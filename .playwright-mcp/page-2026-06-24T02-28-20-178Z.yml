@@ -1,0 +1,123 @@
+- application [ref=e2]:
+  - generic:
+    - generic [ref=e3]:
+      - heading "Arquitecturas SISD y SIMD" [level=2] [ref=e4]
+      - paragraph [ref=e5]: Paralelismo de Datos en el Procesador x86
+      - generic [ref=e6]: MMX · SSE · AVX · AVX-512 · FMA · Amdahl
+    - generic:
+      - generic: Fundamentos
+      - heading [level=2]: Taxonomía de Flynn
+      - paragraph: Clasificación de arquitecturas según flujos de Instrucciones y Datos.
+      - generic:
+        - generic:
+          - heading [level=3]: SISD
+          - paragraph: Un flujo de instrucción, un flujo de datos.
+          - generic:
+            - generic: Instr
+            - generic: →
+            - generic: CPU
+            - generic: ←
+            - generic: Dato
+        - generic:
+          - heading [level=3]: SIMD
+          - paragraph: Un flujo de instrucción, múltiples flujos de datos.
+          - generic:
+            - generic: Instr
+            - generic: →
+            - generic:
+              - generic: ALU
+              - generic: ALU
+            - generic: ←
+            - generic:
+              - generic: Dato 1
+              - generic: Dato 2
+        - generic:
+          - heading [level=3]: MISD (Teórico)
+          - paragraph: Múltiples instrucciones, un flujo de datos.
+        - generic:
+          - heading [level=3]: MIMD
+          - paragraph: Múltiples instrucciones, múltiples datos (Multinúcleo).
+          - generic:
+            - generic:
+              - generic: Inst 1
+              - generic: Inst 2
+            - generic: →
+            - generic:
+              - generic: C1
+              - generic: C2
+            - generic: ←
+            - generic:
+              - generic: Dato 1
+              - generic: Dato 2
+    - generic:
+      - generic: Parte 2 — Paralelismo de Datos
+      - heading [level=2]: SISD vs SIMD en Acción
+      - paragraph: Demostración visual — datos → ALU → resultado, ciclo por ciclo.
+      - generic:
+        - generic:
+          - heading [level=3]: SISD — Uno por vez
+          - generic:
+            - generic: "3"
+            - generic: "6"
+            - generic: "0"
+            - generic: "3"
+          - generic: +
+          - generic:
+            - generic: "1"
+            - generic: "2"
+            - generic: "1"
+            - generic: "7"
+          - generic: ALU (Procesa 1×1)
+          - generic:
+            - generic: "?"
+            - generic: "?"
+            - generic: "?"
+            - generic: "?"
+          - generic:
+            - generic: ⏎ Presioná Ejecutar
+            - button: ▶ Ejecutar
+        - generic:
+          - heading [level=3]: SIMD — Todos simultáneos
+          - generic:
+            - generic: "2"
+            - generic: "6"
+            - generic: "1"
+            - generic: "3"
+            - generic: "0"
+            - generic: "0"
+            - generic: "4"
+            - generic: "8"
+          - generic: +
+          - generic:
+            - generic: "3"
+            - generic: "2"
+            - generic: "4"
+            - generic: "2"
+            - generic: "8"
+            - generic: "8"
+            - generic: "8"
+            - generic: "9"
+          - generic: Vector ALU (Procesa en Paralelo)
+          - generic:
+            - generic: "?"
+            - generic: "?"
+            - generic: "?"
+            - generic: "?"
+            - generic: "?"
+            - generic: "?"
+            - generic: "?"
+            - generic: "?"
+          - generic:
+            - generic: ⏎ Presioná Ejecutar
+            - generic:
+              - button: ↺ Reset
+              - button: ▶ Ejecutar
+      - generic:
+        - generic: —
+        - generic: Ejecutá cada columna y observá la diferencia en ciclos
+  - link "1 / 9" [ref=e11] [cursor=pointer]:
+    - /url: "#/"
+  - complementary:
+    - button "next slide" [ref=e12] [cursor=pointer]
+  - text: Speaker notes
+  - generic [ref=e15]: Arquitecturas SISD y SIMD. Paralelismo de Datos en el Procesador x86. MMX · SSE · AVX · AVX-512 · FMA · Amdahl.

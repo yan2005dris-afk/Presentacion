@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arquitecturas SISD y SIMD</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@6/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@6/dist/theme/night.css">
+  <style>
+    /* ── Global ── */
+    .reveal { font-family: 'Segoe UI', system-ui, sans-serif; }
+    .reveal h2 { font-size: 1.5em; font-weight: 700; margin-bottom: 0.4em; }
+    .reveal h3 { font-size: 1.1em; font-weight: 600; margin-bottom: 0.3em; }
+    .reveal p  { font-size: 0.55em; }
+    .reveal li { font-size: 0.45em; }
+    .reveal .r-stripe {
+      display: inline-block; padding: 0.15em 0.8em; border-radius: 20px;
+      font-size: 0.4em; font-weight: 600; letter-spacing: 1px;
+      background: rgba(148,163,184,0.15); color: #94a3b8;
+      text-transform: uppercase; margin-bottom: 0.5em;
+    }
+    .reveal .r-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .reveal .r-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem; }
+    .reveal .r-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+
+    /* ── Badges ── */
+    .r-badge {
+      display: inline-block; padding: 0.1em 0.5em; border-radius: 4px;
+      font-size: 0.4em; font-weight: 700; letter-spacing: 0.5px;
+    }
+    .badge-info  { background: rgba(96,165,250,0.2); color: #60a5fa; }
+    .badge-sse   { background: rgba(52,211,153,0.2); color: #34d399; }
+    .badge-avx   { background: rgba(251,191,36,0.2); color: #fbbf24; }
+    .badge-simd  { background: rgba(167,139,250,0.2); color: #a78bfa; }
+
+    /* ── Stats ── */
+    .r-stat { background: rgba(148,163,184,0.06); border-radius: 12px; padding: 0.5rem; text-align: center; }
+    .r-stat-num { font-size: 1.6em; font-weight: 900; font-family: monospace; color: #fbbf24; }
+    .r-stat-lbl { font-size: 0.42em; color: #94a3b8; margin-top: 0.15em; }
+
+    /* ── SISD/SIMD animation ── */
+    .sc-cell {
+      flex: 1; padding: 0.15em 0; border-radius: 3px; text-align: center;
+      font-size: 0.3em; font-weight: 700; font-family: monospace;
+      transition: all 0.25s ease;
+    }
+    .sc-alu {
+      text-align: center; padding: 0.25em; border-radius: 0.4em;
+      background: rgba(251,191,36,0.07); border: 1px solid rgba(251,191,36,0.22);
+      font-weight: 900; font-size: 0.35em; color: #fbbf24; font-family: monospace;
+      margin: 0.3em 0; transition: all 0.3s ease;
+    }
+    .active-sisd { background-color: #3b82f6 !important; color: white !important; transform: scale(1.1); box-shadow: 0 0 12px rgba(59,130,246,0.5); border-color: #3b82f6 !important; }
+    .active-simd { background-color: #10b981 !important; color: white !important; transform: scale(1.08); box-shadow: 0 0 10px rgba(16,185,129,0.4); border-color: #10b981 !important; }
+    @keyframes pulseBorder { 0% { border-color: #475569; } 50% { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59,130,246,0.4); background: rgba(59,130,246,0.1); } 100% { border-color: #475569; } }
+    .alu-pulse { animation: pulseBorder 0.5s infinite; }
+    .rslt-cell { transition: all 0.3s ease; }
+
+    /* ── Register evolution ── */
+    .arch-bar-outer { transition: width 0.5s cubic-bezier(0.4,0,0.2,1), background 0.4s ease, border-color 0.4s ease; }
+    .arch-block { animation: blockEnter 0.35s ease-out forwards; opacity: 0; transform: scale(0.8); }
+    @keyframes blockEnter { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+    /* ── Timeline ── */
+    .r-tl { padding-left: 1em; border-left: 2px solid rgba(148,163,184,0.2); }
+    .r-tl-item { margin-bottom: 0.6em; position: relative; }
+    .r-tl-dot { position: absolute; left: -1.45em; top: 0.35em; width: 10px; height: 10px; border-radius: 50%; }
+
+    /* ── FMA ── */
+    .fma-active { background-color: #f59e0b !important; color: white !important; border-color: #fbbf24 !important; transform: scale(1.1); box-shadow: 0 0 15px rgba(245,158,11,0.5); }
+    @keyframes pulseFMA { 0% { border-color: #475569; } 50% { border-color: #f59e0b; box-shadow: 0 0 20px rgba(245,158,11,0.4); background: rgba(245,158,11,0.1); } 100% { border-color: #475569; } }
+    .fma-pulse { animation: pulseFMA 0.5s infinite; }
+
+    /* ── Pixels ── */
+    .pixel { transition: background-color 0.2s ease, transform 0.2s ease; background: #334155; border: 1px solid #475569; border-radius: 2px; }
+    .pixel.processed { background-color: #3b82f6; transform: scale(1.05); box-shadow: 0 0 6px rgba(59,130,246,0.5); }
+    .pixel.processing-simd { background-color: #10b981; transform: scale(1.1); box-shadow: 0 0 10px rgba(16,185,129,0.6); z-index: 10; }
+
+    /* ── Amdahl ── */
+    .amdahl-bar { transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+    /* ── Mundo Real animations ── */
+    .aa-area {
+      display: flex; align-items: center; justify-content: center;
+      height: 52px; border-radius: 6px; padding: 4px 8px;
+      background: rgba(15,23,42,0.6); border: 1px solid; margin-bottom: 2px; overflow: hidden;
+    }
+    .aa-grid { display: grid; gap: 3px; width: 100%; }
+    .aa-grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .aa-pixel { aspect-ratio: 1; background: #1e293b; border: 1px solid #334155; border-radius: 2px; animation: aaPulse 2s ease-in-out infinite; }
+    #uc-anim .aa-pixel { animation: none; }
+    @keyframes aaPulse { 0%,100% { opacity: 0.15; background: #1e293b; transform: scale(0.95); } 50% { opacity: 1; background: #10b981; transform: scale(1.05); box-shadow: 0 0 8px rgba(16,185,129,0.6); } }
+    .aa-video-frame { flex: 1; height: 38px; border-radius: 3px; border: 2px dashed #475569; background: rgba(71,85,105,0.15); position: relative; overflow: hidden; }
+    .aa-video-frame::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(249,115,22,0.35) 2px,rgba(249,115,22,0.35) 4px); background-size: 100% 4px; animation: aaScanline 3s linear infinite; }
+    @keyframes aaScanline { 0% { transform: translateY(0); } 100% { transform: translateY(4px); } }
+    .aa-ml-cell { font-size: 8px; font-weight: 700; color: #a78bfa; background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); border-radius: 2px; padding: 0 5px; line-height: 16px; text-align: center; animation: aaGlow 1.8s ease-in-out infinite; }
+    .aa-ml-res { color: #34d399; border-color: #34d399; }
+    @keyframes aaGlow { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .aa-coord { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 900; background: rgba(52,211,153,0.1); border-radius: 3px; color: #34d399; border: 1px solid rgba(52,211,153,0.2); animation: aaCoordPulse 1.6s ease-in-out infinite; }
+    @keyframes aaCoordPulse { 0%,100% { opacity: 0.3; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
+    .aa-wave { stroke: #fbbf24; stroke-width: 1.2; stroke-linecap: round; fill: none; stroke-dasharray: 120; animation: aaWaveDash 2s linear infinite; }
+    @keyframes aaWaveDash { 0% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -120; } }
+    .aa-wave-wrap { width: 100%; transition: all 0.2s ease; }
+    .aa-eq { display: flex; align-items: flex-end; gap: 3px; width: 100%; height: 100%; justify-content: center; }
+    .aa-eq-bar { width: 8px; border-radius: 1px 1px 0 0; background: #fb7185; flex: 1; animation: aaEqBounce 0.8s ease-in-out infinite alternate; }
+    @keyframes aaEqBounce { 0% { opacity: 0.2; transform: scaleY(0.6); } 100% { opacity: 0.9; transform: scaleY(1.2); } }
+
+    /* ── Custom colors for register buttons ── */
+    .btn-arch { transition: all 0.2s; text-align: center; }
+    .btn-arch:hover { filter: brightness(1.2); }
+
+    /* ── Use-case tabs ── */
+    .uc-btn {
+      padding: 0.2em 0.5em; border-radius: 6px; cursor: pointer;
+      border: 1px solid #475569; background: rgba(71,85,105,0.15);
+      color: #94a3b8; font-size: 0.32em; font-weight: 600;
+      transition: all 0.2s;
+    }
+    .uc-btn:hover { filter: brightness(1.3); }
+    .uc-active { border-width: 2px; font-weight: 800; }
+
+    /* ── GFX vertex nodes ── */
+    .aa-gfx-vertex {
+      width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 800; font-family: monospace;
+      color: #34d399; border-radius: 50%; transition: all 0.2s ease;
+    }
+
+    /* ── HPC simulation nodes ── */
+    .aa-hpc-node {
+      aspect-ratio: 1; border-radius: 50%; width: 100%;
+      background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2);
+      transition: all 0.2s ease;
+    }
+
+    /* ── Telecom constellation points ── */
+    .aa-const-point {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: #fb7185; opacity: 0.3;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 4px rgba(251,113,133,0.4);
+    }
+
+    /* ── Mundo Real: text size boost ── */
+    .mundo-real .r-item-card {
+      padding: 0.7em;
+      display: flex; flex-direction: column;
+    }
+    .mundo-real .r-item-card h3 {
+      font-size: 0.9em !important;
+      line-height: 1.3;
+    }
+    .mundo-real .r-item-card ul {
+      font-size: 0.8em !important;
+      line-height: 1.5;
+      padding-left: 1em;
+    }
+    .mundo-real .r-item-card > div:first-child .aa-icon {
+      font-size: 1.2em;
+    }
+    .mundo-real .aa-area {
+      height: 48px;
+      min-height: 48px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ════════════════ 1. TITLE ════════════════ -->
+      <section data-background="#0f172a">
+        <h2 style="font-size: 2.2em; margin-bottom: 0.2em;">Arquitecturas SISD y SIMD</h2>
+        <p style="font-size: 0.7em; color: #94a3b8;">Paralelismo de Datos en el Procesador x86</p>
+        <div style="margin-top: 1.5em; font-size: 0.4em; color: #64748b;">
+          MMX · SSE · AVX · AVX-512 · FMA · Amdahl
+        </div>
+      </section>
+
+      <!-- ════════════════ 2. TAXONOMÍA FLYNN ════════════════ -->
+      <section data-background="#0f172a">
+        <span class="r-stripe">Fundamentos</span>
+        <h2>Taxonomía de Flynn</h2>
+        <p>Clasificación de arquitecturas según flujos de Instrucciones y Datos.</p>
+        <div class="r-grid-2" style="margin-top: 1rem;">
+          <!-- SISD -->
+          <div style="border:1px solid #475569; border-radius:12px; padding:0.8rem; background:rgba(71,85,105,0.15);">
+            <h3 style="color:#60a5fa;">SISD</h3>
+            <p style="font-size:0.4em; color:#94a3b8;">Un flujo de instrucción, un flujo de datos.</p>
+            <div style="display:flex; align-items:center; justify-content:center; gap:1em; margin-top:0.5em; font-family:monospace;">
+              <span class="r-badge badge-info" style="font-size:0.5em;">Instr</span>
+              <span style="color:#475569;">→</span>
+              <div style="border:2px solid #475569; border-radius:50%; width:2.5em; height:2.5em; display:flex; align-items:center; justify-content:center; font-size:0.5em;">CPU</div>
+              <span style="color:#475569;">←</span>
+              <span class="r-badge badge-info" style="font-size:0.5em;">Dato</span>
+            </div>
+          </div>
+          <!-- SIMD -->
+          <div style="border:1px solid #475569; border-radius:12px; padding:0.8rem; background:rgba(71,85,105,0.15);">
+            <h3 style="color:#34d399;">SIMD</h3>
+            <p style="font-size:0.4em; color:#94a3b8;">Un flujo de instrucción, múltiples flujos de datos.</p>
+            <div style="display:flex; align-items:center; justify-content:center; gap:1em; margin-top:0.5em; font-family:monospace;">
+              <span class="r-badge badge-sse" style="font-size:0.5em;">Instr</span>
+              <span style="color:#475569;">→</span>
+              <div style="display:flex; flex-direction:column; gap:2px;">
+                <div style="border:2px solid #475569; border-radius:50%; width:2em; height:2em; display:flex; align-items:center; justify-content:center; font-size:0.45em;">ALU</div>
+                <div style="border:2px solid #475569; border-radius:50%; width:2em; height:2em; display:flex; align-items:center; justify-content:center; font-size:0.45em;">ALU</div>
+              </div>
+              <span style="color:#475569;">←</span>
+              <div style="display:flex; flex-direction:column; gap:2px;">
+                <span class="r-badge badge-sse" style="font-size:0.45em;">Dato 1</span>
+                <span class="r-badge badge-sse" style="font-size:0.45em;">Dato 2</span>
+              </div>
+            </div>
+          </div>
+          <!-- MISD -->
+          <div style="border:1px solid #475569; border-radius:12px; padding:0.8rem; opacity:0.6;">
+            <h3 style="color:#a78bfa;">MISD (Teórico)</h3>
+            <p style="font-size:0.4em; color:#94a3b8;">Múltiples instrucciones, un flujo de datos.</p>
+          </div>
+          <!-- MIMD -->
+          <div style="border:1px solid #475569; border-radius:12px; padding:0.8rem;">
+            <h3 style="color:#fbbf24;">MIMD</h3>
+            <p style="font-size:0.4em; color:#94a3b8;">Múltiples instrucciones, múltiples datos (Multinúcleo).</p>
+            <div style="display:flex; align-items:center; justify-content:center; gap:1em; margin-top:0.5em; font-family:monospace;">
+              <div style="display:flex; flex-direction:column; gap:2px;">
+                <span class="r-badge badge-avx" style="font-size:0.45em;">Inst 1</span>
+                <span class="r-badge badge-avx" style="font-size:0.45em;">Inst 2</span>
+              </div>
+              <span style="color:#475569;">→</span>
+              <div style="display:flex; flex-direction:column; gap:2px;">
+                <div style="border:2px solid #475569; border-radius:50%; width:2em; height:2em; display:flex; align-items:center; justify-content:center; font-size:0.45em;">C1</div>
+                <div style="border:2px solid #475569; border-radius:50%; width:2em; height:2em; display:flex; align-items:center; justify-content:center; font-size:0.45em;">C2</div>
+              </div>
+              <span style="color:#475569;">←</span>
+              <div style="display:flex; flex-direction:column; gap:2px;">
+                <span class="r-badge badge-avx" style="font-size:0.45em;">Dato 1</span>
+                <span class="r-badge badge-avx" style="font-size:0.45em;">Dato 2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════ 3. SISD vs SIMD ════════════════ -->
+      <section data-background="#0f172a">
+        <span class="r-stripe">Parte 2 — Paralelismo de Datos</span>
+        <h2>SISD vs SIMD en Acción</h2>
+        <p>Demostración visual — datos → ALU → resultado, ciclo por ciclo.</p>
+
+        <div class="r-grid-2" style="gap: 0.8rem; margin-top: 0.5rem;">
+          <!-- SISD -->
+          <div id="sisd-panel" style="border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:0.5rem 0.6rem; background:rgba(59,130,246,0.05);">
+            <h3 style="color:#60a5fa; font-size:0.65em; margin:0 0 0.3em;">SISD — Uno por vez</h3>
+            <div id="sisd-a" style="display:flex; gap:3px; margin-bottom:1px;"></div>
+            <div style="text-align:center; color:#fbbf24; font-size:0.3em; line-height:1;">+</div>
+            <div id="sisd-b" style="display:flex; gap:3px; margin-bottom:3px;"></div>
+            <div id="sisd-alu" class="sc-alu">ALU (Procesa 1×1)</div>
+            <div id="sisd-r" style="display:flex; gap:3px; margin-bottom:0.2rem;"></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(59,130,246,0.13); padding-top:0.2rem;">
+              <span id="sisd-status" style="font-size:0.35em; font-weight:700; font-family:monospace; color:#64748b;">⏎ Presioná Ejecutar</span>
+              <button onclick="runSISD()" id="btn-sisd" style="padding:0.15em 0.6em; border-radius:6px; cursor:pointer; border:1px solid #60a5fa; background:rgba(96,165,250,0.12); color:#60a5fa; font-weight:700; font-size:0.3em;">▶ Ejecutar</button>
+            </div>
+          </div>
+
+          <!-- SIMD -->
+          <div id="simd-panel" style="border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:0.5rem 0.6rem; background:rgba(16,185,129,0.05);">
+            <h3 style="color:#34d399; font-size:0.65em; margin:0 0 0.3em;">SIMD — Todos simultáneos</h3>
+            <div id="simd-a" style="display:flex; gap:2px; margin-bottom:1px;"></div>
+            <div style="text-align:center; color:#fbbf24; font-size:0.3em; line-height:1;">+</div>
+            <div id="simd-b" style="display:flex; gap:2px; margin-bottom:3px;"></div>
+            <div id="simd-alu" class="sc-alu">Vector ALU (Procesa en Paralelo)</div>
+            <div id="simd-r" style="display:flex; gap:2px; margin-bottom:0.2rem;"></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(16,185,129,0.13); padding-top:0.2rem;">
+              <span id="simd-status" style="font-size:0.35em; font-weight:700; font-family:monospace; color:#64748b;">⏎ Presioná Ejecutar</span>
+              <div style="display:flex; gap:0.3rem;">
+                <button onclick="resetSISDSIMD()" style="padding:0.15em 0.4em; border-radius:6px; cursor:pointer; border:1px solid #475569; background:transparent; color:#64748b; font-weight:700; font-size:0.3em;">↺ Reset</button>
+                <button onclick="runSIMD()" id="btn-simd" style="padding:0.15em 0.6em; border-radius:6px; cursor:pointer; border:1px solid #34d399; background:rgba(52,211,153,0.12); color:#34d399; font-weight:700; font-size:0.3em;">▶ Ejecutar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="sisd-simd-stat" class="r-stat" style="margin-top:0.3rem;">
+          <div class="r-stat-num" id="sisd-simd-num" style="font-size:1em;">—</div>
+          <div class="r-stat-lbl" id="sisd-simd-txt" style="font-size:0.35em;">Ejecutá cada columna y observá la diferencia en ciclos</div>
+        </div>
+      </section>
+
+      <!-- ════════════════ 4. EVOLUCIÓN REGISTROS ════════════════ -->
+      <section data-background="#0f172a">
+        <span class="r-stripe">Parte 3 — Registros Vectoriales</span>
+        <h2>Evolución de los Registros SIMD</h2>
+        <p>Cada generación duplicó o cuadruplicó el ancho del registro.</p>
+
+        <!-- Bar -->
+        <div style="position:relative; width:100%; height:64px; background:rgba(15,23,42,0.6); border-radius:8px; border:1px solid #334155; margin-bottom:0.5rem; overflow:hidden;">
+          <div style="position:absolute; inset:0; display:flex; pointer-events:none; opacity:0.12;">
+            <div style="flex:1; border-right:1px dashed #94a3b8;"></div>
+            <div style="flex:1; border-right:1px dashed #94a3b8;"></div>
+            <div style="flex:1; border-right:1px dashed #94a3b8;"></div>
+            <div style="flex:1; border-right:1px dashed #94a3b8;"></div>
+            <div style="flex:1; border-right:1px dashed #94a3b8;"></div>
+            <div style="flex:1; border-right:1px dashed #94a3b8;"></div>
+            <div style="flex:1;"></div>
+          </div>
+          <div id="register-bar" class="arch-bar-outer" style="height:100%; border-radius:6px; background:rgba(167,139,250,0.12); border:2px solid rgba(167,139,250,0.5); display:flex; align-items:center; gap:4px; padding:0 6px; overflow:hidden; width:12.5%;"></div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="r-grid-4" style="margin-bottom:0.5rem;">
+          <button onclick="setRegister('mmx')" class="btn-arch" style="padding:0.4rem; border-radius:8px; cursor:pointer; border:1px solid #475569; background:rgba(71,85,105,0.15); color:#a78bfa;">
+            <div style="font-weight:800; font-size:0.55em;">MMX</div>
+            <div style="font-size:0.4em; color:#94a3b8;">64 bits</div>
+          </button>
+          <button onclick="setRegister('sse')" class="btn-arch" style="padding:0.4rem; border-radius:8px; cursor:pointer; border:1px solid #475569; background:rgba(71,85,105,0.15); color:#60a5fa;">
+            <div style="font-weight:800; font-size:0.55em;">SSE</div>
+            <div style="font-size:0.4em; color:#94a3b8;">128 bits</div>
+          </button>
+          <button onclick="setRegister('avx')" class="btn-arch" style="padding:0.4rem; border-radius:8px; cursor:pointer; border:1px solid #475569; background:rgba(71,85,105,0.15); color:#34d399;">
+            <div style="font-weight:800; font-size:0.55em;">AVX</div>
+            <div style="font-size:0.4em; color:#94a3b8;">256 bits</div>
+          </button>
+          <button onclick="setRegister('avx512')" class="btn-arch" style="padding:0.4rem; border-radius:8px; cursor:pointer; border:1px solid #475569; background:rgba(71,85,105,0.15); color:#fb7185;">
+            <div style="font-weight:800; font-size:0.55em;">AVX-512</div>
+            <div style="font-size:0.4em; color:#94a3b8;">512 bits</div>
+          </button>
+        </div>
+
+        <div id="register-desc" style="border-radius:8px; padding:0.4rem 0.6rem; font-size:0.42em; background:rgba(167,139,250,0.08); border:1px solid rgba(167,139,250,0.3); color:#cbd5e1; margin-bottom:0.4rem;">
+          <strong style="color:#a78bfa;">MMX:</strong> Introdujo registros de 64 bits (aliasing de la FPU). Procesa 2 enteros de 32 bits simultáneamente.
+        </div>
+
+        <div class="r-stat" style="padding:0.4rem;">
+          <div class="r-stat-num" id="register-stat-num" style="color:#a78bfa; font-size:1.2em;">64 bits</div>
+          <div class="r-stat-lbl" id="register-stat-lbl" style="font-size:0.38em;">2 valores de 32 bits por instrucción</div>
+        </div>
+      </section>
+
+      <!-- ════════════════ 5. CRONOLOGÍA ════════════════ -->
+      <section data-background="#0f172a">
+        <span class="r-stripe">Parte 3 — Evolución SIMD en x86</span>
+        <h2>De MMX a AVX-512: 25 años</h2>
+
+        <div class="r-tl" style="margin-bottom: 0.6rem;">
+          <div class="r-tl-item">
+            <div class="r-tl-dot" style="background:#60a5fa;"></div>
+            <div style="display:flex; gap:0.8rem;">
+              <div style="min-width:40px; font-size:0.4em; font-weight:700; color:#64748b; padding-top:0.1em;">1997</div>
+              <div style="flex:1;">
+                <div style="display:flex; align-items:center; gap:0.3rem; margin-bottom:0.1em;">
+                  <span class="r-badge badge-info">MMX</span>
+                  <span style="font-size:0.42em; font-weight:700; color:#60a5fa;">64 bits</span>
+                </div>
+                <p style="font-size:0.38em; color:#94a3b8; margin:0;">8 registros MM0–MM7 (alias de FPU). Enteros empaquetados 8/16/32 bits. Sin punto flotante.</p>
+              </div>
+            </div>
+          </div>
+          <div class="r-tl-item">
+            <div class="r-tl-dot" style="background:#34d399;"></div>
+            <div style="display:flex; gap:0.8rem;">
+              <div style="min-width:40px; font-size:0.4em; font-weight:700; color:#64748b; padding-top:0.1em;">1999</div>
+              <div style="flex:1;">
+                <div style="display:flex; align-items:center; gap:0.3rem; margin-bottom:0.1em;">
+                  <span class="r-badge badge-sse">SSE</span>
+                  <span style="font-size:0.42em; font-weight:700; color:#34d399;">128 bits</span>
+                </div>
+                <p style="font-size:0.38em; color:#94a3b8; margin:0;">8→16 registros XMM0–XMM15. Punto flotante precisión simple. SSE2 (2000) agrega doble precisión.</p>
+              </div>
+            </div>
+          </div>
+          <div class="r-tl-item">
+            <div class="r-tl-dot" style="background:#fbbf24;"></div>
+            <div style="display:flex; gap:0.8rem;">
+              <div style="min-width:40px; font-size:0.4em; font-weight:700; color:#64748b; padding-top:0.1em;">2011</div>
+              <div style="flex:1;">
+                <div style="display:flex; align-items:center; gap:0.3rem; margin-bottom:0.1em;">
+                  <span class="r-badge badge-avx">AVX / AVX2</span>
+                  <span style="font-size:0.42em; font-weight:700; color:#fbbf24;">256 bits</span>
+                </div>
+                <p style="font-size:0.38em; color:#94a3b8; margin:0;">16 registros YMM. Formato VEX de 3 operandos. AVX2 (2013): enteros 256 bits + FMA.</p>
+              </div>
+            </div>
+          </div>
+          <div class="r-tl-item">
+            <div class="r-tl-dot" style="background:#a78bfa;"></div>
+            <div style="display:flex; gap:0.8rem;">
+              <div style="min-width:40px; font-size:0.4em; font-weight:700; color:#64748b; padding-top:0.1em;">2016</div>
+              <div style="flex:1;">
+                <div style="display:flex; align-items:center; gap:0.3rem; margin-bottom:0.1em;">
+                  <span class="r-badge badge-simd">AVX-512</span>
+                  <span style="font-size:0.42em; font-weight:700; color:#a78bfa;">512 bits</span>
+                </div>
+                <p style="font-size:0.38em; color:#94a3b8; margin:0;">32 registros ZMM. Operandos de máscara K0–K7 para predicación. FMA 512 bits.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Speedup bars -->
+        <div style="margin-top:0.6rem;">
+          <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
+            <div style="width:50px; font-size:0.4em; font-weight:700; color:#64748b; text-align:right;">MMX</div>
+            <div style="flex:1; background:rgba(71,85,105,0.3); border-radius:3px; height:16px; overflow:hidden;">
+              <div style="height:100%; width:12%; background:linear-gradient(90deg,rgba(96,165,250,0.5),#60a5fa); border-radius:3px;"></div>
+            </div>
+            <div style="width:30px; font-size:0.4em; font-weight:800; color:#60a5fa;">2×</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
+            <div style="width:50px; font-size:0.4em; font-weight:700; color:#64748b; text-align:right;">SSE</div>
+            <div style="flex:1; background:rgba(71,85,105,0.3); border-radius:3px; height:16px; overflow:hidden;">
+              <div style="height:100%; width:25%; background:linear-gradient(90deg,rgba(52,211,153,0.5),#34d399); border-radius:3px;"></div>
+            </div>
+            <div style="width:30px; font-size:0.4em; font-weight:800; color:#34d399;">4×</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
+            <div style="width:50px; font-size:0.4em; font-weight:700; color:#64748b; text-align:right;">AVX</div>
+            <div style="flex:1; background:rgba(71,85,105,0.3); border-radius:3px; height:16px; overflow:hidden;">
+              <div style="height:100%; width:50%; background:linear-gradient(90deg,rgba(251,191,36,0.5),#fbbf24); border-radius:3px;"></div>
+            </div>
+            <div style="width:30px; font-size:0.4em; font-weight:800; color:#fbbf24;">8×</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <div style="width:50px; font-size:0.4em; font-weight:700; color:#64748b; text-align:right;">AVX-512</div>
+            <div style="flex:1; background:rgba(71,85,105,0.3); border-radius:3px; height:16px; overflow:hidden;">
+              <div style="height:100%; width:100%; background:linear-gradient(90deg,rgba(167,139,250,0.5),#a78bfa); border-radius:3px;"></div>
+            </div>
+            <div style="width:30px; font-size:0.4em; font-weight:800; color:#a78bfa;">16×</div>
+          </div>
+          <p style="font-size:0.35em; color:#64748b; margin-top:0.2rem;">Speedup teórico máximo vs escalar (float32)</p>
+        </div>
+      </section>
+
+      <!-- ════════════════ 6. FMA ════════════════ -->
+      <section data-background="#0f172a">
+        <span class="r-stripe">Parte 4 — Instrucciones Avanzadas</span>
+        <h2>FMA: Fused Multiply-Add</h2>
+        <p>(A × B) + C en una sola operación vectorial.</p>
+
+        <div class="r-grid-2" style="gap: 1rem;">
+          <!-- Tradicional -->
+          <div style="border:1px solid #475569; border-radius:12px; padding:0.6rem; text-align:center;">
+            <h3 style="color:#94a3b8; font-size:0.65em;">Matemática Tradicional (2 Instr)</h3>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:0.2em; font-family:monospace;">
+              <div style="display:flex; gap:0.5em;">
+                <div id="n-a" class="sc-cell" style="width:2.5em; height:1.8em; border:1px solid #475569; background:rgba(71,85,105,0.3); display:flex; align-items:center; justify-content:center;">A</div>
+                <div id="n-b" class="sc-cell" style="width:2.5em; height:1.8em; border:1px solid #475569; background:rgba(71,85,105,0.3); display:flex; align-items:center; justify-content:center;">B</div>
+              </div>
+              <span style="color:#475569; font-size:0.4em;">↓</span>
+              <div id="n-mul" style="width:8em; padding:0.2em; border:2px solid #475569; border-radius:6px; font-size:0.35em;">MULPS (×)</div>
+              <span style="color:#475569; font-size:0.4em;">↓</span>
+              <div id="n-temp" style="width:5em; height:1.8em; border:1px solid #475569; background:rgba(71,85,105,0.3); display:flex; align-items:center; justify-content:center; font-size:0.3em; color:#64748b;">Temp</div>
+              <div style="display:flex; align-items:center; gap:0.3em;">
+                <span style="color:#475569; font-size:0.4em;">↓</span>
+                <span style="font-size:0.5em;">+</span>
+                <div id="n-c" style="width:2.5em; height:1.8em; border:1px solid #475569; background:rgba(71,85,105,0.3); display:flex; align-items:center; justify-content:center;">C</div>
+              </div>
+              <span style="color:#475569; font-size:0.4em;">↓</span>
+              <div id="n-add" style="width:8em; padding:0.2em; border:2px solid #475569; border-radius:6px; font-size:0.35em;">ADDPS (+)</div>
+              <span style="color:#475569; font-size:0.4em;">↓</span>
+              <div id="n-res" style="width:4em; height:1.8em; border:2px solid #475569; background:rgba(71,85,105,0.3); display:flex; align-items:center; justify-content:center; font-weight:700;">Res</div>
+            </div>
+            <button onclick="runNormalMath()" id="btn-nmath" style="margin-top:0.5em; width:100%; padding:0.3em; background:rgba(71,85,105,0.3); border:1px solid #475569; border-radius:6px; color:white; cursor:pointer; font-size:0.35em;">Ejecutar (Más lento, menos preciso)</button>
+          </div>
+
+          <!-- FMA -->
+          <div style="border:1px solid rgba(245,158,11,0.3); border-radius:12px; padding:0.6rem; text-align:center;">
+            <h3 style="color:#fbbf24; font-size:0.65em;">Instrucción FMA (1 Instr)</h3>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:0.2em; font-family:monospace;">
+              <div style="display:flex; gap:0.5em;">
+                <div id="fma-a" style="width:2.5em; height:1.8em; border:1px solid #475569; background:rgba(71,85,105,0.3); display:flex; align-items:center; justify-content:center;">A</div>
+                <div id="fma-b" style="width:2.5em; height:1.8em; border:1px solid #475569; background:rgba(71,85,105,0.3); display:flex; align-items:center; justify-content:center;">B</div>
+                <div id="fma-c" style="width:2.5em; height:1.8em; border:1px solid #475569; background:rgba(71,85,105,0.3); display:flex; align-items:center; justify-content:center;">C</div>
+              </div>
+              <span style="color:#475569; font-size:0.4em;">↓</span>
+              <div id="fma-alu" style="width:12em; padding:0.3em; border:2px solid #475569; border-radius:8px; font-size:0.35em; font-weight:700;">
+                VFMADD231PS<br><span style="font-weight:400; font-size:0.85em;">(A × B) + C</span>
+              </div>
+              <span style="color:#475569; font-size:0.4em;">↓</span>
+              <div id="fma-res" style="width:4em; height:1.8em; border:2px solid #475569; background:rgba(71,85,105,0.3); display:flex; align-items:center; justify-content:center; font-weight:700;">Res</div>
+            </div>
+            <button onclick="runFMA()" id="btn-fma" style="margin-top:0.5em; width:100%; padding:0.3em; background:rgba(245,158,11,0.2); border:1px solid #fbbf24; border-radius:6px; color:#fbbf24; cursor:pointer; font-size:0.35em; font-weight:700;">Ejecutar FMA (1 Ciclo, 1 Redondeo)</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════ 7. LEY DE AMDAHL ════════════════ -->
+      <section data-background="#0f172a">
+        <span class="r-stripe">Parte 5</span>
+        <h2>Ley de Amdahl</h2>
+        <p>El límite teórico del speedup: la porción secuencial siempre restringe el paralelismo.</p>
+
+        <div style="background:rgba(15,23,42,0.6); border-radius:12px; padding:0.8rem; border:1px solid #334155;">
+          <div style="display:flex; justify-content:space-between; font-size:0.4em; margin-bottom:0.3em; font-family:monospace;">
+            <span style="color:#94a3b8;">Porción Secuencial (10%)</span>
+            <span style="color:#22d3ee;">Porción Paralelizable (90%)</span>
+          </div>
+          <div style="width:100%; height:3em; display:flex; border-radius:6px; overflow:hidden; background:rgba(71,85,105,0.3);">
+            <div style="height:100%; background:#64748b; display:flex; align-items:center; justify-content:center; font-size:0.4em; font-weight:700; width:10%; flex-shrink:0;">10%</div>
+            <div id="amdahl-parallel" class="amdahl-bar" style="height:100%; background:rgba(34,211,238,0.7); display:flex; align-items:center; justify-content:center; font-size:0.4em; font-weight:700; width:90%;">90%</div>
+          </div>
+
+          <div class="r-grid-4" style="margin-top:0.6rem; gap:0.3rem;">
+            <button onclick="calcAmdahl(1)" style="padding:0.3em; border:1px solid #475569; border-radius:6px; background:rgba(71,85,105,0.2); color:white; cursor:pointer; font-size:0.35em;">1× (Escalar)</button>
+            <button onclick="calcAmdahl(2)" style="padding:0.3em; border:1px solid #475569; border-radius:6px; background:rgba(71,85,105,0.2); color:white; cursor:pointer; font-size:0.35em;">2× Lanes</button>
+            <button onclick="calcAmdahl(4)" style="padding:0.3em; border:1px solid #475569; border-radius:6px; background:rgba(71,85,105,0.2); color:white; cursor:pointer; font-size:0.35em;">4× Lanes</button>
+            <button onclick="calcAmdahl(16)" style="padding:0.3em; border:1px solid #22d3ee; border-radius:6px; background:rgba(34,211,238,0.1); color:#22d3ee; cursor:pointer; font-size:0.35em; font-weight:700;">16× (AVX-512)</button>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:center; gap:1.5em; margin-top:0.6rem;">
+            <div style="text-align:center;">
+              <div style="font-size:0.35em; color:#64748b; text-transform:uppercase; letter-spacing:1px;">Speedup Teórico</div>
+              <div id="amdahl-speedup" style="font-size:2em; font-weight:900; font-family:monospace; color:white;">1.00×</div>
+            </div>
+            <div style="width:1px; height:2.5em; background:#334155;"></div>
+            <div style="text-align:center;">
+              <div style="font-size:0.35em; color:#64748b; text-transform:uppercase; letter-spacing:1px;">Tiempo Restante</div>
+              <div id="amdahl-time" style="font-size:2em; font-weight:900; font-family:monospace; color:#22d3ee;">100%</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════ 8. CASOS DE USO SIMD ════════════════ -->
+      <section data-background="#0f172a">
+        <span class="r-stripe">Parte 6 — Estudio Práctico</span>
+        <h2>SIMD en el Mundo Real: SISD vs SIMD</h2>
+        <p>Seleccioná un caso de uso y compará el procesamiento escalar vs vectorial. Speedup teórico: <strong>8×</strong> con AVX (256 bits).</p>
+
+        <!-- ── Filter tabs ── -->
+        <div style="display:flex; gap:0.3rem; margin-bottom:0.4rem; flex-wrap:wrap; justify-content:center;">
+          <button class="uc-btn uc-active" data-uc="img"     onclick="setUsecase('img')"     style="border-color:#60a5fa;border-width:2px;background:rgba(96,165,250,0.13);color:#60a5fa;">🖼️ Imágenes</button>
+          <button class="uc-btn"          data-uc="video"   onclick="setUsecase('video')"   style="">🎬 Video</button>
+          <button class="uc-btn"          data-uc="ml"      onclick="setUsecase('ml')"      style="">🧠 ML</button>
+          <button class="uc-btn"          data-uc="gfx"     onclick="setUsecase('gfx')"     style="">🎮 Gráficos</button>
+          <button class="uc-btn"          data-uc="hpc"     onclick="setUsecase('hpc')"     style="">🔬 HPC</button>
+          <button class="uc-btn"          data-uc="telecom" onclick="setUsecase('telecom')" style="">📡 Telecom</button>
+        </div>
+
+        <!-- ── Content layout ── -->
+        <div style="display:flex; gap:0.8rem; align-items:stretch; justify-content:center;">
+          <!-- Animation area -->
+          <div id="uc-anim" style="background:rgba(15,23,42,0.6); padding:0.5em; border-radius:12px; border:1px solid #334155; flex-shrink:0; width:180px; display:flex; align-items:center; justify-content:center;">
+            <div class="aa-grid aa-grid-4" id="uc-anim-inner" style="width:100%;">
+              <div class="aa-pixel"></div><div class="aa-pixel" style="animation-delay:0.12s;"></div><div class="aa-pixel" style="animation-delay:0.24s;"></div><div class="aa-pixel" style="animation-delay:0.36s;"></div>
+              <div class="aa-pixel" style="animation-delay:0.06s;"></div><div class="aa-pixel" style="animation-delay:0.18s;"></div><div class="aa-pixel" style="animation-delay:0.30s;"></div><div class="aa-pixel" style="animation-delay:0.42s;"></div>
+            </div>
+          </div>
+
+          <!-- Info panel -->
+          <div style="flex:1; min-width:300px; display:flex; flex-direction:column; gap:0.3rem;">
+            <!-- Title + desc -->
+            <div style="background:rgba(15,23,42,0.6); padding:0.4rem 0.6rem; border-radius:8px; border:1px solid #334155;">
+              <div id="uc-name" style="font-size:0.55em; font-weight:700; color:#60a5fa;">🖼️ Procesamiento de Imágenes</div>
+              <div id="uc-desc" style="font-size:0.4em; color:#94a3b8; margin-top:0.15em; line-height:1.4;">Filtros convolucionales, transformaciones de color, encode/decode de formatos, redimensionado masivo.</div>
+            </div>
+
+            <!-- Items -->
+            <div style="background:rgba(15,23,42,0.4); padding:0.3rem 0.6rem; border-radius:8px; border:1px solid #334155;">
+              <ul id="uc-items" style="margin:0; padding-left:1em; font-size:0.45em; color:#94a3b8; line-height:1.6;">
+                <li>Filtros convolucionales (blur, sharpen)</li>
+                <li>Transformaciones de color (RGB→YUV)</li>
+                <li>JPEG/PNG encode/decode</li>
+                <li>Redimensionado bilineal masivo</li>
+              </ul>
+            </div>
+
+            <!-- SISD / SIMD / Speedup -->
+            <div style="display:flex; gap:0.3rem;">
+              <div style="flex:1; background:rgba(59,130,246,0.08); padding:0.25rem; border-radius:8px; text-align:center; border:1px solid rgba(59,130,246,0.25);">
+                <div style="font-size:0.32em; color:#64748b;">SISD (escalar)</div>
+                <div id="uc-sisd" style="font-size:0.6em; font-weight:700; font-family:monospace; color:#60a5fa;">64 ops</div>
+                <div style="font-size:0.28em; color:#64748b;">1 operación por ciclo</div>
+              </div>
+              <div style="flex:1; background:rgba(52,211,153,0.08); padding:0.25rem; border-radius:8px; text-align:center; border:1px solid rgba(52,211,153,0.25);">
+                <div style="font-size:0.32em; color:#64748b;">SIMD (vectorial)</div>
+                <div id="uc-simd" style="font-size:0.6em; font-weight:700; font-family:monospace; color:#34d399;">8 ops</div>
+                <div style="font-size:0.28em; color:#64748b;">8 operaciones por ciclo</div>
+              </div>
+              <div style="flex:1; background:rgba(251,191,36,0.06); padding:0.25rem; border-radius:8px; text-align:center; border:1px solid rgba(251,191,36,0.2);">
+                <div style="font-size:0.32em; color:#64748b;">Speedup</div>
+                <div id="uc-speedup" style="font-size:0.7em; font-weight:900; font-family:monospace; color:#fbbf24;">8.0×</div>
+                <div style="font-size:0.28em; color:#64748b;">vs SISD (AVX)</div>
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div style="display:flex; gap:0.3rem;">
+              <button onclick="runUcSISD()" id="btn-uc-sisd" style="flex:1; padding:0.3em; border-radius:6px; border:1px solid #60a5fa; background:rgba(59,130,246,0.15); color:white; cursor:pointer; font-size:0.35em; font-weight:600;">▶ SISD 1×1</button>
+              <button onclick="runUcSIMD()" id="btn-uc-simd" style="flex:1; padding:0.3em; border-radius:6px; border:1px solid #34d399; background:rgba(52,211,153,0.15); color:white; cursor:pointer; font-size:0.35em; font-weight:600;">▶ SIMD 8×</button>
+              <button onclick="resetUsecase()" id="btn-uc-reset" style="padding:0.3em 0.5em; border-radius:6px; border:1px solid #64748b; background:rgba(71,85,105,0.15); color:#94a3b8; cursor:pointer; font-size:0.35em; font-weight:600;">↺ Reset</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════ 9. SIMD EN EL MUNDO REAL ════════════════ -->
+      <section data-background="#0f172a" class="mundo-real">
+        <span class="r-stripe">Parte 7 — Aplicaciones Reales</span>
+        <h2>SIMD en el Mundo Real</h2>
+        <p>Aplicaciones donde el paralelismo masivo de datos es crucial hoy.</p>
+
+        <div class="r-grid-3" style="gap: 0.5rem; margin-top: 0.3rem;">
+          <!-- Imágenes -->
+          <div class="r-item-card" style="border:1px solid rgba(96,165,250,0.3); border-radius:12px; padding:0.5em;">
+            <div style="display:flex; align-items:center; gap:0.3em; margin-bottom:0.2em;">
+              <span style="font-size:0.8em;">🖼️</span>
+              <h3 style="color:#60a5fa; font-size:0.45em; margin:0;">Procesamiento de Imágenes</h3>
+            </div>
+            <div class="aa-area" style="border-color:rgba(96,165,250,0.2);">
+              <div class="aa-grid aa-grid-4">
+                <div class="aa-pixel"></div><div class="aa-pixel" style="animation-delay:0.12s;"></div><div class="aa-pixel" style="animation-delay:0.24s;"></div><div class="aa-pixel" style="animation-delay:0.36s;"></div>
+                <div class="aa-pixel" style="animation-delay:0.06s;"></div><div class="aa-pixel" style="animation-delay:0.18s;"></div><div class="aa-pixel" style="animation-delay:0.30s;"></div><div class="aa-pixel" style="animation-delay:0.42s;"></div>
+              </div>
+            </div>
+            <ul style="margin:0.1em 0 0; padding-left:1em; font-size:0.35em; color:#94a3b8;">
+              <li>Filtros convolucionales (blur, sharpen)</li>
+              <li>Transformaciones de color (RGB→YUV)</li>
+              <li>JPEG/PNG encode/decode</li>
+              <li>Redimensionado bilineal masivo</li>
+            </ul>
+          </div>
+
+          <!-- Video -->
+          <div class="r-item-card" style="border:1px solid rgba(249,115,22,0.3); border-radius:12px; padding:0.5em;">
+            <div style="display:flex; align-items:center; gap:0.3em; margin-bottom:0.2em;">
+              <span style="font-size:0.8em;">🎬</span>
+              <h3 style="color:#f97316; font-size:0.45em; margin:0;">Video & Multimedia</h3>
+            </div>
+            <div class="aa-area" style="border-color:rgba(249,115,22,0.2);">
+              <div class="aa-video">
+                <div class="aa-video-frame"></div>
+                <div class="aa-video-frame"></div>
+                <div class="aa-video-frame"></div>
+              </div>
+            </div>
+            <ul style="margin:0.1em 0 0; padding-left:1em; font-size:0.35em; color:#94a3b8;">
+              <li>Codecs H.264 / H.265 / AV1</li>
+              <li>Motion estimation (HEVC)</li>
+              <li>Mezcla de audio multicanal</li>
+              <li>Renderizado de subtítulos</li>
+            </ul>
+          </div>
+
+          <!-- ML -->
+          <div class="r-item-card" style="border:1px solid rgba(167,139,250,0.3); border-radius:12px; padding:0.5em;">
+            <div style="display:flex; align-items:center; gap:0.3em; margin-bottom:0.2em;">
+              <span style="font-size:0.8em;">🧠</span>
+              <h3 style="color:#a78bfa; font-size:0.45em; margin:0;">Machine Learning</h3>
+            </div>
+            <div class="aa-area" style="border-color:rgba(167,139,250,0.2);">
+              <div class="aa-ml">
+                <div class="aa-ml-col">
+                  <span class="aa-ml-cell">W₀</span>
+                  <span class="aa-ml-cell" style="animation-delay:0.15s;">W₁</span>
+                </div>
+                <span class="aa-ml-op">×</span>
+                <div class="aa-ml-col">
+                  <span class="aa-ml-cell" style="animation-delay:0.3s;">X₀</span>
+                  <span class="aa-ml-cell" style="animation-delay:0.45s;">X₁</span>
+                </div>
+                <span class="aa-ml-op">=</span>
+                <div class="aa-ml-col">
+                  <span class="aa-ml-res" style="animation-delay:0.6s;">Y₀</span>
+                  <span class="aa-ml-res" style="animation-delay:0.75s;">Y₁</span>
+                </div>
+              </div>
+            </div>
+            <ul style="margin:0.1em 0 0; padding-left:1em; font-size:0.35em; color:#94a3b8;">
+              <li>Multiplicación de matrices (GEMM)</li>
+              <li>Activaciones ReLU/Sigmoid en batch</li>
+              <li>Convoluciones de redes neuronales</li>
+              <li>Inferencia en CPU (ONNX Runtime)</li>
+            </ul>
+          </div>
+
+          <!-- Gráficos -->
+          <div class="r-item-card" style="border:1px solid rgba(52,211,153,0.3); border-radius:12px; padding:0.5em;">
+            <div style="display:flex; align-items:center; gap:0.3em; margin-bottom:0.2em;">
+              <span style="font-size:0.8em;">🎮</span>
+              <h3 style="color:#34d399; font-size:0.45em; margin:0;">Gráficos & Juegos</h3>
+            </div>
+            <div class="aa-area" style="border-color:rgba(52,211,153,0.2);">
+              <div class="aa-gfx">
+                <span class="aa-gfx-label">Transformación Vectorial</span>
+                <div class="aa-gfx-row">
+                  <span class="aa-coord">X</span>
+                  <span class="aa-coord" style="animation-delay:0.2s;">Y</span>
+                  <span class="aa-coord" style="animation-delay:0.4s;">Z</span>
+                  <span class="aa-coord" style="animation-delay:0.6s;">W</span>
+                </div>
+              </div>
+            </div>
+            <ul style="margin:0.1em 0 0; padding-left:1em; font-size:0.35em; color:#94a3b8;">
+              <li>Transformaciones de vértices 3D</li>
+              <li>Iluminación por píxel (Phong)</li>
+              <li>Colisión física en batch</li>
+              <li>Mezcla de texturas (bilinear filter)</li>
+            </ul>
+          </div>
+
+          <!-- HPC -->
+          <div class="r-item-card" style="border:1px solid rgba(251,191,36,0.3); border-radius:12px; padding:0.5em;">
+            <div style="display:flex; align-items:center; gap:0.3em; margin-bottom:0.2em;">
+              <span style="font-size:0.8em;">🔬</span>
+              <h3 style="color:#fbbf24; font-size:0.45em; margin:0;">HPC & Ciencia</h3>
+            </div>
+            <div class="aa-area" style="border-color:rgba(251,191,36,0.2);">
+              <div class="aa-hpc">
+                <svg viewBox="0 0 100 12"><path d="M0,6 Q12.5,0 25,6 T50,6 T75,6 T100,6" class="aa-wave"/></svg>
+                <svg viewBox="0 0 100 12"><path d="M0,6 Q12.5,12 25,6 T50,6 T75,6 T100,6" class="aa-wave" style="animation-delay:-0.5s;"/></svg>
+                <svg viewBox="0 0 100 12"><path d="M0,6 Q12.5,0 25,6 T50,6 T75,6 T100,6" class="aa-wave" style="animation-delay:-0.2s;"/></svg>
+              </div>
+            </div>
+            <ul style="margin:0.1em 0 0; padding-left:1em; font-size:0.35em; color:#94a3b8;">
+              <li>Simulaciones de fluidos (CFD)</li>
+              <li>Álgebra lineal (BLAS/LAPACK)</li>
+              <li>FFT sobre señales largas</li>
+              <li>Criptografía (AES-NI, SHA-NI)</li>
+            </ul>
+          </div>
+
+          <!-- Telecom -->
+          <div class="r-item-card" style="border:1px solid rgba(251,113,133,0.3); border-radius:12px; padding:0.5em;">
+            <div style="display:flex; align-items:center; gap:0.3em; margin-bottom:0.2em;">
+              <span style="font-size:0.8em;">📡</span>
+              <h3 style="color:#fb7185; font-size:0.45em; margin:0;">Telecomunicaciones</h3>
+            </div>
+            <div class="aa-area" style="border-color:rgba(251,113,133,0.2);">
+              <div class="aa-eq">
+                <div class="aa-eq-bar" style="height:20%; animation-delay:0s;"></div>
+                <div class="aa-eq-bar" style="height:40%; animation-delay:0.1s;"></div>
+                <div class="aa-eq-bar" style="height:25%; animation-delay:0.2s;"></div>
+                <div class="aa-eq-bar" style="height:55%; animation-delay:0.3s;"></div>
+                <div class="aa-eq-bar" style="height:30%; animation-delay:0.4s;"></div>
+                <div class="aa-eq-bar" style="height:50%; animation-delay:0.5s;"></div>
+                <div class="aa-eq-bar" style="height:35%; animation-delay:0.6s;"></div>
+              </div>
+            </div>
+            <ul style="margin:0.1em 0 0; padding-left:1em; font-size:0.35em; color:#94a3b8;">
+              <li>DSP: filtros FIR/IIR vectorizados</li>
+              <li>Modulación/demodulación QAM</li>
+              <li>Decodificación LDPC/Turbo</li>
+              <li>Procesamiento de radar/sonar</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@6/dist/reveal.js"></script>
+  <script>
+    // ── Init Reveal ──
+    Reveal.initialize({
+      hash: true,
+      controls: true,
+      progress: true,
+      slideNumber: 'c/t',
+      transition: 'slide',
+      transitionSpeed: 'fast',
+      center: true,
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+    });
+
+    // ═══════════════════════════════════════════════════════════
+    //  2. SISD vs SIMD
+    // ═══════════════════════════════════════════════════════════
+    const SISD_COLS = ['#60a5fa', '#3b82f6'];
+    const SIMD_COLS = ['#34d399', '#10b981'];
+    let baseAnimBusy = false;
+
+    function randInt() { return Math.floor(Math.random() * 10); }
+
+    function initSISDSIMD() {
+      ['sisd-a','sisd-b','sisd-r'].forEach(id => {
+        const c = document.getElementById(id); c.innerHTML = '';
+        const isR = id === 'sisd-r';
+        for(let i=0; i<4; i++) {
+          const d = document.createElement('div');
+          d.className = 'sc-cell';
+          d.style.cssText = `background:${isR ? SISD_COLS[0]+'18' : '#1e293b'}; border:1px solid ${SISD_COLS[0]}44; color:${SISD_COLS[0]};`;
+          d.id = `${id}-${i}`;
+          d.textContent = isR ? '?' : randInt();
+          c.appendChild(d);
+        }
+      });
+      ['simd-a','simd-b','simd-r'].forEach(id => {
+        const c = document.getElementById(id); c.innerHTML = '';
+        const isR = id === 'simd-r';
+        const n = id === 'simd-a' || id === 'simd-b' ? 8 : 8;
+        for(let i=0; i<n; i++) {
+          const d = document.createElement('div');
+          d.className = 'sc-cell';
+          d.style.cssText = `background:${isR ? SIMD_COLS[0]+'18' : '#1e293b'}; border:1px solid ${SIMD_COLS[0]}44; color:${SIMD_COLS[0]}; font-size:0.22em;`;
+          if(!isR) d.style.fontSize = '0.22em';
+          d.id = `${id}-${i}`;
+          d.textContent = isR ? '?' : randInt();
+          c.appendChild(d);
+        }
+      });
+      document.getElementById('sisd-status').textContent = '⏎ Presioná Ejecutar';
+      document.getElementById('sisd-status').style.color = '#64748b';
+      document.getElementById('simd-status').textContent = '⏎ Presioná Ejecutar';
+      document.getElementById('simd-status').style.color = '#64748b';
+      document.getElementById('sisd-simd-num').textContent = '—';
+      document.getElementById('sisd-simd-txt').textContent = 'Ejecutá cada columna y observá la diferencia en ciclos';
+    }
+
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    async function runSISD() {
+      if(baseAnimBusy) return;
+      baseAnimBusy = true;
+      document.getElementById('btn-sisd').disabled = true;
+      document.getElementById('btn-sisd').style.opacity = '0.5';
+
+      // Reset results
+      for(let i=0; i<4; i++) {
+        const r = document.getElementById(`sisd-r-${i}`);
+        r.textContent = '?';
+        r.style.opacity = '0.2';
+        r.style.transform = 'translateY(-5px)';
+      }
+
+      for(let i=0; i<4; i++) {
+        const a = document.getElementById(`sisd-a-${i}`);
+        const b = document.getElementById(`sisd-b-${i}`);
+        const r = document.getElementById(`sisd-r-${i}`);
+        const alu = document.getElementById('sisd-alu');
+
+        a.className = 'sc-cell active-sisd'; b.className = 'sc-cell active-sisd';
+        await sleep(300);
+        alu.classList.add('alu-pulse');
+        await sleep(350);
+        alu.classList.remove('alu-pulse');
+        r.textContent = parseInt(a.textContent) + parseInt(b.textContent);
+        r.style.opacity = '1'; r.style.transform = 'translateY(0)';
+        r.style.background = '#3b82f6'; r.style.color = 'white';
+        a.className = 'sc-cell'; b.className = 'sc-cell';
+        a.style.cssText = `background:#1e293b; border:1px solid ${SISD_COLS[0]}44; color:${SISD_COLS[0]};`;
+        b.style.cssText = `background:#1e293b; border:1px solid ${SISD_COLS[0]}44; color:${SISD_COLS[0]};`;
+        await sleep(100);
+      }
+
+      document.getElementById('sisd-status').textContent = '✅ 4 ciclos completados';
+      document.getElementById('sisd-status').style.color = '#34d399';
+      document.getElementById('sisd-simd-num').textContent = '4×';
+      document.getElementById('sisd-simd-txt').textContent = 'SISD necesitó 4 ciclos para 4 operaciones — 1 operación por ciclo';
+
+      document.getElementById('btn-sisd').disabled = false;
+      document.getElementById('btn-sisd').style.opacity = '1';
+      baseAnimBusy = false;
+    }
+
+    async function runSIMD() {
+      if(baseAnimBusy) return;
+      baseAnimBusy = true;
+      document.getElementById('btn-simd').disabled = true;
+      document.getElementById('btn-simd').style.opacity = '0.5';
+
+      // Reset
+      for(let i=0; i<8; i++) {
+        const r = document.getElementById(`simd-r-${i}`);
+        r.textContent = '?';
+        r.style.opacity = '0.2';
+        r.style.transform = 'translateY(-5px)';
+      }
+
+      for(let i=0; i<8; i++) {
+        const a = document.getElementById(`simd-a-${i}`);
+        const b = document.getElementById(`simd-b-${i}`);
+        a.className = 'sc-cell active-simd'; b.className = 'sc-cell active-simd';
+      }
+      await sleep(400);
+
+      const alu = document.getElementById('simd-alu');
+      alu.classList.add('alu-pulse');
+      await sleep(450);
+      alu.classList.remove('alu-pulse');
+
+      for(let i=0; i<8; i++) {
+        const a = document.getElementById(`simd-a-${i}`);
+        const b = document.getElementById(`simd-b-${i}`);
+        const r = document.getElementById(`simd-r-${i}`);
+        r.textContent = parseInt(a.textContent) + parseInt(b.textContent);
+        r.style.opacity = '1'; r.style.transform = 'translateY(0)';
+        r.style.background = '#10b981'; r.style.color = 'white';
+        a.className = 'sc-cell'; b.className = 'sc-cell';
+        a.style.cssText = `background:#1e293b; border:1px solid ${SIMD_COLS[0]}44; color:${SIMD_COLS[0]};`;
+        b.style.cssText = `background:#1e293b; border:1px solid ${SIMD_COLS[0]}44; color:${SIMD_COLS[0]};`;
+      }
+
+      document.getElementById('simd-status').textContent = '✅ 1 ciclo 🎉';
+      document.getElementById('simd-status').style.color = '#34d399';
+      document.getElementById('sisd-simd-num').textContent = '8×';
+      document.getElementById('sisd-simd-txt').textContent = 'SIMD resolvió 8 operaciones simultáneas en 1 solo ciclo';
+
+      document.getElementById('btn-simd').disabled = false;
+      document.getElementById('btn-simd').style.opacity = '1';
+      baseAnimBusy = false;
+    }
+
+    function resetSISDSIMD() {
+      if(baseAnimBusy) return;
+      initSISDSIMD();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  4. EVOLUCIÓN REGISTROS
+    // ═══════════════════════════════════════════════════════════
+    const ARCH_DATA = {
+      mmx:    { bits:64,  blocks:2,  width:'12.5%', color:'#a78bfa', border:'rgba(167,139,250,0.5)', bg:'rgba(167,139,250,0.12)', desc:'<strong>MMX (1997):</strong> Introdujo registros de 64 bits (aliasing de la FPU). Permite procesar 2 enteros de 32 bits simultáneamente.' },
+      sse:    { bits:128, blocks:4,  width:'25%',   color:'#60a5fa', border:'rgba(96,165,250,0.5)',  bg:'rgba(96,165,250,0.12)',  desc:'<strong>SSE (1999):</strong> Introdujo registros XMM dedicados de 128 bits. Permite 4 operaciones de punto flotante en paralelo.' },
+      avx:    { bits:256, blocks:8,  width:'50%',   color:'#34d399', border:'rgba(52,211,153,0.5)',  bg:'rgba(52,211,153,0.12)',  desc:'<strong>AVX (2011):</strong> Duplicó el ancho a 256 bits (registros YMM). 8 operaciones float32 simultáneas. ¡El throughput se dispara!' },
+      avx512: { bits:512, blocks:16, width:'100%',  color:'#fb7185', border:'rgba(251,113,133,0.5)', bg:'rgba(251,113,133,0.12)', desc:'<strong>AVX-512 (2016):</strong> Ofrece registros ZMM de 512 bits. Procesa 16 flotantes simultáneamente. Ideal para IA y simulación científica.' },
+    };
+
+    function setRegister(arch) {
+      const bar = document.getElementById('register-bar');
+      const data = ARCH_DATA[arch];
+      bar.style.width = data.width;
+      bar.style.background = data.bg;
+      bar.style.borderColor = data.color;
+      document.getElementById('register-desc').innerHTML = data.desc;
+      document.getElementById('register-stat-num').textContent = `${data.bits} bits`;
+      document.getElementById('register-stat-num').style.color = data.color;
+      document.getElementById('register-stat-lbl').textContent = `${data.blocks} valores de 32 bits por instrucción · 1 registro = ${data.blocks}× float32`;
+      document.getElementById('register-bar').style.background = data.bg;
+      document.getElementById('register-bar').style.borderColor = data.border;
+
+      setTimeout(() => {
+        bar.innerHTML = '';
+        for(let i=0; i<data.blocks; i++) {
+          const block = document.createElement('div');
+          block.className = 'arch-block';
+          block.style.cssText = `
+            flex:1; height:70%; border-radius:4px;
+            background:${data.color}22; border:1px solid ${data.color}55;
+            display:flex; align-items:center; justify-content:center;
+            font-family:monospace; font-weight:700; font-size:9px;
+            color:${data.color}; animation-delay:${i*0.04}s;
+          `;
+          block.textContent = '32b';
+          bar.appendChild(block);
+        }
+      }, 250);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  6. FMA
+    // ═══════════════════════════════════════════════════════════
+    let fmaBusy = false;
+
+    async function runNormalMath() {
+      if(fmaBusy) return;
+      fmaBusy = true;
+      document.getElementById('btn-nmath').disabled = true;
+      document.getElementById('btn-nmath').style.opacity = '0.5';
+
+      const els = ['n-a','n-b','n-temp','n-c','n-res'].forEach(id => {
+        document.getElementById(id).classList.remove('active-sisd','fma-active');
+      });
+
+      document.getElementById('n-a').classList.add('active-sisd');
+      document.getElementById('n-b').classList.add('active-sisd');
+      await sleep(400);
+      document.getElementById('n-mul').classList.add('alu-pulse');
+      await sleep(500);
+      document.getElementById('n-mul').classList.remove('alu-pulse');
+      document.getElementById('n-a').classList.remove('active-sisd');
+      document.getElementById('n-b').classList.remove('active-sisd');
+      document.getElementById('n-temp').classList.add('active-sisd');
+      await sleep(400);
+      document.getElementById('n-c').classList.add('active-sisd');
+      await sleep(400);
+      document.getElementById('n-add').classList.add('alu-pulse');
+      await sleep(500);
+      document.getElementById('n-add').classList.remove('alu-pulse');
+      document.getElementById('n-temp').classList.remove('active-sisd');
+      document.getElementById('n-c').classList.remove('active-sisd');
+      document.getElementById('n-res').classList.add('active-sisd');
+      await sleep(600);
+      document.getElementById('n-res').classList.remove('active-sisd');
+      document.getElementById('btn-nmath').disabled = false;
+      document.getElementById('btn-nmath').style.opacity = '1';
+      fmaBusy = false;
+    }
+
+    async function runFMA() {
+      if(fmaBusy) return;
+      fmaBusy = true;
+      document.getElementById('btn-fma').disabled = true;
+      document.getElementById('btn-fma').style.opacity = '0.5';
+
+      document.getElementById('fma-res').classList.remove('fma-active');
+      document.getElementById('fma-a').classList.add('fma-active');
+      document.getElementById('fma-b').classList.add('fma-active');
+      document.getElementById('fma-c').classList.add('fma-active');
+      await sleep(500);
+      document.getElementById('fma-alu').classList.add('fma-pulse');
+      await sleep(600);
+      document.getElementById('fma-alu').classList.remove('fma-pulse');
+      document.getElementById('fma-a').classList.remove('fma-active');
+      document.getElementById('fma-b').classList.remove('fma-active');
+      document.getElementById('fma-c').classList.remove('fma-active');
+      document.getElementById('fma-res').classList.add('fma-active');
+      await sleep(600);
+      document.getElementById('fma-res').classList.remove('fma-active');
+      document.getElementById('btn-fma').disabled = false;
+      document.getElementById('btn-fma').style.opacity = '1';
+      fmaBusy = false;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  7. AMDAHL
+    // ═══════════════════════════════════════════════════════════
+    function calcAmdahl(lanes) {
+      const seq = 0.10;
+      const par = 0.90;
+      const newPar = par / lanes;
+      const total = seq + newPar;
+      const speedup = 1 / total;
+
+      document.getElementById('amdahl-speedup').textContent = speedup.toFixed(2) + '×';
+      document.getElementById('amdahl-time').textContent = (total * 100).toFixed(1) + '%';
+      document.getElementById('amdahl-parallel').style.width = (newPar * 100) + '%';
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  8. USE CASES (SISD vs SIMD per domain)
+    // ═══════════════════════════════════════════════════════════
+    let ucBusy = false;
+    let currentUsecase = 'img';
+
+    const UC_DATA = {
+      img: {
+        color: '#60a5fa', name: '🖼️ Procesamiento de Imágenes',
+        desc: 'Filtros convolucionales, transformaciones de color, encode/decode de formatos, redimensionado masivo.',
+        items: ['Filtros convolucionales (blur, sharpen)', 'Transformaciones de color (RGB→YUV)', 'JPEG/PNG encode/decode', 'Redimensionado bilineal masivo'],
+        sisd: '64 ops/s', simd: '8 ops/s', sp: '8.0×',
+        anim: 'img',
+      },
+      video: {
+        color: '#f97316', name: '🎬 Video & Multimedia',
+        desc: 'Codecs de video, motion estimation, mezcla de audio multicanal, renderizado de subtítulos.',
+        items: ['Codecs H.264 / H.265 / AV1', 'Motion estimation (HEVC)', 'Mezcla de audio multicanal', 'Renderizado de subtítulos'],
+        sisd: '1 cuadro/s', simd: '30 fps', sp: '8.0×',
+        anim: 'video',
+      },
+      ml: {
+        color: '#a78bfa', name: '🧠 Machine Learning',
+        desc: 'Multiplicación de matrices, activaciones en batch, convoluciones, inferencia en CPU.',
+        items: ['Multiplicación de matrices (GEMM)', 'Activaciones ReLU/Sigmoid en batch', 'Convoluciones de redes neuronales', 'Inferencia en CPU (ONNX Runtime)'],
+        sisd: '256 ops/ciclo', simd: '2048 ops/ciclo', sp: '8.0×',
+        anim: 'ml',
+      },
+      gfx: {
+        color: '#34d399', name: '🎮 Gráficos & Juegos',
+        desc: 'Transformaciones de vértices 3D, iluminación por píxel, colisión física, mezcla de texturas.',
+        items: ['Transformaciones de vértices 3D', 'Iluminación por píxel (Phong)', 'Colisión física en batch', 'Mezcla de texturas (bilinear filter)'],
+        sisd: '1 vértice/ciclo', simd: '8 vértices/ciclo', sp: '8.0×',
+        anim: 'gfx',
+      },
+      hpc: {
+        color: '#fbbf24', name: '🔬 HPC & Ciencia',
+        desc: 'Simulaciones de fluidos, álgebra lineal, FFT, criptografía acelerada por hardware.',
+        items: ['Simulaciones de fluidos (CFD)', 'Álgebra lineal (BLAS/LAPACK)', 'FFT sobre señales largas', 'Criptografía (AES-NI, SHA-NI)'],
+        sisd: '1 elemento', simd: '8 elementos', sp: '8.0×',
+        anim: 'hpc',
+      },
+      telecom: {
+        color: '#fb7185', name: '📡 Telecomunicaciones',
+        desc: 'DSP vectorizado, modulación QAM, decodificación LDPC/Turbo, procesamiento de radar/sonar.',
+        items: ['DSP: filtros FIR/IIR vectorizados', 'Modulación/demodulación QAM', 'Decodificación LDPC/Turbo', 'Procesamiento de radar/sonar'],
+        sisd: '1 muestra', simd: '8 muestras', sp: '8.0×',
+        anim: 'telecom',
+      },
+    };
+
+    const UC_ANIMS = {
+      img: `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;width:100%;">
+        <div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div>
+        <div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div>
+        <div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div>
+        <div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div>
+        <div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div><div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div><div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div>
+        <div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div><div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div><div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div><div class="aa-pixel" style="background:#ef4444;opacity:0.3;border-color:#ef444488;"></div><div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div><div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div><div class="aa-pixel" style="background:#1e293b;border-color:#334155;"></div>
+      </div>`,
+      video: `<div style="display:flex;gap:3px;width:100%;height:100%;align-items:center;justify-content:center;">
+        <div class="aa-video-frame" style="width:24%;height:80%;background:linear-gradient(90deg,#f97316 0%,#f97316 25%,transparent 25%);opacity:0.3;"></div>
+        <div class="aa-video-frame" style="width:24%;height:80%;background:linear-gradient(90deg,transparent 25%,#f97316 25%,#f97316 50%,transparent 50%);opacity:0.3;"></div>
+        <div class="aa-video-frame" style="width:24%;height:80%;background:linear-gradient(90deg,transparent 50%,#f97316 50%,#f97316 75%,transparent 75%);opacity:0.3;"></div>
+        <div class="aa-video-frame" style="width:24%;height:80%;background:linear-gradient(90deg,transparent 75%,#f97316 75%,#f97316 100%);opacity:0.3;"></div>
+      </div>`,
+      ml: `<div style="display:flex;flex-wrap:wrap;gap:2px 4px;width:100%;justify-content:center;font-family:monospace;">
+        <span class="aa-ml-cell">W₀</span><span class="aa-ml-cell" style="animation-delay:0.15s;">W₁</span><span class="aa-ml-cell" style="animation-delay:0.3s;">W₂</span><span class="aa-ml-cell" style="animation-delay:0.45s;">W₃</span>
+        <span style="font-size:10px;color:#475569;font-weight:700;">×</span>
+        <span class="aa-ml-cell" style="animation-delay:0.6s;">X₀</span><span class="aa-ml-cell" style="animation-delay:0.75s;">X₁</span>
+        <span style="font-size:10px;color:#475569;font-weight:700;">=</span>
+        <span class="aa-ml-res" style="animation-delay:0.9s;">Y₀</span><span class="aa-ml-res" style="animation-delay:1.05s;">Y₁</span>
+      </div>`,
+      gfx: `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:4px;width:100%;justify-items:center;align-items:center;">
+        <span class="aa-gfx-vertex" style="background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.3);">V₁</span>
+        <span class="aa-gfx-vertex" style="background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.3);animation-delay:0.2s;">V₂</span>
+        <span class="aa-gfx-vertex" style="background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.3);animation-delay:0.4s;">V₃</span>
+        <span class="aa-gfx-vertex" style="background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.3);animation-delay:0.6s;">V₄</span>
+      </div>`,
+      hpc: `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;width:100%;">
+        <div class="aa-hpc-node"></div><div class="aa-hpc-node" style="animation-delay:0.1s;"></div><div class="aa-hpc-node" style="animation-delay:0.2s;"></div><div class="aa-hpc-node" style="animation-delay:0.3s;"></div>
+        <div class="aa-hpc-node" style="animation-delay:0.4s;"></div><div class="aa-hpc-node" style="animation-delay:0.5s;"></div><div class="aa-hpc-node" style="animation-delay:0.6s;"></div><div class="aa-hpc-node" style="animation-delay:0.7s;"></div>
+        <div class="aa-hpc-node" style="animation-delay:0.8s;"></div><div class="aa-hpc-node" style="animation-delay:0.9s;"></div><div class="aa-hpc-node" style="animation-delay:1.0s;"></div><div class="aa-hpc-node" style="animation-delay:1.1s;"></div>
+      </div>`,
+      telecom: `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;justify-items:center;align-items:center;">
+        <div class="aa-const-point"></div><div style="font-size:6px;color:#fb7185;">·</div><div class="aa-const-point"></div>
+        <div style="font-size:6px;color:#475569;">·</div><div style="font-size:7px;color:#64748b;">QAM</div><div style="font-size:6px;color:#475569;">·</div>
+        <div class="aa-const-point"></div><div style="font-size:6px;color:#fb7185;">·</div><div class="aa-const-point"></div>
+      </div>`,
+    };
+
+    function setUsecase(id) {
+      if(ucBusy) return;
+      currentUsecase = id;
+
+      // Update tabs
+      document.querySelectorAll('.uc-btn').forEach(btn => {
+        const uid = btn.dataset.uc;
+        const isActive = uid === id;
+        const c = UC_DATA[uid].color;
+        btn.className = isActive ? 'uc-btn uc-active' : 'uc-btn';
+        btn.style.borderColor = isActive ? c : '#475569';
+        btn.style.borderWidth = isActive ? '2px' : '1px';
+        btn.style.background = isActive ? c + '22' : 'rgba(71,85,105,0.15)';
+        btn.style.color = isActive ? c : '#94a3b8';
+      });
+
+      // Update info
+      const d = UC_DATA[id];
+      document.getElementById('uc-name').textContent = d.name;
+      document.getElementById('uc-name').style.color = d.color;
+      document.getElementById('uc-desc').textContent = d.desc;
+      document.getElementById('uc-sisd').textContent = d.sisd;
+      document.getElementById('uc-sisd').style.color = d.color;
+      document.getElementById('uc-simd').textContent = d.simd;
+      document.getElementById('uc-speedup').textContent = d.sp;
+
+      // Update items
+      const ul = document.getElementById('uc-items');
+      ul.innerHTML = d.items.map(item => `<li>${item}</li>`).join('');
+
+      // Update animation
+      const animCont = document.getElementById('uc-anim');
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(UC_ANIMS[id], 'text/html');
+      const newAnim = doc.body.firstChild;
+      if(newAnim) {
+        const old = document.getElementById('uc-anim-inner');
+        if(old) old.remove();
+        newAnim.id = 'uc-anim-inner';
+        newAnim.style.width = '100%';
+        animCont.appendChild(newAnim);
+      }
+    }
+
+    async function runUcSISD() {
+      if(ucBusy) return;
+      ucBusy = true;
+      const btn = document.getElementById('btn-uc-sisd');
+      const btn2 = document.getElementById('btn-uc-simd');
+      const rst = document.getElementById('btn-uc-reset');
+      btn.disabled = true; btn2.disabled = true; rst.disabled = true;
+      btn.style.opacity = '0.5';
+
+      const anim = document.getElementById('uc-anim-inner');
+      const items = anim?.children;
+      if(items && items.length > 0) {
+        for(const el of items) {
+          if(el.classList) {
+            el.style.transition = 'all 0.15s ease';
+            el.style.opacity = '1';
+            el.style.transform = 'scale(1.05)';
+            el.style.boxShadow = '0 0 6px rgba(59,130,246,0.6)';
+            await sleep(40);
+          }
+        }
+      } else {
+        await sleep(600);
+      }
+
+      await sleep(200);
+      btn.disabled = false; btn2.disabled = false; rst.disabled = false;
+      btn.style.opacity = '1';
+      ucBusy = false;
+    }
+
+    async function runUcSIMD() {
+      if(ucBusy) return;
+      ucBusy = true;
+      const btn = document.getElementById('btn-uc-sisd');
+      const btn2 = document.getElementById('btn-uc-simd');
+      const rst = document.getElementById('btn-uc-reset');
+      btn.disabled = true; btn2.disabled = true; rst.disabled = true;
+      btn2.style.opacity = '0.5';
+
+      const anim = document.getElementById('uc-anim-inner');
+      const items = anim?.children;
+      if(items && items.length > 0) {
+        const children = Array.from(items);
+        for(let i=0; i<children.length; i+=4) {
+          const batch = children.slice(i, i+4);
+          batch.forEach(el => {
+            el.style.transition = 'all 0.12s ease';
+            el.style.opacity = '1';
+            el.style.transform = 'scale(1.1)';
+            el.style.boxShadow = '0 0 8px rgba(52,211,153,0.7)';
+          });
+          await sleep(80);
+        }
+      } else {
+        await sleep(200);
+      }
+
+      await sleep(100);
+      btn.disabled = false; btn2.disabled = false; rst.disabled = false;
+      btn2.style.opacity = '1';
+      ucBusy = false;
+    }
+
+    function resetUsecase() { setUsecase(currentUsecase); }
+
+    // ═══════════════════════════════════════════════════════════
+    //  EXPOSE GLOBALS (for onclick attributes)
+    // ═══════════════════════════════════════════════════════════
+    window.runSISD = runSISD;
+    window.runSIMD = runSIMD;
+    window.resetSISDSIMD = resetSISDSIMD;
+    window.setRegister = setRegister;
+    window.runNormalMath = runNormalMath;
+    window.runFMA = runFMA;
+    window.calcAmdahl = calcAmdahl;
+    window.setUsecase = setUsecase;
+    window.runUcSISD = runUcSISD;
+    window.runUcSIMD = runUcSIMD;
+    window.resetUsecase = resetUsecase;
+
+    // ═══════════════════════════════════════════════════════════
+    //  INIT
+    // ═══════════════════════════════════════════════════════════
+    initSISDSIMD();
+    setRegister('mmx');
+    setUsecase('img');
+  </script>
+</body>
+</html>
