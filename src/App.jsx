@@ -52,14 +52,6 @@ export default function App() {
       component: <SlideIntroParte1 />
     },
     {
-      id: '1.1',
-      section: 1,
-      title: 'El Problema: Una Sola Caja Registradora',
-      subtitle: 'Slide 1.1 · El Límite del Procesamiento Secuencial',
-      speaker: "El cuello de botella no es la velocidad del cajero. Es que solo hay uno. En SISD, para calcular C[i]=(A[i]+B[i])/2 sobre 50 elementos, la CPU ejecuta 304 instrucciones y 2004 ciclos. SIMD abre más cajas y lo hace en 7 instrucciones y 285 ciclos.",
-      component: <Slide1_1 />
-    },
-    {
       id: '1.1b',
       section: 1,
       title: 'Simulación: Cajero vs Paralelo',
@@ -82,6 +74,14 @@ export default function App() {
       subtitle: 'Slide 1.3 · Arquitectura y Funcionamiento Von Neumann',
       speaker: "SISD es el modelo clásico de Von Neumann: una ALU, un bus, un stream de instrucciones. Cada instrucción pasa por Fetch, Decode, Execute y Writeback. Para N datos, el ciclo se repite N veces — esa es la limitación estructural.",
       component: <Slide1_2 />
+    },
+    {
+      id: '1.1',
+      section: 1,
+      title: 'Arquitectura Von Neumann — Componentes SISD',
+      subtitle: 'Slide 1.1 · Diagrama Interactivo · Hacé click en cada componente',
+      speaker: "Esta es la arquitectura Von Neumann que subyace al modelo SISD. Hay un solo bus, una sola ALU, un solo flujo. Hacé click en cualquier componente para ver su rol específico en el cuello de botella secuencial.",
+      component: <Slide1_1 />
     },
     {
       id: '1.4',
@@ -515,47 +515,128 @@ function SlideIntroParte4() {
 // ==========================================
 
 function Slide1_1() {
+  const [active, setActive] = useState(null);
+
+  const INFO = {
+    cu:     { title: 'Control Unit (CU)', text: 'Decodifica 1 instrucción por ciclo. Orquesta el ciclo Fetch → Decode → Execute de forma estrictamente secuencial. Sin CU no hay SISD.' },
+    alu:    { title: 'ALU — Arithmetic Logic Unit', text: 'Ejecuta 1 operación aritmética o lógica por ciclo de reloj. Es el cuello de botella del SISD: no puede operar sobre dos datos al mismo tiempo.' },
+    reg:    { title: 'Registers', text: 'Almacenamiento de ultra-velocidad (1 ciclo). Contiene el Program Counter (PC), Instruction Register (IR) y operandos activos de la ALU.' },
+    ram:    { title: 'Main Memory (RAM)', text: 'Almacena instrucciones y datos activos. El CPU los fetcha de a 1 palabra por ciclo de bus. Latencia ~100 ciclos vs 1 del registro.' },
+    disk:   { title: 'Secondary Memory', text: 'SSD / HDD para persistencia. Hasta 100.000× más lento que RAM. El CPU bloquea (I/O wait) hasta recibir el dato — pura serialización.' },
+    bus:    { title: 'System Bus', text: 'Canal compartido entre CPU, memoria y periféricos. En SISD solo ocurre 1 transferencia por vez. La autopista de un único carril del procesamiento secuencial.' },
+    input:  { title: 'Input Devices', text: 'Teclado, mouse. Generan interrupciones que el CPU atiende suspendiendo el thread actual, procesando la entrada, y luego retomando — siempre en serie.' },
+    output: { title: 'Output Devices', text: 'Display, impresora. Reciben resultados del CPU solo tras completar toda la cadena secuencial Fetch → Decode → Execute → Writeback.' },
+  };
+
+  const toggle = (id) => setActive(prev => prev === id ? null : id);
+
+  const Node = ({ id, label, sub, lg = false }) => {
+    const on = active === id;
+    return (
+      <div onClick={() => toggle(id)} className={`cursor-pointer rounded-lg border-2 transition-all duration-150 select-none text-center px-2 py-1.5 ${lg ? 'py-3' : ''} ${
+        on ? 'border-cyan-400/70 bg-cyan-500/10' : 'border-slate-700 bg-slate-900 hover:border-slate-500 hover:bg-slate-800/60'
+      }`}>
+        <p className={`font-mono font-bold text-xs ${on ? 'text-cyan-300' : 'text-slate-300'}`}>{label}</p>
+        {sub && <p className="text-[9px] text-slate-600 mt-0.5 font-mono">{sub}</p>}
+      </div>
+    );
+  };
+
+  const Connector = ({ dir = 'h', label }) => (
+    <div className={`flex ${dir === 'h' ? 'items-center' : 'flex-col items-center'} gap-0.5 shrink-0`}>
+      {label && <span className="text-[8px] text-slate-700 font-mono">{label}</span>}
+      {dir === 'h'
+        ? <div className="flex items-center gap-0"><span className="text-slate-600 text-xs">◄</span><div className="w-5 h-px bg-slate-700" /><span className="text-slate-600 text-xs">►</span></div>
+        : <div className="flex flex-col items-center gap-0"><span className="text-slate-600 text-xs leading-none">▲</span><div className="w-px h-5 bg-slate-700" /><span className="text-slate-600 text-xs leading-none">▼</span></div>
+      }
+    </div>
+  );
+
+  const ArrowOut = ({ dir = 'right' }) => (
+    <div className="flex items-center shrink-0">
+      {dir === 'right'
+        ? <><div className="w-5 h-px bg-slate-700" /><span className="text-slate-600 text-xs">►</span></>
+        : <><span className="text-slate-600 text-xs">◄</span><div className="w-5 h-px bg-slate-700" /></>
+      }
+    </div>
+  );
+
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center space-y-1">
-        <h3 className="text-base font-bold text-slate-200">El Ejemplo Real: Promedio de Arreglos</h3>
-        <p className="text-xs font-mono text-cyan-300">C[i] = (A[i] + B[i]) / 2  para i = 0..49 (50 elementos)</p>
+    <div className="w-full h-full flex flex-col gap-2 max-w-5xl mx-auto select-none">
+
+      {/* Info panel */}
+      <div className={`shrink-0 rounded-xl border px-4 py-2.5 min-h-[54px] flex items-center transition-all duration-200 ${
+        active ? 'border-cyan-500/40 bg-slate-900' : 'border-slate-800 bg-slate-900/40'
+      }`}>
+        {active
+          ? <div><p className="text-xs font-bold text-cyan-300 mb-0.5">{INFO[active]?.title}</p><p className="text-[11px] text-slate-400 leading-relaxed">{INFO[active]?.text}</p></div>
+          : <p className="text-[11px] text-slate-700 font-mono w-full text-center">Hacé click en cualquier componente para ver su rol en SISD →</p>
+        }
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-        <motion.div whileHover={{ scale: 1.01 }} className="p-6 rounded-3xl bg-slate-900/80 border border-red-500/30 space-y-4 flex flex-col justify-between">
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-xs font-bold px-3 py-1 bg-red-500/10 text-red-400 rounded-full border border-red-500/20">SISD — 1 Caja Registradora</span>
-              <AlertTriangle size={18} className="text-red-400" />
-            </div>
-            <p className="text-xs text-slate-400">Cuello de botella estructural: 1 solo cajero procesa cliente por cliente.</p>
-          </div>
-          <div className="space-y-2 py-2 font-mono text-xs bg-slate-950 p-4 rounded-2xl border border-red-500/20">
-            <div className="flex justify-between text-slate-400"><span>• Instrucciones Dinámicas:</span> <span className="text-red-400 font-bold">304</span></div>
-            <div className="flex justify-between text-slate-400"><span>• Ciclos de Reloj Totales:</span> <span className="text-red-400 font-bold">~2004</span></div>
-          </div>
-          <p className="text-[11px] text-red-300 bg-red-950/40 p-2.5 rounded-xl border border-red-900/40 text-center">
-            ⚠️ El problema no es velocidad de reloj — es throughput estructural.
-          </p>
-        </motion.div>
+      {/* Diagram */}
+      <div className="flex-1 flex items-stretch gap-2 min-h-0">
 
-        <motion.div whileHover={{ scale: 1.01 }} className="p-6 rounded-3xl bg-slate-900/80 border border-cyan-500/40 space-y-4 flex flex-col justify-between shadow-xl shadow-cyan-500/5">
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-xs font-bold px-3 py-1 bg-cyan-500/10 text-cyan-400 rounded-full border border-cyan-500/20">SIMD — 4+ Cajas en Paralelo</span>
-              <Zap size={18} className="text-cyan-400 animate-pulse" />
-            </div>
-            <p className="text-xs text-slate-400">Procesamiento vectorial síncrono sobre múltiples elementos.</p>
+        {/* ── CPU block ── */}
+        <div className={`flex flex-col gap-1.5 rounded-xl border-2 p-2.5 w-32 shrink-0 transition-colors duration-200 ${
+          ['cu','alu','reg'].includes(active) ? 'border-cyan-500/40 bg-slate-900' : 'border-slate-700 bg-slate-900/60'
+        }`}>
+          <p className="text-[9px] text-slate-500 font-mono text-center tracking-widest">CPU</p>
+          <Node id="cu" label="Control Unit" sub="CU" />
+          <div className="flex justify-center"><div className="w-px h-2.5 bg-slate-700" /></div>
+          <Node id="alu" label="ALU" sub="Arithmetic Logic" />
+          <div className="flex justify-center"><div className="w-px h-2.5 bg-slate-700" /></div>
+          <Node id="reg" label="Registers" sub="PC · IR · ACC" />
+          <p className="text-[8px] text-slate-600 font-mono text-center mt-auto pt-1">Central Processing Unit</p>
+        </div>
+
+        {/* CPU ↔ Bus (top rail connection) */}
+        <Connector dir="h" />
+
+        {/* ── Memory block ── */}
+        <div className="flex flex-col gap-3 justify-center flex-1 min-w-0">
+          <Node id="ram" label="Main Memory" sub="RAM · instrucciones + datos activos" lg />
+          <Node id="disk" label="Secondary Memory" sub="SSD / HDD · Storage" lg />
+        </div>
+
+        {/* Memory ↔ Bus */}
+        <div className="flex flex-col justify-center gap-8 shrink-0">
+          <Connector dir="h" />
+          <Connector dir="h" />
+        </div>
+
+        {/* ── BUS vertical bar ── */}
+        <div
+          onClick={() => toggle('bus')}
+          className={`cursor-pointer w-9 shrink-0 rounded-xl border-2 flex items-center justify-center transition-all duration-150 ${
+            active === 'bus' ? 'border-amber-400/60 bg-amber-500/10' : 'border-slate-600 bg-slate-800 hover:border-slate-500'
+          }`}
+        >
+          <p className={`text-[9px] font-bold font-mono [writing-mode:vertical-rl] tracking-widest ${active === 'bus' ? 'text-amber-300' : 'text-slate-500'}`}>SYSTEM BUS</p>
+        </div>
+
+        {/* Bus → I/O connectors (4 rows: 2 in, 2 out) */}
+        <div className="flex flex-col justify-around shrink-0 py-2">
+          <ArrowOut dir="left" />
+          <ArrowOut dir="left" />
+          <ArrowOut dir="right" />
+          <ArrowOut dir="right" />
+        </div>
+
+        {/* ── I/O block ── */}
+        <div className="flex flex-col justify-between w-32 shrink-0">
+          <div className="flex flex-col gap-1.5">
+            <p className="text-[9px] text-slate-500 font-mono text-center tracking-widest">INPUT</p>
+            <Node id="input" label="Keyboard" />
+            <Node id="input" label="Mouse" />
           </div>
-          <div className="space-y-2 py-2 font-mono text-xs bg-slate-950 p-4 rounded-2xl border border-cyan-500/30">
-            <div className="flex justify-between text-slate-400"><span>• Instrucciones Dinámicas:</span> <span className="text-cyan-400 font-bold">7</span></div>
-            <div className="flex justify-between text-slate-400"><span>• Ciclos de Reloj Totales:</span> <span className="text-cyan-400 font-bold">~285</span></div>
+          <div className="flex flex-col gap-1.5">
+            <Node id="output" label="Display" />
+            <Node id="output" label="Printer" />
+            <p className="text-[9px] text-slate-500 font-mono text-center tracking-widest">OUTPUT</p>
           </div>
-          <p className="text-[11px] text-cyan-300 bg-cyan-950/40 p-2.5 rounded-xl border border-cyan-900/40 text-center font-bold">
-            ⚡ Aceleración de 7X respecto al modelo secuencial.
-          </p>
-        </motion.div>
+        </div>
+
       </div>
     </div>
   );
@@ -568,55 +649,57 @@ function Slide1_1Anim() {
   const [running, setRunning] = useState(false);
   const timerRef = React.useRef(null);
 
-  const sisdDone = Math.min(tick, TOTAL);
-  const simdDone = Math.min(tick * SIMD_W, TOTAL);
-  const simdFinished = simdDone >= TOTAL;
+  const sisdDone  = Math.min(tick, TOTAL);
+  const simdDone  = Math.min(tick * SIMD_W, TOTAL);
   const sisdFinished = sisdDone >= TOTAL;
-  const simdFinishTick = TOTAL / SIMD_W; // tick 4
+  const simdFinished = simdDone >= TOTAL;
+  const simdFinishTick = TOTAL / SIMD_W;
 
   useEffect(() => {
     if (!running) return;
     timerRef.current = setInterval(() => {
       setTick(prev => {
-        if (prev >= TOTAL) {
-          clearInterval(timerRef.current);
-          setRunning(false);
-          return prev;
-        }
+        if (prev >= TOTAL) { clearInterval(timerRef.current); setRunning(false); return prev; }
         return prev + 1;
       });
-    }, 350);
+    }, 500);
     return () => clearInterval(timerRef.current);
   }, [running]);
 
-  const reset = () => {
-    clearInterval(timerRef.current);
-    setTick(0);
-    setRunning(false);
-  };
+  const reset = () => { clearInterval(timerRef.current); setTick(0); setRunning(false); };
 
-  const itemColors = [
-    'bg-red-400','bg-orange-400','bg-amber-400','bg-yellow-400',
-    'bg-lime-400','bg-green-400','bg-teal-400','bg-cyan-400',
-    'bg-sky-400','bg-blue-400','bg-indigo-400','bg-violet-400',
-    'bg-purple-400','bg-pink-400','bg-rose-400','bg-fuchsia-400',
-  ];
+  // SISD: item at index sisdDone is at cajero; items after are queued
+  const sisdAtCajero = sisdDone < TOTAL ? sisdDone : null;
+  const sisdQueue    = Array.from({ length: Math.max(0, TOTAL - sisdDone - 1) }, (_, i) => sisdDone + 1 + i);
+
+  // SIMD: current batch at cajeros; items after batch are queued
+  const simdBatchIdxs = !simdFinished
+    ? Array.from({ length: Math.min(SIMD_W, TOTAL - simdDone) }, (_, i) => simdDone + i)
+    : [];
+  const simdQueueStart = simdDone + simdBatchIdxs.length;
+  const simdQueue      = Array.from({ length: Math.max(0, TOTAL - simdQueueStart) }, (_, i) => simdQueueStart + i);
+
+  const ItemChip = ({ idx, size = 'sm', ring = false, accent = 'bg-slate-700 border border-slate-600' }) => {
+    const cls = size === 'lg'
+      ? 'w-11 h-11 text-sm rounded-xl'
+      : 'w-6 h-6 text-[9px] rounded';
+    return (
+      <div className={`${cls} ${accent} flex items-center justify-center font-bold font-mono text-slate-200 shrink-0 ${ring ? 'ring-2 ring-white/40 ring-offset-1 ring-offset-slate-950' : ''}`}>
+        {idx + 1}
+      </div>
+    );
+  };
 
   return (
     <div className="w-full h-full flex flex-col gap-3 max-w-5xl mx-auto select-none">
       {/* Controls */}
       <div className="flex items-center justify-center gap-3 shrink-0">
-        <button
-          onClick={() => setRunning(r => !r)}
-          disabled={sisdFinished && simdFinished}
-          className="flex items-center gap-2 px-5 py-2 rounded-xl bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 text-sm font-bold hover:bg-cyan-500/30 disabled:opacity-40 transition-all"
-        >
+        <button onClick={() => setRunning(r => !r)} disabled={sisdFinished && simdFinished}
+          className="flex items-center gap-2 px-5 py-2 rounded-xl bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 text-sm font-bold hover:bg-cyan-500/30 disabled:opacity-40 transition-all">
           <Play size={14} /> {running ? 'Corriendo...' : 'Iniciar Simulación'}
         </button>
-        <button
-          onClick={reset}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 text-sm hover:text-slate-200 transition-all"
-        >
+        <button onClick={reset}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 text-sm hover:text-slate-200 transition-all">
           <RotateCcw size={14} /> Reset
         </button>
         <span className="text-xs font-mono text-slate-500 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
@@ -624,111 +707,138 @@ function Slide1_1Anim() {
         </span>
       </div>
 
-      {/* Cards — flex-1 so they always fill remaining height */}
       <div className="flex-1 grid grid-cols-2 gap-4 min-h-0">
-        {/* SISD */}
-        <div className={`flex flex-col p-5 rounded-2xl border transition-colors duration-500 ${sisdFinished ? 'border-emerald-500/50 bg-slate-900' : 'border-red-500/30 bg-slate-900'}`}>
+
+        {/* ── SISD panel ── */}
+        <div className={`flex flex-col p-4 rounded-2xl border bg-slate-900 transition-colors duration-300 ${sisdFinished ? 'border-emerald-500/50' : 'border-red-500/30'}`}>
           <div className="flex items-center justify-between mb-3 shrink-0">
             <div>
-              <span className="text-sm font-bold text-red-400 font-mono">SISD — Cajero Único</span>
-              <p className="text-[11px] text-slate-500 mt-0.5">1 dato por ciclo · 16 ciclos totales</p>
+              <span className="text-sm font-bold text-red-400 font-mono">SISD — 1 Cajero</span>
+              <p className="text-[10px] text-slate-500">1 dato · {TOTAL} ciclos</p>
             </div>
-            {sisdFinished ? (
-              <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
-                className="text-xs font-bold text-emerald-400 bg-emerald-500/20 border border-emerald-500/40 px-2 py-1 rounded-lg">
-                ✓ Ciclo {TOTAL}
-              </motion.span>
-            ) : tick > 0 ? (
-              <span className="text-xs font-mono text-red-400">{sisdDone}/{TOTAL}</span>
-            ) : null}
+            {sisdFinished
+              ? <motion.span initial={{scale:0}} animate={{scale:1}}
+                  className="text-xs font-bold text-emerald-400 bg-emerald-500/20 border border-emerald-500/40 px-2 py-1 rounded-lg">✓ Ciclo {TOTAL}</motion.span>
+              : tick > 0 ? <span className="text-xs font-mono text-red-400">{sisdDone}/{TOTAL}</span>
+              : null}
           </div>
 
-          {/* Items grid — flex-1 fills card height */}
-          <div className="flex-1 grid gap-2 content-center" style={{ gridTemplateColumns: 'repeat(8, 1fr)' }}>
-            {itemColors.map((color, i) => {
-              const done = i < sisdDone;
-              const active = i === sisdDone && running;
-              return (
-                <div key={i}
-                  className={`rounded-lg flex items-center justify-center text-[11px] font-bold font-mono transition-colors duration-150 aspect-square ${
-                    done    ? `${color} text-slate-900`
-                    : active ? 'bg-red-500/50 border-2 border-red-400 text-red-100'
-                             : 'bg-slate-800 border border-slate-700 text-slate-600'
-                  }`}
-                >
-                  {done ? '✓' : i + 1}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Progress bar */}
-          <div className="mt-3 shrink-0">
-            <div className="h-2.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
-              <motion.div className="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full"
-                animate={{ width: `${(sisdDone / TOTAL) * 100}%` }} transition={{ duration: 0.3 }} />
+          <div className="flex-1 flex items-start gap-3 min-h-0 overflow-hidden">
+            {/* Queue — anchored top-left */}
+            <div className="flex flex-col items-center gap-1 shrink-0">
+              <span className="text-[9px] text-slate-600 font-mono mb-0.5">COLA</span>
+              <div className="flex flex-col gap-1">
+                <AnimatePresence initial={false}>
+                  {sisdQueue.map(i => (
+                    <motion.div key={i}
+                      initial={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 36, transition: { duration: 0.22 } }}
+                      layout="position">
+                      <ItemChip idx={i} />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
             </div>
-            <div className="flex justify-between text-[10px] font-mono text-slate-600 mt-1">
-              <span>0%</span>
-              <span className="text-red-400 font-bold">{Math.round((sisdDone / TOTAL) * 100)}%</span>
-              <span>100%</span>
+
+            {/* Flex spacer with arrow centered */}
+            <div className="flex-1 flex items-center justify-center pt-8">
+              <ArrowRight size={16} className="text-red-500/50" />
+            </div>
+
+            {/* Cajero + done counter — anchored top-right */}
+            <div className="flex flex-col items-center gap-2 shrink-0">
+              <span className="text-[9px] text-slate-600 font-mono">CAJERO</span>
+              <div className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors duration-200 ${
+                sisdAtCajero !== null ? 'border-red-400 bg-slate-800' : sisdFinished ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-slate-700 bg-slate-800'
+              }`}>
+                <AnimatePresence mode="wait">
+                  {sisdAtCajero !== null
+                    ? <motion.div key={sisdAtCajero} initial={{scale:0.4,opacity:0}} animate={{scale:1,opacity:1}} exit={{scale:0.4,opacity:0}} transition={{duration:0.2}}>
+                        <ItemChip idx={sisdAtCajero} size="lg" ring accent="bg-red-500 border-0" />
+                      </motion.div>
+                    : <motion.span key="ok" initial={{scale:0}} animate={{scale:1}} className="text-emerald-400 text-xl">✓</motion.span>
+                  }
+                </AnimatePresence>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-lg font-bold font-mono text-slate-300">{sisdDone}</span>
+                <span className="text-[9px] text-slate-600 font-mono">procesados</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* SIMD */}
-        <div className={`flex flex-col p-5 rounded-2xl border transition-colors duration-500 ${simdFinished ? 'border-emerald-500/50 bg-slate-900' : 'border-cyan-500/40 bg-slate-900'}`}>
+        {/* ── SIMD panel ── */}
+        <div className={`flex flex-col p-4 rounded-2xl border bg-slate-900 transition-colors duration-300 ${simdFinished ? 'border-emerald-500/50' : 'border-cyan-500/40'}`}>
           <div className="flex items-center justify-between mb-3 shrink-0">
             <div>
-              <span className="text-sm font-bold text-cyan-400 font-mono">SIMD — {SIMD_W} Carriles</span>
-              <p className="text-[11px] text-slate-500 mt-0.5">{SIMD_W} datos por ciclo · {simdFinishTick} ciclos totales</p>
+              <span className="text-sm font-bold text-cyan-400 font-mono">SIMD — {SIMD_W} Cajeros</span>
+              <p className="text-[10px] text-slate-500">{SIMD_W} datos · {simdFinishTick} ciclos</p>
             </div>
-            {simdFinished ? (
-              <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
-                className="text-xs font-bold text-emerald-400 bg-emerald-500/20 border border-emerald-500/40 px-2 py-1 rounded-lg">
-                ✓ Ciclo {simdFinishTick} · {TOTAL / simdFinishTick}× más rápido
-              </motion.span>
-            ) : tick > 0 ? (
-              <span className="text-xs font-mono text-cyan-400">{simdDone}/{TOTAL}</span>
-            ) : null}
+            {simdFinished
+              ? <motion.span initial={{scale:0}} animate={{scale:1}}
+                  className="text-xs font-bold text-emerald-400 bg-emerald-500/20 border border-emerald-500/40 px-2 py-1 rounded-lg">✓ Ciclo {simdFinishTick} · {TOTAL/simdFinishTick}× más rápido</motion.span>
+              : tick > 0 ? <span className="text-xs font-mono text-cyan-400">{simdDone}/{TOTAL}</span>
+              : null}
           </div>
 
-          {/* Items grid */}
-          <div className="flex-1 grid gap-2 content-center" style={{ gridTemplateColumns: 'repeat(8, 1fr)' }}>
-            {itemColors.map((color, i) => {
-              const done = i < simdDone;
-              const batchStart = Math.floor(simdDone / SIMD_W) * SIMD_W;
-              const inActiveBatch = i >= batchStart && i < batchStart + SIMD_W && running && !simdFinished;
-              return (
-                <div key={i}
-                  className={`rounded-lg flex items-center justify-center text-[11px] font-bold font-mono transition-colors duration-150 aspect-square ${
-                    done          ? `${color} text-slate-900`
-                    : inActiveBatch ? 'bg-cyan-500/50 border-2 border-cyan-400 text-cyan-100'
-                                  : 'bg-slate-800 border border-slate-700 text-slate-600'
-                  }`}
-                >
-                  {done ? '✓' : i + 1}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Progress bar */}
-          <div className="mt-3 shrink-0">
-            <div className="h-2.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
-              <motion.div className="h-full bg-gradient-to-r from-cyan-500 to-cyan-300 rounded-full"
-                animate={{ width: `${(simdDone / TOTAL) * 100}%` }} transition={{ duration: 0.3 }} />
+          <div className="flex-1 flex items-start gap-3 min-h-0 overflow-hidden">
+            {/* Queue — anchored top-left */}
+            <div className="flex flex-col items-center gap-1 shrink-0">
+              <span className="text-[9px] text-slate-600 font-mono mb-0.5">COLA</span>
+              <div className="flex flex-col gap-1">
+                <AnimatePresence initial={false}>
+                  {simdQueue.map(i => (
+                    <motion.div key={i}
+                      initial={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 36, transition: { duration: 0.22 } }}
+                      layout="position">
+                      <ItemChip idx={i} />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
             </div>
-            <div className="flex justify-between text-[10px] font-mono text-slate-600 mt-1">
-              <span>0%</span>
-              <span className="text-cyan-400 font-bold">{Math.round((simdDone / TOTAL) * 100)}%</span>
-              <span>100%</span>
+
+            {/* Flex spacer with arrow centered */}
+            <div className="flex-1 flex items-center justify-center pt-8">
+              <ArrowRight size={16} className="text-cyan-500/50" />
+            </div>
+
+            {/* 4 cajeros — anchored top-right */}
+            <div className="flex flex-col gap-1.5 shrink-0">
+              <span className="text-[9px] text-slate-600 font-mono text-center">CAJEROS</span>
+              {Array.from({ length: SIMD_W }, (_, lane) => {
+                const itemIdx = simdBatchIdxs[lane] ?? null;
+                return (
+                  <div key={lane} className="flex items-center gap-2">
+                    <div className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-colors duration-200 ${
+                      itemIdx !== null ? 'border-cyan-400 bg-slate-800' : simdFinished ? 'border-emerald-500/30 bg-emerald-500/10' : 'border-slate-700 bg-slate-800'
+                    }`}>
+                      <AnimatePresence mode="wait">
+                        {itemIdx !== null
+                          ? <motion.div key={`${tick}-${lane}`} initial={{scale:0.4,opacity:0}} animate={{scale:1,opacity:1}} exit={{scale:0.4,opacity:0}} transition={{duration:0.2}}>
+                              <ItemChip idx={itemIdx} ring accent="bg-cyan-500 border-0" />
+                            </motion.div>
+                          : <motion.span key="ok" initial={{scale:0}} animate={{scale:1}} className="text-emerald-400 text-sm">✓</motion.span>
+                        }
+                      </AnimatePresence>
+                    </div>
+                    <span className="text-[9px] text-slate-600 font-mono">C{lane + 1}</span>
+                  </div>
+                );
+              })}
+              <div className="flex flex-col items-center mt-1">
+                <span className="text-lg font-bold font-mono text-slate-300">{simdDone}</span>
+                <span className="text-[9px] text-slate-600 font-mono">procesados</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Banner — always present to hold layout */}
+      {/* Banner */}
       <div className={`shrink-0 p-3 rounded-xl border text-center text-xs font-mono transition-all duration-300 ${
         tick === 0
           ? 'border-slate-800 bg-slate-900/50 text-slate-700'
@@ -741,10 +851,10 @@ function Slide1_1Anim() {
         {tick === 0
           ? 'Presioná "Iniciar Simulación" para ver la diferencia en tiempo real'
           : simdFinished && !sisdFinished
-            ? `⚡ SIMD terminó (ciclo ${simdFinishTick}) — SISD va en ${Math.round((sisdDone / TOTAL) * 100)}% · todavía ${TOTAL - sisdDone} datos pendientes`
+            ? `⚡ SIMD terminó (ciclo ${simdFinishTick}) — SISD va en ${Math.round((sisdDone / TOTAL) * 100)}% · ${TOTAL - sisdDone} datos pendientes`
             : sisdFinished && simdFinished
-              ? `Speedup real = ${TOTAL} ciclos / ${simdFinishTick} ciclos = ${TOTAL / simdFinishTick}× más rápido`
-              : `SIMD procesó ${simdDone} datos · SISD procesó ${sisdDone} datos · ventaja SIMD: +${simdDone - sisdDone} datos`}
+              ? `Speedup = ${TOTAL} ciclos / ${simdFinishTick} ciclos = ${TOTAL / simdFinishTick}× más rápido`
+              : `SIMD procesó ${simdDone} · SISD procesó ${sisdDone} · ventaja: +${simdDone - sisdDone} datos`}
       </div>
     </div>
   );
