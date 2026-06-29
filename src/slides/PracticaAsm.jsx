@@ -36,29 +36,17 @@ const CYCLES_PER_INSN = {
   mov: 1, inc: 1, cmp: 1, jl: 1, add: 1,
 };
 
-function estimate(step, isSisd, processed) {
-  if (step === 0) return { cycles: 0, insns: 0 };
-  const iter = isSisd ? step : Math.ceil(step / 4);
-  if (isSisd) {
-    const insns = iter * 5 + 1; // mov eax counts once
-    const cycles = insns + iter * 2; // rough: ~7c/iter
-    return { cycles, insns };
-  } else {
-    const insns = iter * 4 + 1;
-    const cycles = iter * 4 + 1;
-    return { cycles, insns };
-  }
-}
-
 export function SlidePracticaAsm() {
   const [step, setStep] = useState(0);
-  const [mode, setMode] = useState('both'); // 'sisd' | 'simd' | 'both'
   const [running, setRunning] = useState(false);
   const timerRef = useRef(null);
 
-  const sisdDone = Math.min(step, N);
-  const simdDone = Math.min(step * 4, N);
-  const allDone = sisdDone >= N && simdDone >= N;
+  // Total instruction steps: 1 initial (mov eax) + 6 steps per iteration
+  const sisdMaxSteps = 1 + N * 6;
+  const simdMaxSteps = 1 + Math.ceil(N / 4) * 6;
+  const maxSteps = Math.max(sisdMaxSteps, simdMaxSteps);
+
+  const allDone = step >= maxSteps;
 
   const reset = useCallback(() => {
     clearInterval(timerRef.current);
@@ -70,64 +58,69 @@ export function SlidePracticaAsm() {
     if (!running || allDone) { setRunning(false); return; }
     timerRef.current = setInterval(() => {
       setStep(prev => {
-        const nextSisd = Math.min(prev + 1, N);
-        const nextSimd = Math.min(prev * 4 + 4, N);
-        if (nextSisd >= N && nextSimd >= N) {
+        if (prev + 1 >= maxSteps) {
           clearInterval(timerRef.current);
-          return N;
+          return maxSteps;
         }
-        return Math.min(prev + 1, N);
+        return prev + 1;
       });
     }, 600);
     return () => clearInterval(timerRef.current);
-  }, [running, allDone]);
+  }, [running, allDone, maxSteps]);
 
   const stepOnce = () => {
     if (allDone) { reset(); setTimeout(() => setStep(1), 50); return; }
-    setStep(prev => Math.min(prev + 1, N));
+    setStep(prev => Math.min(prev + 1, maxSteps));
   };
 
-  const sisdActiveIdx = sisdDone < N ? sisdDone : null;
-  const simdBatch = [];
-  if (simdDone < N) {
-    for (let i = 0; i < 4 && simdDone + i < N; i++) simdBatch.push(simdDone + i);
+  // --- SISD State ---
+  let sisdCodeHighlight = -1;
+  let sisdDone = 0;
+  let sisdActiveIdx = null;
+
+  if (step === 1) {
+    sisdCodeHighlight = 0; // mov eax, 0
+  } else if (step > 1) {
+    const iter = Math.floor((step - 2) / 6);
+    if (iter >= N) {
+      sisdDone = N;
+      sisdCodeHighlight = -1;
+    } else {
+      sisdActiveIdx = iter;
+      sisdCodeHighlight = 2 + ((step - 2) % 6); // 2=movss, 3=addss, 4=movss, 5=inc, 6=cmp, 7=jl
+      // Element is officially stored in RAM C starting at line 5 (after line 4 store executes)
+      sisdDone = (step - 2) % 6 >= 3 ? iter + 1 : iter;
+    }
   }
 
-  // Highlight code lines for SISD
-  const sisdHighlighted = step === 0 ? -1 : ((sisdDone - 1) % N) >= 0 ? ((sisdDone - 1) % 1 === 0 ? 3 : -1) : -1;
-  // Actually, let me highlight lines based on where we are
-  const getCodeLine = (step, isSisd) => {
-    if (step === 0) return -1; // nothing highlighted
-    const iter = isSisd ? Math.min(step, N) : Math.min(step * 4, N);
-    if (isSisd) {
-      // For SISD: highlight lines in order for each iteration
-      // Line 0: mov eax (only first time)
-      // Lines 2-7: loop body (iter times)
-      const pos = (step - 1) % N;
-      if (step === 1) return 0; // mov eax
-      // After first step, cycle through the loop body
-      return 2 + ((pos + 1) % 6);
-      // Line 2=movss load, 3=addss, 4=movss store, 5=inc, 6=cmp, 7=jl
-    } else {
-      // For SIMD
-      if (step === 1) return 0;
-      const pos = (step - 1) % N;
-      return 2 + ((pos + 1) % 6);
-    }
-  };
+  // --- SIMD State ---
+  let simdCodeHighlight = -1;
+  let simdDone = 0;
+  let simdBatch = [];
 
-  // Simplified highlighting approach
-  const sisdCodeHighlight = step === 0 ? -1 : (step <= 1 ? 0 : ((step - 2) % 6) + 2);
-  const simdCodeHighlight = step === 0 ? -1 : (step <= 1 ? 0 : ((step - 2) % 6) + 2);
+  if (step === 1) {
+    simdCodeHighlight = 0; // mov eax, 0
+  } else if (step > 1) {
+    const iter = Math.floor((step - 2) / 6);
+    const totalSimdIters = Math.ceil(N / 4);
+    if (iter >= totalSimdIters) {
+      simdDone = N;
+      simdCodeHighlight = -1;
+    } else {
+      for (let k = 0; k < 4 && iter * 4 + k < N; k++) simdBatch.push(iter * 4 + k);
+      simdCodeHighlight = 2 + ((step - 2) % 6); // 2=movaps, 3=addps, 4=movaps, 5=add, 6=cmp, 7=jl
+      // Batch of 4 is officially stored in RAM C starting at line 5 (after line 4 store executes)
+      simdDone = (step - 2) % 6 >= 3 ? Math.min((iter + 1) * 4, N) : iter * 4;
+    }
+  }
 
   // Stats
   const sisdStats = step === 0 ? { cycles: 0, insns: 0 }
-    : { cycles: sisdDone * 7 + 1, insns: sisdDone * 5 + 1 };
+    : { cycles: Math.min(step, sisdMaxSteps) * 1.2 | 0, insns: Math.min(step, sisdMaxSteps) };
   const simdStats = step === 0 ? { cycles: 0, insns: 0 }
-    : { cycles: Math.ceil(simdDone / 4) * 5, insns: Math.ceil(simdDone / 4) * 4 + 1 };
-  const speedup = sisdStats.cycles > 0 && simdStats.cycles > 0
-    ? (sisdStats.cycles / simdStats.cycles).toFixed(1)
-    : '—';
+    : { cycles: Math.min(step, simdMaxSteps) * 1.1 | 0, insns: Math.min(step, simdMaxSteps) };
+  
+  const speedup = step > 0 ? (simdDone / Math.max(1, sisdDone)).toFixed(1) : '—';
 
   return (
     <div className="w-full h-full flex flex-col gap-2 max-w-6xl mx-auto select-none">
@@ -140,7 +133,7 @@ export function SlidePracticaAsm() {
           </span>
         </div>
         <div className="text-[13px] text-slate-500 font-mono">
-          Arreglo de <span className="text-slate-300">{N}</span> elementos
+          Arreglo de <span className="text-slate-300">{N}</span> elementos · Paso <span className="text-cyan-400 font-bold">{step}</span>/{maxSteps}
         </div>
       </div>
 
@@ -153,33 +146,33 @@ export function SlidePracticaAsm() {
               <Cpu size={14} /> SISD — Escalar (1 por vez)
             </span>
             <span className="text-[13px] font-mono text-slate-500">
-              {step === 0 ? '0' : sisdDone}/{N}
+              {sisdDone}/{N} elementos en RAM
             </span>
           </div>
 
           {/* Code listing */}
           <div className="flex-1 bg-slate-950/80 p-3 font-mono text-[13px] leading-relaxed overflow-y-auto pr-1">
             {CODE_SISD.map((c, i) => (
-              <div key={i} className={`flex items-center gap-2 py-[1px] rounded px-1 transition-colors ${sisdCodeHighlight === i && step > 0 && sisdDone < N ? 'bg-red-500/20 border-l-2 border-red-400' : 'border-l-2 border-transparent'} ${c.label ? 'text-slate-600 mt-1' : ''} ${step > 0 && sisdDone >= N ? 'opacity-50' : ''}`}>
+              <div key={i} className={`flex items-center gap-2 py-[1px] rounded px-1 transition-colors ${sisdCodeHighlight === i ? 'bg-red-500/20 border-l-2 border-red-400' : 'border-l-2 border-transparent'} ${c.label ? 'text-slate-600 mt-1' : ''} ${sisdDone >= N ? 'opacity-50' : ''}`}>
                 {!c.label && <span className="text-xs text-slate-700 w-4 shrink-0 text-right">{i}</span>}
                 {c.label && <span className="text-xs text-slate-700 w-4 shrink-0" />}
-                <span className={`${sisdCodeHighlight === i && step > 0 && sisdDone < N ? 'text-red-200' : c.label ? 'text-slate-600' : 'text-slate-400'}`}>
+                <span className={`${sisdCodeHighlight === i ? 'text-red-200 font-bold' : c.label ? 'text-slate-600' : 'text-slate-400'}`}>
                   {c.line}
                 </span>
-                {c.highlight && sisdCodeHighlight === i && step > 0 && sisdDone < N && (
+                {c.highlight && sisdCodeHighlight === i && (
                   <span className="ml-auto text-[13px] text-red-300 font-bold shrink-0">◄ 1 dato</span>
                 )}
               </div>
             ))}
           </div>
 
-          {/* Stats */}
-          {step > 0 && (
-            <div className="shrink-0 px-3 py-1.5 bg-slate-900/90 border-t border-slate-800 flex justify-between text-[13px] font-mono">
-              <span className="text-slate-500">Instrucciones: <span className="text-red-300 font-bold">{sisdStats.insns}</span></span>
-              <span className="text-slate-500">Ciclos: <span className="text-red-300 font-bold">{sisdStats.cycles}</span></span>
-            </div>
-          )}
+          {/* Stats & Register State */}
+          <div className="shrink-0 px-3 py-1.5 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between text-[12px] font-mono">
+            <span className="text-slate-500">Instrucciones: <span className="text-red-300 font-bold">{sisdStats.insns}</span></span>
+            <span className="text-red-400 font-bold bg-slate-950 px-2 py-0.5 rounded border border-red-500/30">
+              XMM0: {sisdCodeHighlight === 2 ? `[ Load A[${sisdActiveIdx}] = ${A[sisdActiveIdx]} ]` : sisdCodeHighlight === 3 ? `[ ALU: ${A[sisdActiveIdx]}+${B[sisdActiveIdx]} ]` : sisdCodeHighlight === 4 ? `[ Store → C[${sisdActiveIdx}] ]` : '[ · ]'}
+            </span>
+          </div>
 
           {/* ── SISD Data Viz ── */}
           <div className="shrink-0 px-2 py-1.5 bg-slate-950/60 border-t border-slate-800">
@@ -187,12 +180,12 @@ export function SlidePracticaAsm() {
               <div className="flex items-center gap-0.5">
                 <span className="text-[10px] text-slate-600 w-3 shrink-0">A</span>
                 {A.map((v, i) => {
-                  const isActive = i === sisdActiveIdx && sisdDone < N;
+                  const isActive = i === sisdActiveIdx && sisdCodeHighlight === 2;
                   const isDone = i < sisdDone;
                   return (
                     <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
                       ${isDone ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
-                        : isActive ? 'bg-red-500/30 border border-red-400 text-red-200 animate-[glow-pulse_1.5s_ease-in-out_infinite]'
+                        : isActive ? 'bg-red-500/40 border border-red-400 text-red-100 animate-pulse scale-105'
                           : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
                       {v}
                     </div>
@@ -202,12 +195,12 @@ export function SlidePracticaAsm() {
               <div className="flex items-center gap-0.5">
                 <span className="text-[10px] text-slate-600 w-3 shrink-0">B</span>
                 {B.map((v, i) => {
-                  const isActive = i === sisdActiveIdx && sisdDone < N;
+                  const isActive = i === sisdActiveIdx && sisdCodeHighlight === 3;
                   const isDone = i < sisdDone;
                   return (
                     <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
                       ${isDone ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
-                        : isActive ? 'bg-red-500/30 border border-red-400 text-red-200 animate-[glow-pulse_1.5s_ease-in-out_infinite]'
+                        : isActive ? 'bg-amber-500/40 border border-amber-400 text-amber-100 animate-pulse scale-105'
                           : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
                       {v}
                     </div>
@@ -217,7 +210,8 @@ export function SlidePracticaAsm() {
               <div className="flex items-center gap-0.5">
                 <span className="text-[10px] text-slate-600 w-3 shrink-0">C</span>
                 {A.map((_, i) => {
-                  const done = i < sisdDone;
+                  const isWriting = i === sisdActiveIdx && sisdCodeHighlight === 4;
+                  const done = i < sisdDone || isWriting;
                   const val = done ? A[i] + B[i] : '·';
                   return (
                     <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
@@ -239,33 +233,33 @@ export function SlidePracticaAsm() {
               <Zap size={14} /> SIMD — SSE (4 por vez)
             </span>
             <span className="text-[13px] font-mono text-slate-500">
-              {step === 0 ? '0' : simdDone}/{N}
+              {simdDone}/{N} elementos en RAM
             </span>
           </div>
 
           {/* Code listing */}
           <div className="flex-1 bg-slate-950/80 p-3 font-mono text-[13px] leading-relaxed overflow-y-auto pr-1">
             {CODE_SIMD.map((c, i) => (
-              <div key={i} className={`flex items-center gap-2 py-[1px] rounded px-1 transition-colors ${simdCodeHighlight === i && step > 0 && simdDone < N ? 'bg-cyan-500/20 border-l-2 border-cyan-400' : 'border-l-2 border-transparent'} ${c.label ? 'text-slate-600 mt-1' : ''} ${step > 0 && simdDone >= N ? 'opacity-50' : ''}`}>
+              <div key={i} className={`flex items-center gap-2 py-[1px] rounded px-1 transition-colors ${simdCodeHighlight === i ? 'bg-cyan-500/20 border-l-2 border-cyan-400' : 'border-l-2 border-transparent'} ${c.label ? 'text-slate-600 mt-1' : ''} ${simdDone >= N ? 'opacity-50' : ''}`}>
                 {!c.label && <span className="text-xs text-slate-700 w-4 shrink-0 text-right">{i}</span>}
                 {c.label && <span className="text-xs text-slate-700 w-4 shrink-0" />}
-                <span className={`${simdCodeHighlight === i && step > 0 && simdDone < N ? 'text-cyan-200' : c.label ? 'text-slate-600' : c.neon ? 'text-cyan-400 drop-shadow-[0_0_4px_rgba(6,182,212,0.35)]' : 'text-slate-400'}`}>
+                <span className={`${simdCodeHighlight === i ? 'text-cyan-200 font-bold' : c.label ? 'text-slate-600' : c.neon ? 'text-cyan-400 drop-shadow-[0_0_4px_rgba(6,182,212,0.35)]' : 'text-slate-400'}`}>
                   {c.line}
                 </span>
-                {c.highlight && simdCodeHighlight === i && step > 0 && simdDone < N && (
+                {c.highlight && simdCodeHighlight === i && (
                   <span className="ml-auto text-[13px] text-cyan-300 font-bold shrink-0">◄ 4 datos</span>
                 )}
               </div>
             ))}
           </div>
 
-          {/* Stats */}
-          {step > 0 && (
-            <div className="shrink-0 px-3 py-1.5 bg-slate-900/90 border-t border-slate-800 flex justify-between text-[13px] font-mono">
-              <span className="text-slate-500">Instrucciones: <span className="text-cyan-300 font-bold">{simdStats.insns}</span></span>
-              <span className="text-slate-500">Ciclos: <span className="text-cyan-300 font-bold">{simdStats.cycles}</span></span>
-            </div>
-          )}
+          {/* Stats & Register State */}
+          <div className="shrink-0 px-3 py-1.5 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between text-[12px] font-mono">
+            <span className="text-slate-500">Instrucciones: <span className="text-cyan-300 font-bold">{simdStats.insns}</span></span>
+            <span className="text-cyan-400 font-bold bg-slate-950 px-2 py-0.5 rounded border border-cyan-500/30">
+              XMM0: {simdCodeHighlight === 2 ? '[ Load 4 Floats A ]' : simdCodeHighlight === 3 ? '[ ALU: 4 Sumas SIMD ]' : simdCodeHighlight === 4 ? '[ Store → 4 RAM C ]' : '[ · ]'}
+            </span>
+          </div>
 
           {/* ── SIMD Data Viz ── */}
           <div className="shrink-0 px-2 py-1.5 bg-slate-950/60 border-t border-slate-800">
@@ -273,12 +267,12 @@ export function SlidePracticaAsm() {
               <div className="flex items-center gap-0.5">
                 <span className="text-[10px] text-slate-600 w-3 shrink-0">A</span>
                 {A.map((v, i) => {
-                  const inBatch = simdBatch.includes(i);
+                  const inBatch = simdBatch.includes(i) && simdCodeHighlight === 2;
                   const isDone = i < simdDone;
                   return (
                     <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
                       ${isDone ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
-                        : inBatch ? 'bg-cyan-500/30 border border-cyan-400 text-cyan-200 animate-[glow-pulse-cyan_1.5s_ease-in-out_infinite]'
+                        : inBatch ? 'bg-cyan-500/40 border border-cyan-400 text-cyan-100 animate-pulse scale-105'
                           : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
                       {v}
                     </div>
@@ -288,12 +282,12 @@ export function SlidePracticaAsm() {
               <div className="flex items-center gap-0.5">
                 <span className="text-[10px] text-slate-600 w-3 shrink-0">B</span>
                 {B.map((v, i) => {
-                  const inBatch = simdBatch.includes(i);
+                  const inBatch = simdBatch.includes(i) && simdCodeHighlight === 3;
                   const isDone = i < simdDone;
                   return (
                     <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
                       ${isDone ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
-                        : inBatch ? 'bg-cyan-500/30 border border-cyan-400 text-cyan-200 animate-[glow-pulse-cyan_1.5s_ease-in-out_infinite]'
+                        : inBatch ? 'bg-cyan-500/40 border border-cyan-400 text-cyan-100 animate-pulse scale-105'
                           : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
                       {v}
                     </div>
@@ -303,7 +297,8 @@ export function SlidePracticaAsm() {
               <div className="flex items-center gap-0.5">
                 <span className="text-[10px] text-slate-600 w-3 shrink-0">C</span>
                 {A.map((_, i) => {
-                  const done = i < simdDone;
+                  const isWriting = simdBatch.includes(i) && simdCodeHighlight === 4;
+                  const done = i < simdDone || isWriting;
                   const val = done ? A[i] + B[i] : '·';
                   return (
                     <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
@@ -328,7 +323,7 @@ export function SlidePracticaAsm() {
           </button>
           <button onClick={() => { if (allDone) reset(); setRunning(r => !r); }} disabled={allDone && !running}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 text-xs font-bold hover:bg-cyan-500/30 disabled:opacity-30 transition-all">
-            <Play size={13} /> {running ? 'Automático' : 'Auto'}
+            <Play size={13} /> {running ? 'Pausar' : 'Auto'}
           </button>
           <button onClick={reset}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-400 text-xs hover:text-slate-200 transition-all">
@@ -339,18 +334,18 @@ export function SlidePracticaAsm() {
         <AnimatePresence>
           {step > 0 && (
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-              className={`px-4 py-1.5 rounded-lg border text-[13px] font-bold font-mono ${sisdDone >= N && simdDone >= N
+              className={`px-4 py-1.5 rounded-lg border text-[13px] font-bold font-mono ${allDone
                 ? 'bg-emerald-500/10 border-emerald-400/40 text-emerald-300'
                 : 'bg-slate-900 border-slate-700 text-slate-300'}`}>
-              {sisdDone >= N && simdDone >= N
-                ? <>Speedup: <span className="text-emerald-300">{speedup}×</span></>
+              {allDone
+                ? <>SIMD terminó en un tercio de iteraciones 🎉</>
                 : <>Speedup: <span className="text-cyan-300">{speedup}</span>× — corriendo...</>}
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* ADDPS highlight */}
-        {step > 0 && simdDone < N && (
+        {step > 0 && !allDone && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             className="text-[13px] text-cyan-400 font-bold bg-cyan-500/10 px-3 py-1 rounded-lg border border-cyan-500/30">
             ⚡ addps = 4 sumas en 1 ciclo

@@ -68,52 +68,113 @@ export function Slide2_2() {
 /* ───────── Slide 2.3 — Array vs Vector Processor ───────── */
 
 export function Slide2_3() {
+  const [view, setView] = useState('diagram'); // 'diagram' | 'table'
+
   return (
     <div className="w-full h-full flex flex-col gap-3 max-w-6xl mx-auto">
-      {/* Dual description */}
-      <div className="shrink-0 grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div className="p-4 rounded-2xl bg-slate-900 border border-amber-500/30 space-y-2">
-          <h4 className="text-sm font-bold text-amber-400 flex items-center gap-2"><Layers size={16} /> Array Processor <span className="text-[13px] font-mono text-amber-500">(Espacio)</span></h4>
-          <p className="text-[13px] text-slate-300">Múltiples PEs (Processing Elements) físicos independientes operando exactamente en el mismo ciclo de reloj.</p>
-          <div className="p-2 bg-slate-950 rounded-xl font-mono text-[13px] text-amber-300 border border-slate-800">
-            • 4 obreros trabajando al mismo tiempo<br />
-            • GPUs · Connection Machine CM-2
-          </div>
+      {/* Top Header & Selector */}
+      <div className="shrink-0 flex items-center justify-between px-1">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setView('diagram')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'diagram' ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
+            🏛️ Esquema Arquitectura Vectorial (CRAY-1 / VMIPS)
+          </button>
+          <button
+            onClick={() => setView('table')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'table' ? 'bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
+            📊 Tabla Comparativa (Array vs Vector)
+          </button>
         </div>
-
-        <div className="p-4 rounded-2xl bg-slate-900 border border-purple-500/30 space-y-2">
-          <h4 className="text-sm font-bold text-purple-400 flex items-center gap-2"><Activity size={16} /> Vector Processor <span className="text-[13px] font-mono text-purple-500">(Tiempo)</span></h4>
-          <p className="text-[13px] text-slate-300">Un pipeline segmentado que procesa elementos en pasos consecutivos usando el mismo circuito físico.</p>
-          <div className="p-2 bg-slate-950 rounded-xl font-mono text-xs text-purple-300 border border-slate-800">
-            • Línea de ensamblaje de fábrica<br />
-            • CRAY-1 (1976) · procesadores vectoriales
-          </div>
-        </div>
+        <span className="text-xs font-mono text-slate-500">Dualidad Espacio-Tiempo (Sección 2.5)</span>
       </div>
 
-      {/* Comparison table */}
-      <div className="flex-1 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/90 text-[13px]">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-slate-800 bg-slate-950 text-slate-500">
-              <th className="p-2 font-bold">Dimensión</th>
-              <th className="p-2 font-bold text-amber-400">Array Processor</th>
-              <th className="p-2 font-bold text-purple-400">Vector Processor</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-800/60">
-            <tr><td className="p-2 text-slate-300">Hardware extra</td><td className="p-2 text-slate-400">Muchos PEs físicos</td><td className="p-2 text-slate-400">1 pipeline sofisticado</td></tr>
-            <tr><td className="p-2 text-slate-300">Costo en área</td><td className="p-2 text-amber-300 font-semibold">Mayor (más silicio)</td><td className="p-2 text-purple-300 font-semibold">Menor (circuito compartido)</td></tr>
-            <tr><td className="p-2 text-slate-300">Mismo ciclo</td><td className="p-2 text-emerald-300 font-semibold">Sí — todas las ALUs activas</td><td className="p-2 text-slate-400">No — elementos pipelineados</td></tr>
-            <tr><td className="p-2 text-slate-300">Latencia de arranque</td><td className="p-2 text-emerald-300 font-semibold">Baja (inmediata)</td><td className="p-2 text-red-300 font-semibold">Alta (llenar pipeline)</td></tr>
-            <tr><td className="p-2 text-slate-300">Throughput sostenido</td><td className="p-2 text-amber-300 font-semibold">Muy alto</td><td className="p-2 text-purple-300 font-semibold">Muy alto</td></tr>
-            <tr><td className="p-2 text-slate-300">Escalabilidad</td><td className="p-2 text-slate-400">Agregar más PEs</td><td className="p-2 text-slate-400">Agregar etapas/lanes</td></tr>
-          </tbody>
-        </table>
-        <div className="p-2 text-center text-[13px] text-cyan-400 font-mono border-t border-slate-800 bg-slate-950/50">
-          ⟺ Dualidad espacio-tiempo: ambos son SIMD — la diferencia es cómo el hardware implementa el paralelismo
+      {/* Main Content View */}
+      {view === 'diagram' ? (
+        <div className="flex-1 rounded-2xl border border-purple-500/30 bg-slate-900 p-3 flex flex-col md:flex-row gap-4 min-h-0 overflow-hidden">
+          {/* Diagram Image Container */}
+          <div className="shrink-0 md:w-[420px] bg-slate-950 rounded-xl p-3 border border-slate-800/80 flex items-center justify-center min-h-0 relative group">
+            <div className="bg-white rounded-xl p-2.5 shadow-xl max-h-full flex items-center justify-center">
+              <img
+                src="/vector_arch.png"
+                alt="Arquitectura Vectorial Clásica VMIPS / CRAY-1"
+                className="max-h-[330px] w-auto object-contain rounded"
+              />
+            </div>
+          </div>
+
+          {/* Explanation sidebar */}
+          <div className="flex-1 min-w-0 flex flex-col gap-2 overflow-y-auto pr-1">
+            <h4 className="text-xs font-bold font-mono text-purple-400 uppercase tracking-widest flex items-center gap-1.5">
+              <Activity size={16} /> Componentes Clave
+            </h4>
+            
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs space-y-1">
+              <span className="font-bold text-cyan-300 font-mono block">1. Vector Registers</span>
+              <p className="text-slate-400 leading-relaxed">Bancos de registros capaces de almacenar vectores completos de datos contiguos.</p>
+            </div>
+
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs space-y-1">
+              <span className="font-bold text-amber-300 font-mono block">2. Scalar Registers</span>
+              <p className="text-slate-400 leading-relaxed">Registros tradicionales para operandos individuales y punteros de control.</p>
+            </div>
+
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs space-y-1">
+              <span className="font-bold text-emerald-300 font-mono block">3. Vector Load/Store Unit</span>
+              <p className="text-slate-400 leading-relaxed">Unidad dedicada a la transferencia masiva y ordenada entre RAM y los registros vectoriales.</p>
+            </div>
+
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs space-y-1">
+              <span className="font-bold text-purple-300 font-mono block">4. Functional Units Segmentadas</span>
+              <p className="text-slate-400 leading-relaxed">ALUs independientes (FP Add, Multiply, Divide, Integer, Logical) operando en pipeline continuo.</p>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex-1 flex flex-col gap-3 min-h-0">
+          {/* Dual description */}
+          <div className="shrink-0 grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="p-3.5 rounded-2xl bg-slate-900 border border-amber-500/30 space-y-1.5">
+              <h4 className="text-xs font-bold text-amber-400 flex items-center gap-2"><Layers size={16} /> Array Processor <span className="text-[11px] font-mono text-amber-500">(Espacio)</span></h4>
+              <p className="text-xs text-slate-300">Múltiples PEs físicos independientes operando exactamente en el mismo ciclo de reloj.</p>
+              <div className="p-2 bg-slate-950 rounded-xl font-mono text-[11px] text-amber-300 border border-slate-800">
+                • 4 obreros trabajando al mismo tiempo<br />
+                • GPUs · Connection Machine CM-2
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-slate-900 border border-purple-500/30 space-y-1.5">
+              <h4 className="text-xs font-bold text-purple-400 flex items-center gap-2"><Activity size={16} /> Vector Processor <span className="text-[11px] font-mono text-purple-500">(Tiempo)</span></h4>
+              <p className="text-xs text-slate-300">Un pipeline segmentado que procesa elementos en pasos consecutivos usando el mismo circuito físico.</p>
+              <div className="p-2 bg-slate-950 rounded-xl font-mono text-[11px] text-purple-300 border border-slate-800">
+                • Línea de ensamblaje de fábrica<br />
+                • CRAY-1 (1976) · procesadores vectoriales
+              </div>
+            </div>
+          </div>
+
+          {/* Comparison table */}
+          <div className="flex-1 overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/90 text-xs">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 bg-slate-950 text-slate-500">
+                  <th className="p-2 font-bold">Dimensión</th>
+                  <th className="p-2 font-bold text-amber-400">Array Processor</th>
+                  <th className="p-2 font-bold text-purple-400">Vector Processor</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                <tr><td className="p-2 text-slate-300">Hardware extra</td><td className="p-2 text-slate-400">Muchos PEs físicos</td><td className="p-2 text-slate-400">1 pipeline sofisticado</td></tr>
+                <tr><td className="p-2 text-slate-300">Costo en área</td><td className="p-2 text-amber-300 font-semibold">Mayor (más silicio)</td><td className="p-2 text-purple-300 font-semibold">Menor (circuito compartido)</td></tr>
+                <tr><td className="p-2 text-slate-300">Mismo ciclo</td><td className="p-2 text-emerald-300 font-semibold">Sí — todas las ALUs activas</td><td className="p-2 text-slate-400">No — elementos pipelineados</td></tr>
+                <tr><td className="p-2 text-slate-300">Latencia de arranque</td><td className="p-2 text-emerald-300 font-semibold">Baja (inmediata)</td><td className="p-2 text-red-300 font-semibold">Alta (llenar pipeline)</td></tr>
+                <tr><td className="p-2 text-slate-300">Throughput sostenido</td><td className="p-2 text-amber-300 font-semibold">Muy alto</td><td className="p-2 text-purple-300 font-semibold">Muy alto</td></tr>
+                <tr><td className="p-2 text-slate-300">Escalabilidad</td><td className="p-2 text-slate-400">Agregar más PEs</td><td className="p-2 text-slate-400">Agregar etapas/lanes</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

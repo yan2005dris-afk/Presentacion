@@ -268,15 +268,17 @@ export function Slide3_OrganizacionDatos() {
             <span>Bit 0 (LSB)</span>
           </div>
 
-          <div className="p-2 bg-slate-950 rounded-2xl border border-slate-800 grid gap-1.5" style={{ gridTemplateColumns: `repeat(${f.count}, 1fr)` }}>
-            {Array.from({ length: f.count }).map((_, i) => (
-              <div
-                key={i}
-                className={`p-3 rounded-xl border text-center font-mono text-xs font-bold transition-all ${f.color}`}
-              >
-                {f.count <= 8 ? `Elem [${f.count - 1 - i}]` : `[${f.count - 1 - i}]`}
-              </div>
-            ))}
+          <div className="p-2 bg-slate-950 rounded-2xl border border-slate-800 overflow-x-auto pb-2">
+            <div className="grid gap-1.5 min-w-max" style={{ gridTemplateColumns: `repeat(${f.count}, minmax(42px, 1fr))` }}>
+              {Array.from({ length: f.count }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`p-2.5 rounded-xl border text-center font-mono text-xs font-bold transition-all whitespace-nowrap ${f.color}`}
+                >
+                  {f.count <= 8 ? `Elem [${f.count - 1 - i}]` : `[${f.count - 1 - i}]`}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
