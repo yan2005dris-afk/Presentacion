@@ -52,6 +52,14 @@ export default function App() {
       component: <SlideIntroParte1 />
     },
     {
+      id: '1.0',
+      section: 1,
+      title: '¿Por qué existe el paralelismo? El límite secuencial',
+      subtitle: 'Slide 1.0 · El cuello de botella estructural · SISD vs SIMD en números reales',
+      speaker: "El problema no es qué tan rápido corre la CPU — es que solo puede hacer una cosa a la vez. Con el ejemplo de C[i]=(A[i]+B[i])/2 sobre 50 elementos, el modelo secuencial genera 304 instrucciones y 2004 ciclos. El modelo vectorial lo resuelve en 7 instrucciones y 285 ciclos. Ese es el argumento de existencia del paralelismo.",
+      component: <Slide1_LimiteSec />
+    },
+    {
       id: '1.1b',
       section: 1,
       title: 'Simulación: Cajero vs Paralelo',
@@ -68,28 +76,12 @@ export default function App() {
       component: <Slide1_3 />
     },
     {
-      id: '1.3',
-      section: 1,
-      title: 'SISD: El Ciclo Fetch-Decode-Execute',
-      subtitle: 'Slide 1.3 · Arquitectura y Funcionamiento Von Neumann',
-      speaker: "SISD es el modelo clásico de Von Neumann: una ALU, un bus, un stream de instrucciones. Cada instrucción pasa por Fetch, Decode, Execute y Writeback. Para N datos, el ciclo se repite N veces — esa es la limitación estructural.",
-      component: <Slide1_2 />
-    },
-    {
       id: '1.1',
       section: 1,
-      title: 'Arquitectura Von Neumann — Componentes SISD',
-      subtitle: 'Slide 1.1 · Diagrama Interactivo · Hacé click en cada componente',
-      speaker: "Esta es la arquitectura Von Neumann que subyace al modelo SISD. Hay un solo bus, una sola ALU, un solo flujo. Hacé click en cualquier componente para ver su rol específico en el cuello de botella secuencial.",
+      title: 'Taxonomía de Flynn — Diagrama Interactivo',
+      subtitle: 'Slide 1.1 · SISD · SIMD · MISD · MIMD · Hacé click para explorar',
+      speaker: "Flynn clasificó las arquitecturas en dos ejes: cuántos flujos de instrucciones y cuántos flujos de datos. SISD es Von Neumann clásico. SIMD es nuestro foco: 1 instrucción, N datos en paralelo. MIMD es el generalista multinúcleo. MISD es el caso teórico. Hacé click en cada componente para ver su rol en cada arquitectura.",
       component: <Slide1_1 />
-    },
-    {
-      id: '1.4',
-      section: 1,
-      title: 'MIMD — Referencia para la Comparación Final',
-      subtitle: 'Slide 1.4 · El Generalista: SMP y sus Limitaciones',
-      speaker: "MIMD es el otro extremo: múltiples CPUs independientes con instrucciones y datos distintos. SMP (Symmetric Multiprocessing) comparte RAM entre todos los núcleos. Sufre bus congestion y spinlocks. Entender MIMD es clave para apreciar por qué SIMD existe.",
-      component: <Slide1_4 />
     },
 
     // === PARTE 2: RIVERA Yandris ===
@@ -514,129 +506,237 @@ function SlideIntroParte4() {
 // === SLIDE COMPONENTS (INTEGRANTE 1) ===
 // ==========================================
 
+function Slide1_LimiteSec() {
+  const instrRows = [
+    { op: 'MOVI',   n: '4×',  desc: 'Inicializar contadores',        cycles: '4',   color: 'text-slate-400' },
+    { op: 'LD',     n: '100×', desc: '2 loads/iter × 50',            cycles: '1100', color: 'text-red-400' },
+    { op: 'ADD',    n: '50×',  desc: '1 suma/iter × 50',             cycles: '200',  color: 'text-amber-400' },
+    { op: 'SHFR',   n: '50×',  desc: 'Divide ÷2 (shift right)',      cycles: '50',   color: 'text-slate-400' },
+    { op: 'ST',     n: '50×',  desc: '1 store/iter × 50',            cycles: '550',  color: 'text-red-400' },
+    { op: 'DECBNZ', n: '50×',  desc: '1 branch/iter × 50',           cycles: '100',  color: 'text-slate-400' },
+  ];
+
+  return (
+    <div className="w-full h-full flex gap-4 max-w-5xl mx-auto">
+
+      {/* Left — analogy + concept */}
+      <div className="flex flex-col gap-3 w-56 shrink-0">
+        <div className="flex-1 rounded-2xl border border-slate-700 bg-slate-900 p-4 flex flex-col gap-3">
+          <p className="text-[9px] font-mono text-slate-500 uppercase tracking-widest">El problema</p>
+          <p className="text-xs text-slate-300 leading-relaxed">
+            Procesamiento masivo de datos: renderizado 3D, machine learning, video 4K. El modelo secuencial se queda corto.
+          </p>
+          <div className="border-t border-slate-800 pt-3">
+            <p className="text-[9px] font-mono text-cyan-500 uppercase tracking-widest mb-2">Analogía</p>
+            <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
+              <p>Supermercado con miles de clientes y <span className="text-red-400 font-bold">1 sola caja</span>.</p>
+              <p>El cajero es competente. El cuello de botella es <span className="text-red-400 font-bold">estructural</span>.</p>
+              <p>Agregar un cajero más rápido ayuda poco. La solución es <span className="text-cyan-400 font-bold">abrir más cajas</span>.</p>
+            </div>
+          </div>
+          <div className="mt-auto pt-2 border-t border-slate-800">
+            <p className="text-[10px] text-slate-400 italic leading-relaxed">
+              El procesador es el cajero. El problema no es velocidad de reloj — es <span className="text-amber-400 font-bold">throughput estructural</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Right — concrete numbers */}
+      <div className="flex-1 flex flex-col gap-3 min-w-0">
+
+        {/* Formula */}
+        <div className="shrink-0 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2.5 flex items-center gap-3">
+          <p className="text-[9px] font-mono text-slate-500 uppercase tracking-widest shrink-0">Ejemplo real</p>
+          <code className="text-sm font-mono text-cyan-300 font-bold">C[i] = (A[i] + B[i]) / 2</code>
+          <span className="text-[10px] text-slate-500">para i = 0..49 · 50 elementos</span>
+        </div>
+
+        {/* Instruction breakdown */}
+        <div className="flex-1 rounded-2xl border border-red-500/20 bg-slate-900 p-3 flex flex-col gap-2">
+          <div className="flex items-center justify-between shrink-0 mb-1">
+            <p className="text-[9px] font-mono text-red-400 uppercase tracking-widest">SISD — desglose de instrucciones</p>
+            <div className="flex items-center gap-3">
+              <span className="text-[10px] font-mono text-slate-500">Total instr: <span className="text-red-400 font-bold">304</span></span>
+              <span className="text-[10px] font-mono text-slate-500">Total ciclos: <span className="text-red-400 font-bold">~2004</span></span>
+            </div>
+          </div>
+
+          <div className="flex-1 flex flex-col gap-1 justify-center">
+            {instrRows.map((r, i) => (
+              <div key={i} className="flex items-center gap-2 text-[10px] font-mono">
+                <span className="w-14 text-slate-500 font-bold shrink-0">{r.n}</span>
+                <span className="w-14 text-cyan-400 font-bold shrink-0">{r.op}</span>
+                <span className="flex-1 text-slate-500 truncate">{r.desc}</span>
+                <div className="shrink-0 flex items-center gap-1">
+                  <div className="h-1.5 bg-slate-800 rounded-full w-20 overflow-hidden">
+                    <div
+                      className="h-full bg-red-500/60 rounded-full"
+                      style={{ width: `${Math.min(100, (parseInt(r.cycles) / 1100) * 100)}%` }}
+                    />
+                  </div>
+                  <span className={`w-10 text-right ${r.color}`}>{r.cycles} c</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* SISD vs SIMD comparison */}
+        <div className="shrink-0 grid grid-cols-2 gap-3">
+          <div className="rounded-xl border border-red-500/30 bg-slate-900 p-3 flex items-center gap-3">
+            <div>
+              <p className="text-[9px] font-mono text-red-400 uppercase tracking-widest">SISD secuencial</p>
+              <p className="text-lg font-bold font-mono text-red-400">304 <span className="text-xs text-slate-500 font-normal">instrucciones</span></p>
+              <p className="text-xs font-mono text-slate-500">~2004 ciclos</p>
+            </div>
+          </div>
+          <div className="rounded-xl border border-cyan-500/40 bg-slate-900 p-3 flex items-center gap-3">
+            <div>
+              <p className="text-[9px] font-mono text-cyan-400 uppercase tracking-widest">SIMD vectorial</p>
+              <p className="text-lg font-bold font-mono text-cyan-400">7 <span className="text-xs text-slate-500 font-normal">instrucciones</span></p>
+              <p className="text-xs font-mono text-slate-500">~285 ciclos · <span className="text-emerald-400 font-bold">7× más rápido</span></p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
 function Slide1_1() {
+  const [mode, setMode] = useState('SISD');
   const [active, setActive] = useState(null);
 
-  const INFO = {
-    cu:     { title: 'Control Unit (CU)', text: 'Decodifica 1 instrucción por ciclo. Orquesta el ciclo Fetch → Decode → Execute de forma estrictamente secuencial. Sin CU no hay SISD.' },
-    alu:    { title: 'ALU — Arithmetic Logic Unit', text: 'Ejecuta 1 operación aritmética o lógica por ciclo de reloj. Es el cuello de botella del SISD: no puede operar sobre dos datos al mismo tiempo.' },
-    reg:    { title: 'Registers', text: 'Almacenamiento de ultra-velocidad (1 ciclo). Contiene el Program Counter (PC), Instruction Register (IR) y operandos activos de la ALU.' },
-    ram:    { title: 'Main Memory (RAM)', text: 'Almacena instrucciones y datos activos. El CPU los fetcha de a 1 palabra por ciclo de bus. Latencia ~100 ciclos vs 1 del registro.' },
-    disk:   { title: 'Secondary Memory', text: 'SSD / HDD para persistencia. Hasta 100.000× más lento que RAM. El CPU bloquea (I/O wait) hasta recibir el dato — pura serialización.' },
-    bus:    { title: 'System Bus', text: 'Canal compartido entre CPU, memoria y periféricos. En SISD solo ocurre 1 transferencia por vez. La autopista de un único carril del procesamiento secuencial.' },
-    input:  { title: 'Input Devices', text: 'Teclado, mouse. Generan interrupciones que el CPU atiende suspendiendo el thread actual, procesando la entrada, y luego retomando — siempre en serie.' },
-    output: { title: 'Output Devices', text: 'Display, impresora. Reciben resultados del CPU solo tras completar toda la cadena secuencial Fetch → Decode → Execute → Writeback.' },
+  const ARCHS = {
+    SISD: { full: 'Single Instruction · Single Data',    bdr: 'border-slate-500',  txt: 'text-slate-300',  bg: 'bg-slate-500/10',  desc: 'Von Neumann clásico. 1 CU, 1 ALU, 1 dato por ciclo. Todo procesamiento es estrictamente secuencial.',           ex: 'Intel 8086 · ARM Cortex-A escalar' },
+    SIMD: { full: 'Single Instruction · Multiple Data',  bdr: 'border-cyan-500',   txt: 'text-cyan-300',   bg: 'bg-cyan-500/10',   desc: '1 CU hace broadcast de 1 instrucción a N ALUs en paralelo. El foco de esta exposición.',                         ex: 'SSE/AVX · GPU shaders · ARM NEON' },
+    MISD: { full: 'Multiple Instruction · Single Data',  bdr: 'border-amber-500',  txt: 'text-amber-300',  bg: 'bg-amber-500/10',  desc: 'N CUs con instrucciones distintas operan sobre el mismo dato. Caso teórico / fault-tolerance.',                   ex: 'Systolic Arrays · Fault-tolerant' },
+    MIMD: { full: 'Multiple Instruction · Multiple Data',bdr: 'border-blue-500',   txt: 'text-blue-300',   bg: 'bg-blue-500/10',   desc: 'N CPUs completamente independientes. El generalista: instrucciones distintas, datos distintos.',                  ex: 'Intel Core i9 · AMD Ryzen · SMP' },
   };
 
-  const toggle = (id) => setActive(prev => prev === id ? null : id);
+  const INFO = {
+    IS:  { title: 'Instruction Stream (IS)', SISD: '1 stream. El PC avanza secuencialmente, 1 instrucción por ciclo.', SIMD: '1 stream compartido. La MISMA instrucción se broadcast a todas las ALUs — esa es la eficiencia de SIMD.', MISD: 'N streams distintos. Cada CU tiene su propio PC e instrucciones independientes.', MIMD: 'N streams completamente independientes. Cada núcleo tiene su propio pipeline y PC.' },
+    CU:  { title: 'Control Unit (CU)',       SISD: '1 CU. Fetch → Decode → Execute secuencial. 1 instrucción por ciclo a 1 ALU.', SIMD: '1 CU compartida. Decodifica 1 vez, hace broadcast a N ALUs. Costo de decode ÷ N.', MISD: 'N CUs independientes. Cada una decodifica su propio stream sobre el mismo dato.', MIMD: 'N CUs sin coordinación central. Cada núcleo opera autónomamente.' },
+    ALU: { title: 'ALU — Arithmetic Logic Unit', SISD: '1 ALU. 1 operación por ciclo. El cuello de botella del throughput secuencial.', SIMD: 'N ALUs en paralelo. Misma operación sobre N datos distintos. Throughput N× sin N× overhead de control.', MISD: 'N ALUs con instrucciones distintas sobre el mismo dato para verificación cruzada o transformación en cadena.', MIMD: 'N ALUs independientes. Operaciones heterogéneas simultáneas sin sincronización.' },
+    DS:  { title: 'Data Stream (DS)',        SISD: '1 stream. 1 dato entra, 1 resultado por ciclo. Throughput lineal.', SIMD: 'N streams de datos en paralelo. 1 instrucción produce N resultados simultáneamente.', MISD: '1 stream compartido. N procesadores distintos trabajan sobre el mismo flujo de datos.', MIMD: 'N streams independientes. Cada CPU lee y escribe sus propios datos sin interferencia.' },
+  };
 
-  const Node = ({ id, label, sub, lg = false }) => {
-    const on = active === id;
+  const ROWS = {
+    SISD: [{ is: 'IS',   cu: 'CU',   alu: 'ALU',   ds: 'DS'   }],
+    SIMD: [{ is: 'IS',   cu: 'CU',   alu: 'ALU₁',  ds: 'DS₁'  },
+           { is: null,   cu: null,   alu: 'ALU₂',  ds: 'DS₂'  },
+           { is: null,   cu: null,   alu: 'ALU₃',  ds: 'DS₃'  },
+           { is: null,   cu: null,   alu: 'ALU₄',  ds: 'DS₄'  }],
+    MISD: [{ is: 'IS₁',  cu: 'CU₁',  alu: 'ALU',   ds: 'DS'   },
+           { is: 'IS₂',  cu: 'CU₂',  alu: null,    ds: null   },
+           { is: 'IS₃',  cu: 'CU₃',  alu: null,    ds: null   },
+           { is: 'IS₄',  cu: 'CU₄',  alu: null,    ds: null   }],
+    MIMD: [{ is: 'IS₁',  cu: 'CU₁',  alu: 'ALU₁',  ds: 'DS₁'  },
+           { is: 'IS₂',  cu: 'CU₂',  alu: 'ALU₂',  ds: 'DS₂'  },
+           { is: 'IS₃',  cu: 'CU₃',  alu: 'ALU₃',  ds: 'DS₃'  },
+           { is: 'IS₄',  cu: 'CU₄',  alu: 'ALU₄',  ds: 'DS₄'  }],
+  };
+
+  const ANNOT = {
+    SISD: '1 IS × 1 CU × 1 ALU × 1 DS — procesamiento estrictamente secuencial',
+    SIMD: '1 IS → 1 CU broadcast → 4 ALUs en paralelo → 4 DS simultáneos',
+    MISD: '4 IS distintos → 4 CUs → mismo ALU/DS — verificación redundante',
+    MIMD: '4 IS × 4 CUs × 4 ALUs × 4 DS — ejecución heterogénea e independiente',
+  };
+
+  const arch = ARCHS[mode];
+  const rows = ROWS[mode];
+  const toggle = (id) => setActive(a => a === id ? null : id);
+
+  const Cell = ({ label, type, rowIdx }) => {
+    if (!label) {
+      if (type === 'CU' && mode === 'SIMD')
+        return <div className="h-9 flex items-center justify-center"><div className="w-px h-full bg-slate-800" /></div>;
+      if ((type === 'ALU' || type === 'DS') && mode === 'MISD')
+        return <div className="h-9 flex items-center justify-center"><div className="w-px h-full bg-slate-800" /></div>;
+      return <div className="h-9 opacity-0 pointer-events-none rounded-lg border-2 border-transparent" />;
+    }
+    const on = active === type;
     return (
-      <div onClick={() => toggle(id)} className={`cursor-pointer rounded-lg border-2 transition-all duration-150 select-none text-center px-2 py-1.5 ${lg ? 'py-3' : ''} ${
-        on ? 'border-cyan-400/70 bg-cyan-500/10' : 'border-slate-700 bg-slate-900 hover:border-slate-500 hover:bg-slate-800/60'
-      }`}>
-        <p className={`font-mono font-bold text-xs ${on ? 'text-cyan-300' : 'text-slate-300'}`}>{label}</p>
-        {sub && <p className="text-[9px] text-slate-600 mt-0.5 font-mono">{sub}</p>}
+      <div onClick={() => toggle(type)}
+        className={`h-9 rounded-lg border-2 flex items-center justify-center text-[10px] font-mono font-bold cursor-pointer select-none transition-all duration-150 ${
+          on ? `${arch.bdr} ${arch.bg} ${arch.txt}` : 'border-slate-600 bg-slate-800 text-slate-400 hover:border-slate-500 hover:text-slate-300'
+        }`}>
+        {label}
       </div>
     );
   };
 
-  const Connector = ({ dir = 'h', label }) => (
-    <div className={`flex ${dir === 'h' ? 'items-center' : 'flex-col items-center'} gap-0.5 shrink-0`}>
-      {label && <span className="text-[8px] text-slate-700 font-mono">{label}</span>}
-      {dir === 'h'
-        ? <div className="flex items-center gap-0"><span className="text-slate-600 text-xs">◄</span><div className="w-5 h-px bg-slate-700" /><span className="text-slate-600 text-xs">►</span></div>
-        : <div className="flex flex-col items-center gap-0"><span className="text-slate-600 text-xs leading-none">▲</span><div className="w-px h-5 bg-slate-700" /><span className="text-slate-600 text-xs leading-none">▼</span></div>
-      }
-    </div>
-  );
-
-  const ArrowOut = ({ dir = 'right' }) => (
-    <div className="flex items-center shrink-0">
-      {dir === 'right'
-        ? <><div className="w-5 h-px bg-slate-700" /><span className="text-slate-600 text-xs">►</span></>
-        : <><span className="text-slate-600 text-xs">◄</span><div className="w-5 h-px bg-slate-700" /></>
-      }
+  const Arr = ({ vis }) => (
+    <div className={`flex items-center transition-opacity ${vis ? 'opacity-100' : 'opacity-0'}`}>
+      <div className="flex-1 h-px bg-slate-700" /><span className="text-slate-600 text-[10px] shrink-0">▶</span>
     </div>
   );
 
   return (
     <div className="w-full h-full flex flex-col gap-2 max-w-5xl mx-auto select-none">
 
+      {/* Tabs */}
+      <div className="shrink-0 flex gap-2 justify-center pt-1">
+        {Object.entries(ARCHS).map(([k, a]) => (
+          <button key={k} onClick={() => { setMode(k); setActive(null); }}
+            className={`px-5 py-1.5 rounded-xl text-xs font-bold font-mono border-2 transition-all duration-200 ${
+              mode === k ? `${a.bdr} ${a.bg} ${a.txt}` : 'border-slate-700 text-slate-600 hover:border-slate-600 hover:text-slate-400'
+            }`}>{k}</button>
+        ))}
+      </div>
+
       {/* Info panel */}
-      <div className={`shrink-0 rounded-xl border px-4 py-2.5 min-h-[54px] flex items-center transition-all duration-200 ${
-        active ? 'border-cyan-500/40 bg-slate-900' : 'border-slate-800 bg-slate-900/40'
-      }`}>
+      <div className={`shrink-0 rounded-xl border-2 px-4 py-2.5 min-h-[52px] flex items-start bg-slate-900 transition-all duration-200 ${arch.bdr}/50`}>
         {active
-          ? <div><p className="text-xs font-bold text-cyan-300 mb-0.5">{INFO[active]?.title}</p><p className="text-[11px] text-slate-400 leading-relaxed">{INFO[active]?.text}</p></div>
-          : <p className="text-[11px] text-slate-700 font-mono w-full text-center">Hacé click en cualquier componente para ver su rol en SISD →</p>
+          ? <div>
+              <p className={`text-[11px] font-bold mb-0.5 ${arch.txt}`}>{INFO[active]?.title}</p>
+              <p className="text-[11px] text-slate-400">{INFO[active]?.[mode]}</p>
+            </div>
+          : <div className="w-full">
+              <div className="flex justify-between items-baseline">
+                <p className={`text-xs font-bold ${arch.txt}`}>{arch.full}</p>
+                <span className="text-[10px] text-slate-600 font-mono">{arch.ex}</span>
+              </div>
+              <p className="text-[11px] text-slate-400 mt-0.5">{arch.desc}</p>
+            </div>
         }
       </div>
 
-      {/* Diagram */}
-      <div className="flex-1 flex items-stretch gap-2 min-h-0">
+      {/* Column headers */}
+      <div className="shrink-0 grid text-[8px] font-mono text-slate-600 uppercase tracking-widest"
+        style={{ gridTemplateColumns: '1fr 28px 1fr 28px 1fr 28px 1fr' }}>
+        <span className="text-center">Instr. Stream</span><span />
+        <span className="text-center">Control Unit</span><span />
+        <span className="text-center">ALU</span><span />
+        <span className="text-center">Data Stream</span>
+      </div>
 
-        {/* ── CPU block ── */}
-        <div className={`flex flex-col gap-1.5 rounded-xl border-2 p-2.5 w-32 shrink-0 transition-colors duration-200 ${
-          ['cu','alu','reg'].includes(active) ? 'border-cyan-500/40 bg-slate-900' : 'border-slate-700 bg-slate-900/60'
-        }`}>
-          <p className="text-[9px] text-slate-500 font-mono text-center tracking-widest">CPU</p>
-          <Node id="cu" label="Control Unit" sub="CU" />
-          <div className="flex justify-center"><div className="w-px h-2.5 bg-slate-700" /></div>
-          <Node id="alu" label="ALU" sub="Arithmetic Logic" />
-          <div className="flex justify-center"><div className="w-px h-2.5 bg-slate-700" /></div>
-          <Node id="reg" label="Registers" sub="PC · IR · ACC" />
-          <p className="text-[8px] text-slate-600 font-mono text-center mt-auto pt-1">Central Processing Unit</p>
-        </div>
+      {/* Diagram rows */}
+      <div className="flex-1 flex flex-col justify-center gap-2 min-h-0">
+        <AnimatePresence mode="wait">
+          <motion.div key={mode}
+            initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.18 }}
+            className="flex flex-col gap-2">
+            {rows.map((r, i) => (
+              <div key={i} className="grid items-center gap-1"
+                style={{ gridTemplateColumns: '1fr 28px 1fr 28px 1fr 28px 1fr' }}>
+                <Cell label={r.is}  type="IS"  rowIdx={i} />
+                <Arr vis={!!r.is && !!r.cu} />
+                <Cell label={r.cu}  type="CU"  rowIdx={i} />
+                <Arr vis={!!r.cu && !!r.alu || (mode === 'SIMD' && i > 0 && !!r.alu)} />
+                <Cell label={r.alu} type="ALU" rowIdx={i} />
+                <Arr vis={!!r.alu && !!r.ds} />
+                <Cell label={r.ds}  type="DS"  rowIdx={i} />
+              </div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
 
-        {/* CPU ↔ Bus (top rail connection) */}
-        <Connector dir="h" />
-
-        {/* ── Memory block ── */}
-        <div className="flex flex-col gap-3 justify-center flex-1 min-w-0">
-          <Node id="ram" label="Main Memory" sub="RAM · instrucciones + datos activos" lg />
-          <Node id="disk" label="Secondary Memory" sub="SSD / HDD · Storage" lg />
-        </div>
-
-        {/* Memory ↔ Bus */}
-        <div className="flex flex-col justify-center gap-8 shrink-0">
-          <Connector dir="h" />
-          <Connector dir="h" />
-        </div>
-
-        {/* ── BUS vertical bar ── */}
-        <div
-          onClick={() => toggle('bus')}
-          className={`cursor-pointer w-9 shrink-0 rounded-xl border-2 flex items-center justify-center transition-all duration-150 ${
-            active === 'bus' ? 'border-amber-400/60 bg-amber-500/10' : 'border-slate-600 bg-slate-800 hover:border-slate-500'
-          }`}
-        >
-          <p className={`text-[9px] font-bold font-mono [writing-mode:vertical-rl] tracking-widest ${active === 'bus' ? 'text-amber-300' : 'text-slate-500'}`}>SYSTEM BUS</p>
-        </div>
-
-        {/* Bus → I/O connectors (4 rows: 2 in, 2 out) */}
-        <div className="flex flex-col justify-around shrink-0 py-2">
-          <ArrowOut dir="left" />
-          <ArrowOut dir="left" />
-          <ArrowOut dir="right" />
-          <ArrowOut dir="right" />
-        </div>
-
-        {/* ── I/O block ── */}
-        <div className="flex flex-col justify-between w-32 shrink-0">
-          <div className="flex flex-col gap-1.5">
-            <p className="text-[9px] text-slate-500 font-mono text-center tracking-widest">INPUT</p>
-            <Node id="input" label="Keyboard" />
-            <Node id="input" label="Mouse" />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <Node id="output" label="Display" />
-            <Node id="output" label="Printer" />
-            <p className="text-[9px] text-slate-500 font-mono text-center tracking-widest">OUTPUT</p>
-          </div>
-        </div>
-
+        <p className={`text-center text-[10px] font-mono mt-1 opacity-70 ${arch.txt}`}>{ANNOT[mode]}</p>
       </div>
     </div>
   );
