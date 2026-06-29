@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserCheck, HelpCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Maximize2, Minimize2, UserCheck, HelpCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import {
   SlidePortada, SlideIndice,
-  Slide1_LimiteSec, Slide1_1, Slide1_1Anim, Slide1_2, Slide1_3, Slide1_4,
-  Slide2_1, Slide2_2, Slide2_3, Slide2_4,
-  Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_4,
-  Slide4_1, Slide4_2, Slide4_3, Slide4_4, Slide4_5,
+  Slide1_LimiteSec, Slide1_1, Slide1_1Anim, Slide1_2, Slide1_4,
+  SlideIntroParte1,
+  Slide2_1, Slide2_2, Slide2_3, Slide2_4, SlideIntroParte2,
+  Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_4, SlideIntroParte3,
+  Slide4_1, Slide4_2, Slide4_3, Slide4_4, Slide4_5, SlideIntroParte4,
   SlidePracticaAsm
 } from './slides';
 
@@ -23,6 +24,21 @@ const SECTIONS = [
 export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showSpeakerNotes, setShowSpeakerNotes] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const onFSChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', onFSChange);
+    return () => document.removeEventListener('fullscreenchange', onFSChange);
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  };
 
   const slides = [
     // === PORTADA Y AGENDA ===
@@ -72,20 +88,28 @@ export default function App() {
       component: <Slide1_1Anim />
     },
     {
-      id: '1.2',
-      section: 1,
-      title: "Flynn's Taxonomy (1966)",
-      subtitle: 'Slide 1.2 · Matriz 2×2 de Arquitecturas Paralelas',
-      speaker: "Flynn clasificó en dos ejes: Flujos de Instrucciones (I) y Flujos de Datos (D). De ahí surgen SISD, SIMD (nuestro foco), MISD y MIMD. Es la matriz que clasifica prácticamente todo el hardware real.",
-      component: <Slide1_3 />
-    },
-    {
       id: '1.1',
       section: 1,
+      title: 'El Ciclo Fetch-Decode-Execute',
+      subtitle: 'Slide 1.1 · Fetch · Decode · Execute · Writeback',
+      speaker: "La CPU ejecuta instrucciones en 4 etapas: Fetch (trae de RAM), Decode (interpreta opcode), Execute (ALU opera), Writeback (guarda resultado). Es el latido del modelo Von Neumann y la base de todo procesamiento secuencial.",
+      component: <Slide1_2 />
+    },
+    {
+      id: '1.2',
+      section: 1,
       title: 'Taxonomía de Flynn — Diagrama Interactivo',
-      subtitle: 'Slide 1.1 · SISD · SIMD · MISD · MIMD · Hacé click para explorar',
+      subtitle: 'Slide 1.2 · SISD · SIMD · MISD · MIMD · Hacé click para explorar',
       speaker: "Flynn clasificó las arquitecturas en dos ejes: cuántos flujos de instrucciones y cuántos flujos de datos. SISD es Von Neumann clásico. SIMD es nuestro foco: 1 instrucción, N datos en paralelo. MIMD es el generalista multinúcleo. MISD es el caso teórico. Hacé click en cada componente para ver su rol en cada arquitectura.",
       component: <Slide1_1 />
+    },
+    {
+      id: '1.3',
+      section: 1,
+      title: 'SMP vs SIMD: El Generalista vs El Especialista',
+      subtitle: 'Slide 1.3 · Comparación directa · Tabla de diferencias clave',
+      speaker: "Mientras SMP/MIMD es el generalista multitarea, SIMD es el especialista en procesamiento masivo. Esta tabla compara: tarea típica, instrucciones, problemas (bus congestion vs divergencia), y eficiencia energética.",
+      component: <Slide1_4 />
     },
 
     // === PARTE 2: RIVERA YANDRIS ===
@@ -283,6 +307,13 @@ export default function App() {
           <span className="text-xs font-mono text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
             {currentSlide + 1} / {slides.length}
           </span>
+          <button
+            onClick={toggleFullscreen}
+            className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-600 transition-all"
+            title={isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
+          >
+            {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+          </button>
         </div>
       </header>
 
@@ -362,76 +393,3 @@ export default function App() {
   );
 }
 
-// ==========================================
-// === CARÁTULAS DE SECCIÓN (inline, simples) ===
-// ==========================================
-
-function SlideIntroParte1() {
-  return (
-    <div className="p-8 rounded-3xl bg-gradient-to-br from-cyan-500/10 via-slate-900 to-blue-500/10 border-2 border-cyan-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
-      <span className="px-4 py-1 bg-cyan-500/20 text-cyan-300 font-extrabold text-xs rounded-full border border-cyan-400/30 uppercase tracking-widest">
-        Expositor: Reyes Ricardo · Parte 1
-      </span>
-      <h2 className="text-3xl font-extrabold text-slate-100">El Problema Secuencial y la Taxonomía de Flynn</h2>
-      <div className="grid grid-cols-2 gap-3 text-left text-xs pt-2">
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.0: El Problema y el Límite Secuencial</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.1: El Ciclo Fetch-Decode-Execute</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.2: Flynn's Taxonomy (1966)</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.3: SMP vs SIMD (Generalista vs Especialista)</div>
-      </div>
-    </div>
-  );
-}
-
-function SlideIntroParte2() {
-  return (
-    <div className="p-8 rounded-3xl bg-gradient-to-br from-purple-500/10 via-slate-900 to-pink-500/10 border-2 border-purple-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
-      <span className="px-4 py-1 bg-purple-500/20 text-purple-300 font-extrabold text-xs rounded-full border border-purple-400/30 uppercase tracking-widest">
-        Expositor: Rivera Yandris · Parte 2
-      </span>
-      <h2 className="text-3xl font-extrabold text-slate-100">Arquitectura SIMD y el Principio Vectorial</h2>
-      <div className="grid grid-cols-2 gap-3 text-left text-xs pt-2">
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.1: Una Orden, Ocho Soldados</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.2: Registros Vectoriales y Control</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.3: Array Processor vs Vector Processor</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.4: Ventajas y La Kryptonita (Divergencia)</div>
-      </div>
-    </div>
-  );
-}
-
-function SlideIntroParte3() {
-  return (
-    <div className="p-8 rounded-3xl bg-gradient-to-br from-amber-500/10 via-slate-900 to-orange-500/10 border-2 border-amber-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
-      <span className="px-4 py-1 bg-amber-500/20 text-amber-300 font-extrabold text-xs rounded-full border border-amber-400/30 uppercase tracking-widest">
-        Expositor: Alejandro Andy · Parte 3
-      </span>
-      <h2 className="text-3xl font-extrabold text-slate-100">Extensiones SIMD Modernas (MMX, SSE, AVX)</h2>
-      <div className="grid grid-cols-2 gap-3 text-left text-xs pt-2">
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.1: Evolución de Registros (1996-2017)</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.2: Subword Parallelism en Hardware</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.3: Instrucciones SSE y AVX + FMA</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.4: Fetch-Decode-Execute Vectorial</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.5: AMD Zen vs AMD Excavator</div>
-      </div>
-    </div>
-  );
-}
-
-function SlideIntroParte4() {
-  return (
-    <div className="p-8 rounded-3xl bg-gradient-to-br from-emerald-500/10 via-slate-900 to-teal-500/10 border-2 border-emerald-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
-      <span className="px-4 py-1 bg-emerald-500/20 text-emerald-300 font-extrabold text-xs rounded-full border border-emerald-400/30 uppercase tracking-widest">
-        Expositor: Bermudez Gino · Parte 4
-      </span>
-      <h2 className="text-3xl font-extrabold text-slate-100">Rendimiento, Aplicaciones Reales y Conclusiones</h2>
-      <div className="grid grid-cols-2 gap-3 text-left text-xs pt-2">
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Práctica: Assembler SISD vs SIMD (ADDPS)</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.1: Desglose Dinámico: 304 vs 7 Instrucciones</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.2: Throughput y Ley de Amdahl</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.3: SIMD en el Mundo Real (6 dominios)</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.4: SoC Híbrido + Conclusiones</div>
-      </div>
-    </div>
-  );
-}

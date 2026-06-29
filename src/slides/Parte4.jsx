@@ -9,7 +9,7 @@ import { Sparkles } from 'lucide-react';
 
 export function Slide4_1() {
   return (
-    <div className="space-y-4 max-w-6xl mx-auto text-xs font-mono">
+    <div className="space-y-4 max-w-6xl mx-auto text-[13px] font-mono">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="p-4 rounded-2xl bg-slate-900 border border-red-500/30 space-y-2">
           <h4 className="font-bold text-red-400">Escalar (304 Instrucciones Dinámicas):</h4>
@@ -52,11 +52,11 @@ export function Slide4_2() {
         <div className="p-4 rounded-2xl bg-slate-900 border border-cyan-500/30 flex flex-col gap-2">
           <h4 className="text-sm font-bold text-cyan-400 shrink-0">Throughput</h4>
           <div className="flex-1 flex flex-col justify-center gap-2">
-            <div className="p-2 bg-slate-950 rounded-xl border border-slate-800 text-center font-mono text-xs">
+            <div className="p-2 bg-slate-950 rounded-xl border border-slate-800 text-center font-mono text-[13px]">
               <span className="text-slate-400">Throughput = </span>
               <span className="text-cyan-300 font-bold">Datos procesados / Tiempo</span>
             </div>
-            <div className="space-y-1.5 text-xs font-mono">
+            <div className="space-y-1.5 text-[13px] font-mono">
               <div className="flex items-center justify-between p-1.5 bg-slate-950/80 rounded-lg border border-slate-800">
                 <span className="text-slate-400">Escalar (1 float)</span>
                 <span className="text-slate-500">3 GFLOPS</span>
@@ -81,11 +81,11 @@ export function Slide4_2() {
         <div className="p-4 rounded-2xl bg-slate-900 border border-purple-500/30 flex flex-col gap-2">
           <h4 className="text-sm font-bold text-purple-400 shrink-0">Ley de Amdahl</h4>
           <div className="flex-1 flex flex-col justify-center gap-2">
-            <div className="p-2 bg-slate-950 rounded-xl border border-slate-800 text-center font-mono text-xs">
+            <div className="p-2 bg-slate-950 rounded-xl border border-slate-800 text-center font-mono text-[13px]">
               <span className="text-slate-400">Speedup máximo = </span>
               <span className="text-purple-300 font-bold">1 / (S + P/N)</span>
             </div>
-            <div className="space-y-1.5 text-xs font-mono">
+            <div className="space-y-1.5 text-[13px] font-mono">
               <div className="flex items-center gap-2 p-2 bg-slate-950/80 rounded-lg border border-slate-800">
                 <span className="text-slate-500 shrink-0">20% secuencial, 80% paralelo:</span>
               </div>
@@ -112,7 +112,7 @@ export function Slide4_2() {
         </div>
       </div>
 
-      <div className="shrink-0 p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-slate-400 text-center leading-relaxed">
+      <div className="shrink-0 p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-[13px] text-slate-400 text-center leading-relaxed">
         <span className="text-cyan-400 font-bold">Conclusión:</span> el throughput escala con el ancho de registro, pero la Ley de Amdahl te recuerda que la porción secuencial siempre pone un techo.
       </div>
     </div>
@@ -141,10 +141,10 @@ export function Slide4_3() {
           transition={{ delay: i * 0.08 }}
           className={`p-3 rounded-xl bg-slate-900 border ${a.color} space-y-1`}
         >
-          <h4 className={`text-xs font-bold flex items-center gap-1.5 ${a.color}`}>
+          <h4 className={`text-[13px] font-bold flex items-center gap-1.5 ${a.color}`}>
             <span>{a.icon}</span> {a.title}
           </h4>
-          <p className="text-xs text-slate-400 leading-relaxed">{a.desc}</p>
+          <p className="text-[13px] text-slate-400 leading-relaxed">{a.desc}</p>
         </motion.div>
       ))}
     </div>
@@ -155,7 +155,7 @@ export function Slide4_3() {
 
 export function Slide4_4() {
   return (
-    <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 max-w-5xl mx-auto space-y-4 text-center text-xs">
+    <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 max-w-5xl mx-auto space-y-4 text-center text-[13px]">
       <h4 className="text-sm font-bold text-slate-200">SoC Híbrido Moderno</h4>
       <div className="grid grid-cols-2 gap-4 text-left">
         <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30">
@@ -191,7 +191,7 @@ export function Slide4_5() {
             className={`flex items-start gap-3 p-3 rounded-xl bg-slate-900 border ${p.color}`}
           >
             <span className="text-lg font-bold text-cyan-400 shrink-0">{p.icon}</span>
-            <p className="text-xs text-slate-300 leading-relaxed">{p.text}</p>
+            <p className="text-[13px] text-slate-300 leading-relaxed">{p.text}</p>
           </motion.div>
         ))}
       </div>
@@ -203,10 +203,30 @@ export function Slide4_5() {
         className="mt-4 p-4 rounded-2xl bg-gradient-to-br from-cyan-500/10 via-slate-900 to-purple-500/10 border border-cyan-500/30 text-center max-w-3xl"
       >
         <Sparkles size={28} className="text-cyan-400 mx-auto animate-bounce mb-2" />
-        <p className="text-xs text-slate-300 italic font-semibold">
+        <p className="text-[13px] text-slate-300 italic font-semibold">
           "El límite secuencial era real. SIMD lo rompió — un registro a la vez, un bit más ancho por generación."
         </p>
       </motion.div>
+    </div>
+  );
+}
+
+/* ───────── Carátula de Sección: Parte 4 ───────── */
+
+export function SlideIntroParte4() {
+  return (
+    <div className="p-8 rounded-3xl bg-gradient-to-br from-emerald-500/10 via-slate-900 to-teal-500/10 border-2 border-emerald-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
+      <span className="px-4 py-1 bg-emerald-500/20 text-emerald-300 font-extrabold text-xs rounded-full border border-emerald-400/30 uppercase tracking-widest">
+        Expositor: Bermudez Gino · Parte 4
+      </span>
+      <h2 className="text-3xl font-extrabold text-slate-100">Rendimiento, Aplicaciones Reales y Conclusiones</h2>
+      <div className="grid grid-cols-2 gap-3 text-left text-[13px] pt-2">
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Práctica: Assembler SISD vs SIMD (ADDPS)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.1: Desglose Dinámico: 304 vs 7 Instrucciones</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.2: Throughput y Ley de Amdahl</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.3: SIMD en el Mundo Real (6 dominios)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.4: SoC Híbrido + Conclusiones</div>
+      </div>
     </div>
   );
 }

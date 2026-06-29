@@ -41,9 +41,9 @@ export function SlidePortada() {
             className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-center space-y-1"
           >
             <Users size={20} className="mx-auto text-cyan-400" />
-            <div className="text-xs font-bold text-slate-100">{m.name}</div>
-            <div className="text-xs text-cyan-400 font-mono font-bold">{m.part}</div>
-            <div className="text-xs text-slate-500">{m.topic}</div>
+            <div className="text-[13px] font-bold text-slate-100">{m.name}</div>
+            <div className="text-[13px] text-cyan-400 font-mono font-bold">{m.part}</div>
+            <div className="text-[13px] text-slate-500">{m.topic}</div>
           </motion.div>
         ))}
       </div>
@@ -65,7 +65,7 @@ export function SlideIndice({ onSelectSection }) {
         <h3 className="text-xl font-bold text-slate-100 flex items-center justify-center gap-2">
           <ListOrdered size={22} className="text-cyan-400" /> Agenda Temática de la Exposición
         </h3>
-        <p className="text-xs text-slate-400">Haz clic en cualquier parte para navegar directamente</p>
+        <p className="text-[13px] text-slate-400">Haz clic en cualquier parte para navegar directamente</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -77,11 +77,11 @@ export function SlideIndice({ onSelectSection }) {
             className={`p-4 rounded-2xl bg-slate-900 border-2 ${a.color} cursor-pointer space-y-2 transition-all shadow-md`}
           >
             <div className="flex justify-between items-center">
-              <span className="text-xs font-bold px-2 py-0.5 bg-slate-950 rounded border border-slate-800 text-slate-200">{a.member}</span>
+              <span className="text-[13px] font-bold px-2 py-0.5 bg-slate-950 rounded border border-slate-800 text-slate-200">{a.member}</span>
               <ArrowRight size={16} className="text-slate-400" />
             </div>
             <h4 className="font-bold text-sm text-slate-100">{a.title}</h4>
-            <p className="text-xs text-slate-400 leading-relaxed">{a.desc}</p>
+            <p className="text-[13px] text-slate-400 leading-relaxed">{a.desc}</p>
           </motion.div>
         ))}
       </div>

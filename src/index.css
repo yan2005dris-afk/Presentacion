@@ -14,4 +14,21 @@
   body {
     @apply bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-cyan-500 selection:text-black;
   }
+
+  :fullscreen {
+    background: #020617;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.2); }
+  50% { box-shadow: 0 0 16px rgba(239, 68, 68, 0.7), 0 0 40px rgba(239, 68, 68, 0.4); }
+}
+@keyframes glow-pulse-amber {
+  0%, 100% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.4), 0 0 20px rgba(245, 158, 11, 0.2); }
+  50% { box-shadow: 0 0 16px rgba(245, 158, 11, 0.7), 0 0 40px rgba(245, 158, 11, 0.4); }
+}
+@keyframes glow-pulse-cyan {
+  0%, 100% { box-shadow: 0 0 8px rgba(6, 182, 212, 0.4), 0 0 20px rgba(6, 182, 212, 0.2); }
+  50% { box-shadow: 0 0 16px rgba(6, 182, 212, 0.7), 0 0 40px rgba(6, 182, 212, 0.4); }
 }
