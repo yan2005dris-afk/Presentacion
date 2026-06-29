@@ -556,6 +556,66 @@ export function Slide1_4() {
   );
 }
 
+/* ───────── Slide 1.Limitaciones — Limitaciones del SISD y Problemas SMP (Secciones 1.3 y 1.4) ───────── */
+
+export function Slide1_LimitacionesSISD() {
+  return (
+    <div className="w-full h-full flex flex-col gap-4 max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0">
+        {/* Left: Limitaciones SISD */}
+        <div className="p-5 rounded-2xl bg-slate-900 border border-red-500/40 flex flex-col gap-3 min-h-0">
+          <h4 className="text-sm font-bold text-red-400 font-mono uppercase tracking-widest shrink-0">
+            ⚠ Limitaciones del Modelo SISD (Sección 1.3)
+          </h4>
+          <div className="space-y-2 text-[13px] flex-1 overflow-y-auto pr-1">
+            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
+              <span className="text-red-300 font-bold block mb-0.5">1. Throughput Lineal</span>
+              Procesar N datos toma estrictamente N veces más tiempo. Sin paralelismo, la latencia escala linealmente.
+            </div>
+            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
+              <span className="text-amber-300 font-bold block mb-0.5">2. Cuello de Botella de Von Neumann</span>
+              Un solo bus de datos entre la CPU y la RAM limita dramáticamente el ancho de banda transferido por ciclo.
+            </div>
+            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
+              <span className="text-slate-300 font-bold block mb-0.5">3. Subutilización de Silicio</span>
+              El chip mantiene una sola ALU en serie cuando físicamente podría albergar múltiples unidades activas.
+            </div>
+            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
+              <span className="text-cyan-300 font-bold block mb-0.5">4. Muro de Frecuencia Agotada</span>
+              Desde ~2005, la velocidad de reloj se estancó por límites físicos de calor y densidad. La única salida es el paralelismo.
+            </div>
+          </div>
+        </div>
+
+        {/* Right: El Problema en MIMD/SMP */}
+        <div className="p-5 rounded-2xl bg-slate-900 border border-blue-500/40 flex flex-col gap-3 min-h-0">
+          <h4 className="text-sm font-bold text-blue-400 font-mono uppercase tracking-widest shrink-0">
+            ⚙️ El Desafío en MIMD / SMP (Sección 1.4)
+          </h4>
+          <div className="space-y-3 text-[13px] flex-1">
+            <p className="text-slate-300">
+              En sistemas multinúcleo (MIMD/SMP), cada CPU corre de forma independiente, pero surgen cuellos de botella estructurales de coordinación:
+            </p>
+            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
+              <span className="text-blue-300 font-bold block mb-0.5">Bus Congestion (Congestión de Bus)</span>
+              Cuando múltiples CPUs intentan acceder a la misma memoria RAM compartida al mismo tiempo, el bus se satura.
+            </div>
+            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1">
+              <span className="text-amber-300 font-bold block">Spinlock (Espera Activa)</span>
+              <p className="text-slate-400 text-xs">Cuando un thread espera un recurso bloqueado por otro, entra en bucle quemando ciclos sin trabajo útil:</p>
+              <code className="block p-2 bg-slate-900 rounded text-amber-300 font-mono text-xs">while (lock.isLocked()) &#123; /* spinning */ &#125;</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="shrink-0 p-3 bg-slate-900 border border-slate-800 rounded-xl text-[13px] text-center text-slate-400 font-mono">
+        💡 <span className="text-cyan-400 font-bold">Conclusión:</span> SISD se agotó en frecuencia y MIMD/SMP tiene overhead de coordinación. <span className="text-cyan-300 font-bold">SIMD es la solución especialista</span> para cómputo masivo síncrono.
+      </div>
+    </div>
+  );
+}
+
 /* ───────── Carátula de Sección: Parte 1 ───────── */
 
 export function SlideIntroParte1() {
@@ -567,9 +627,10 @@ export function SlideIntroParte1() {
       <h2 className="text-3xl font-extrabold text-slate-100">El Problema Secuencial y la Taxonomía de Flynn</h2>
       <div className="grid grid-cols-2 gap-3 text-left text-[13px] pt-2">
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.0: El Problema y el Límite Secuencial</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.1b: Animación SISD vs SIMD</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.1: Ciclo Fetch-Decode-Execute</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.2: Taxonomía de Flynn — Diagrama Interactivo</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.1: Simulación SISD vs SIMD</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.2: Ciclo Fetch-Decode-Execute</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.3: Taxonomía de Flynn (Diagrama)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.4: Limitaciones SISD y Cuellos MIMD</div>
       </div>
     </div>
   );

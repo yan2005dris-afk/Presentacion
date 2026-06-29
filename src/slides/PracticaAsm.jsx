@@ -158,7 +158,7 @@ export function SlidePracticaAsm() {
           </div>
 
           {/* Code listing */}
-          <div className="flex-1 bg-slate-950/80 p-3 font-mono text-[13px] leading-relaxed overflow-hidden">
+          <div className="flex-1 bg-slate-950/80 p-3 font-mono text-[13px] leading-relaxed overflow-y-auto pr-1">
             {CODE_SISD.map((c, i) => (
               <div key={i} className={`flex items-center gap-2 py-[1px] rounded px-1 transition-colors ${sisdCodeHighlight === i && step > 0 && sisdDone < N ? 'bg-red-500/20 border-l-2 border-red-400' : 'border-l-2 border-transparent'} ${c.label ? 'text-slate-600 mt-1' : ''} ${step > 0 && sisdDone >= N ? 'opacity-50' : ''}`}>
                 {!c.label && <span className="text-xs text-slate-700 w-4 shrink-0 text-right">{i}</span>}
@@ -244,7 +244,7 @@ export function SlidePracticaAsm() {
           </div>
 
           {/* Code listing */}
-          <div className="flex-1 bg-slate-950/80 p-3 font-mono text-[13px] leading-relaxed overflow-hidden">
+          <div className="flex-1 bg-slate-950/80 p-3 font-mono text-[13px] leading-relaxed overflow-y-auto pr-1">
             {CODE_SIMD.map((c, i) => (
               <div key={i} className={`flex items-center gap-2 py-[1px] rounded px-1 transition-colors ${simdCodeHighlight === i && step > 0 && simdDone < N ? 'bg-cyan-500/20 border-l-2 border-cyan-400' : 'border-l-2 border-transparent'} ${c.label ? 'text-slate-600 mt-1' : ''} ${step > 0 && simdDone >= N ? 'opacity-50' : ''}`}>
                 {!c.label && <span className="text-xs text-slate-700 w-4 shrink-0 text-right">{i}</span>}

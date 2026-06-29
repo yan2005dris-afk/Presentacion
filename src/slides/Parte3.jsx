@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 // ==========================================
@@ -225,6 +226,88 @@ export function Slide3_4() {
   );
 }
 
+/* ───────── Slide 3.Organizacion — Organización de Datos Empaquetados (Sección 3.4) ───────── */
+
+export function Slide3_OrganizacionDatos() {
+  const [format, setFormat] = useState('float32');
+
+  const formats = {
+    float32: { name: '8× Float (32-bit)', count: 8, color: 'border-cyan-400 bg-cyan-500/20 text-cyan-300', desc: 'Ideal para gráficos 3D, física y procesamiento de audio/imágenes estandar.' },
+    double64: { name: '4× Double (64-bit)', count: 4, color: 'border-emerald-400 bg-emerald-500/20 text-emerald-300', desc: 'Simulaciones científicas de alta precisión y cálculo financiero.' },
+    int16: { name: '16× Short (16-bit)', count: 16, color: 'border-purple-400 bg-purple-500/20 text-purple-300', desc: 'Procesamiento de muestras de audio y sensores DSP.' },
+    byte8: { name: '32× Byte (8-bit)', count: 32, color: 'border-amber-400 bg-amber-500/20 text-amber-300', desc: 'Procesamiento de píxeles RGBA (0-255) y redes neuronales cuantizadas (INT8).' }
+  };
+
+  const f = formats[format];
+
+  return (
+    <div className="w-full h-full flex flex-col gap-4 max-w-6xl mx-auto">
+      <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+        <div className="flex justify-between items-center">
+          <h4 className="text-sm font-bold text-slate-200 font-mono">
+            Organización de Datos Empaquetados en Registro YMM (256 Bits) · Sección 3.4
+          </h4>
+          <div className="flex gap-2">
+            {Object.keys(formats).map(key => (
+              <button
+                key={key}
+                onClick={() => setFormat(key)}
+                className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all border ${format === key ? formats[key].color : 'bg-slate-950 border-slate-800 text-slate-500 hover:text-slate-300'}`}
+              >
+                {key}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Visual representation of 256-bit register */}
+        <div className="space-y-2">
+          <div className="flex justify-between text-xs font-mono text-slate-500 px-1">
+            <span>Bit 255 (MSB)</span>
+            <span>Registro YMM (256 Bits de Silicio)</span>
+            <span>Bit 0 (LSB)</span>
+          </div>
+
+          <div className="p-2 bg-slate-950 rounded-2xl border border-slate-800 grid gap-1.5" style={{ gridTemplateColumns: `repeat(${f.count}, 1fr)` }}>
+            {Array.from({ length: f.count }).map((_, i) => (
+              <div
+                key={i}
+                className={`p-3 rounded-xl border text-center font-mono text-xs font-bold transition-all ${f.color}`}
+              >
+                {f.count <= 8 ? `Elem [${f.count - 1 - i}]` : `[${f.count - 1 - i}]`}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+          <span className="text-slate-400">Formato activo: <span className="font-bold text-slate-200">{f.name}</span></span>
+          <span className="text-slate-300 italic">{f.desc}</span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-1">
+          <span className="text-cyan-400 font-bold font-mono block">32-bit Float</span>
+          <span className="text-slate-400">8 elementos por instrucción en AVX (256-bit).</span>
+        </div>
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-1">
+          <span className="text-emerald-400 font-bold font-mono block">64-bit Double</span>
+          <span className="text-slate-400">4 elementos por instrucción en AVX (256-bit).</span>
+        </div>
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-1">
+          <span className="text-purple-400 font-bold font-mono block">16-bit Short</span>
+          <span className="text-slate-400">16 elementos por instrucción en AVX-2 (256-bit).</span>
+        </div>
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-1">
+          <span className="text-amber-400 font-bold font-mono block">8-bit Byte</span>
+          <span className="text-slate-400">32 elementos por instrucción en AVX-2 (256-bit).</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ───────── Carátula de Sección: Parte 3 ───────── */
 
 export function SlideIntroParte3() {
@@ -238,9 +321,11 @@ export function SlideIntroParte3() {
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.1: Evolución de Registros (1996-2017)</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.2: Subword Parallelism en Hardware</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.3: Instrucciones SSE y AVX + FMA</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.4: Fetch-Decode-Execute Vectorial</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.5: Encadenamiento Vectorial (Chaining)</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.6: AMD Zen vs AMD Excavator</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.4: Organización de Datos Empaquetados</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.5: Práctica Assembler (SISD vs SSE)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.6: Fetch-Decode-Execute Vectorial</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.7: Encadenamiento Vectorial (Chaining)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.8: AMD Zen vs AMD Excavator</div>
       </div>
     </div>
   );

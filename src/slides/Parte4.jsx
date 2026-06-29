@@ -1,9 +1,165 @@
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, ShieldAlert } from 'lucide-react';
 
 // ==========================================
 // === PARTE 4 — Bermudez Gino ===
 // ==========================================
+
+/* ───────── Slide 4.Divergencia — La Kryptonita del SIMD (Sección 4.5) ───────── */
+
+export function Slide4_Divergencia() {
+  const [step, setStep] = useState(0);
+  const [autoPlay, setAutoPlay] = useState(true);
+
+  const nextStep = () => setStep(p => (p + 1) % 4);
+
+  useEffect(() => {
+    if (!autoPlay) return;
+    const timer = setInterval(nextStep, 2800);
+    return () => clearInterval(timer);
+  }, [autoPlay]);
+
+  const A_data = [5, -2, 10, -1];
+
+  const steps = [
+    {
+      label: 'Cargando datos...',
+      mask: '····',
+      active: [],
+      inactive: [0, 1, 2, 3],
+      result: [5, -2, 10, -1],
+      desc: 'Registro vectorial con datos cargados. La ALU espera la instrucción.',
+      error: '',
+    },
+    {
+      label: 'Paso 1: Camino TRUE → A + 1',
+      mask: '1···1',
+      active: [0, 2],
+      inactive: [1, 3],
+      result: [6, -2, 11, -1],
+      desc: 'Elementos >0 ejecutan A+1. Elementos ≤0 también computan pero su resultado se descarta.',
+      error: '',
+    },
+    {
+      label: 'Paso 2: Camino FALSE → A × 2',
+      mask: '·1·1·',
+      active: [1, 3],
+      inactive: [0, 2],
+      result: [5, -4, 10, -2],
+      desc: 'Elementos ≤0 ejecutan A×2. Gastamos un ciclo completo adicional para solo 2 elementos.',
+      error: '¡1 ciclo extra desperdiciado!',
+    },
+    {
+      label: 'Paso 3: Fusionar con VMASK',
+      mask: '1111',
+      active: [0, 1, 2, 3],
+      inactive: [],
+      result: [6, -4, 11, -2],
+      desc: 'La máscara combina: TRUE→[0,2] y FALSE→[1,3]. Resultado correcto, pero a DOBLE COSTE.',
+      error: '2 ciclos para 1 operación lógica',
+    },
+  ];
+
+  const s = steps[step];
+
+  return (
+    <div className="w-full h-full flex flex-col gap-3 max-w-5xl mx-auto">
+      <div className="p-5 rounded-2xl bg-slate-900 border border-red-500/40 flex flex-col gap-3 min-h-0">
+        <div className="flex justify-between items-center shrink-0">
+          <h4 className="text-base font-bold text-red-400 flex items-center gap-2">
+            <ShieldAlert size={20} /> La Kryptonita del SIMD: Divergencia Condicional (Sección 4.5)
+          </h4>
+          <span className="text-xs px-2.5 py-1 rounded bg-red-500/20 text-red-300 font-mono border border-red-500/30">
+            Enmascaramiento (Masking)
+          </span>
+        </div>
+
+        <p className="text-[13px] text-slate-300 shrink-0">
+          Código analizado: <span className="font-mono text-cyan-300">if (A[i] &gt; 0) C[i] = A[i] + 1; else C[i] = A[i] * 2;</span> con datos <span className="font-mono text-amber-300">[5, -2, 10, -1]</span>
+        </p>
+
+        {/* Animated masking viewer */}
+        <div className="flex-1 flex flex-col justify-center gap-2 bg-slate-950 p-4 rounded-xl border border-slate-800">
+          <motion.div
+            key={step}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-col gap-3"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-bold text-slate-200">{s.label}</span>
+              <span className="text-xs font-mono text-slate-400">
+                VMASK: <span className="text-amber-400 font-bold">{s.mask}</span>
+              </span>
+            </div>
+
+            <div className="grid grid-cols-4 gap-2">
+              {A_data.map((val, idx) => {
+                const isActive = s.active.includes(idx);
+                const isInactive = s.inactive.includes(idx);
+                return (
+                  <div key={idx} className="flex flex-col items-center gap-1">
+                    <span className="text-xs font-mono text-slate-500">A[{idx}] = {val}</span>
+                    <div className={`w-full p-2.5 rounded-xl text-center font-mono text-sm font-bold transition-all duration-300 ${
+                      isActive
+                        ? 'bg-amber-500/20 border border-amber-400/60 text-amber-200 shadow-md shadow-amber-500/10'
+                        : 'bg-slate-900 border border-slate-800 text-slate-600'
+                    }`}>
+                      {s.result[idx]}
+                    </div>
+                    <span className={`text-xs font-bold ${isActive ? 'text-amber-400' : isInactive ? 'text-red-400' : 'text-transparent'}`}>
+                      {isActive ? 'ACTIVO (✓)' : isInactive ? 'DESCARTADO (✗)' : '-'}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <p className="text-[13px] text-slate-400 leading-relaxed text-center italic">{s.desc}</p>
+
+            {s.error && (
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="p-2 bg-red-500/10 rounded-xl border border-red-500/30 text-center"
+              >
+                <span className="text-red-300 font-bold text-[13px]">⚠ {s.error}</span>
+              </motion.div>
+            )}
+          </motion.div>
+        </div>
+
+        {/* Controls */}
+        <div className="shrink-0 flex items-center justify-between gap-2 pt-1">
+          <button onClick={() => setStep(p => (p - 1 + 4) % 4)}
+            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all text-xs font-bold">◀ Anterior</button>
+
+          <div className="flex items-center gap-2">
+            {[0, 1, 2, 3].map(i => (
+              <button key={i} onClick={() => setStep(i)}
+                className={`h-2.5 rounded-full transition-all ${i === step ? 'bg-red-400 w-6' : 'bg-slate-800 hover:bg-slate-700 w-2.5'}`} />
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button onClick={nextStep}
+              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all text-xs font-bold">Siguiente ▶</button>
+            <button onClick={() => setAutoPlay(p => !p)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${autoPlay ? 'bg-red-500/20 text-red-300' : 'bg-emerald-500/20 text-emerald-300'}`}>
+              {autoPlay ? '⏸ Pausar' : '▶ Automático'}
+            </button>
+          </div>
+        </div>
+
+        <div className="shrink-0 p-2.5 bg-red-500/10 rounded-xl border border-red-500/30 text-xs text-slate-300 text-center">
+          <span className="font-bold text-red-400">Conclusión de la Sección 4.5:</span> La divergencia destruye el throughput paralelo al obligar al hardware a ejecutar secuencialmente todos los caminos condicionales.
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /* ───────── Slide 4.1 — 304 vs 7 Instrucciones ───────── */
 
@@ -225,12 +381,12 @@ export function SlideIntroParte4() {
       </span>
       <h2 className="text-3xl font-extrabold text-slate-100">Rendimiento, Aplicaciones Reales y Conclusiones</h2>
       <div className="grid grid-cols-2 gap-3 text-left text-[13px] pt-2">
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Práctica: Assembler SISD vs SIMD (ADDPS)</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.1: Desglose Dinámico: 304 vs 7 Instrucciones</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.1: Desglose Dinámico (304 vs 7 instrs & Speedup)</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.2: Throughput y Ley de Amdahl</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.3: SIMD en el Mundo Real (6 dominios)</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.4: SoC Híbrido + Conclusiones</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.6: Tabla de Diagnóstico Final (SMP vs SIMD)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.4: Paradigma Híbrido: SoC Moderno</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.5: Diagnóstico Final (SMP vs SIMD)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.6: Conclusiones y Cierre</div>
       </div>
     </div>
   );

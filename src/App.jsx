@@ -4,11 +4,11 @@ import { Maximize2, Minimize2, UserCheck, HelpCircle, ChevronLeft, ChevronRight 
 
 import {
   SlidePortada, SlideIndice,
-  Slide1_LimiteSec, Slide1_1, Slide1_1Anim, Slide1_2, Slide1_4,
+  Slide1_LimiteSec, Slide1_1, Slide1_1Anim, Slide1_2, Slide1_4, Slide1_LimitacionesSISD,
   SlideIntroParte1,
   Slide2_1, Slide2_2, Slide2_3, Slide2_4, Slide2_Codigo, SlideIntroParte2,
-  Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_Chaining, Slide3_4, SlideIntroParte3,
-  Slide4_1, Slide4_2, Slide4_3, Slide4_4, Slide4_5, SlideIntroParte4,
+  Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_Chaining, Slide3_4, Slide3_OrganizacionDatos, SlideIntroParte3,
+  Slide4_1, Slide4_2, Slide4_3, Slide4_4, Slide4_5, Slide4_Divergencia, SlideIntroParte4,
   SlidePracticaAsm
 } from './slides';
 
@@ -99,9 +99,17 @@ export default function App() {
       id: '1.2',
       section: 1,
       title: 'Taxonomía de Flynn — Diagrama Interactivo',
-      subtitle: 'Slide 1.2 · SISD · SIMD · MISD · MIMD · Hacé click para explorar',
+      subtitle: 'Slide 1.3 · SISD · SIMD · MISD · MIMD · Hacé click para explorar',
       speaker: "Flynn clasificó las arquitecturas en dos ejes: cuántos flujos de instrucciones y cuántos flujos de datos. SISD es Von Neumann clásico. SIMD es nuestro foco: 1 instrucción, N datos en paralelo. MIMD es el generalista multinúcleo. MISD es el caso teórico. Hacé click en cada componente para ver su rol en cada arquitectura.",
       component: <Slide1_1 />
+    },
+    {
+      id: '1.limitaciones',
+      section: 1,
+      title: 'Limitaciones del SISD y Cuellos de Botella MIMD',
+      subtitle: 'Slide 1.4 · Von Neumann Bottleneck, Muro de Frecuencia y Spinlocks · Secciones 1.3 y 1.4',
+      speaker: "Para cerrar la Parte 1, analizamos por qué SISD se agotó: la frecuencia de reloj se estancó en 2005 por calor y el bus único de Von Neumann limita el ancho de banda. Y en MIMD/SMP, agregar más núcleos genera congestión de bus y spinlocks donde la CPU quema ciclos esperando recursos.",
+      component: <Slide1_LimitacionesSISD />
     },
 
     // === PARTE 2: RIVERA YANDRIS ===
@@ -110,7 +118,7 @@ export default function App() {
       section: 2,
       title: 'Parte 2: Arquitectura SIMD y el Principio Vectorial',
       subtitle: 'Expositor: Rivera Yandris · Parte 2',
-      speaker: "Saludos, soy Rivera Yandris. En esta segunda parte explicaré el funcionamiento interno de SIMD: registros vectoriales, la dualidad espacio-tiempo y la divergencia condicional.",
+      speaker: "Saludos, soy Rivera Yandris. En esta segunda parte explicaré el funcionamiento interno de SIMD: registros vectoriales, la dualidad espacio-tiempo y los requisitos de regularidad de datos.",
       component: <SlideIntroParte2 />
     },
     {
@@ -140,9 +148,9 @@ export default function App() {
     {
       id: '2.4',
       section: 2,
-      title: 'El Poder y El Límite del SIMD',
-      subtitle: 'Slide 2.4 · Ventajas y La Kryptonita (Divergencia)',
-      speaker: "SIMD brilla con datos regulares y alineados. Su kryptonita son las condiciones 'if/else' por elemento: el hardware debe ejecutar ambos caminos enmascarando los elementos falsos.",
+      title: 'Ventajas del Procesamiento Vectorial',
+      subtitle: 'Slide 2.4 · Ventajas Principales y Requisitos de Regularidad (Sección 2.7)',
+      speaker: "En la sección 2.7 analizamos las ventajas clave: multiplicamos el throughput por N y dividimos el costo de decodificación entre N datos. Para aprovechar esto, el problema requiere datos homogéneos, contiguos en memoria y sin dependencias.",
       component: <Slide2_4 />
     },
     {
@@ -160,7 +168,7 @@ export default function App() {
       section: 3,
       title: 'Parte 3: Extensiones SIMD Modernas (MMX, SSE, AVX)',
       subtitle: 'Expositor: Alejandro Andy · Parte 3',
-      speaker: "Buenas tardes, soy Alejandro Andy. Analizaremos cómo Intel y AMD evolucionaron los registros desde MMX hasta AVX-512, el truco del Subword Parallelism y las instrucciones FMA.",
+      speaker: "Buenas tardes, soy Alejandro Andy. Analizaremos cómo Intel y AMD evolucionaron los registros desde MMX hasta AVX-512, el truco del Subword Parallelism, la práctica en assembler y las instrucciones FMA.",
       component: <SlideIntroParte3 />
     },
     {
@@ -188,10 +196,26 @@ export default function App() {
       component: <Slide3_3 />
     },
     {
+      id: '3.organizacion',
+      section: 3,
+      title: 'Organización de Datos Empaquetados en Registros',
+      subtitle: 'Slide 3.4 · Formatos Float32, Double64, Int16 y Byte8 · Sección 3.4 de la Guía',
+      speaker: "En la sección 3.4 de la guía analizamos cómo un registro vectorial YMM de 256 bits subdivide físicamente su espacio: puede albergar 8 floats de 32-bit, 4 doubles de 64-bit, 16 Shorts de 16-bit o 32 bytes de 8-bit para procesamiento masivo.",
+      component: <Slide3_OrganizacionDatos />
+    },
+    {
+      id: 'asm.practice',
+      section: 3,
+      title: 'Práctica: Suma de Arreglos en Assembler',
+      subtitle: 'Slide 3.5 · Código Escalar (SISD) vs Vectorial (SSE) · Sección 3.6 de la Guía',
+      speaker: "Para aplicar las instrucciones SSE vistas en la sección 3.6 de la guía, aquí comparamos el código assembler escalar contra el vectorial. Del lado izquierdo, el bucle SISD carga, suma y guarda un elemento por vez. Del lado derecho, con MOVAPS y ADDPS de SSE, procesamos 4 floats por instrucción. Observen la instrucción addps: una sola instrucción haciendo 4 sumas simultáneas.",
+      component: <SlidePracticaAsm />
+    },
+    {
       id: '3.4',
       section: 3,
       title: 'Fetch-Decode-Execute en SIMD',
-      subtitle: 'Slide 3.4 · El Pipeline Vectorial paso a paso',
+      subtitle: 'Slide 3.6 · El Pipeline Vectorial paso a paso',
       speaker: "El pipeline interno para VADDPD: FETCH carga 1 instrucción, DECODE identifica que opera sobre 256 bits, EXECUTE activa 4 sumadores de 64 bits simultáneamente, y WRITEBACK escribe 256 bits de una vez. La diferencia clave con SISD: 1 decodificación para 4 operaciones efectivas.",
       component: <Slide3_FDE_SIMD />
     },
@@ -199,7 +223,7 @@ export default function App() {
       id: '3.5',
       section: 3,
       title: 'Encadenamiento Vectorial (Vector Chaining)',
-      subtitle: 'Slide 3.5 · Sección 3.8 · CRAY-1 (Seymour Cray, 1976)',
+      subtitle: 'Slide 3.7 · Sección 3.8 · CRAY-1 (Seymour Cray, 1976)',
       speaker: "En la sección 3.8 de la guía analizamos el encadenamiento vectorial introducido por Seymour Cray en la CRAY-1. Permite que el resultado de la ALU multiplicadora pase directamente a la ALU sumadora sin esperar al vector completo. Es el antepasado directo de la instrucción FMA moderna.",
       component: <Slide3_Chaining />
     },
@@ -207,7 +231,7 @@ export default function App() {
       id: '3.6',
       section: 3,
       title: 'El ISA es el Mismo. El Hardware No.',
-      subtitle: 'Slide 3.6 · AMD Excavator vs AMD Zen',
+      subtitle: 'Slide 3.8 · AMD Excavator vs AMD Zen',
       speaker: "Excavator coordinaba dos unidades FMAC de 128 bits con mayor latencia. Zen implementó una unidad nativa de 256 bits con crossbar, demostrando cómo la microarquitectura cambia el rendimiento real.",
       component: <Slide3_4 />
     },
@@ -218,38 +242,38 @@ export default function App() {
       section: 4,
       title: 'Parte 4: Rendimiento, Aplicaciones y Conclusiones',
       subtitle: 'Expositor: Bermudez Gino · Parte 4',
-      speaker: "Hola a todos, soy Bermudez Gino. En esta parte final revisaremos el desglose numérico de speedup, Throughput, Ley de Amdahl, aplicaciones reales en IA y SoCs híbridos.",
+      speaker: "Hola a todos, soy Bermudez Gino. En esta parte final revisaremos el desglose numérico de speedup real, Throughput, Ley de Amdahl, la divergencia condicional, aplicaciones reales en IA y SoCs híbridos.",
       component: <SlideIntroParte4 />
-    },
-    {
-      id: 'asm.practice',
-      section: 4,
-      title: 'Práctica: Suma de Arreglos en Assembler',
-      subtitle: 'Código Escalar (SISD) vs Vectorial (SSE) · Paso a paso',
-      speaker: "En esta práctica vamos a comparar el código assembler escalar contra el vectorial. Del lado izquierdo, el bucle SISD carga suma y guarda un elemento por vez. Del lado derecho, con MOVAPS y ADDPS de SSE, procesamos 4 floats por instrucción. Observen cómo resalta la instrucción addps: una sola instrucción haciendo 4 sumas simultáneas.",
-      component: <SlidePracticaAsm />
     },
     {
       id: '4.1',
       section: 4,
       title: 'El Argumento Definitivo: Desglose de Instrucciones',
-      subtitle: 'Slide 4.1 · Desglose Dinámico: 304 vs 7 Instrucciones',
-      speaker: "En la suma de 50 elementos, el bucle escalar ejecuta 100 Loads, 50 ADDS, 50 Shifts, 50 Stores y 50 Branches (304 instrs). En vectorial, 2 cargas, 1 VADD, 1 VSHFR y 1 VST lo hacen todo en 7 instrucciones y 285 ciclos.",
+      subtitle: 'Slide 4.1 · Desglose Dinámico: 304 vs 7 Instrucciones (Sección 4.2)',
+      speaker: "Como vimos en la sección 4.2 de la guía, en la suma de 50 elementos el bucle escalar ejecuta 100 Loads, 50 ADDS, 50 Shifts, 50 Stores y 50 Branches (304 instrs). En vectorial, 2 cargas, 1 VADD, 1 VSHFR y 1 VST lo hacen todo en 7 instrucciones y 285 ciclos. Logramos un Speedup real de 7.0x.",
       component: <Slide4_1 />
     },
     {
       id: '4.2',
       section: 4,
       title: 'Throughput y Ley de Amdahl',
-      subtitle: 'Slide 4.2 · Las Dos Métricas Fundamentales',
+      subtitle: 'Slide 4.2 · Las Dos Métricas Fundamentales (Secciones 4.3 y 4.4)',
       speaker: "Throughput (GFLOPS) escala con el ancho del registro. Pero la Ley de Amdahl establece un techo: si el 20% del código es secuencial, el speedup máximo teórico jamás superará 5x.",
       component: <Slide4_2 />
+    },
+    {
+      id: '4.kryptonita',
+      section: 4,
+      title: 'La Kryptonita del SIMD: Divergencia Condicional',
+      subtitle: 'Slide 4.3 · Animación Interactiva de Enmascaramiento · Sección 4.5 de la Guía',
+      speaker: "Llegamos a la sección 4.5 de nuestra guía: la kryptonita del SIMD. Cuando ejecutamos un 'if/else' donde algunos datos entran por el camino verdadero y otros por el falso, SIMD se ve obligado a ejecutar AMBOS caminos aplicando una máscara de bits (VMASK) para descartar los inactivos. Esto penaliza severamente el rendimiento.",
+      component: <Slide4_Divergencia />
     },
     {
       id: '4.3',
       section: 4,
       title: 'SIMD en el Mundo Real',
-      subtitle: 'Slide 4.3 · Aplicaciones en la Computación Actual',
+      subtitle: 'Slide 4.4 · Aplicaciones en la Computación Actual',
       speaker: "Al ejecutar np.dot en Python o procesar imágenes en Photoshop, estás usando SIMD. BLAS, redes neuronales (CNNs) y cifrado AES-NI dependen 100% de estas extensiones.",
       component: <Slide4_3 />
     },
@@ -257,7 +281,7 @@ export default function App() {
       id: '4.4',
       section: 4,
       title: 'El Paradigma Híbrido: SoC Moderno',
-      subtitle: 'Slide 4.4 · CPU (MIMD) + GPU (SIMD) en el Mismo Silicio',
+      subtitle: 'Slide 4.5 · CPU (MIMD) + GPU (SIMD) en el Mismo Silicio',
       speaker: "Los chips modernos de smartphones y laptops combinan núcleos CPU para control asíncrono y miles de cores SIMD en la GPU integrados por un bus de alta velocidad.",
       component: <Slide4_4 />
     },
@@ -273,7 +297,7 @@ export default function App() {
       id: '4.5',
       section: 4,
       title: 'Conclusiones y Cierre',
-      subtitle: 'Slide 4.5 · La División del Trabajo Computacional',
+      subtitle: 'Slide 4.7 · La División del Trabajo Computacional',
       speaker: "SIMD no es una optimización opcional; es el mecanismo estructural por el cual la computación moderna superó el límite de frecuencia de reloj.",
       component: <Slide4_5 />
     }
