@@ -1,6 +1,16 @@
 @import "tailwindcss";
 
 @layer base {
+  html {
+    @apply text-base;
+  }
+
+  @media (min-width: 1536px) {
+    html {
+      font-size: 18px;
+    }
+  }
+
   body {
     @apply bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-cyan-500 selection:text-black;
   }

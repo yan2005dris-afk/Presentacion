@@ -9,7 +9,7 @@ import { Sparkles } from 'lucide-react';
 
 export function Slide4_1() {
   return (
-    <div className="space-y-4 max-w-5xl mx-auto text-xs font-mono">
+    <div className="space-y-4 max-w-6xl mx-auto text-xs font-mono">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="p-4 rounded-2xl bg-slate-900 border border-red-500/30 space-y-2">
           <h4 className="font-bold text-red-400">Escalar (304 Instrucciones Dinámicas):</h4>
@@ -46,15 +46,74 @@ export function Slide4_1() {
 
 export function Slide4_2() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto text-xs">
-      <div className="p-5 rounded-2xl bg-slate-900 border border-cyan-500/30 space-y-3">
-        <h4 className="text-sm font-bold text-cyan-400">Throughput (GFLOPS)</h4>
-        <p className="text-slate-300">Volumen de datos por segundo. AVX-512 a 3GHz = 48 GFLOPS (hasta 96 GFLOPS con FMA).</p>
+    <div className="w-full h-full flex flex-col gap-3 max-w-6xl mx-auto">
+      <div className="flex-1 grid grid-cols-2 gap-3 min-h-0">
+        {/* Throughput */}
+        <div className="p-4 rounded-2xl bg-slate-900 border border-cyan-500/30 flex flex-col gap-2">
+          <h4 className="text-sm font-bold text-cyan-400 shrink-0">Throughput</h4>
+          <div className="flex-1 flex flex-col justify-center gap-2">
+            <div className="p-2 bg-slate-950 rounded-xl border border-slate-800 text-center font-mono text-xs">
+              <span className="text-slate-400">Throughput = </span>
+              <span className="text-cyan-300 font-bold">Datos procesados / Tiempo</span>
+            </div>
+            <div className="space-y-1.5 text-xs font-mono">
+              <div className="flex items-center justify-between p-1.5 bg-slate-950/80 rounded-lg border border-slate-800">
+                <span className="text-slate-400">Escalar (1 float)</span>
+                <span className="text-slate-500">3 GFLOPS</span>
+              </div>
+              <div className="flex items-center justify-between p-1.5 bg-slate-950/80 rounded-lg border border-slate-800">
+                <span className="text-cyan-400">SSE (4× float)</span>
+                <span className="text-cyan-300 font-bold">12 GFLOPS</span>
+              </div>
+              <div className="flex items-center justify-between p-1.5 bg-slate-950/80 rounded-lg border border-slate-800">
+                <span className="text-purple-400">AVX (8× float)</span>
+                <span className="text-purple-300 font-bold">24 GFLOPS</span>
+              </div>
+              <div className="flex items-center justify-between p-1.5 bg-slate-950/80 rounded-lg border border-amber-500/30">
+                <span className="text-amber-400">AVX-512 + FMA</span>
+                <span className="text-amber-300 font-bold">96 GFLOPS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Amdahl */}
+        <div className="p-4 rounded-2xl bg-slate-900 border border-purple-500/30 flex flex-col gap-2">
+          <h4 className="text-sm font-bold text-purple-400 shrink-0">Ley de Amdahl</h4>
+          <div className="flex-1 flex flex-col justify-center gap-2">
+            <div className="p-2 bg-slate-950 rounded-xl border border-slate-800 text-center font-mono text-xs">
+              <span className="text-slate-400">Speedup máximo = </span>
+              <span className="text-purple-300 font-bold">1 / (S + P/N)</span>
+            </div>
+            <div className="space-y-1.5 text-xs font-mono">
+              <div className="flex items-center gap-2 p-2 bg-slate-950/80 rounded-lg border border-slate-800">
+                <span className="text-slate-500 shrink-0">20% secuencial, 80% paralelo:</span>
+              </div>
+              <div className="grid grid-cols-2 gap-1.5">
+                <div className="p-1.5 rounded-lg bg-slate-950/80 border border-slate-800 text-center">
+                  <div className="text-slate-500">4 ALUs</div>
+                  <div className="text-slate-300 font-bold">2.5×</div>
+                </div>
+                <div className="p-1.5 rounded-lg bg-slate-950/80 border border-slate-800 text-center">
+                  <div className="text-slate-500">16 ALUs</div>
+                  <div className="text-purple-300 font-bold">4.0×</div>
+                </div>
+                <div className="p-1.5 rounded-lg bg-slate-950/80 border border-slate-800 text-center">
+                  <div className="text-slate-500">∞ ALUs</div>
+                  <div className="text-amber-300 font-bold">5.0× ← techo</div>
+                </div>
+                <div className="p-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-center">
+                  <div className="text-red-400 font-bold">50% secuencial</div>
+                  <div className="text-red-300 font-bold">2.0× ← máximo</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="p-5 rounded-2xl bg-slate-900 border border-purple-500/30 space-y-3">
-        <h4 className="text-sm font-bold text-purple-400">Ley de Amdahl & Techo Secuencial</h4>
-        <p className="text-slate-300">Si el 20% del código es secuencial y no se puede vectorizar, el speedup máximo teórico jamás superará 5X, sin importar cuántas ALUs agregues.</p>
+      <div className="shrink-0 p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-slate-400 text-center leading-relaxed">
+        <span className="text-cyan-400 font-bold">Conclusión:</span> el throughput escala con el ancho de registro, pero la Ley de Amdahl te recuerda que la porción secuencial siempre pone un techo.
       </div>
     </div>
   );
@@ -63,20 +122,31 @@ export function Slide4_2() {
 /* ───────── Slide 4.3 — Aplicaciones Reales ───────── */
 
 export function Slide4_3() {
+  const apps = [
+    { icon: '🖼️', title: 'Imágenes Digitales', desc: '6.2M píxeles (1920×1080 × 3 canales). AVX-512 procesa 64 píxeles por instrucción → ~97K instrs vs 6.2M escalares.', color: 'border-emerald-500/30 text-emerald-300' },
+    { icon: '🎬', title: 'Video y Audio', desc: 'Codecs H.264/HEVC: DCT, motion estimation y filtros de desbloqueo. 100% vectorizado en CPUs modernas.', color: 'border-blue-500/30 text-blue-300' },
+    { icon: '🎮', title: 'Videojuegos 3D', desc: '1M vértices × 60fps = matrices 4×4. Sin SIMD, las transformaciones 3D serían imposibles en tiempo real.', color: 'border-purple-500/30 text-purple-300' },
+    { icon: '🧠', title: 'Inteligencia Artificial', desc: 'CNN: 90% del tiempo = multiplicación de matrices. AVX-512 + FMA es la base de TensorFlow y PyTorch en CPU.', color: 'border-amber-500/30 text-amber-300' },
+    { icon: '📊', title: 'Data Science', desc: 'NumPy `np.dot` llama a BLAS/LAPACK con AVX-512 bajo el capó. Sin que el usuario lo sepa, está usando SIMD.', color: 'border-cyan-500/30 text-cyan-300' },
+    { icon: '🖥️', title: 'GPUs (SIMT)', desc: 'Una GPU NVIDIA tiene miles de cores SIMD. Cada SM ejecuta la misma instrucción sobre datos distintos (SIMT).', color: 'border-rose-500/30 text-rose-300' },
+  ];
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-4xl mx-auto text-xs">
-      <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
-        <h4 className="font-bold text-cyan-400">Python NumPy</h4>
-        <p className="text-slate-400 mt-1">Llama internamente a BLAS/LAPACK acelerado por AVX-512.</p>
-      </div>
-      <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
-        <h4 className="font-bold text-amber-400">Redes Neuronales</h4>
-        <p className="text-slate-400 mt-1">Convoluciones CNN y multiplicaciones de matrices GEMM.</p>
-      </div>
-      <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
-        <h4 className="font-bold text-purple-400">Cifrado AES-NI</h4>
-        <p className="text-slate-400 mt-1">Instrucciones vectoriales dedicadas para seguridad en red.</p>
-      </div>
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 max-w-6xl mx-auto">
+      {apps.map((a, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.08 }}
+          className={`p-3 rounded-xl bg-slate-900 border ${a.color} space-y-1`}
+        >
+          <h4 className={`text-xs font-bold flex items-center gap-1.5 ${a.color}`}>
+            <span>{a.icon}</span> {a.title}
+          </h4>
+          <p className="text-xs text-slate-400 leading-relaxed">{a.desc}</p>
+        </motion.div>
+      ))}
     </div>
   );
 }
@@ -85,7 +155,7 @@ export function Slide4_3() {
 
 export function Slide4_4() {
   return (
-    <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 max-w-4xl mx-auto space-y-4 text-center text-xs">
+    <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 max-w-5xl mx-auto space-y-4 text-center text-xs">
       <h4 className="text-sm font-bold text-slate-200">SoC Híbrido Moderno</h4>
       <div className="grid grid-cols-2 gap-4 text-left">
         <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30">
@@ -102,13 +172,41 @@ export function Slide4_4() {
 /* ───────── Slide 4.5 — Conclusiones ───────── */
 
 export function Slide4_5() {
+  const points = [
+    { icon: '①', text: 'El Von Neumann secuencial tiene un cuello de botella estructural. La solución no es velocidad de reloj — es paralelismo.', color: 'border-slate-800' },
+    { icon: '②', text: 'Flynn (1966) clasificó las soluciones. SIMD es el especialista del procesamiento masivo y homogéneo.', color: 'border-cyan-500/30' },
+    { icon: '③', text: 'Evolución: MMX → SSE → AVX → AVX-512. Cada generación duplica el throughput sin cambiar el modelo de programación.', color: 'border-purple-500/30' },
+    { icon: '④', text: 'Presente híbrido: CPU (MIMD) + GPU (SIMD) en el mismo silicio. Sin SIMD no hay video 4K, no hay IA, no hay gráficos en tiempo real.', color: 'border-amber-500/30' },
+  ];
+
   return (
-    <div className="p-8 rounded-3xl bg-slate-900 border border-cyan-500/30 max-w-3xl mx-auto text-center space-y-4">
-      <Sparkles size={36} className="text-cyan-400 mx-auto animate-bounce" />
-      <h3 className="text-xl font-bold text-slate-100">SIMD: La Base del Cómputo Moderno</h3>
-      <p className="text-xs text-slate-300 italic">
-        "Lo que comenzó como una extensión multimedia en 1996 es hoy la estructura sobre la cual se erige toda la Inteligencia Artificial."
-      </p>
+    <div className="w-full h-full flex flex-col justify-center items-center max-w-5xl mx-auto">
+      <div className="space-y-3 w-full max-w-4xl">
+        {points.map((p, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.15 }}
+            className={`flex items-start gap-3 p-3 rounded-xl bg-slate-900 border ${p.color}`}
+          >
+            <span className="text-lg font-bold text-cyan-400 shrink-0">{p.icon}</span>
+            <p className="text-xs text-slate-300 leading-relaxed">{p.text}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.8 }}
+        className="mt-4 p-4 rounded-2xl bg-gradient-to-br from-cyan-500/10 via-slate-900 to-purple-500/10 border border-cyan-500/30 text-center max-w-3xl"
+      >
+        <Sparkles size={28} className="text-cyan-400 mx-auto animate-bounce mb-2" />
+        <p className="text-xs text-slate-300 italic font-semibold">
+          "El límite secuencial era real. SIMD lo rompió — un registro a la vez, un bit más ancho por generación."
+        </p>
+      </motion.div>
     </div>
   );
 }

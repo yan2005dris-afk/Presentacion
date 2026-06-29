@@ -14,7 +14,7 @@ export function SlidePortada() {
   ];
 
   return (
-    <div className="text-center space-y-8 max-w-4xl mx-auto">
+    <div className="text-center space-y-8 max-w-5xl mx-auto">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -28,7 +28,7 @@ export function SlidePortada() {
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-teal-300 to-purple-400">
           SIMD y Arquitecturas Paralelas
         </h1>
-        <p className="mt-3 text-sm md:text-base text-slate-300 max-w-2xl mx-auto font-medium">
+        <p className="mt-3 text-sm md:text-base text-slate-300 max-w-3xl mx-auto font-medium">
           Exposición Oficial · Arquitectura y Organización de Computadoras
         </p>
       </motion.div>
@@ -42,8 +42,8 @@ export function SlidePortada() {
           >
             <Users size={20} className="mx-auto text-cyan-400" />
             <div className="text-xs font-bold text-slate-100">{m.name}</div>
-            <div className="text-[10px] text-cyan-400 font-mono font-bold">{m.part}</div>
-            <div className="text-[10px] text-slate-500">{m.topic}</div>
+            <div className="text-xs text-cyan-400 font-mono font-bold">{m.part}</div>
+            <div className="text-xs text-slate-500">{m.topic}</div>
           </motion.div>
         ))}
       </div>
@@ -60,7 +60,7 @@ export function SlideIndice({ onSelectSection }) {
   ];
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="space-y-6 max-w-5xl mx-auto">
       <div className="text-center space-y-1">
         <h3 className="text-xl font-bold text-slate-100 flex items-center justify-center gap-2">
           <ListOrdered size={22} className="text-cyan-400" /> Agenda Temática de la Exposición
@@ -77,7 +77,7 @@ export function SlideIndice({ onSelectSection }) {
             className={`p-4 rounded-2xl bg-slate-900 border-2 ${a.color} cursor-pointer space-y-2 transition-all shadow-md`}
           >
             <div className="flex justify-between items-center">
-              <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-950 rounded border border-slate-800 text-slate-200">{a.member}</span>
+              <span className="text-xs font-bold px-2 py-0.5 bg-slate-950 rounded border border-slate-800 text-slate-200">{a.member}</span>
               <ArrowRight size={16} className="text-slate-400" />
             </div>
             <h4 className="font-bold text-sm text-slate-100">{a.title}</h4>

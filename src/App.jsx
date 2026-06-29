@@ -6,7 +6,7 @@ import {
   SlidePortada, SlideIndice,
   Slide1_LimiteSec, Slide1_1, Slide1_1Anim, Slide1_2, Slide1_3, Slide1_4,
   Slide2_1, Slide2_2, Slide2_3, Slide2_4,
-  Slide3_1, Slide3_2, Slide3_3, Slide3_4,
+  Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_4,
   Slide4_1, Slide4_2, Slide4_3, Slide4_4, Slide4_5,
   SlidePracticaAsm
 } from './slides';
@@ -164,6 +164,14 @@ export default function App() {
       component: <Slide3_3 />
     },
     {
+      id: '3.fde',
+      section: 3,
+      title: 'Fetch-Decode-Execute en SIMD',
+      subtitle: 'Slide 3.5 · El Pipeline Vectorial paso a paso',
+      speaker: "El pipeline interno para VADDPD: FETCH carga 1 instrucción, DECODE identifica que opera sobre 256 bits, EXECUTE activa 4 sumadores de 64 bits simultáneamente, y WRITEBACK escribe 256 bits de una vez. La diferencia clave con SISD: 1 decodificación para 4 operaciones efectivas.",
+      component: <Slide3_FDE_SIMD />
+    },
+    {
       id: '3.4',
       section: 3,
       title: 'El ISA es el Mismo. El Hardware No.',
@@ -180,6 +188,14 @@ export default function App() {
       subtitle: 'Expositor: Bermudez Gino · Parte 4',
       speaker: "Hola a todos, soy Bermudez Gino. En esta parte final revisaremos el desglose numérico de speedup, Throughput, Ley de Amdahl, aplicaciones reales en IA y SoCs híbridos.",
       component: <SlideIntroParte4 />
+    },
+    {
+      id: 'asm.practice',
+      section: 4,
+      title: 'Práctica: Suma de Arreglos en Assembler',
+      subtitle: 'Código Escalar (SISD) vs Vectorial (SSE) · Paso a paso',
+      speaker: "En esta práctica vamos a comparar el código assembler escalar contra el vectorial. Del lado izquierdo, el bucle SISD carga suma y guarda un elemento por vez. Del lado derecho, con MOVAPS y ADDPS de SSE, procesamos 4 floats por instrucción. Observen cómo resalta la instrucción addps: una sola instrucción haciendo 4 sumas simultáneas.",
+      component: <SlidePracticaAsm />
     },
     {
       id: '4.1',
@@ -279,7 +295,7 @@ export default function App() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -15 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="w-full max-w-6xl mx-auto h-full flex flex-col justify-center"
+            className="w-full max-w-7xl 2xl:max-w-[90vw] mx-auto h-full flex flex-col justify-center"
           >
             {slide.component}
           </motion.div>
@@ -394,8 +410,9 @@ function SlideIntroParte3() {
       <div className="grid grid-cols-2 gap-3 text-left text-xs pt-2">
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.1: Evolución de Registros (1996-2017)</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.2: Subword Parallelism en Hardware</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.3: Vocabulario Ensamblador y FMA</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.4: AMD Zen vs AMD Excavator</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.3: Instrucciones SSE y AVX + FMA</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.4: Fetch-Decode-Execute Vectorial</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.5: AMD Zen vs AMD Excavator</div>
       </div>
     </div>
   );
@@ -409,10 +426,11 @@ function SlideIntroParte4() {
       </span>
       <h2 className="text-3xl font-extrabold text-slate-100">Rendimiento, Aplicaciones Reales y Conclusiones</h2>
       <div className="grid grid-cols-2 gap-3 text-left text-xs pt-2">
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Práctica: Assembler SISD vs SIMD (ADDPS)</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.1: Desglose Dinámico: 304 vs 7 Instrucciones</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.2: Throughput y Ley de Amdahl</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.3: SIMD en el Mundo Real (IA, NumPy, AES)</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.4: SoC Híbrido y Conclusiones Finales</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.3: SIMD en el Mundo Real (6 dominios)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.4: SoC Híbrido + Conclusiones</div>
       </div>
     </div>
   );

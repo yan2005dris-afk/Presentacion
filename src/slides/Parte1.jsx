@@ -19,23 +19,23 @@ export function Slide1_LimiteSec() {
   ];
 
   return (
-    <div className="w-full h-full flex gap-4 max-w-5xl mx-auto">
+    <div className="w-full h-full flex gap-4 max-w-6xl mx-auto">
       <div className="flex flex-col gap-3 w-56 shrink-0">
         <div className="flex-1 rounded-2xl border border-slate-700 bg-slate-900 p-4 flex flex-col gap-3">
-          <p className="text-[9px] font-mono text-slate-500 uppercase tracking-widest">El problema</p>
+          <p className="text-[13px] font-mono text-slate-500 uppercase tracking-widest">El problema</p>
           <p className="text-xs text-slate-300 leading-relaxed">
             Procesamiento masivo de datos: renderizado 3D, machine learning, video 4K. El modelo secuencial se queda corto.
           </p>
           <div className="border-t border-slate-800 pt-3">
-            <p className="text-[9px] font-mono text-cyan-500 uppercase tracking-widest mb-2">Analogía</p>
-            <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
+            <p className="text-[13px] font-mono text-cyan-500 uppercase tracking-widest mb-2">Analogía</p>
+            <div className="space-y-1.5 text-[13px] text-slate-300 leading-relaxed">
               <p>Supermercado con miles de clientes y <span className="text-red-400 font-bold">1 sola caja</span>.</p>
               <p>El cajero es competente. El cuello de botella es <span className="text-red-400 font-bold">estructural</span>.</p>
               <p>Agregar un cajero más rápido ayuda poco. La solución es <span className="text-cyan-400 font-bold">abrir más cajas</span>.</p>
             </div>
           </div>
           <div className="mt-auto pt-2 border-t border-slate-800">
-            <p className="text-[10px] text-slate-400 italic leading-relaxed">
+            <p className="text-xs text-slate-400 italic leading-relaxed">
               El procesador es el cajero. El problema no es velocidad de reloj — es <span className="text-amber-400 font-bold">throughput estructural</span>.
             </p>
           </div>
@@ -44,22 +44,22 @@ export function Slide1_LimiteSec() {
 
       <div className="flex-1 flex flex-col gap-3 min-w-0">
         <div className="shrink-0 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2.5 flex items-center gap-3">
-          <p className="text-[9px] font-mono text-slate-500 uppercase tracking-widest shrink-0">Ejemplo real</p>
+          <p className="text-[13px] font-mono text-slate-500 uppercase tracking-widest shrink-0">Ejemplo real</p>
           <code className="text-sm font-mono text-cyan-300 font-bold">C[i] = (A[i] + B[i]) / 2</code>
-          <span className="text-[10px] text-slate-500">para i = 0..49 · 50 elementos</span>
+          <span className="text-xs text-slate-500">para i = 0..49 · 50 elementos</span>
         </div>
 
         <div className="flex-1 rounded-2xl border border-red-500/20 bg-slate-900 p-3 flex flex-col gap-2">
           <div className="flex items-center justify-between shrink-0 mb-1">
-            <p className="text-[9px] font-mono text-red-400 uppercase tracking-widest">SISD — desglose de instrucciones</p>
+            <p className="text-[13px] font-mono text-red-400 uppercase tracking-widest">SISD — desglose de instrucciones</p>
             <div className="flex items-center gap-3">
-              <span className="text-[10px] font-mono text-slate-500">Total instr: <span className="text-red-400 font-bold">304</span></span>
-              <span className="text-[10px] font-mono text-slate-500">Total ciclos: <span className="text-red-400 font-bold">~2004</span></span>
+              <span className="text-xs font-mono text-slate-500">Total instr: <span className="text-red-400 font-bold">304</span></span>
+              <span className="text-xs font-mono text-slate-500">Total ciclos: <span className="text-red-400 font-bold">~2004</span></span>
             </div>
           </div>
           <div className="flex-1 flex flex-col gap-1 justify-center">
             {instrRows.map((r, i) => (
-              <div key={i} className="flex items-center gap-2 text-[10px] font-mono">
+              <div key={i} className="flex items-center gap-2 text-xs font-mono">
                 <span className="w-14 text-slate-500 font-bold shrink-0">{r.n}</span>
                 <span className="w-14 text-cyan-400 font-bold shrink-0">{r.op}</span>
                 <span className="flex-1 text-slate-500 truncate">{r.desc}</span>
@@ -80,14 +80,14 @@ export function Slide1_LimiteSec() {
         <div className="shrink-0 grid grid-cols-2 gap-3">
           <div className="rounded-xl border border-red-500/30 bg-slate-900 p-3 flex items-center gap-3">
             <div>
-              <p className="text-[9px] font-mono text-red-400 uppercase tracking-widest">SISD secuencial</p>
+              <p className="text-[13px] font-mono text-red-400 uppercase tracking-widest">SISD secuencial</p>
               <p className="text-lg font-bold font-mono text-red-400">304 <span className="text-xs text-slate-500 font-normal">instrucciones</span></p>
               <p className="text-xs font-mono text-slate-500">~2004 ciclos</p>
             </div>
           </div>
           <div className="rounded-xl border border-cyan-500/40 bg-slate-900 p-3 flex items-center gap-3">
             <div>
-              <p className="text-[9px] font-mono text-cyan-400 uppercase tracking-widest">SIMD vectorial</p>
+              <p className="text-[13px] font-mono text-cyan-400 uppercase tracking-widest">SIMD vectorial</p>
               <p className="text-lg font-bold font-mono text-cyan-400">7 <span className="text-xs text-slate-500 font-normal">instrucciones</span></p>
               <p className="text-xs font-mono text-slate-500">~285 ciclos · <span className="text-emerald-400 font-bold">7× más rápido</span></p>
             </div>
@@ -162,7 +162,7 @@ export function Slide1_1() {
     const on = active === type;
     return (
       <div onClick={() => toggle(type)}
-        className={`h-9 rounded-lg border-2 flex items-center justify-center text-[10px] font-mono font-bold cursor-pointer select-none transition-all duration-150 ${on ? `${arch.bdr} ${arch.bg} ${arch.txt}` : 'border-slate-600 bg-slate-800 text-slate-400 hover:border-slate-500 hover:text-slate-300'
+        className={`h-9 rounded-lg border-2 flex items-center justify-center text-xs font-mono font-bold cursor-pointer select-none transition-all duration-150 ${on ? `${arch.bdr} ${arch.bg} ${arch.txt}` : 'border-slate-600 bg-slate-800 text-slate-400 hover:border-slate-500 hover:text-slate-300'
           }`}>
         {label}
       </div>
@@ -171,12 +171,12 @@ export function Slide1_1() {
 
   const Arr = ({ vis }) => (
     <div className={`flex items-center transition-opacity ${vis ? 'opacity-100' : 'opacity-0'}`}>
-      <div className="flex-1 h-px bg-slate-700" /><span className="text-slate-600 text-[10px] shrink-0">▶</span>
+      <div className="flex-1 h-px bg-slate-700" /><span className="text-slate-600 text-xs shrink-0">▶</span>
     </div>
   );
 
   return (
-    <div className="w-full h-full flex flex-col gap-2 max-w-5xl mx-auto select-none">
+    <div className="w-full h-full flex flex-col gap-2 max-w-6xl mx-auto select-none">
       <div className="shrink-0 flex gap-2 justify-center pt-1">
         {Object.entries(ARCHS).map(([k, a]) => (
           <button key={k} onClick={() => { setMode(k); setActive(null); }}
@@ -188,20 +188,20 @@ export function Slide1_1() {
       <div className={`shrink-0 rounded-xl border-2 px-4 py-2.5 min-h-[52px] flex items-start bg-slate-900 transition-all duration-200 ${arch.bdr}/50`}>
         {active
           ? <div>
-            <p className={`text-[11px] font-bold mb-0.5 ${arch.txt}`}>{INFO[active]?.title}</p>
-            <p className="text-[11px] text-slate-400">{INFO[active]?.[mode]}</p>
+            <p className={`text-[13px] font-bold mb-0.5 ${arch.txt}`}>{INFO[active]?.title}</p>
+            <p className="text-[13px] text-slate-400">{INFO[active]?.[mode]}</p>
           </div>
           : <div className="w-full">
             <div className="flex justify-between items-baseline">
               <p className={`text-xs font-bold ${arch.txt}`}>{arch.full}</p>
-              <span className="text-[10px] text-slate-600 font-mono">{arch.ex}</span>
+              <span className="text-xs text-slate-600 font-mono">{arch.ex}</span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-0.5">{arch.desc}</p>
+            <p className="text-[13px] text-slate-400 mt-0.5">{arch.desc}</p>
           </div>
         }
       </div>
 
-      <div className="shrink-0 grid text-[8px] font-mono text-slate-600 uppercase tracking-widest"
+      <div className="shrink-0 grid text-[10px] font-mono text-slate-600 uppercase tracking-widest"
         style={{ gridTemplateColumns: '1fr 28px 1fr 28px 1fr 28px 1fr' }}>
         <span className="text-center">Instr. Stream</span><span />
         <span className="text-center">Control Unit</span><span />
@@ -229,7 +229,7 @@ export function Slide1_1() {
             ))}
           </motion.div>
         </AnimatePresence>
-        <p className={`text-center text-[10px] font-mono mt-1 opacity-70 ${arch.txt}`}>{ANNOT[mode]}</p>
+        <p className={`text-center text-xs font-mono mt-1 opacity-70 ${arch.txt}`}>{ANNOT[mode]}</p>
       </div>
     </div>
   );
@@ -283,7 +283,7 @@ export function Slide1_1Anim() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col gap-3 max-w-5xl mx-auto select-none">
+    <div className="w-full h-full flex flex-col gap-3 max-w-6xl mx-auto select-none">
       <div className="flex items-center justify-center gap-3 shrink-0">
         <button onClick={() => setRunning(r => !r)} disabled={sisdFinished && simdFinished}
           className="flex items-center gap-2 px-5 py-2 rounded-xl bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 text-sm font-bold hover:bg-cyan-500/30 disabled:opacity-40 transition-all">
@@ -304,7 +304,7 @@ export function Slide1_1Anim() {
           <div className="flex items-center justify-between mb-3 shrink-0">
             <div>
               <span className="text-sm font-bold text-red-400 font-mono">SISD — 1 Cajero</span>
-              <p className="text-[10px] text-slate-500">1 dato · {TOTAL} ciclos</p>
+              <p className="text-xs text-slate-500">1 dato · {TOTAL} ciclos</p>
             </div>
             {sisdFinished
               ? <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
@@ -331,7 +331,7 @@ export function Slide1_1Anim() {
             <ArrowRight size={16} className="text-red-500/50 shrink-0" />
 
             <div className="flex flex-col items-center gap-2 shrink-0">
-              <span className="text-[9px] text-slate-600 font-mono">CAJERO</span>
+              <span className="text-[13px] text-slate-600 font-mono">CAJERO</span>
               <div className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors duration-200 ${sisdAtCajero !== null ? 'border-red-400 bg-slate-800' : sisdFinished ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-slate-700 bg-slate-800'
                 }`}>
                 <AnimatePresence mode="wait">
@@ -345,7 +345,7 @@ export function Slide1_1Anim() {
               </div>
               <div className="flex flex-col items-center">
                 <span className="text-lg font-bold font-mono text-slate-300">{sisdDone}</span>
-                <span className="text-[9px] text-slate-600 font-mono">procesados</span>
+                <span className="text-[13px] text-slate-600 font-mono">procesados</span>
               </div>
             </div>
           </div>
@@ -356,7 +356,7 @@ export function Slide1_1Anim() {
           <div className="flex items-center justify-between mb-3 shrink-0">
             <div>
               <span className="text-sm font-bold text-cyan-400 font-mono">SIMD — {SIMD_W} Cajeros</span>
-              <p className="text-[10px] text-slate-500">{SIMD_W} datos · {simdFinishTick} ciclos</p>
+              <p className="text-xs text-slate-500">{SIMD_W} datos · {simdFinishTick} ciclos</p>
             </div>
             {simdFinished
               ? <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
@@ -383,7 +383,7 @@ export function Slide1_1Anim() {
             <ArrowRight size={16} className="text-cyan-500/50 shrink-0" />
 
             <div className="flex flex-col gap-1.5 shrink-0">
-              <span className="text-[9px] text-slate-600 font-mono text-center">CAJEROS</span>
+              <span className="text-[13px] text-slate-600 font-mono text-center">CAJEROS</span>
               {Array.from({ length: SIMD_W }, (_, lane) => {
                 const itemIdx = simdBatchIdxs[lane] ?? null;
                 return (
@@ -399,13 +399,13 @@ export function Slide1_1Anim() {
                         }
                       </AnimatePresence>
                     </div>
-                    <span className="text-[9px] text-slate-600 font-mono">C{lane + 1}</span>
+                    <span className="text-[13px] text-slate-600 font-mono">C{lane + 1}</span>
                   </div>
                 );
               })}
               <div className="flex flex-col items-center mt-1">
                 <span className="text-lg font-bold font-mono text-slate-300">{simdDone}</span>
-                <span className="text-[9px] text-slate-600 font-mono">procesados</span>
+                <span className="text-[13px] text-slate-600 font-mono">procesados</span>
               </div>
             </div>
           </div>
@@ -444,12 +444,12 @@ export function Slide1_2() {
   ];
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="space-y-6 max-w-6xl mx-auto">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {steps.map((s, i) => (
           <motion.div key={i} whileHover={{ y: -3 }} className={`p-4 rounded-2xl bg-slate-900 border-2 ${s.color} space-y-2`}>
             <h4 className="font-bold font-mono text-sm">{s.title}</h4>
-            <p className="text-[11px] leading-relaxed text-slate-300">{s.desc}</p>
+            <p className="text-[13px] leading-relaxed text-slate-300">{s.desc}</p>
           </motion.div>
         ))}
       </div>
@@ -471,29 +471,29 @@ export function Slide1_2() {
 
 export function Slide1_3() {
   return (
-    <div className="space-y-4 max-w-4xl mx-auto">
+    <div className="space-y-4 max-w-5xl mx-auto">
       <p className="text-xs text-slate-400 text-center">Matriz 2×2 basada en Flujos de Instrucciones (I) vs Flujos de Datos (D)</p>
       <div className="grid grid-cols-2 gap-4 text-left">
         <div className="p-5 rounded-2xl bg-slate-900/40 border border-slate-800 opacity-60">
-          <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Single Instr - Single Data</span>
+          <span className="text-xs font-bold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Single Instr - Single Data</span>
           <h3 className="text-lg font-bold text-slate-300 mt-1">SISD</h3>
           <p className="text-xs text-slate-400 mt-1">Von Neumann clásico. Procesadores uninúcleo tradicionales.</p>
         </div>
 
         <motion.div animate={{ boxShadow: ['0 0 15px rgba(6,182,212,0.1)', '0 0 25px rgba(6,182,212,0.3)', '0 0 15px rgba(6,182,212,0.1)'] }} transition={{ repeat: Infinity, duration: 2 }} className="p-5 rounded-2xl bg-slate-900 border-2 border-cyan-400">
-          <span className="text-[10px] font-bold px-2 py-0.5 bg-cyan-500/20 text-cyan-300 rounded border border-cyan-400/30">EL FOCO HOY ★</span>
+          <span className="text-xs font-bold px-2 py-0.5 bg-cyan-500/20 text-cyan-300 rounded border border-cyan-400/30">EL FOCO HOY ★</span>
           <h3 className="text-xl font-bold text-cyan-300 mt-1">SIMD</h3>
           <p className="text-xs text-slate-300 mt-1">Single Instruction, Multiple Data. El especialista en cómputo masivo.</p>
         </motion.div>
 
         <div className="p-5 rounded-2xl bg-slate-900/40 border border-slate-800 opacity-60">
-          <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Multiple Instr - Single Data</span>
+          <span className="text-xs font-bold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Multiple Instr - Single Data</span>
           <h3 className="text-lg font-bold text-slate-300 mt-1">MISD</h3>
           <p className="text-xs text-slate-400 mt-1">Caso teórico / Systolic Arrays (Google TPU).</p>
         </div>
 
         <div className="p-5 rounded-2xl bg-slate-900/80 border border-blue-500/40">
-          <span className="text-[10px] font-bold px-2 py-0.5 bg-blue-500/20 text-blue-300 rounded">Multiple Instr - Multiple Data</span>
+          <span className="text-xs font-bold px-2 py-0.5 bg-blue-500/20 text-blue-300 rounded">Multiple Instr - Multiple Data</span>
           <h3 className="text-lg font-bold text-blue-300 mt-1">MIMD / SMP</h3>
           <p className="text-xs text-slate-300 mt-1">El Generalista. Multiprocesadores multinúcleo asíncronos.</p>
         </div>
@@ -506,7 +506,7 @@ export function Slide1_3() {
 
 export function Slide1_4() {
   return (
-    <div className="space-y-4 max-w-5xl mx-auto">
+    <div className="space-y-4 max-w-6xl mx-auto">
       <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/90 text-xs">
         <table className="w-full text-left border-collapse">
           <thead>

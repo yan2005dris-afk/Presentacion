@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 // ==========================================
 // === PARTE 3 — Alejandro Andy ===
 // ==========================================
@@ -6,7 +8,7 @@
 
 export function Slide3_1() {
   return (
-    <div className="space-y-4 max-w-4xl mx-auto">
+    <div className="space-y-4 max-w-5xl mx-auto">
       <div className="p-3 rounded-xl bg-slate-900 border border-cyan-500/30 text-xs text-slate-300">
         <span className="font-bold text-cyan-400">Caso Real (Intel Atom 2009):</span> Sin extensiones SIMD, la CPU se saturaba al 100% procesando video HD. Con SSE habilitado, el mismo chip lo manejaba al 40%.
       </div>
@@ -25,7 +27,7 @@ export function Slide3_1() {
 
 export function Slide3_2() {
   return (
-    <div className="space-y-6 max-w-4xl mx-auto text-center">
+    <div className="space-y-6 max-w-5xl mx-auto text-center">
       <div className="p-4 rounded-2xl bg-slate-900 border border-amber-500/40">
         <h4 className="text-sm font-bold text-amber-300">Subword Parallelism</h4>
         <p className="text-xs text-slate-300 mt-1">Un solo sumador físico de 256 bits se particiona ajustando la lógica de acarreo interna según la instrucción.</p>
@@ -37,7 +39,7 @@ export function Slide3_2() {
           {[...Array(8)].map((_, i) => <div key={i} className="p-2 rounded bg-cyan-500/20 border border-cyan-400 text-cyan-300">+32</div>)}
         </div>
         <div className="text-purple-400 font-bold pt-2">• Particionado como 32×8-bit (Bytes para píxeles RGB en PADDB)</div>
-        <div className="grid grid-cols-16 gap-0.5 text-center text-[9px] font-bold">
+        <div className="grid grid-cols-16 gap-0.5 text-center text-[13px] font-bold">
           {[...Array(16)].map((_, i) => <div key={i} className="p-1 rounded bg-purple-500/20 border border-purple-400 text-purple-300">+8</div>)}
         </div>
       </div>
@@ -45,18 +47,113 @@ export function Slide3_2() {
   );
 }
 
-/* ───────── Slide 3.3 — Instrucciones AVX ───────── */
+/* ───────── Slide 3.3 — Instrucciones SSE y AVX ───────── */
 
 export function Slide3_3() {
   return (
-    <div className="space-y-4 max-w-4xl mx-auto">
-      <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 text-xs font-mono space-y-2">
-        <div className="text-cyan-400 font-bold">; Código Ensamblador AVX Típico:</div>
-        <div className="text-slate-300">VMOVAPD ymm0, [X + i*8]    <span className="text-slate-500">; cargar 4 doubles de X</span></div>
-        <div className="text-slate-300">VBROADCASTSD ymm1, [scalar] <span className="text-slate-500">; copiar escalar a 4 posiciones</span></div>
-        <div className="text-purple-300 font-bold">VFMADDPD ymm2, ymm0, ymm1, ymm3 <span className="text-purple-400">; FMA: (ymm0 * ymm1) + ymm3 en 1 ciclo</span></div>
+    <div className="space-y-4 max-w-6xl mx-auto">
+      {/* SSE instructions table */}
+      <div className="rounded-2xl bg-slate-900 border border-cyan-500/30 overflow-hidden">
+        <div className="px-4 py-2 bg-slate-950 border-b border-slate-800 text-xs font-bold text-cyan-400 font-mono flex items-center gap-2">
+          <span className="text-xs px-1.5 py-0.5 bg-cyan-500/20 rounded">SSE</span> Instrucciones básicas — Registros XMM (128 bits) · 4 × float32
+        </div>
+        <div className="p-3 grid grid-cols-2 gap-x-6 gap-y-1.5 text-[13px] font-mono">
+          <div className="flex items-center gap-2"><span className="text-amber-300 font-bold">MOVAPS</span> <span className="text-slate-400">xmm0, [mem]</span> <span className="text-slate-600 ml-auto">; cargar 4 floats alineados</span></div>
+          <div className="flex items-center gap-2"><span className="text-amber-300 font-bold">ADDPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; sumar 4 floats</span></div>
+          <div className="flex items-center gap-2"><span className="text-amber-300 font-bold">MULPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; multiplicar 4 floats</span></div>
+          <div className="flex items-center gap-2"><span className="text-amber-300 font-bold">SUBPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; restar 4 floats</span></div>
+          <div className="flex items-center gap-2"><span className="text-amber-300 font-bold">DIVPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; dividir 4 floats</span></div>
+        </div>
       </div>
-      <p className="text-xs text-slate-400 text-center">FMA (Fused Multiply-Add) es la instrucción clave en Inteligencia Artificial y Deep Learning.</p>
+
+      {/* AVX instructions */}
+      <div className="rounded-2xl bg-slate-900 border border-purple-500/30 overflow-hidden">
+        <div className="px-4 py-2 bg-slate-950 border-b border-slate-800 text-xs font-bold text-purple-400 font-mono flex items-center gap-2">
+          <span className="text-xs px-1.5 py-0.5 bg-purple-500/20 rounded">AVX</span> Instrucciones avanzadas — Registros YMM (256 bits) · 8 × float32
+        </div>
+        <div className="p-3 text-xs font-mono space-y-2">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-1.5">
+            <div className="flex items-center gap-2"><span className="text-purple-300 font-bold">VMOVAPD</span> <span className="text-slate-400">ymm, [mem]</span> <span className="text-slate-600 ml-auto">; mover 4 doubles</span></div>
+            <div className="flex items-center gap-2"><span className="text-purple-300 font-bold">VADDPD</span> <span className="text-slate-400">ymm, ymm, ymm</span> <span className="text-slate-600 ml-auto">; sumar 4 doubles</span></div>
+            <div className="flex items-center gap-2"><span className="text-purple-300 font-bold">VBROADCASTSD</span> <span className="text-slate-400">ymm, [r64]</span> <span className="text-slate-600 ml-auto">; escalar → vector</span></div>
+            <div className="flex items-center gap-2 relative">
+              <span className="text-emerald-300 font-bold">VFMADDPD</span>
+              <span className="text-slate-400">ymm, ymm, ymm, ymm</span>
+              <span className="text-emerald-400/80 text-xs ml-auto font-bold">★ FMA: a*b + c en 1 ciclo</span>
+            </div>
+          </div>
+          <div className="p-2 bg-slate-950 rounded-xl border border-purple-500/20 text-xs text-slate-400 leading-relaxed">
+            <span className="text-purple-300">Ejemplo:</span> <span className="text-slate-500">C[0..3] = A[0..3] × B[0..3] + D[0..3]</span>
+          </div>
+        </div>
+      </div>
+
+      <p className="text-xs text-slate-400 text-center">FMA (Fused Multiply-Add) es la instrucción clave en Inteligencia Artificial: 2 operaciones por ciclo.</p>
+    </div>
+  );
+}
+
+/* ───────── Slide 3.5 — Fetch-Decode-Execute en SIMD ───────── */
+
+export function Slide3_FDE_SIMD() {
+  const stages = [
+    { name: 'FETCH', color: 'border-cyan-400 text-cyan-300', bg: 'bg-cyan-500/10',
+      desc: 'La CU busca VADDPD en el instruction cache. Es 1 instrucción que la CPU sabe que opera sobre 256 bits.',
+      detail: '1 instrucción cargada' },
+    { name: 'DECODE', color: 'border-blue-400 text-blue-300', bg: 'bg-blue-500/10',
+      desc: 'Decodifica el opcode: "suma 4 doubles". Identifica operandos: YMM0, YMM1 → YMM2.',
+      detail: '1 decode → 4 ops efectivas' },
+    { name: 'EXECUTE', color: 'border-amber-400 text-amber-300', bg: 'bg-amber-500/10',
+      desc: 'Los 4 sumadores de 64 bits se activan simultáneamente. En vector processor: pipelineado.',
+      detail: '4 ALUs activas en paralelo' },
+    { name: 'WRITEBACK', color: 'border-purple-400 text-purple-300', bg: 'bg-purple-500/10',
+      desc: 'Los 256 bits del resultado se escriben de vuelta al banco de registros YMM en 1 operación.',
+      detail: '256 bits en 1 write' },
+  ];
+
+  return (
+    <div className="w-full h-full flex flex-col gap-4 max-w-6xl mx-auto">
+      <div className="shrink-0 flex items-center gap-3 px-2">
+        <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-400/30 text-xs font-mono text-amber-300">
+          Instrucción: <span className="font-bold">VADDPD ymm2, ymm0, ymm1</span>
+        </div>
+        <div className="flex items-center gap-1 text-[13px] text-slate-600 font-mono">
+          <span className="w-2 h-2 rounded-full bg-cyan-400" /> Pipeline SIMD
+        </div>
+      </div>
+
+      {/* Stages */}
+      <div className="flex-1 grid grid-cols-4 gap-3 min-h-0">
+        {stages.map((s, i) => (
+          <motion.div
+            key={s.name}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.15 }}
+            className={`flex flex-col rounded-2xl border-2 ${s.color} ${s.bg} overflow-hidden`}
+          >
+            <div className={`shrink-0 px-3 py-2 text-center font-bold font-mono text-sm border-b ${s.color} bg-slate-950/50`}>
+              {i + 1}. {s.name}
+            </div>
+            <div className="flex-1 p-3 flex flex-col justify-center text-center gap-2">
+              <p className="text-[13px] text-slate-300 leading-relaxed">{s.desc}</p>
+              <div className={`mt-auto px-2 py-1 rounded-lg ${s.color.replace('text-', 'bg-').replace('300', '500/20')} border ${s.color.replace('text-', 'border-').replace('300', '400/30')}`}>
+                <span className={`text-[13px] font-bold font-mono ${s.color}`}>◆ {s.detail}</span>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Comparison footer */}
+      <div className="shrink-0 grid grid-cols-2 gap-3 text-xs font-mono">
+        <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400">
+          <span className="text-red-400 font-bold">SISD:</span> 1 Decode → 1 micro-op → 1 ALU → 1 resultado
+        </div>
+        <div className="p-2.5 rounded-xl bg-slate-900 border border-cyan-500/20 text-slate-400">
+          <span className="text-cyan-400 font-bold">SIMD:</span> 1 Decode → 1 instr → 4 ALUs activas → 4 resultados
+        </div>
+      </div>
     </div>
   );
 }
@@ -65,7 +162,7 @@ export function Slide3_3() {
 
 export function Slide3_4() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
       <div className="p-5 rounded-2xl bg-slate-900 border border-purple-500/30 space-y-3">
         <span className="text-xs text-purple-400 font-mono font-bold">AMD Excavator (Pre-2017)</span>
         <h4 className="text-base font-bold text-slate-200">2x 128-bit FMAC Coordinados</h4>
