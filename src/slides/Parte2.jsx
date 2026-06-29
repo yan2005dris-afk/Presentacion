@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Layers, Activity, CheckCircle2, ShieldAlert } from 'lucide-react';
 
@@ -120,90 +121,189 @@ export function Slide2_3() {
 /* ───────── Slide 2.4 — Ventajas y Kryptonita ───────── */
 
 export function Slide2_4() {
-  const maskingSteps = [
-    { label: 'Paso 1: C = A + 1', desc: 'Ejecutar camino "true" para TODOS los elementos', active: [0, 2], inactive: [1, 3], result: [6, -1, 11, 0] },
-    { label: 'Paso 2: C = A × 2', desc: 'Ejecutar camino "false" para TODOS los elementos', active: [1, 3], inactive: [0, 2], result: [10, -4, 20, -2] },
-    { label: 'Paso 3: Fusionar con VMASK', desc: 'Combinar usando la máscara de predicción', active: [0, 1, 2, 3], inactive: [], result: [6, -4, 11, -2] },
-  ];
+  const [step, setStep] = useState(0);
+  const [autoPlay, setAutoPlay] = useState(true);
 
-  const masks = [
-    { mask: '1···1', active: [0, 2] },
-    { mask: '·1·1·', active: [1, 3] },
-    { mask: '1111', active: [0, 1, 2, 3] },
-  ];
+  const nextStep = () => setStep(p => (p + 1) % 4);
+
+  // Auto-cycle through 4 steps: 0=datos-inicial, 1=true-path, 2=false-path, 3=merge
+  useEffect(() => {
+    if (!autoPlay) return;
+    const timer = setInterval(nextStep, 2800);
+    return () => clearInterval(timer);
+  }, [autoPlay]);
 
   const A_data = [5, -2, 10, -1];
 
+  const steps = [
+    {
+      label: 'Cargando datos...',
+      mask: '····',
+      active: [],
+      inactive: [0, 1, 2, 3],
+      result: [5, -2, 10, -1],
+      desc: 'Registro vectorial con datos cargados. La ALU espera la instrucción.',
+      error: '',
+    },
+    {
+      label: 'Paso 1: Camino TRUE → A + 1',
+      mask: '1···1',
+      active: [0, 2],
+      inactive: [1, 3],
+      result: [6, -2, 11, -1],
+      desc: 'Elementos >0 ejecutan A+1. Elementos ≤0 también computan pero su resultado se descarta.',
+      error: '',
+    },
+    {
+      label: 'Paso 2: Camino FALSE → A × 2',
+      mask: '·1·1·',
+      active: [1, 3],
+      inactive: [0, 2],
+      result: [5, -4, 10, -2],
+      desc: 'Elementos ≤0 ejecutan A×2. "Gastamos otro ciclo completo para 2 elementos".',
+      error: '¡1 ciclo extra desperdiciado!',
+    },
+    {
+      label: 'Paso 3: Fusionar con VMASK',
+      mask: '1111',
+      active: [0, 1, 2, 3],
+      inactive: [],
+      result: [6, -4, 11, -2],
+      desc: 'La máscara combina: TRUE→[0,2] y FALSE→[1,3]. Resultado correcto, pero a COSTE DOBLE.',
+      error: '2 ciclos para 1 operación lógica',
+    },
+  ];
+
+  const s = steps[step];
+
+  const useCases = [
+    { label: 'Imágenes', desc: 'Brillo, convolución, filtros', color: 'text-cyan-400' },
+    { label: 'Audio / Video', desc: 'Codificación H.264, AAC', color: 'text-emerald-400' },
+    { label: 'IA / ML', desc: 'CNN, GEMM, FMA', color: 'text-purple-400' },
+    { label: 'Criptografía', desc: 'AES-NI, SHA-NI', color: 'text-amber-400' },
+  ];
+
   return (
     <div className="w-full h-full flex flex-col gap-3 max-w-6xl mx-auto">
-      {/* Two columns */}
       <div className="flex-1 grid grid-cols-2 gap-3 min-h-0">
-        {/* Ventajas */}
-        <div className="p-4 rounded-2xl bg-slate-900 border border-emerald-500/40 flex flex-col gap-3">
+        {/* ─── Ventajas + Casos de Uso ─── */}
+        <div className="p-4 rounded-2xl bg-slate-900 border border-emerald-500/40 flex flex-col gap-2 min-h-0">
           <h4 className="text-sm font-bold text-emerald-400 flex items-center gap-2 shrink-0"><CheckCircle2 size={16} /> Ventajas Clave</h4>
-          <ul className="text-[13px] text-slate-300 space-y-1.5 flex-1 flex flex-col justify-center">
-            <li className="bg-slate-950/80 p-2 rounded-lg border border-slate-800">✓ <span className="text-emerald-300 font-bold">Throughput N veces mayor</span> por ciclo de reloj</li>
-            <li className="bg-slate-950/80 p-2 rounded-lg border border-slate-800">✓ <span className="text-emerald-300 font-bold">1 decodificación</span> para N operaciones → eficiencia energética</li>
-            <li className="bg-slate-950/80 p-2 rounded-lg border border-slate-800">✓ <span className="text-emerald-300 font-bold">Menos instrucciones</span> dinámicas (304 → 7) → menos presión ICache</li>
-            <li className="bg-slate-950/80 p-2 rounded-lg border border-slate-800">✓ <span className="text-emerald-300 font-bold">Amortización de latencia</span> en el pipeline vectorial</li>
+          <ul className="text-[13px] text-slate-300 space-y-1 flex-1 min-h-0">
+            <li className="bg-slate-950/80 p-2 rounded-lg border border-slate-800">✓ <span className="text-emerald-300 font-bold">Throughput N× mayor</span> por ciclo de reloj</li>
+            <li className="bg-slate-950/80 p-2 rounded-lg border border-slate-800">✓ <span className="text-emerald-300 font-bold">1 decodificación</span> para N op → eficiencia energética</li>
+            <li className="bg-slate-950/80 p-2 rounded-lg border border-slate-800">✓ <span className="text-emerald-300 font-bold">Menos instrucciones</span> dinámicas → menos presión ICache</li>
+            <li className="bg-slate-950/80 p-2 rounded-lg border border-slate-800">✓ <span className="text-emerald-300 font-bold">Amortización de latencia</span> en pipeline vectorial</li>
           </ul>
+
+          {/* Casos de Uso */}
+          <div className="shrink-0">
+            <h5 className="text-[13px] font-bold text-slate-400 mb-1.5">• Casos de Uso Reales</h5>
+            <div className="grid grid-cols-2 gap-1.5">
+              {useCases.map((uc, i) => (
+                <div key={i} className="p-1.5 rounded-lg bg-slate-950/60 border border-slate-800 text-[13px] text-center">
+                  <span className={`font-bold block ${uc.color}`}>{uc.label}</span>
+                  <span className="text-slate-500 text-[13px]">{uc.desc}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Kryptonita con pasos */}
-        <div className="p-4 rounded-2xl bg-slate-900 border border-red-500/40 flex flex-col gap-2">
+        {/* ─── Kryptonita Animada ─── */}
+        <div className="p-4 rounded-2xl bg-slate-900 border border-red-500/40 flex flex-col gap-2 min-h-0">
           <h4 className="text-sm font-bold text-red-400 flex items-center gap-2 shrink-0"><ShieldAlert size={16} /> La Kryptonita: Divergencia</h4>
           <p className="text-[13px] text-slate-400 shrink-0">
-            Con datos <span className="font-mono text-red-300">[5, -2, 10, -1]</span> y <span className="font-mono text-cyan-300">if (A[i] &gt; 0)</span>
+            Datos <span className="font-mono text-red-300">[5, -2, 10, -1]</span> · Condición <span className="font-mono text-cyan-300">if (A[i] &gt; 0)</span>
           </p>
 
-          {/* Masking steps */}
-          <div className="flex-1 space-y-1.5 min-h-0">
-            {maskingSteps.map((st, si) => (
-              <motion.div
-                key={si}
-                initial={{ opacity: 0, x: -5 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: si * 0.1 }}
-                className="p-2 rounded-xl bg-slate-950/80 border border-slate-800 text-[13px]"
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-bold text-slate-300">{st.label}</span>
-                  <span className="text-[13px] font-mono text-slate-600">MASK: {masks[si].mask}</span>
-                </div>
-                <div className="flex items-center gap-1 mb-1">
-                  {A_data.map((_, idx) => {
-                    const isActive = st.active.includes(idx);
-                    return (
-                      <div key={idx} className={`flex-1 p-1 rounded text-center font-mono text-[13px] font-bold transition-all ${isActive ? 'bg-amber-500/20 border border-amber-400/50 text-amber-200' : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
-                        {st.result[idx]}
+          {/* Animated masking viewer */}
+          <div className="flex-1 flex flex-col min-h-0">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex-1 flex flex-col gap-1.5"
+            >
+              {/* Step label + mask */}
+              <div className="flex items-center justify-between">
+                <span className="text-[13px] font-bold text-slate-200">{s.label}</span>
+                <span className="text-[13px] font-mono text-slate-600">
+                  MASK: <span className="text-amber-400">{s.mask}</span>
+                </span>
+              </div>
+
+              {/* Data cells */}
+              <div className="grid grid-cols-4 gap-1">
+                {A_data.map((val, idx) => {
+                  const isActive = s.active.includes(idx);
+                  const isInactive = s.inactive.includes(idx);
+                  return (
+                    <div key={idx} className="flex flex-col items-center gap-0.5">
+                      {/* Original value */}
+                      <span className="text-[13px] font-mono text-slate-600">{val}</span>
+                      {/* Result */}
+                      <div className={`w-full p-1.5 rounded text-center font-mono text-[13px] font-bold transition-all duration-300 ${
+                        isActive
+                          ? 'bg-amber-500/20 border border-amber-400/50 text-amber-200'
+                          : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'
+                      }`}>
+                        {s.result[idx]}
                       </div>
-                    );
-                  })}
-                </div>
-                <p className="text-[13px] text-slate-500">{st.desc}</p>
-              </motion.div>
-            ))}
+                      {/* Status */}
+                      <span className={`text-[13px] ${isActive ? 'text-amber-400' : isInactive ? 'text-red-400' : ''}`}>
+                        {isActive ? '✓' : isInactive ? '✗' : ''}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Description */}
+              <p className="text-[13px] text-slate-500 leading-relaxed">{s.desc}</p>
+
+              {/* Error callout */}
+              {s.error && (
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="p-2 bg-red-500/10 rounded-xl border border-red-500/30 text-center"
+                >
+                  <span className="text-red-300 font-bold text-[13px]">⚠ {s.error}</span>
+                </motion.div>
+              )}
+            </motion.div>
+          </div>
+
+          {/* Controls: prev / dots / next + auto toggle */}
+          <div className="shrink-0 flex items-center justify-between gap-2">
+            <button onClick={() => setStep(p => (p - 1 + 4) % 4)}
+              className="p-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-all text-[13px] font-bold leading-none"
+              title="Paso anterior">◀</button>
+
+            <div className="flex items-center gap-1.5">
+              {[0, 1, 2, 3].map(i => (
+                <button key={i} onClick={() => setStep(i)}
+                  className={`h-2 rounded-full transition-all ${i === step ? 'bg-red-400 w-5' : 'bg-slate-700 hover:bg-slate-600 w-2'}`} />
+              ))}
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              <button onClick={nextStep}
+                className="p-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-all text-[13px] font-bold leading-none"
+                title="Siguiente paso">▶</button>
+              <button onClick={() => setAutoPlay(p => !p)}
+                className={`px-2 py-1 rounded-lg text-[13px] font-bold leading-none transition-all ${autoPlay ? 'bg-red-500/20 text-red-300 hover:bg-red-500/30' : 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30'}`}>
+                {autoPlay ? '⏸ Pausar' : '▶ Automático'}
+              </button>
+            </div>
           </div>
 
           <div className="shrink-0 p-2 bg-red-500/5 rounded-xl border border-red-500/20 text-[13px] text-slate-400 leading-relaxed">
             ⚠️ Se ejecutaron <span className="text-red-300 font-bold">2 ciclos de instrucción</span> en vez de 1. Si la condición divide los datos 50/50, el speedup cae a la mitad. Accesos no alineados (stride &gt; 1) también penalizan.
           </div>
-        </div>
-      </div>
-
-      {/* Footer: aplicaciones SIMD */}
-      <div className="shrink-0 grid grid-cols-4 gap-2 text-[13px] text-center">
-        <div className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400">
-          <span className="text-cyan-400 font-bold block">Imágenes</span> Brillo, convolución
-        </div>
-        <div className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400">
-          <span className="text-cyan-400 font-bold block">Audio/Video</span> Codificación H.264
-        </div>
-        <div className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400">
-          <span className="text-cyan-400 font-bold block">IA/ML</span> CNN, GEMM, FMA
-        </div>
-        <div className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400">
-          <span className="text-cyan-400 font-bold block">Cripto</span> AES-NI, SHA-NI
         </div>
       </div>
     </div>

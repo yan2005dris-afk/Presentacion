@@ -316,13 +316,13 @@ export function Slide1_1Anim() {
               : tick > 0 ? <span className="text-xs font-mono text-red-400">{sisdDone}/{TOTAL}</span> : null}
           </div>
 
-          <div className="flex-1 flex items-center gap-3 min-h-0">
-            <div className="flex-1 grid gap-1.5" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+          <div className="flex-1 flex items-center gap-2 min-h-0">
+            <div className="flex-1 grid gap-1 content-start" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
               {Array.from({ length: TOTAL }, (_, i) => {
                 const done = i < sisdDone;
                 const active = i === sisdAtCajero;
                 return (
-                  <div key={i} className={`aspect-square rounded-lg flex items-center justify-center text-sm font-bold font-mono transition-all duration-200 ${done ? 'bg-slate-800/60 border border-slate-700/40 text-slate-600'
+                  <div key={i} className={`w-full h-8 rounded-lg flex items-center justify-center text-xs font-bold font-mono transition-all duration-200 ${done ? 'bg-slate-800/60 border border-slate-700/40 text-slate-600'
                     : active ? 'bg-red-500 text-white animate-[glow-pulse_1.5s_ease-in-out_infinite] shadow-none'
                       : 'bg-slate-700 border border-slate-600 text-slate-300'
                     }`}>
@@ -332,7 +332,7 @@ export function Slide1_1Anim() {
               })}
             </div>
 
-            <ArrowRight size={16} className="text-red-500/50 shrink-0" />
+            <ArrowRight size={14} className="text-red-500/50 shrink-0" />
 
             <div className="flex flex-col items-center gap-2 shrink-0">
               <span className="text-[13px] text-slate-600 font-mono">CAJERO</span>
@@ -368,13 +368,13 @@ export function Slide1_1Anim() {
               : tick > 0 ? <span className="text-xs font-mono text-cyan-400">{simdDone}/{TOTAL}</span> : null}
           </div>
 
-          <div className="flex-1 flex items-center gap-3 min-h-0">
-            <div className="flex-1 grid gap-1.5" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+          <div className="flex-1 flex items-center gap-2 min-h-0">
+            <div className="flex-1 grid gap-1 content-start" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
               {Array.from({ length: TOTAL }, (_, i) => {
                 const done = i < simdDone;
                 const active = !simdFinished && i >= simdDone && i < simdDone + SIMD_W;
                 return (
-                  <div key={i} className={`aspect-square rounded-lg flex items-center justify-center text-sm font-bold font-mono transition-all duration-200 ${done ? 'bg-slate-800/60 border border-slate-700/40 text-slate-600'
+                  <div key={i} className={`w-full h-8 rounded-lg flex items-center justify-center text-xs font-bold font-mono transition-all duration-200 ${done ? 'bg-slate-800/60 border border-slate-700/40 text-slate-600'
                     : active ? 'bg-cyan-500 text-white animate-[glow-pulse-cyan_1.5s_ease-in-out_infinite] shadow-none'
                       : 'bg-slate-700 border border-slate-600 text-slate-300'
                     }`}>
@@ -384,7 +384,7 @@ export function Slide1_1Anim() {
               })}
             </div>
 
-            <ArrowRight size={16} className="text-cyan-500/50 shrink-0" />
+            <ArrowRight size={14} className="text-cyan-500/50 shrink-0" />
 
             <div className="flex flex-col gap-1.5 shrink-0">
               <span className="text-[13px] text-slate-600 font-mono text-center">CAJEROS</span>
