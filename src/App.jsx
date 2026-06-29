@@ -508,12 +508,12 @@ function SlideIntroParte4() {
 
 function Slide1_LimiteSec() {
   const instrRows = [
-    { op: 'MOVI',   n: '4×',  desc: 'Inicializar contadores',        cycles: '4',   color: 'text-slate-400' },
-    { op: 'LD',     n: '100×', desc: '2 loads/iter × 50',            cycles: '1100', color: 'text-red-400' },
-    { op: 'ADD',    n: '50×',  desc: '1 suma/iter × 50',             cycles: '200',  color: 'text-amber-400' },
-    { op: 'SHFR',   n: '50×',  desc: 'Divide ÷2 (shift right)',      cycles: '50',   color: 'text-slate-400' },
-    { op: 'ST',     n: '50×',  desc: '1 store/iter × 50',            cycles: '550',  color: 'text-red-400' },
-    { op: 'DECBNZ', n: '50×',  desc: '1 branch/iter × 50',           cycles: '100',  color: 'text-slate-400' },
+    { op: 'MOVI', n: '4×', desc: 'Inicializar contadores', cycles: '4', color: 'text-slate-400' },
+    { op: 'LD', n: '100×', desc: '2 loads/iter × 50', cycles: '1100', color: 'text-red-400' },
+    { op: 'ADD', n: '50×', desc: '1 suma/iter × 50', cycles: '200', color: 'text-amber-400' },
+    { op: 'SHFR', n: '50×', desc: 'Divide ÷2 (shift right)', cycles: '50', color: 'text-slate-400' },
+    { op: 'ST', n: '50×', desc: '1 store/iter × 50', cycles: '550', color: 'text-red-400' },
+    { op: 'DECBNZ', n: '50×', desc: '1 branch/iter × 50', cycles: '100', color: 'text-slate-400' },
   ];
 
   return (
@@ -610,33 +610,33 @@ function Slide1_1() {
   const [active, setActive] = useState(null);
 
   const ARCHS = {
-    SISD: { full: 'Single Instruction · Single Data',    bdr: 'border-slate-500',  txt: 'text-slate-300',  bg: 'bg-slate-500/10',  desc: 'Von Neumann clásico. 1 CU, 1 ALU, 1 dato por ciclo. Todo procesamiento es estrictamente secuencial.',           ex: 'Intel 8086 · ARM Cortex-A escalar' },
-    SIMD: { full: 'Single Instruction · Multiple Data',  bdr: 'border-cyan-500',   txt: 'text-cyan-300',   bg: 'bg-cyan-500/10',   desc: '1 CU hace broadcast de 1 instrucción a N ALUs en paralelo. El foco de esta exposición.',                         ex: 'SSE/AVX · GPU shaders · ARM NEON' },
-    MISD: { full: 'Multiple Instruction · Single Data',  bdr: 'border-amber-500',  txt: 'text-amber-300',  bg: 'bg-amber-500/10',  desc: 'N CUs con instrucciones distintas operan sobre el mismo dato. Caso teórico / fault-tolerance.',                   ex: 'Systolic Arrays · Fault-tolerant' },
-    MIMD: { full: 'Multiple Instruction · Multiple Data',bdr: 'border-blue-500',   txt: 'text-blue-300',   bg: 'bg-blue-500/10',   desc: 'N CPUs completamente independientes. El generalista: instrucciones distintas, datos distintos.',                  ex: 'Intel Core i9 · AMD Ryzen · SMP' },
+    SISD: { full: 'Single Instruction · Single Data', bdr: 'border-slate-500', txt: 'text-slate-300', bg: 'bg-slate-500/10', desc: 'Von Neumann clásico. 1 CU, 1 ALU, 1 dato por ciclo. Todo procesamiento es estrictamente secuencial.', ex: 'Intel 8086 · ARM Cortex-A escalar' },
+    SIMD: { full: 'Single Instruction · Multiple Data', bdr: 'border-cyan-500', txt: 'text-cyan-300', bg: 'bg-cyan-500/10', desc: '1 CU hace broadcast de 1 instrucción a N ALUs en paralelo. El foco de esta exposición.', ex: 'SSE/AVX · GPU shaders · ARM NEON' },
+    MISD: { full: 'Multiple Instruction · Single Data', bdr: 'border-amber-500', txt: 'text-amber-300', bg: 'bg-amber-500/10', desc: 'N CUs con instrucciones distintas operan sobre el mismo dato. Caso teórico / fault-tolerance.', ex: 'Systolic Arrays · Fault-tolerant' },
+    MIMD: { full: 'Multiple Instruction · Multiple Data', bdr: 'border-blue-500', txt: 'text-blue-300', bg: 'bg-blue-500/10', desc: 'N CPUs completamente independientes. El generalista: instrucciones distintas, datos distintos.', ex: 'Intel Core i9 · AMD Ryzen · SMP' },
   };
 
   const INFO = {
-    IS:  { title: 'Instruction Stream (IS)', SISD: '1 stream. El PC avanza secuencialmente, 1 instrucción por ciclo.', SIMD: '1 stream compartido. La MISMA instrucción se broadcast a todas las ALUs — esa es la eficiencia de SIMD.', MISD: 'N streams distintos. Cada CU tiene su propio PC e instrucciones independientes.', MIMD: 'N streams completamente independientes. Cada núcleo tiene su propio pipeline y PC.' },
-    CU:  { title: 'Control Unit (CU)',       SISD: '1 CU. Fetch → Decode → Execute secuencial. 1 instrucción por ciclo a 1 ALU.', SIMD: '1 CU compartida. Decodifica 1 vez, hace broadcast a N ALUs. Costo de decode ÷ N.', MISD: 'N CUs independientes. Cada una decodifica su propio stream sobre el mismo dato.', MIMD: 'N CUs sin coordinación central. Cada núcleo opera autónomamente.' },
+    IS: { title: 'Instruction Stream (IS)', SISD: '1 stream. El PC avanza secuencialmente, 1 instrucción por ciclo.', SIMD: '1 stream compartido. La MISMA instrucción se broadcast a todas las ALUs — esa es la eficiencia de SIMD.', MISD: 'N streams distintos. Cada CU tiene su propio PC e instrucciones independientes.', MIMD: 'N streams completamente independientes. Cada núcleo tiene su propio pipeline y PC.' },
+    CU: { title: 'Control Unit (CU)', SISD: '1 CU. Fetch → Decode → Execute secuencial. 1 instrucción por ciclo a 1 ALU.', SIMD: '1 CU compartida. Decodifica 1 vez, hace broadcast a N ALUs. Costo de decode ÷ N.', MISD: 'N CUs independientes. Cada una decodifica su propio stream sobre el mismo dato.', MIMD: 'N CUs sin coordinación central. Cada núcleo opera autónomamente.' },
     ALU: { title: 'ALU — Arithmetic Logic Unit', SISD: '1 ALU. 1 operación por ciclo. El cuello de botella del throughput secuencial.', SIMD: 'N ALUs en paralelo. Misma operación sobre N datos distintos. Throughput N× sin N× overhead de control.', MISD: 'N ALUs con instrucciones distintas sobre el mismo dato para verificación cruzada o transformación en cadena.', MIMD: 'N ALUs independientes. Operaciones heterogéneas simultáneas sin sincronización.' },
-    DS:  { title: 'Data Stream (DS)',        SISD: '1 stream. 1 dato entra, 1 resultado por ciclo. Throughput lineal.', SIMD: 'N streams de datos en paralelo. 1 instrucción produce N resultados simultáneamente.', MISD: '1 stream compartido. N procesadores distintos trabajan sobre el mismo flujo de datos.', MIMD: 'N streams independientes. Cada CPU lee y escribe sus propios datos sin interferencia.' },
+    DS: { title: 'Data Stream (DS)', SISD: '1 stream. 1 dato entra, 1 resultado por ciclo. Throughput lineal.', SIMD: 'N streams de datos en paralelo. 1 instrucción produce N resultados simultáneamente.', MISD: '1 stream compartido. N procesadores distintos trabajan sobre el mismo flujo de datos.', MIMD: 'N streams independientes. Cada CPU lee y escribe sus propios datos sin interferencia.' },
   };
 
   const ROWS = {
-    SISD: [{ is: 'IS',   cu: 'CU',   alu: 'ALU',   ds: 'DS'   }],
-    SIMD: [{ is: 'IS',   cu: 'CU',   alu: 'ALU₁',  ds: 'DS₁'  },
-           { is: null,   cu: null,   alu: 'ALU₂',  ds: 'DS₂'  },
-           { is: null,   cu: null,   alu: 'ALU₃',  ds: 'DS₃'  },
-           { is: null,   cu: null,   alu: 'ALU₄',  ds: 'DS₄'  }],
-    MISD: [{ is: 'IS₁',  cu: 'CU₁',  alu: 'ALU',   ds: 'DS'   },
-           { is: 'IS₂',  cu: 'CU₂',  alu: null,    ds: null   },
-           { is: 'IS₃',  cu: 'CU₃',  alu: null,    ds: null   },
-           { is: 'IS₄',  cu: 'CU₄',  alu: null,    ds: null   }],
-    MIMD: [{ is: 'IS₁',  cu: 'CU₁',  alu: 'ALU₁',  ds: 'DS₁'  },
-           { is: 'IS₂',  cu: 'CU₂',  alu: 'ALU₂',  ds: 'DS₂'  },
-           { is: 'IS₃',  cu: 'CU₃',  alu: 'ALU₃',  ds: 'DS₃'  },
-           { is: 'IS₄',  cu: 'CU₄',  alu: 'ALU₄',  ds: 'DS₄'  }],
+    SISD: [{ is: 'IS', cu: 'CU', alu: 'ALU', ds: 'DS' }],
+    SIMD: [{ is: 'IS', cu: 'CU', alu: 'ALU₁', ds: 'DS₁' },
+    { is: null, cu: null, alu: 'ALU₂', ds: 'DS₂' },
+    { is: null, cu: null, alu: 'ALU₃', ds: 'DS₃' },
+    { is: null, cu: null, alu: 'ALU₄', ds: 'DS₄' }],
+    MISD: [{ is: 'IS₁', cu: 'CU₁', alu: 'ALU', ds: 'DS' },
+    { is: 'IS₂', cu: 'CU₂', alu: null, ds: null },
+    { is: 'IS₃', cu: 'CU₃', alu: null, ds: null },
+    { is: 'IS₄', cu: 'CU₄', alu: null, ds: null }],
+    MIMD: [{ is: 'IS₁', cu: 'CU₁', alu: 'ALU₁', ds: 'DS₁' },
+    { is: 'IS₂', cu: 'CU₂', alu: 'ALU₂', ds: 'DS₂' },
+    { is: 'IS₃', cu: 'CU₃', alu: 'ALU₃', ds: 'DS₃' },
+    { is: 'IS₄', cu: 'CU₄', alu: 'ALU₄', ds: 'DS₄' }],
   };
 
   const ANNOT = {
@@ -661,9 +661,8 @@ function Slide1_1() {
     const on = active === type;
     return (
       <div onClick={() => toggle(type)}
-        className={`h-9 rounded-lg border-2 flex items-center justify-center text-[10px] font-mono font-bold cursor-pointer select-none transition-all duration-150 ${
-          on ? `${arch.bdr} ${arch.bg} ${arch.txt}` : 'border-slate-600 bg-slate-800 text-slate-400 hover:border-slate-500 hover:text-slate-300'
-        }`}>
+        className={`h-9 rounded-lg border-2 flex items-center justify-center text-[10px] font-mono font-bold cursor-pointer select-none transition-all duration-150 ${on ? `${arch.bdr} ${arch.bg} ${arch.txt}` : 'border-slate-600 bg-slate-800 text-slate-400 hover:border-slate-500 hover:text-slate-300'
+          }`}>
         {label}
       </div>
     );
@@ -682,9 +681,8 @@ function Slide1_1() {
       <div className="shrink-0 flex gap-2 justify-center pt-1">
         {Object.entries(ARCHS).map(([k, a]) => (
           <button key={k} onClick={() => { setMode(k); setActive(null); }}
-            className={`px-5 py-1.5 rounded-xl text-xs font-bold font-mono border-2 transition-all duration-200 ${
-              mode === k ? `${a.bdr} ${a.bg} ${a.txt}` : 'border-slate-700 text-slate-600 hover:border-slate-600 hover:text-slate-400'
-            }`}>{k}</button>
+            className={`px-5 py-1.5 rounded-xl text-xs font-bold font-mono border-2 transition-all duration-200 ${mode === k ? `${a.bdr} ${a.bg} ${a.txt}` : 'border-slate-700 text-slate-600 hover:border-slate-600 hover:text-slate-400'
+              }`}>{k}</button>
         ))}
       </div>
 
@@ -692,16 +690,16 @@ function Slide1_1() {
       <div className={`shrink-0 rounded-xl border-2 px-4 py-2.5 min-h-[52px] flex items-start bg-slate-900 transition-all duration-200 ${arch.bdr}/50`}>
         {active
           ? <div>
-              <p className={`text-[11px] font-bold mb-0.5 ${arch.txt}`}>{INFO[active]?.title}</p>
-              <p className="text-[11px] text-slate-400">{INFO[active]?.[mode]}</p>
-            </div>
+            <p className={`text-[11px] font-bold mb-0.5 ${arch.txt}`}>{INFO[active]?.title}</p>
+            <p className="text-[11px] text-slate-400">{INFO[active]?.[mode]}</p>
+          </div>
           : <div className="w-full">
-              <div className="flex justify-between items-baseline">
-                <p className={`text-xs font-bold ${arch.txt}`}>{arch.full}</p>
-                <span className="text-[10px] text-slate-600 font-mono">{arch.ex}</span>
-              </div>
-              <p className="text-[11px] text-slate-400 mt-0.5">{arch.desc}</p>
+            <div className="flex justify-between items-baseline">
+              <p className={`text-xs font-bold ${arch.txt}`}>{arch.full}</p>
+              <span className="text-[10px] text-slate-600 font-mono">{arch.ex}</span>
             </div>
+            <p className="text-[11px] text-slate-400 mt-0.5">{arch.desc}</p>
+          </div>
         }
       </div>
 
@@ -724,13 +722,13 @@ function Slide1_1() {
             {rows.map((r, i) => (
               <div key={i} className="grid items-center gap-1"
                 style={{ gridTemplateColumns: '1fr 28px 1fr 28px 1fr 28px 1fr' }}>
-                <Cell label={r.is}  type="IS"  rowIdx={i} />
+                <Cell label={r.is} type="IS" rowIdx={i} />
                 <Arr vis={!!r.is && !!r.cu} />
-                <Cell label={r.cu}  type="CU"  rowIdx={i} />
+                <Cell label={r.cu} type="CU" rowIdx={i} />
                 <Arr vis={!!r.cu && !!r.alu || (mode === 'SIMD' && i > 0 && !!r.alu)} />
                 <Cell label={r.alu} type="ALU" rowIdx={i} />
                 <Arr vis={!!r.alu && !!r.ds} />
-                <Cell label={r.ds}  type="DS"  rowIdx={i} />
+                <Cell label={r.ds} type="DS" rowIdx={i} />
               </div>
             ))}
           </motion.div>
@@ -749,8 +747,8 @@ function Slide1_1Anim() {
   const [running, setRunning] = useState(false);
   const timerRef = React.useRef(null);
 
-  const sisdDone  = Math.min(tick, TOTAL);
-  const simdDone  = Math.min(tick * SIMD_W, TOTAL);
+  const sisdDone = Math.min(tick, TOTAL);
+  const simdDone = Math.min(tick * SIMD_W, TOTAL);
   const sisdFinished = sisdDone >= TOTAL;
   const simdFinished = simdDone >= TOTAL;
   const simdFinishTick = TOTAL / SIMD_W;
@@ -770,19 +768,19 @@ function Slide1_1Anim() {
 
   // SISD: item at index sisdDone is at cajero; items after are queued
   const sisdAtCajero = sisdDone < TOTAL ? sisdDone : null;
-  const sisdQueue    = Array.from({ length: Math.max(0, TOTAL - sisdDone - 1) }, (_, i) => sisdDone + 1 + i);
+  const sisdQueue = Array.from({ length: Math.max(0, TOTAL - sisdDone - 1) }, (_, i) => sisdDone + 1 + i);
 
   // SIMD: current batch at cajeros; items after batch are queued
   const simdBatchIdxs = !simdFinished
     ? Array.from({ length: Math.min(SIMD_W, TOTAL - simdDone) }, (_, i) => simdDone + i)
     : [];
   const simdQueueStart = simdDone + simdBatchIdxs.length;
-  const simdQueue      = Array.from({ length: Math.max(0, TOTAL - simdQueueStart) }, (_, i) => simdQueueStart + i);
+  const simdQueue = Array.from({ length: Math.max(0, TOTAL - simdQueueStart) }, (_, i) => simdQueueStart + i);
 
   const ItemChip = ({ idx, size = 'sm', ring = false, accent = 'bg-slate-700 border border-slate-600' }) => {
     const cls = size === 'lg'
       ? 'w-11 h-11 text-sm rounded-xl'
-      : 'w-6 h-6 text-[9px] rounded';
+      : 'w-6 h-6 text-sm rounded-lg';
     return (
       <div className={`${cls} ${accent} flex items-center justify-center font-bold font-mono text-slate-200 shrink-0 ${ring ? 'ring-2 ring-white/40 ring-offset-1 ring-offset-slate-950' : ''}`}>
         {idx + 1}
@@ -817,47 +815,41 @@ function Slide1_1Anim() {
               <p className="text-[10px] text-slate-500">1 dato · {TOTAL} ciclos</p>
             </div>
             {sisdFinished
-              ? <motion.span initial={{scale:0}} animate={{scale:1}}
-                  className="text-xs font-bold text-emerald-400 bg-emerald-500/20 border border-emerald-500/40 px-2 py-1 rounded-lg">✓ Ciclo {TOTAL}</motion.span>
+              ? <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
+                className="text-xs font-bold text-emerald-400 bg-emerald-500/20 border border-emerald-500/40 px-2 py-1 rounded-lg">✓ Ciclo {TOTAL}</motion.span>
               : tick > 0 ? <span className="text-xs font-mono text-red-400">{sisdDone}/{TOTAL}</span>
-              : null}
+                : null}
           </div>
 
-          <div className="flex-1 flex items-start gap-3 min-h-0 overflow-hidden">
-            {/* Queue — anchored top-left */}
-            <div className="flex flex-col items-center gap-1 shrink-0">
-              <span className="text-[9px] text-slate-600 font-mono mb-0.5">COLA</span>
-              <div className="flex flex-col gap-1">
-                <AnimatePresence initial={false}>
-                  {sisdQueue.map(i => (
-                    <motion.div key={i}
-                      initial={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 36, transition: { duration: 0.22 } }}
-                      layout="position">
-                      <ItemChip idx={i} />
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
+          {/* Fixed 4×4 grid + cajero */}
+          <div className="flex-1 flex items-center gap-3 min-h-0">
+            <div className="grid gap-1" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+              {Array.from({ length: TOTAL }, (_, i) => {
+                const done = i < sisdDone;
+                const active = i === sisdAtCajero;
+                return (
+                  <div key={i} className={`w-8 h-8 rounded-md flex items-center justify-center text-xs font-bold font-mono transition-all duration-200 ${done ? 'bg-slate-800/60 border border-slate-700/40 text-slate-600'
+                    : active ? 'bg-red-500 text-white shadow-md shadow-red-500/30'
+                      : 'bg-slate-700 border border-slate-600 text-slate-300'
+                    }`}>
+                    {done ? '✓' : i + 1}
+                  </div>
+                );
+              })}
             </div>
 
-            {/* Flex spacer with arrow centered */}
-            <div className="flex-1 flex items-center justify-center pt-8">
-              <ArrowRight size={16} className="text-red-500/50" />
-            </div>
+            <ArrowRight size={16} className="text-red-500/50 shrink-0" />
 
-            {/* Cajero + done counter — anchored top-right */}
             <div className="flex flex-col items-center gap-2 shrink-0">
               <span className="text-[9px] text-slate-600 font-mono">CAJERO</span>
-              <div className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors duration-200 ${
-                sisdAtCajero !== null ? 'border-red-400 bg-slate-800' : sisdFinished ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-slate-700 bg-slate-800'
-              }`}>
+              <div className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors duration-200 ${sisdAtCajero !== null ? 'border-red-400 bg-slate-800' : sisdFinished ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-slate-700 bg-slate-800'
+                }`}>
                 <AnimatePresence mode="wait">
                   {sisdAtCajero !== null
-                    ? <motion.div key={sisdAtCajero} initial={{scale:0.4,opacity:0}} animate={{scale:1,opacity:1}} exit={{scale:0.4,opacity:0}} transition={{duration:0.2}}>
-                        <ItemChip idx={sisdAtCajero} size="lg" ring accent="bg-red-500 border-0" />
-                      </motion.div>
-                    : <motion.span key="ok" initial={{scale:0}} animate={{scale:1}} className="text-emerald-400 text-xl">✓</motion.span>
+                    ? <motion.div key={sisdAtCajero} initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.4, opacity: 0 }} transition={{ duration: 0.2 }}>
+                      <ItemChip idx={sisdAtCajero} size="lg" ring accent="bg-red-500 border-0" />
+                    </motion.div>
+                    : <motion.span key="ok" initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-emerald-400 text-xl">✓</motion.span>
                   }
                 </AnimatePresence>
               </div>
@@ -877,51 +869,45 @@ function Slide1_1Anim() {
               <p className="text-[10px] text-slate-500">{SIMD_W} datos · {simdFinishTick} ciclos</p>
             </div>
             {simdFinished
-              ? <motion.span initial={{scale:0}} animate={{scale:1}}
-                  className="text-xs font-bold text-emerald-400 bg-emerald-500/20 border border-emerald-500/40 px-2 py-1 rounded-lg">✓ Ciclo {simdFinishTick} · {TOTAL/simdFinishTick}× más rápido</motion.span>
+              ? <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
+                className="text-xs font-bold text-emerald-400 bg-emerald-500/20 border border-emerald-500/40 px-2 py-1 rounded-lg">✓ Ciclo {simdFinishTick} · {TOTAL / simdFinishTick}× más rápido</motion.span>
               : tick > 0 ? <span className="text-xs font-mono text-cyan-400">{simdDone}/{TOTAL}</span>
-              : null}
+                : null}
           </div>
 
-          <div className="flex-1 flex items-start gap-3 min-h-0 overflow-hidden">
-            {/* Queue — anchored top-left */}
-            <div className="flex flex-col items-center gap-1 shrink-0">
-              <span className="text-[9px] text-slate-600 font-mono mb-0.5">COLA</span>
-              <div className="flex flex-col gap-1">
-                <AnimatePresence initial={false}>
-                  {simdQueue.map(i => (
-                    <motion.div key={i}
-                      initial={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 36, transition: { duration: 0.22 } }}
-                      layout="position">
-                      <ItemChip idx={i} />
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
+          {/* Fixed 4×4 grid + cajeros */}
+          <div className="flex-1 flex items-center gap-3 min-h-0">
+            <div className="grid gap-1" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+              {Array.from({ length: TOTAL }, (_, i) => {
+                const done = i < simdDone;
+                const active = !simdFinished && i >= simdDone && i < simdDone + SIMD_W;
+                return (
+                  <div key={i} className={`w-8 h-8 rounded-md flex items-center justify-center text-xs font-bold font-mono transition-all duration-200 ${done ? 'bg-slate-800/60 border border-slate-700/40 text-slate-600'
+                    : active ? 'bg-cyan-500 text-white shadow-md shadow-cyan-500/30'
+                      : 'bg-slate-700 border border-slate-600 text-slate-300'
+                    }`}>
+                    {done ? '✓' : i + 1}
+                  </div>
+                );
+              })}
             </div>
 
-            {/* Flex spacer with arrow centered */}
-            <div className="flex-1 flex items-center justify-center pt-8">
-              <ArrowRight size={16} className="text-cyan-500/50" />
-            </div>
+            <ArrowRight size={16} className="text-cyan-500/50 shrink-0" />
 
-            {/* 4 cajeros — anchored top-right */}
             <div className="flex flex-col gap-1.5 shrink-0">
               <span className="text-[9px] text-slate-600 font-mono text-center">CAJEROS</span>
               {Array.from({ length: SIMD_W }, (_, lane) => {
                 const itemIdx = simdBatchIdxs[lane] ?? null;
                 return (
-                  <div key={lane} className="flex items-center gap-2">
-                    <div className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-colors duration-200 ${
-                      itemIdx !== null ? 'border-cyan-400 bg-slate-800' : simdFinished ? 'border-emerald-500/30 bg-emerald-500/10' : 'border-slate-700 bg-slate-800'
-                    }`}>
+                  <div key={lane} className="flex items-center gap-1.5">
+                    <div className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-colors duration-200 ${itemIdx !== null ? 'border-cyan-400 bg-slate-800' : simdFinished ? 'border-emerald-500/30 bg-emerald-500/10' : 'border-slate-700 bg-slate-800'
+                      }`}>
                       <AnimatePresence mode="wait">
                         {itemIdx !== null
-                          ? <motion.div key={`${tick}-${lane}`} initial={{scale:0.4,opacity:0}} animate={{scale:1,opacity:1}} exit={{scale:0.4,opacity:0}} transition={{duration:0.2}}>
-                              <ItemChip idx={itemIdx} ring accent="bg-cyan-500 border-0" />
-                            </motion.div>
-                          : <motion.span key="ok" initial={{scale:0}} animate={{scale:1}} className="text-emerald-400 text-sm">✓</motion.span>
+                          ? <motion.div key={`${tick}-${lane}`} initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.4, opacity: 0 }} transition={{ duration: 0.2 }}>
+                            <ItemChip idx={itemIdx} ring accent="bg-cyan-500 border-0" />
+                          </motion.div>
+                          : <motion.span key="ok" initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-emerald-400 text-sm">✓</motion.span>
                         }
                       </AnimatePresence>
                     </div>
@@ -939,15 +925,14 @@ function Slide1_1Anim() {
       </div>
 
       {/* Banner */}
-      <div className={`shrink-0 p-3 rounded-xl border text-center text-xs font-mono transition-all duration-300 ${
-        tick === 0
-          ? 'border-slate-800 bg-slate-900/50 text-slate-700'
-          : simdFinished && !sisdFinished
-            ? 'bg-cyan-500/10 border-cyan-400/40 text-cyan-300'
-            : sisdFinished && simdFinished
-              ? 'bg-emerald-500/10 border-emerald-400/40 text-emerald-300'
-              : 'bg-slate-900 border-slate-800 text-slate-400'
-      }`}>
+      <div className={`shrink-0 p-3 rounded-xl border text-center text-xs font-mono transition-all duration-300 ${tick === 0
+        ? 'border-slate-800 bg-slate-900/50 text-slate-700'
+        : simdFinished && !sisdFinished
+          ? 'bg-cyan-500/10 border-cyan-400/40 text-cyan-300'
+          : sisdFinished && simdFinished
+            ? 'bg-emerald-500/10 border-emerald-400/40 text-emerald-300'
+            : 'bg-slate-900 border-slate-800 text-slate-400'
+        }`}>
         {tick === 0
           ? 'Presioná "Iniciar Simulación" para ver la diferencia en tiempo real'
           : simdFinished && !sisdFinished
