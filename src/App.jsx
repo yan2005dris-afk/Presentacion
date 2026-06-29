@@ -6,8 +6,8 @@ import {
   SlidePortada, SlideIndice,
   Slide1_LimiteSec, Slide1_1, Slide1_1Anim, Slide1_2, Slide1_4,
   SlideIntroParte1,
-  Slide2_1, Slide2_2, Slide2_3, Slide2_4, SlideIntroParte2,
-  Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_4, SlideIntroParte3,
+  Slide2_1, Slide2_2, Slide2_3, Slide2_4, Slide2_Codigo, SlideIntroParte2,
+  Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_Chaining, Slide3_4, SlideIntroParte3,
   Slide4_1, Slide4_2, Slide4_3, Slide4_4, Slide4_5, SlideIntroParte4,
   SlidePracticaAsm
 } from './slides';
@@ -103,14 +103,6 @@ export default function App() {
       speaker: "Flynn clasificó las arquitecturas en dos ejes: cuántos flujos de instrucciones y cuántos flujos de datos. SISD es Von Neumann clásico. SIMD es nuestro foco: 1 instrucción, N datos en paralelo. MIMD es el generalista multinúcleo. MISD es el caso teórico. Hacé click en cada componente para ver su rol en cada arquitectura.",
       component: <Slide1_1 />
     },
-    {
-      id: '1.3',
-      section: 1,
-      title: 'SMP vs SIMD: El Generalista vs El Especialista',
-      subtitle: 'Slide 1.3 · Comparación directa · Tabla de diferencias clave',
-      speaker: "Mientras SMP/MIMD es el generalista multitarea, SIMD es el especialista en procesamiento masivo. Esta tabla compara: tarea típica, instrucciones, problemas (bus congestion vs divergencia), y eficiencia energética.",
-      component: <Slide1_4 />
-    },
 
     // === PARTE 2: RIVERA YANDRIS ===
     {
@@ -153,6 +145,14 @@ export default function App() {
       speaker: "SIMD brilla con datos regulares y alineados. Su kryptonita son las condiciones 'if/else' por elemento: el hardware debe ejecutar ambos caminos enmascarando los elementos falsos.",
       component: <Slide2_4 />
     },
+    {
+      id: '2.5',
+      section: 2,
+      title: 'Código Secuencial vs Vectorial',
+      subtitle: 'Slide 2.5 · Desglose de Código Secuencial vs Vectorial (Sección 2.3)',
+      speaker: "Para profundizar en la sección 2.3 de nuestra guía, aquí comparamos explícitamente el código secuencial elemento por elemento contra la instrucción vectorial VADD que ejecuta la operación sobre todo el registro XMM en un solo ciclo.",
+      component: <Slide2_Codigo />
+    },
 
     // === PARTE 3: ALEJANDRO ANDY ===
     {
@@ -188,18 +188,26 @@ export default function App() {
       component: <Slide3_3 />
     },
     {
-      id: '3.fde',
+      id: '3.4',
       section: 3,
       title: 'Fetch-Decode-Execute en SIMD',
-      subtitle: 'Slide 3.5 · El Pipeline Vectorial paso a paso',
+      subtitle: 'Slide 3.4 · El Pipeline Vectorial paso a paso',
       speaker: "El pipeline interno para VADDPD: FETCH carga 1 instrucción, DECODE identifica que opera sobre 256 bits, EXECUTE activa 4 sumadores de 64 bits simultáneamente, y WRITEBACK escribe 256 bits de una vez. La diferencia clave con SISD: 1 decodificación para 4 operaciones efectivas.",
       component: <Slide3_FDE_SIMD />
     },
     {
-      id: '3.4',
+      id: '3.5',
+      section: 3,
+      title: 'Encadenamiento Vectorial (Vector Chaining)',
+      subtitle: 'Slide 3.5 · Sección 3.8 · CRAY-1 (Seymour Cray, 1976)',
+      speaker: "En la sección 3.8 de la guía analizamos el encadenamiento vectorial introducido por Seymour Cray en la CRAY-1. Permite que el resultado de la ALU multiplicadora pase directamente a la ALU sumadora sin esperar al vector completo. Es el antepasado directo de la instrucción FMA moderna.",
+      component: <Slide3_Chaining />
+    },
+    {
+      id: '3.6',
       section: 3,
       title: 'El ISA es el Mismo. El Hardware No.',
-      subtitle: 'Slide 3.4 · AMD Excavator vs AMD Zen',
+      subtitle: 'Slide 3.6 · AMD Excavator vs AMD Zen',
       speaker: "Excavator coordinaba dos unidades FMAC de 128 bits con mayor latencia. Zen implementó una unidad nativa de 256 bits con crossbar, demostrando cómo la microarquitectura cambia el rendimiento real.",
       component: <Slide3_4 />
     },
@@ -252,6 +260,14 @@ export default function App() {
       subtitle: 'Slide 4.4 · CPU (MIMD) + GPU (SIMD) en el Mismo Silicio',
       speaker: "Los chips modernos de smartphones y laptops combinan núcleos CPU para control asíncrono y miles de cores SIMD en la GPU integrados por un bus de alta velocidad.",
       component: <Slide4_4 />
+    },
+    {
+      id: '4.smp_simd',
+      section: 4,
+      title: 'Tabla de Diagnóstico Final: SMP vs SIMD',
+      subtitle: 'Slide 4.6 · Diagnóstico y Comparación Estructural (Sección 4.8)',
+      speaker: "Como tabla de diagnóstico final según la sección 4.8 de la guía, comparamos SMP (MIMD) contra SIMD en cuatro ejes: tarea típica, instrucciones dinámicas, cuellos de botella (congestión de bus vs divergencia) y eficiencia energética.",
+      component: <Slide1_4 />
     },
     {
       id: '4.5',

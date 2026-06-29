@@ -39,8 +39,8 @@ export function Slide3_2() {
           {[...Array(8)].map((_, i) => <div key={i} className="p-2 rounded bg-cyan-500/20 border border-cyan-400 text-cyan-300">+32</div>)}
         </div>
         <div className="text-purple-400 font-bold pt-2">• Particionado como 32×8-bit (Bytes para píxeles RGB en PADDB)</div>
-        <div className="grid grid-cols-16 gap-0.5 text-center text-[13px] font-bold">
-          {[...Array(16)].map((_, i) => <div key={i} className="p-1 rounded bg-purple-500/20 border border-purple-400 text-purple-300">+8</div>)}
+        <div className="grid grid-cols-[repeat(32,minmax(0,1fr))] gap-0.5 text-center text-[10px] font-bold">
+          {[...Array(32)].map((_, i) => <div key={i} className="p-1 rounded bg-purple-500/20 border border-purple-400 text-purple-300">+8</div>)}
         </div>
       </div>
     </div>
@@ -98,7 +98,7 @@ export function Slide3_3() {
   );
 }
 
-/* ───────── Slide 3.5 — Fetch-Decode-Execute en SIMD ───────── */
+/* ───────── Slide 3.4 — Fetch-Decode-Execute en SIMD ───────── */
 
 export function Slide3_FDE_SIMD() {
   const stages = [
@@ -163,7 +163,49 @@ export function Slide3_FDE_SIMD() {
   );
 }
 
-/* ───────── Slide 3.4 — Excavator vs Zen ───────── */
+/* ───────── Slide 3.5 — Encadenamiento Vectorial (Chaining) ───────── */
+
+export function Slide3_Chaining() {
+  return (
+    <div className="space-y-5 max-w-5xl mx-auto">
+      <div className="p-4 rounded-2xl bg-slate-900 border border-amber-500/40 text-center space-y-2">
+        <span className="text-[13px] text-amber-400 font-mono font-bold uppercase tracking-widest">Sección 3.8 · CRAY-1 (Seymour Cray, 1976)</span>
+        <h4 className="text-lg font-bold text-slate-100">Encadenamiento Vectorial (Vector Chaining)</h4>
+        <p className="text-[13px] text-slate-300 max-w-3xl mx-auto">
+          En una operación compuesta como <span className="font-mono text-cyan-300">(A × B) + C</span>, el encadenamiento permite que los resultados parciales de la ALU Multiplicadora pasen directo a la ALU Sumadora mediante un bus de forwarding interno sin esperar a que termine el vector completo.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[13px] font-mono">
+        <div className="p-4 rounded-2xl bg-slate-900 border border-red-500/30 space-y-2">
+          <h5 className="font-bold text-red-400 flex items-center gap-2">❌ Sin Chaining (Tradicional)</h5>
+          <p className="text-slate-300 leading-relaxed">
+            1. La ALU Multiplicadora procesa los N elementos del vector completo.<br/>
+            2. Se escriben todos los resultados intermediarios en memoria o registros.<br/>
+            3. Recién entonces la ALU Sumadora empieza a leer y sumar.<br/>
+            <span className="text-red-300 font-bold block mt-2">Latencia Alta: N × Mul + N × Add</span>
+          </p>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-slate-900 border border-emerald-500/40 space-y-2">
+          <h5 className="font-bold text-emerald-400 flex items-center gap-2">✓ Con Chaining (CRAY-1 / FMA)</h5>
+          <p className="text-slate-300 leading-relaxed">
+            1. En cuanto sale el primer producto parcial <span className="text-cyan-300">A[0]×B[0]</span>, pasa directamente a la ALU Sumadora.<br/>
+            2. Ambas ALUs operan en cascada simultánea (pipeline cruzado).<br/>
+            3. Avance continuo de elementos.<br/>
+            <span className="text-emerald-300 font-bold block mt-2">Latencia Mínima: Antepasado directo de FMA</span>
+          </p>
+        </div>
+      </div>
+
+      <div className="p-3 bg-amber-500/10 border border-amber-400/30 rounded-xl text-center text-amber-300 font-mono text-[13px]">
+        💡 <span className="font-bold">Importancia Histórica y Moderna:</span> CRAY-1 demostró que el pipelining cruzado entre ALUs multiplica la velocidad sin aumentar los registros. En procesadores modernos x86/ARM, este principio dio origen a la instrucción nativa <span className="text-emerald-300 font-bold font-mono">FMA (Fused Multiply-Add)</span>.
+      </div>
+    </div>
+  );
+}
+
+/* ───────── Slide 3.6 — Excavator vs Zen ───────── */
 
 export function Slide3_4() {
   return (
@@ -197,7 +239,8 @@ export function SlideIntroParte3() {
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.2: Subword Parallelism en Hardware</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.3: Instrucciones SSE y AVX + FMA</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.4: Fetch-Decode-Execute Vectorial</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.5: AMD Zen vs AMD Excavator</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.5: Encadenamiento Vectorial (Chaining)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.6: AMD Zen vs AMD Excavator</div>
       </div>
     </div>
   );

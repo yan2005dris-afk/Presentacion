@@ -9,8 +9,6 @@ import { Play, RotateCcw, ArrowRight, Layers, Activity } from 'lucide-react';
 /* ───────── Slide 1.0 — Límite Secuencial ───────── */
 
 export function Slide1_LimiteSec() {
-  const [mode, setMode] = useState('SISD');
-
   const sisdRows = [
     { op: 'MOVI', n: '4×', desc: 'Inicializar contadores', cycles: '4', color: 'text-slate-400' },
     { op: 'LD', n: '100×', desc: '2 loads/iter × 50', cycles: '1100', color: 'text-red-400' },
@@ -20,38 +18,8 @@ export function Slide1_LimiteSec() {
     { op: 'DECBNZ', n: '50×', desc: '1 branch/iter × 50', cycles: '100', color: 'text-slate-400' },
   ];
 
-  const simdRows = [
-    { op: 'VLOAD', n: '12×', desc: '6 cargas A + 6 cargas B desde memoria', cycles: '132', color: 'text-cyan-400' },
-    { op: 'VADD', n: '6×', desc: 'VPADDD · 8 sumas simultáneas por op', cycles: '24', color: 'text-amber-400' },
-    { op: 'VSHR', n: '6×', desc: 'VPSRLD · shift right ÷2 vectorial', cycles: '6', color: 'text-slate-400' },
-    { op: 'VSTORE', n: '6×', desc: '6 stores vectoriales a C (8 c/u)', cycles: '66', color: 'text-cyan-400' },
-    { op: 'LOOP', n: '6×', desc: 'Avance puntero + cmp + branch', cycles: '12', color: 'text-slate-400' },
-    { op: 'INIT', n: '1×', desc: 'Setup punteros, contador, máscara', cycles: '5', color: 'text-slate-400' },
-    { op: 'REMAN', n: '5×', desc: '2 elementos restantes (escalar)', cycles: '40', color: 'text-slate-400' },
-  ];
-
-  const rows = mode === 'SISD' ? sisdRows : simdRows;
-  const totalInstr = mode === 'SISD' ? 304 : 7;
-  const totalCycles = mode === 'SISD' ? 2004 : 285;
-
   return (
     <div className="w-full h-full flex flex-col gap-2 max-w-6xl mx-auto select-none">
-      {/* Toggle */}
-      <div className="shrink-0 flex gap-2 justify-center">
-        {['SISD', 'SIMD'].map(m => (
-          <button key={m} onClick={() => setMode(m)}
-            className={`px-6 py-1.5 rounded-xl text-xs font-bold font-mono border-2 transition-all ${
-              mode === m
-                ? m === 'SISD'
-                  ? 'border-red-400/60 bg-red-500/10 text-red-300'
-                  : 'border-cyan-400/60 bg-cyan-500/10 text-cyan-300'
-                : 'border-slate-700 text-slate-600 hover:border-slate-600 hover:text-slate-400'
-            }`}>
-            {m === 'SISD' ? 'SISD Secuencial' : 'SIMD Vectorial'}
-          </button>
-        ))}
-      </div>
-
       {/* Main content */}
       <div className="flex-1 flex gap-3 min-h-0">
         {/* Left: Problema + Analogía */}
@@ -84,78 +52,57 @@ export function Slide1_LimiteSec() {
             <span className="text-[13px] text-slate-500">para i = 0..49 · 50 elementos</span>
           </div>
 
-          {/* Instruction breakdown */}
-          <div className="flex-1 rounded-2xl border bg-slate-900 p-3 flex flex-col gap-2 min-h-0"
-            style={{ borderColor: mode === 'SISD' ? 'rgba(239,68,68,0.2)' : 'rgba(6,182,212,0.25)' }}>
+          {/* SISD Instruction breakdown */}
+          <div className="flex-1 rounded-2xl border border-red-500/20 bg-slate-900 p-3 flex flex-col gap-2 min-h-0">
             <div className="flex items-center justify-between shrink-0">
-              <p className={`text-[13px] font-mono uppercase tracking-widest ${mode === 'SISD' ? 'text-red-400' : 'text-cyan-400'}`}>
-                {mode === 'SISD' ? 'SISD — desglose de instrucciones' : 'SIMD — desglose vectorial'}
+              <p className="text-[13px] font-mono uppercase tracking-widest text-red-400">
+                SISD — desglose de instrucciones
               </p>
               <div className="flex items-center gap-3">
                 <span className="text-[13px] font-mono text-slate-500">
-                  Total instr: <span className={`font-bold ${mode === 'SISD' ? 'text-red-400' : 'text-cyan-400'}`}>{totalInstr}</span>
+                  Total instr: <span className="font-bold text-red-400">304</span>
                 </span>
                 <span className="text-[13px] font-mono text-slate-500">
-                  Total ciclos: <span className={`font-bold ${mode === 'SISD' ? 'text-red-400' : 'text-cyan-400'}`}>~{totalCycles}</span>
+                  Total ciclos: <span className="font-bold text-red-400">~2004</span>
                 </span>
               </div>
             </div>
 
             <div className="flex-1 flex flex-col gap-1 justify-center min-h-0">
-              <AnimatePresence mode="wait">
-                <motion.div key={mode}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.15 }}
-                  className="flex flex-col gap-1">
-                  {rows.map((r, i) => (
-                    <div key={i} className="flex items-center gap-2 text-[13px] font-mono">
-                      <span className="w-14 text-slate-500 font-bold shrink-0">{r.n}</span>
-                      <span className={`w-20 font-bold shrink-0 ${r.color}`}>{r.op}</span>
-                      <span className="flex-1 text-slate-500 truncate">{r.desc}</span>
-                      <div className="shrink-0 flex items-center gap-1">
-                        <div className="h-1.5 bg-slate-800 rounded-full w-16 overflow-hidden">
-                          <div className="h-full rounded-full"
-                            style={{
-                              width: `${Math.min(100, (parseInt(r.cycles) / 1100) * 100)}%`,
-                              backgroundColor: mode === 'SISD' ? 'rgba(239,68,68,0.5)' : 'rgba(6,182,212,0.5)',
-                            }} />
-                        </div>
-                        <span className={`w-10 text-right ${r.color}`}>{r.cycles} c</span>
+              <div className="flex flex-col gap-1">
+                {sisdRows.map((r, i) => (
+                  <div key={i} className="flex items-center gap-2 text-[13px] font-mono">
+                    <span className="w-14 text-slate-500 font-bold shrink-0">{r.n}</span>
+                    <span className={`w-20 font-bold shrink-0 ${r.color}`}>{r.op}</span>
+                    <span className="flex-1 text-slate-500 truncate">{r.desc}</span>
+                    <div className="shrink-0 flex items-center gap-1">
+                      <div className="h-1.5 bg-slate-800 rounded-full w-16 overflow-hidden">
+                        <div className="h-full rounded-full"
+                          style={{
+                            width: `${Math.min(100, (parseInt(r.cycles) / 1100) * 100)}%`,
+                            backgroundColor: 'rgba(239,68,68,0.5)',
+                          }} />
                       </div>
+                      <span className={`w-10 text-right ${r.color}`}>{r.cycles} c</span>
                     </div>
-                  ))}
-                </motion.div>
-              </AnimatePresence>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Bottom comparison cards */}
           <div className="shrink-0 grid grid-cols-2 gap-2">
-            <div className={`rounded-xl border p-3 transition-all duration-200 ${
-              mode === 'SISD'
-                ? 'border-red-500/40 bg-slate-900/80 ring-1 ring-red-500/20'
-                : 'border-slate-700 bg-slate-900/50 opacity-60'
-            }`}>
+            <div className="rounded-xl border border-red-500/40 bg-slate-900/80 ring-1 ring-red-500/20 p-3">
               <p className="text-[13px] font-mono text-red-400 uppercase tracking-widest">SISD secuencial</p>
               <p className="text-lg font-bold font-mono text-red-400">304 <span className="text-[13px] text-slate-500 font-normal">instrucciones</span></p>
               <p className="text-[13px] font-mono text-slate-500">~2004 ciclos</p>
             </div>
-            <motion.div
-              animate={mode === 'SIMD' ? {
-                boxShadow: ['0 0 12px rgba(6,182,212,0.15)', '0 0 28px rgba(6,182,212,0.35), 0 0 8px rgba(168,85,247,0.2)', '0 0 12px rgba(6,182,212,0.15)'],
-              } : {}}
-              transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
-              className={`rounded-xl border-2 p-3 transition-all duration-200 ${
-                mode === 'SIMD'
-                  ? 'border-cyan-500/60 bg-slate-900'
-                  : 'border-slate-700 bg-slate-900/50 opacity-60'
-              }`}>
-              <p className="text-[13px] font-mono text-cyan-400 uppercase tracking-widest">SIMD vectorial</p>
+            <div className="rounded-xl border border-cyan-500/30 bg-slate-900/60 p-3">
+              <p className="text-[13px] font-mono text-cyan-400 uppercase tracking-widest">SIMD vectorial <span className="text-slate-600 normal-case font-normal">→ Parte 2</span></p>
               <p className="text-lg font-bold font-mono text-cyan-400">7 <span className="text-[13px] text-slate-500 font-normal">instrucciones</span></p>
               <p className="text-[13px] font-mono text-slate-500">~285 ciclos · <span className="text-emerald-400 font-bold">7× más rápido</span></p>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
@@ -623,7 +570,6 @@ export function SlideIntroParte1() {
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.1b: Animación SISD vs SIMD</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.1: Ciclo Fetch-Decode-Execute</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.2: Taxonomía de Flynn — Diagrama Interactivo</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.3: SMP vs SIMD (Generalista vs Especialista)</div>
       </div>
     </div>
   );

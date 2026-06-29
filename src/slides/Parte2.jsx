@@ -310,6 +310,59 @@ export function Slide2_4() {
   );
 }
 
+/* ───────── Slide 2.5 — Comparación Explícita de Código (Sección 2.3) ───────── */
+
+export function Slide2_Codigo() {
+  return (
+    <div className="space-y-4 max-w-6xl mx-auto text-[13px] font-mono">
+      <div className="p-3 rounded-xl bg-slate-900 border border-purple-500/30 text-center text-purple-300 font-bold">
+        Sección 2.3 de la Guía · Desglose de Código Secuencial vs Vectorial
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* SISD */}
+        <div className="p-4 rounded-2xl bg-slate-900 border border-red-500/30 space-y-3">
+          <div className="flex justify-between items-center border-b border-slate-800 pb-2">
+            <span className="font-bold text-red-400">Código Secuencial (SISD)</span>
+            <span className="text-xs px-2 py-0.5 rounded bg-red-500/20 text-red-300">4 Iteraciones</span>
+          </div>
+          <div className="p-3 bg-slate-950 rounded-xl text-slate-300 space-y-1.5 leading-relaxed">
+            <div className="text-slate-500">// Bucle tradicional elemento por elemento</div>
+            <div><span className="text-red-400">ADD</span> A[0], B[0] → C[0] <span className="text-slate-600">; Ciclo 1</span></div>
+            <div><span className="text-red-400">ADD</span> A[1], B[1] → C[1] <span className="text-slate-600">; Ciclo 2</span></div>
+            <div><span className="text-red-400">ADD</span> A[2], B[2] → C[2] <span className="text-slate-600">; Ciclo 3</span></div>
+            <div><span className="text-red-400">ADD</span> A[3], B[3] → C[3] <span className="text-slate-600">; Ciclo 4</span></div>
+          </div>
+          <div className="text-xs text-slate-400">
+            • 4 decodificaciones de instrucción<br/>
+            • 4 saltos de bucle y comprobaciones de índice
+          </div>
+        </div>
+
+        {/* SIMD */}
+        <div className="p-4 rounded-2xl bg-slate-900 border border-cyan-400/40 space-y-3">
+          <div className="flex justify-between items-center border-b border-slate-800 pb-2">
+            <span className="font-bold text-cyan-400">Código Vectorial (SIMD)</span>
+            <span className="text-xs px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">1 Instrucción</span>
+          </div>
+          <div className="p-3 bg-slate-950 rounded-xl text-slate-300 space-y-1.5 leading-relaxed">
+            <div className="text-slate-500">// Instrucción vectorial sobre registro XMM (128 bits)</div>
+            <div><span className="text-cyan-300 font-bold">VADD</span> XMM0, XMM1, XMM2</div>
+            <div className="text-emerald-400/90 text-xs pt-1">
+              └─ Suma en paralelo: <br/>
+                 [A0+B0, A1+B1, A2+B2, A3+B3] en 1 solo ciclo
+            </div>
+          </div>
+          <div className="text-xs text-slate-400">
+            • 1 sola decodificación en la Control Unit<br/>
+            • Reducción de latencia y consumo eléctrico
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ───────── Carátula de Sección: Parte 2 ───────── */
 
 export function SlideIntroParte2() {
@@ -324,6 +377,7 @@ export function SlideIntroParte2() {
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.2: Registros Vectoriales y Control</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.3: Array Processor vs Vector Processor</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.4: Ventajas y La Kryptonita (Divergencia)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.5: Código Secuencial vs Vectorial (Sec. 2.3)</div>
       </div>
     </div>
   );

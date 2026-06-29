@@ -69,8 +69,12 @@ export function Slide4_2() {
                 <span className="text-purple-400">AVX (8× float)</span>
                 <span className="text-purple-300 font-bold">24 GFLOPS</span>
               </div>
+              <div className="flex items-center justify-between p-1.5 bg-slate-950/80 rounded-lg border border-indigo-500/30">
+                <span className="text-indigo-400">AVX-512 (16× float sin FMA)</span>
+                <span className="text-indigo-300 font-bold">48 GFLOPS</span>
+              </div>
               <div className="flex items-center justify-between p-1.5 bg-slate-950/80 rounded-lg border border-amber-500/30">
-                <span className="text-amber-400">AVX-512 + FMA</span>
+                <span className="text-amber-400">AVX-512 + FMA (Con FMA)</span>
                 <span className="text-amber-300 font-bold">96 GFLOPS</span>
               </div>
             </div>
@@ -226,6 +230,7 @@ export function SlideIntroParte4() {
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.2: Throughput y Ley de Amdahl</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.3: SIMD en el Mundo Real (6 dominios)</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.4: SoC Híbrido + Conclusiones</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.6: Tabla de Diagnóstico Final (SMP vs SIMD)</div>
       </div>
     </div>
   );
