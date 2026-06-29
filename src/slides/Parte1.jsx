@@ -9,100 +9,47 @@ import { Play, RotateCcw, ArrowRight, Layers, Activity } from 'lucide-react';
 /* ───────── Slide 1.0 — Límite Secuencial ───────── */
 
 export function Slide1_LimiteSec() {
-  const sisdRows = [
-    { op: 'MOVI', n: '4×', desc: 'Inicializar contadores', cycles: '4', color: 'text-slate-400' },
-    { op: 'LD', n: '100×', desc: '2 loads/iter × 50', cycles: '1100', color: 'text-red-400' },
-    { op: 'ADD', n: '50×', desc: '1 suma/iter × 50', cycles: '200', color: 'text-amber-400' },
-    { op: 'SHFR', n: '50×', desc: 'Divide ÷2 (shift right)', cycles: '50', color: 'text-slate-400' },
-    { op: 'ST', n: '50×', desc: '1 store/iter × 50', cycles: '550', color: 'text-red-400' },
-    { op: 'DECBNZ', n: '50×', desc: '1 branch/iter × 50', cycles: '100', color: 'text-slate-400' },
-  ];
-
   return (
     <div className="w-full h-full flex flex-col gap-2 max-w-6xl mx-auto select-none">
       {/* Main content */}
       <div className="flex-1 flex gap-3 min-h-0">
         {/* Left: Problema + Analogía */}
-        <div className="w-52 shrink-0 flex flex-col gap-2">
-          <div className="flex-1 rounded-2xl border border-slate-700 bg-slate-900 p-2.5 flex flex-col gap-1.5">
+        <div className="w-64 shrink-0 flex flex-col gap-2">
+          <div className="flex-1 rounded-2xl border border-slate-700 bg-slate-900 p-3 flex flex-col gap-2">
             <p className="text-[13px] font-mono text-slate-500 uppercase tracking-widest">El problema</p>
             <p className="text-[13px] text-slate-300 leading-snug">
-              Procesamiento masivo: renderizado 3D, ML, video 4K. El modelo secuencial se queda corto.
+              Procesamiento masivo: renderizado 3D, ML, video 4K. El modelo secuencial clásico se queda corto.
             </p>
-            <div className="border-t border-slate-800 pt-1.5 mt-auto">
+            <div className="border-t border-slate-800 pt-2 mt-auto">
               <p className="text-[13px] font-mono text-cyan-500 uppercase tracking-widest mb-1">Analogía</p>
-              <div className="space-y-0.5 text-[13px] text-slate-300 leading-snug">
+              <div className="space-y-1 text-[13px] text-slate-300 leading-snug">
                 <p><span className="text-red-400 font-bold">1 chef</span> friendo en sartén de <span className="text-red-400 font-bold">1</span> hamburguesa — repite el gesto una y otra vez.</p>
                 <p>Cuello de botella <span className="text-red-400 font-bold">estructural</span>: la herramienta, no el chef.</p>
-                <p>Solución: <span className="text-cyan-400 font-bold">parrilla + espátula gigante</span> → 4 hamburguesas de un solo movimiento.</p>
+                <p>Solución: <span className="text-cyan-400 font-bold">parrilla + espátula gigante</span> → N hamburguesas de un solo movimiento.</p>
               </div>
             </div>
-            <p className="text-[13px] text-slate-400 italic leading-snug pt-1.5 border-t border-slate-800">
+            <p className="text-[13px] text-slate-400 italic leading-snug pt-2 border-t border-slate-800">
               El procesador es el chef. No es velocidad de reloj — es <span className="text-amber-400 font-bold">throughput de herramienta</span>.
             </p>
           </div>
         </div>
 
-        {/* Right: Code + instructions */}
-        <div className="flex-1 flex flex-col gap-2 min-w-0">
-          {/* Code header */}
-          <div className="shrink-0 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 flex items-center gap-3">
-            <p className="text-[13px] font-mono text-slate-500 uppercase tracking-widest shrink-0">Ejemplo real</p>
-            <code className="text-sm font-mono text-cyan-300 font-bold">C[i] = (A[i] + B[i]) / 2</code>
-            <span className="text-[13px] text-slate-500">para i = 0..49 · 50 elementos</span>
+        {/* Right: Embedded Video */}
+        <div className="flex-1 rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden flex flex-col min-w-0">
+          <div className="shrink-0 px-4 py-2.5 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+            <span className="text-[13px] font-mono font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+              🎬 Video Explicativo: Límite Secuencial vs Paralelismo
+            </span>
+            <span className="text-xs font-mono text-slate-500">YouTube Embed</span>
           </div>
-
-          {/* SISD Instruction breakdown */}
-          <div className="flex-1 rounded-2xl border border-red-500/20 bg-slate-900 p-3 flex flex-col gap-2 min-h-0">
-            <div className="flex items-center justify-between shrink-0">
-              <p className="text-[13px] font-mono uppercase tracking-widest text-red-400">
-                SISD — desglose de instrucciones
-              </p>
-              <div className="flex items-center gap-3">
-                <span className="text-[13px] font-mono text-slate-500">
-                  Total instr: <span className="font-bold text-red-400">304</span>
-                </span>
-                <span className="text-[13px] font-mono text-slate-500">
-                  Total ciclos: <span className="font-bold text-red-400">~2004</span>
-                </span>
-              </div>
-            </div>
-
-            <div className="flex-1 flex flex-col gap-1 justify-center min-h-0">
-              <div className="flex flex-col gap-1">
-                {sisdRows.map((r, i) => (
-                  <div key={i} className="flex items-center gap-2 text-[13px] font-mono">
-                    <span className="w-14 text-slate-500 font-bold shrink-0">{r.n}</span>
-                    <span className={`w-20 font-bold shrink-0 ${r.color}`}>{r.op}</span>
-                    <span className="flex-1 text-slate-500 truncate">{r.desc}</span>
-                    <div className="shrink-0 flex items-center gap-1">
-                      <div className="h-1.5 bg-slate-800 rounded-full w-16 overflow-hidden">
-                        <div className="h-full rounded-full"
-                          style={{
-                            width: `${Math.min(100, (parseInt(r.cycles) / 1100) * 100)}%`,
-                            backgroundColor: 'rgba(239,68,68,0.5)',
-                          }} />
-                      </div>
-                      <span className={`w-10 text-right ${r.color}`}>{r.cycles} c</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom comparison cards */}
-          <div className="shrink-0 grid grid-cols-2 gap-2">
-            <div className="rounded-xl border border-red-500/40 bg-slate-900/80 ring-1 ring-red-500/20 p-3">
-              <p className="text-[13px] font-mono text-red-400 uppercase tracking-widest">SISD secuencial</p>
-              <p className="text-lg font-bold font-mono text-red-400">304 <span className="text-[13px] text-slate-500 font-normal">instrucciones</span></p>
-              <p className="text-[13px] font-mono text-slate-500">~2004 ciclos</p>
-            </div>
-            <div className="rounded-xl border border-cyan-500/30 bg-slate-900/60 p-3">
-              <p className="text-[13px] font-mono text-cyan-400 uppercase tracking-widest">SIMD vectorial <span className="text-slate-600 normal-case font-normal">→ Parte 2</span></p>
-              <p className="text-lg font-bold font-mono text-cyan-400">7 <span className="text-[13px] text-slate-500 font-normal">instrucciones</span></p>
-              <p className="text-[13px] font-mono text-slate-500">~285 ciclos · <span className="text-emerald-400 font-bold">7× más rápido</span></p>
-            </div>
+          <div className="flex-1 relative w-full h-full bg-black">
+            <iframe
+              className="absolute inset-0 w-full h-full border-0"
+              src="https://www.youtube.com/embed/8_ZTvG1WQxM?autoplay=0"
+              title="SIMD vs SISD Video Explicativo"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
           </div>
         </div>
       </div>
@@ -592,7 +539,7 @@ export function Slide1_LimitacionesSISD() {
           <h4 className="text-sm font-bold text-blue-400 font-mono uppercase tracking-widest shrink-0">
             ⚙️ El Desafío en MIMD / SMP (Sección 1.4)
           </h4>
-          <div className="space-y-3 text-[13px] flex-1">
+          <div className="space-y-3 text-[13px] flex-1 overflow-y-auto pr-1">
             <p className="text-slate-300">
               En sistemas multinúcleo (MIMD/SMP), cada CPU corre de forma independiente, pero surgen cuellos de botella estructurales de coordinación:
             </p>
