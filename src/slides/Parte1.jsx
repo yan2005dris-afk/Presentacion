@@ -29,14 +29,14 @@ export function Slide1_LimiteSec() {
           <div className="border-t border-slate-800 pt-3">
             <p className="text-[13px] font-mono text-cyan-500 uppercase tracking-widest mb-2">Analogía</p>
             <div className="space-y-1.5 text-[13px] text-slate-300 leading-relaxed">
-              <p>Supermercado con miles de clientes y <span className="text-red-400 font-bold">1 sola caja</span>.</p>
-              <p>El cajero es competente. El cuello de botella es <span className="text-red-400 font-bold">estructural</span>.</p>
-              <p>Agregar un cajero más rápido ayuda poco. La solución es <span className="text-cyan-400 font-bold">abrir más cajas</span>.</p>
+              <p>Una cocina con <span className="text-red-400 font-bold">1 chef</span> friendo hamburguesas en un sartén donde solo cabe <span className="text-red-400 font-bold">1</span>.</p>
+              <p>El chef es rápido, pero tiene que repetir el mismo gesto una y otra vez. El cuello de botella es <span className="text-red-400 font-bold">estructural</span>.</p>
+              <p>La solución no es un chef más rápido: es cambiar la herramienta. Una <span className="text-cyan-400 font-bold">parrilla + espátula gigante</span> permite voltear 4 hamburguesas con un solo movimiento.</p>
             </div>
           </div>
           <div className="mt-auto pt-2 border-t border-slate-800">
             <p className="text-[13px] text-slate-400 italic leading-relaxed">
-              El procesador es el cajero. El problema no es velocidad de reloj — es <span className="text-amber-400 font-bold">throughput estructural</span>.
+              El procesador es el chef. El problema no es la velocidad del tenedor — es <span className="text-amber-400 font-bold">el throughput de la herramienta</span>.
             </p>
           </div>
         </div>
@@ -307,8 +307,8 @@ export function Slide1_1Anim() {
         <div className={`flex flex-col p-4 rounded-2xl border bg-slate-900 transition-colors duration-300 ${sisdFinished ? 'border-emerald-500/50' : 'border-red-500/30'}`}>
           <div className="flex items-center justify-between mb-3 shrink-0">
             <div>
-              <span className="text-sm font-bold text-red-400 font-mono">SISD — 1 Cajero</span>
-              <p className="text-[13px] text-slate-500">1 dato · {TOTAL} ciclos</p>
+              <span className="text-sm font-bold text-red-400 font-mono">SISD — 1 Sartén</span>
+              <p className="text-[13px] text-slate-500">1 hamburguesa · {TOTAL} ciclos</p>
             </div>
             {sisdFinished
               ? <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
@@ -335,7 +335,7 @@ export function Slide1_1Anim() {
             <ArrowRight size={14} className="text-red-500/50 shrink-0" />
 
             <div className="flex flex-col items-center gap-2 shrink-0">
-              <span className="text-[13px] text-slate-600 font-mono">CAJERO</span>
+              <span className="text-[13px] text-slate-600 font-mono">SARTÉN</span>
               <div className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors duration-200 ${sisdAtCajero !== null ? 'border-red-400 bg-slate-800' : sisdFinished ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-slate-700 bg-slate-800'
                 }`}>
                 <AnimatePresence mode="wait">
@@ -359,8 +359,8 @@ export function Slide1_1Anim() {
         <div className={`flex flex-col p-4 rounded-2xl border bg-slate-900 transition-colors duration-300 ${simdFinished ? 'border-emerald-500/50' : 'border-cyan-500/40'}`}>
           <div className="flex items-center justify-between mb-3 shrink-0">
             <div>
-              <span className="text-sm font-bold text-cyan-400 font-mono">SIMD — {SIMD_W} Cajeros</span>
-              <p className="text-[13px] text-slate-500">{SIMD_W} datos · {simdFinishTick} ciclos</p>
+              <span className="text-sm font-bold text-cyan-400 font-mono">SIMD — 1 Parrilla · {SIMD_W} Hamburguesas</span>
+              <p className="text-[13px] text-slate-500">{SIMD_W} hamburguesas · {simdFinishTick} ciclos</p>
             </div>
             {simdFinished
               ? <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
@@ -387,7 +387,7 @@ export function Slide1_1Anim() {
             <ArrowRight size={14} className="text-cyan-500/50 shrink-0" />
 
             <div className="flex flex-col gap-1.5 shrink-0">
-              <span className="text-[13px] text-slate-600 font-mono text-center">CAJEROS</span>
+              <span className="text-[13px] text-slate-600 font-mono text-center">PARRILLA</span>
               {Array.from({ length: SIMD_W }, (_, lane) => {
                 const itemIdx = simdBatchIdxs[lane] ?? null;
                 return (
@@ -403,7 +403,7 @@ export function Slide1_1Anim() {
                         }
                       </AnimatePresence>
                     </div>
-                    <span className="text-[13px] text-slate-600 font-mono">C{lane + 1}</span>
+                    <span className="text-[13px] text-slate-600 font-mono">H{lane + 1}</span>
                   </div>
                 );
               })}

@@ -76,7 +76,7 @@ export default function App() {
       section: 1,
       title: '¿Por qué existe el paralelismo? El límite secuencial',
       subtitle: 'Slide 1.0 · El cuello de botella estructural · SISD vs SIMD en números reales',
-      speaker: "El problema no es qué tan rápido corre la CPU — es que solo puede hacer una cosa a la vez. Con el ejemplo de C[i]=(A[i]+B[i])/2 sobre 50 elementos, el modelo secuencial genera 304 instrucciones y 2004 ciclos. El modelo vectorial lo resuelve en 7 instrucciones y 285 ciclos. Ese es el argumento de existencia del paralelismo.",
+      speaker: "El problema no es qué tan rápido corre la CPU — es que solo puede hacer una cosa a la vez, como un chef con un sartén de 1 hamburguesa. Con el ejemplo de C[i]=(A[i]+B[i])/2 sobre 50 elementos, el modelo secuencial genera 304 instrucciones y 2004 ciclos. El modelo vectorial —la parrilla con espátula gigante— lo resuelve en 7 instrucciones y 285 ciclos. Ese es el argumento de existencia del paralelismo.",
       component: <Slide1_LimiteSec />
     },
     {
@@ -84,7 +84,7 @@ export default function App() {
       section: 1,
       title: 'Simulación: Cajero vs Paralelo',
       subtitle: 'Slide 1.1b · Animación Interactiva · SISD vs SIMD en tiempo real',
-      speaker: "Esta animación muestra 16 datos procesándose en tiempo real. El cajero SISD atiende uno por uno: tarda 16 ciclos. El procesador SIMD atiende 4 simultáneamente: termina en 4 ciclos. SIMD finaliza cuando SISD va apenas en el 25%.",
+      speaker: "Esta animación usa la analogía del chef. SISD es un sartén donde solo cabe 1 hamburguesa a la vez: el chef voltea una por una, 16 veces. SIMD es una parrilla con espacio para 4 hamburguesas y una espátula gigante: con un solo movimiento voltea las 4 a la vez, terminando 4 veces más rápido. La desventaja: si las hamburguesas necesitan cocciones distintas, la espátula gigante no sirve — eso es la divergencia.",
       component: <Slide1_1Anim />
     },
     {
