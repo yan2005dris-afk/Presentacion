@@ -368,6 +368,7 @@ export default function App() {
             {SECTIONS.map(sec => (
               <button
                 key={sec.id}
+                title={`${sec.title} — ${sec.member}`}
                 onClick={() => {
                   const firstIdx = slides.findIndex(s => s.section === sec.id);
                   if (firstIdx !== -1) setCurrentSlide(firstIdx);

@@ -85,13 +85,17 @@ export function Slide1_LimiteSec() {
               <p className="text-[13px] font-mono text-slate-500">~2004 ciclos</p>
             </div>
           </div>
-          <div className="rounded-xl border border-cyan-500/40 bg-slate-900 p-3 flex items-center gap-3">
+          <motion.div
+            animate={{ boxShadow: ['0 0 12px rgba(6,182,212,0.15)', '0 0 28px rgba(6,182,212,0.35), 0 0 8px rgba(168,85,247,0.2)', '0 0 12px rgba(6,182,212,0.15)'] }}
+            transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
+            className="rounded-xl border-2 border-cyan-500/60 bg-slate-900 p-3 flex items-center gap-3"
+          >
             <div>
               <p className="text-[13px] font-mono text-cyan-400 uppercase tracking-widest">SIMD vectorial</p>
               <p className="text-lg font-bold font-mono text-cyan-400">7 <span className="text-[13px] text-slate-500 font-normal">instrucciones</span></p>
               <p className="text-[13px] font-mono text-slate-500">~285 ciclos · <span className="text-emerald-400 font-bold">7× más rápido</span></p>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

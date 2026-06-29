@@ -23,9 +23,9 @@ const CODE_SISD = [
 const CODE_SIMD = [
   { line: 'mov     eax, 0            ; i = 0',        active: false },
   { line: '.loop:',                                     active: false, label: true },
-  { line: 'movaps  xmm0, [A+eax*4]   ; 4 A[i..i+3]',  active: false },
-  { line: 'addps   xmm0, [B+eax*4]   ; + 4 B[i..i+3]', active: false, highlight: true },
-  { line: 'movaps  [C+eax*4], xmm0   ; guardar 4 res', active: false },
+  { line: 'movaps  xmm0, [A+eax*4]   ; 4 A[i..i+3]',  active: false, neon: true },
+  { line: 'addps   xmm0, [B+eax*4]   ; + 4 B[i..i+3]', active: false, highlight: true, neon: true },
+  { line: 'movaps  [C+eax*4], xmm0   ; guardar 4 res', active: false, neon: true },
   { line: 'add     eax, 4            ; i += 4',        active: false },
   { line: 'cmp     eax, N            ; ¿i == N?',      active: false },
   { line: 'jl      .loop             ; repetir',       active: false },
@@ -180,6 +180,56 @@ export function SlidePracticaAsm() {
               <span className="text-slate-500">Ciclos: <span className="text-red-300 font-bold">{sisdStats.cycles}</span></span>
             </div>
           )}
+
+          {/* ── SISD Data Viz ── */}
+          <div className="shrink-0 px-2 py-1.5 bg-slate-950/60 border-t border-slate-800">
+            <div className="grid grid-cols-1 gap-0.5 text-center font-mono">
+              <div className="flex items-center gap-0.5">
+                <span className="text-[10px] text-slate-600 w-3 shrink-0">A</span>
+                {A.map((v, i) => {
+                  const isActive = i === sisdActiveIdx && sisdDone < N;
+                  const isDone = i < sisdDone;
+                  return (
+                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
+                      ${isDone ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
+                        : isActive ? 'bg-red-500/30 border border-red-400 text-red-200 animate-[glow-pulse_1.5s_ease-in-out_infinite]'
+                          : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
+                      {v}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="flex items-center gap-0.5">
+                <span className="text-[10px] text-slate-600 w-3 shrink-0">B</span>
+                {B.map((v, i) => {
+                  const isActive = i === sisdActiveIdx && sisdDone < N;
+                  const isDone = i < sisdDone;
+                  return (
+                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
+                      ${isDone ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
+                        : isActive ? 'bg-red-500/30 border border-red-400 text-red-200 animate-[glow-pulse_1.5s_ease-in-out_infinite]'
+                          : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
+                      {v}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="flex items-center gap-0.5">
+                <span className="text-[10px] text-slate-600 w-3 shrink-0">C</span>
+                {A.map((_, i) => {
+                  const done = i < sisdDone;
+                  const val = done ? A[i] + B[i] : '·';
+                  return (
+                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
+                      ${done ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
+                        : 'bg-slate-800/60 border border-slate-700/50 text-slate-700'}`}>
+                      {val}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* ── PANEL SIMD ── */}
@@ -199,7 +249,7 @@ export function SlidePracticaAsm() {
               <div key={i} className={`flex items-center gap-2 py-[1px] rounded px-1 transition-colors ${simdCodeHighlight === i && step > 0 && simdDone < N ? 'bg-cyan-500/20 border-l-2 border-cyan-400' : 'border-l-2 border-transparent'} ${c.label ? 'text-slate-600 mt-1' : ''} ${step > 0 && simdDone >= N ? 'opacity-50' : ''}`}>
                 {!c.label && <span className="text-xs text-slate-700 w-4 shrink-0 text-right">{i}</span>}
                 {c.label && <span className="text-xs text-slate-700 w-4 shrink-0" />}
-                <span className={`${simdCodeHighlight === i && step > 0 && simdDone < N ? 'text-cyan-200' : c.label ? 'text-slate-600' : 'text-slate-400'}`}>
+                <span className={`${simdCodeHighlight === i && step > 0 && simdDone < N ? 'text-cyan-200' : c.label ? 'text-slate-600' : c.neon ? 'text-cyan-400 drop-shadow-[0_0_4px_rgba(6,182,212,0.35)]' : 'text-slate-400'}`}>
                   {c.line}
                 </span>
                 {c.highlight && simdCodeHighlight === i && step > 0 && simdDone < N && (
@@ -216,54 +266,56 @@ export function SlidePracticaAsm() {
               <span className="text-slate-500">Ciclos: <span className="text-cyan-300 font-bold">{simdStats.cycles}</span></span>
             </div>
           )}
-        </div>
-      </div>
 
-      {/* ─── Data Visualization ─── */}
-      <div className="shrink-0 grid grid-cols-3 gap-1.5 text-center text-[13px] font-mono">
-        <div className="flex items-center gap-1">
-          <span className="text-slate-500 w-4">A:</span>
-          {A.map((v, i) => {
-            const active = sisdActiveIdx === i || simdBatch.includes(i);
-            const doneSisd = i < sisdDone;
-            const doneSimd = i < simdDone;
-            return (
-              <div key={i} className={`w-9 h-9 rounded flex items-center justify-center text-xs font-bold transition-all duration-200
-                ${doneSisd && doneSimd ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
-                  : active ? 'bg-amber-500/30 border border-amber-400 text-amber-200 scale-110 animate-[glow-pulse-amber_1.5s_ease-in-out_infinite]'
-                    : 'bg-slate-800 border border-slate-700 text-slate-500'}`}>
-                {v}
+          {/* ── SIMD Data Viz ── */}
+          <div className="shrink-0 px-2 py-1.5 bg-slate-950/60 border-t border-slate-800">
+            <div className="grid grid-cols-1 gap-0.5 text-center font-mono">
+              <div className="flex items-center gap-0.5">
+                <span className="text-[10px] text-slate-600 w-3 shrink-0">A</span>
+                {A.map((v, i) => {
+                  const inBatch = simdBatch.includes(i);
+                  const isDone = i < simdDone;
+                  return (
+                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
+                      ${isDone ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
+                        : inBatch ? 'bg-cyan-500/30 border border-cyan-400 text-cyan-200 animate-[glow-pulse-cyan_1.5s_ease-in-out_infinite]'
+                          : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
+                      {v}
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
-        </div>
-        <div className="flex items-center gap-1">
-          <span className="text-slate-500 w-4">B:</span>
-          {B.map((v, i) => {
-            const active = sisdActiveIdx === i || simdBatch.includes(i);
-            return (
-              <div key={i} className={`w-9 h-9 rounded flex items-center justify-center text-xs font-bold transition-all duration-200
-                ${i < Math.min(sisdDone, simdDone) ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
-                  : active ? 'bg-amber-500/30 border border-amber-400 text-amber-200 scale-110 animate-[glow-pulse-amber_1.5s_ease-in-out_infinite]'
-                    : 'bg-slate-800 border border-slate-700 text-slate-500'}`}>
-                {v}
+              <div className="flex items-center gap-0.5">
+                <span className="text-[10px] text-slate-600 w-3 shrink-0">B</span>
+                {B.map((v, i) => {
+                  const inBatch = simdBatch.includes(i);
+                  const isDone = i < simdDone;
+                  return (
+                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
+                      ${isDone ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
+                        : inBatch ? 'bg-cyan-500/30 border border-cyan-400 text-cyan-200 animate-[glow-pulse-cyan_1.5s_ease-in-out_infinite]'
+                          : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
+                      {v}
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
-        </div>
-        <div className="flex items-center gap-1">
-          <span className="text-slate-500 w-4">C:</span>
-          {A.map((_, i) => {
-            const done = i < Math.min(sisdDone, simdDone);
-            const val = done ? A[i] + B[i] : '·';
-            return (
-              <div key={i} className={`w-9 h-9 rounded flex items-center justify-center text-xs font-bold transition-all duration-200
-                ${done ? 'bg-cyan-500/20 border border-cyan-400/50 text-cyan-300'
-                  : 'bg-slate-800/60 border border-slate-700/50 text-slate-700'}`}>
-                {val}
+              <div className="flex items-center gap-0.5">
+                <span className="text-[10px] text-slate-600 w-3 shrink-0">C</span>
+                {A.map((_, i) => {
+                  const done = i < simdDone;
+                  const val = done ? A[i] + B[i] : '·';
+                  return (
+                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
+                      ${done ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
+                        : 'bg-slate-800/60 border border-slate-700/50 text-slate-700'}`}>
+                      {val}
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
+            </div>
+          </div>
         </div>
       </div>
 

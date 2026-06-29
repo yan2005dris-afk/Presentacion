@@ -58,11 +58,11 @@ export function Slide3_3() {
           <span className="text-[13px] px-1.5 py-0.5 bg-cyan-500/20 rounded">SSE</span> Instrucciones básicas — Registros XMM (128 bits) · 4 × float32
         </div>
         <div className="p-3 grid grid-cols-2 gap-x-6 gap-y-1.5 text-[13px] font-mono">
-          <div className="flex items-center gap-2"><span className="text-amber-300 font-bold">MOVAPS</span> <span className="text-slate-400">xmm0, [mem]</span> <span className="text-slate-600 ml-auto">; cargar 4 floats alineados</span></div>
-          <div className="flex items-center gap-2"><span className="text-amber-300 font-bold">ADDPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; sumar 4 floats</span></div>
-          <div className="flex items-center gap-2"><span className="text-amber-300 font-bold">MULPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; multiplicar 4 floats</span></div>
-          <div className="flex items-center gap-2"><span className="text-amber-300 font-bold">SUBPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; restar 4 floats</span></div>
-          <div className="flex items-center gap-2"><span className="text-amber-300 font-bold">DIVPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; dividir 4 floats</span></div>
+          <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">①</span><span className="text-cyan-300 font-bold drop-shadow-[0_0_4px_rgba(6,182,212,0.5)]">MOVAPS</span> <span className="text-slate-400">xmm0, [mem]</span> <span className="text-slate-600 ml-auto">; cargar 4 floats alineados</span></div>
+          <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">②</span><span className="text-cyan-300 font-bold drop-shadow-[0_0_4px_rgba(6,182,212,0.5)]">ADDPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; sumar 4 floats</span></div>
+          <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">③</span><span className="text-cyan-300 font-bold drop-shadow-[0_0_4px_rgba(6,182,212,0.5)]">MULPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; multiplicar 4 floats</span></div>
+          <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">④</span><span className="text-cyan-300 font-bold drop-shadow-[0_0_4px_rgba(6,182,212,0.5)]">SUBPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; restar 4 floats</span></div>
+          <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">⑤</span><span className="text-cyan-300 font-bold drop-shadow-[0_0_4px_rgba(6,182,212,0.5)]">DIVPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; dividir 4 floats</span></div>
         </div>
       </div>
 
@@ -73,17 +73,22 @@ export function Slide3_3() {
         </div>
         <div className="p-3 text-[13px] font-mono space-y-2">
           <div className="grid grid-cols-2 gap-x-6 gap-y-1.5">
-            <div className="flex items-center gap-2"><span className="text-purple-300 font-bold">VMOVAPD</span> <span className="text-slate-400">ymm, [mem]</span> <span className="text-slate-600 ml-auto">; mover 4 doubles</span></div>
-            <div className="flex items-center gap-2"><span className="text-purple-300 font-bold">VADDPD</span> <span className="text-slate-400">ymm, ymm, ymm</span> <span className="text-slate-600 ml-auto">; sumar 4 doubles</span></div>
-            <div className="flex items-center gap-2"><span className="text-purple-300 font-bold">VBROADCASTSD</span> <span className="text-slate-400">ymm, [r64]</span> <span className="text-slate-600 ml-auto">; escalar → vector</span></div>
+            <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">①</span><span className="text-fuchsia-300 font-bold drop-shadow-[0_0_4px_rgba(217,70,239,0.5)]">VMOVAPD</span> <span className="text-slate-400">ymm, [mem]</span> <span className="text-slate-600 ml-auto">; mover 4 doubles</span></div>
+            <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">②</span><span className="text-fuchsia-300 font-bold drop-shadow-[0_0_4px_rgba(217,70,239,0.5)]">VADDPD</span> <span className="text-slate-400">ymm, ymm, ymm</span> <span className="text-slate-600 ml-auto">; sumar 4 doubles</span></div>
+            <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">③</span><span className="text-fuchsia-300 font-bold drop-shadow-[0_0_4px_rgba(217,70,239,0.5)]">VBROADCASTSD</span> <span className="text-slate-400">ymm, [r64]</span> <span className="text-slate-600 ml-auto">; escalar → vector</span></div>
             <div className="flex items-center gap-2 relative">
-              <span className="text-emerald-300 font-bold">VFMADDPD</span>
+              <span className="text-xs text-slate-700 w-4 shrink-0 text-right">④</span>
+              <motion.span
+                animate={{ textShadow: ['0 0 4px rgba(52,211,153,0.4)', '0 0 12px rgba(52,211,153,0.8)', '0 0 4px rgba(52,211,153,0.4)'] }}
+                transition={{ repeat: Infinity, duration: 2 }}
+                className="text-emerald-300 font-bold"
+              >VFMADDPD</motion.span>
               <span className="text-slate-400">ymm, ymm, ymm, ymm</span>
-              <span className="text-emerald-400/80 text-[13px] ml-auto font-bold">★ FMA: a*b + c en 1 ciclo</span>
+              <span className="text-emerald-400/80 text-[13px] ml-auto font-bold drop-shadow-[0_0_6px_rgba(52,211,153,0.5)]">★ FMA: a*b + c en 1 ciclo</span>
             </div>
           </div>
           <div className="p-2 bg-slate-950 rounded-xl border border-purple-500/20 text-[13px] text-slate-400 leading-relaxed">
-            <span className="text-purple-300">Ejemplo:</span> <span className="text-slate-500">C[0..3] = A[0..3] × B[0..3] + D[0..3]</span>
+            <span className="text-fuchsia-300">Ejemplo:</span> <span className="text-slate-500">C[0..3] = A[0..3] × B[0..3] + D[0..3]</span>
           </div>
         </div>
       </div>
