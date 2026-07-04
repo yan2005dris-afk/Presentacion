@@ -293,7 +293,7 @@ export function Slide2_4() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0">
         {/* ─── Ventajas Clave ─── */}
         <div className="p-5 rounded-2xl bg-slate-900 border border-emerald-500/40 flex flex-col gap-3 min-h-0">
-          <h4 className="text-sm font-bold text-emerald-400 flex items-center gap-2 shrink-0"><CheckCircle2 size={18} /> Ventajas Principales (Sección 2.7)</h4>
+          <h4 className="text-[12px] font-bold text-emerald-400 flex items-center gap-2 shrink-0"><CheckCircle2 size={18} /> Ventajas Principales (Sección 2.7)</h4>
           <ul className="text-[13px] text-slate-300 space-y-2 flex-1 overflow-y-auto pr-1">
             <li className="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
               ✓ <span className="text-emerald-300 font-bold">Throughput N× mayor:</span> Procesa múltiples datos en un solo ciclo de reloj según el ancho del registro vectorial.
@@ -312,7 +312,7 @@ export function Slide2_4() {
 
         {/* ─── Requisitos de Regularidad ─── */}
         <div className="p-5 rounded-2xl bg-slate-900 border border-cyan-500/40 flex flex-col gap-3 min-h-0">
-          <h4 className="text-sm font-bold text-cyan-400 flex items-center gap-2 shrink-0"><Layers size={18} /> Requisitos para el Paralelismo Vectorial</h4>
+          <h4 className="text-[12px] font-bold text-cyan-400 flex items-center gap-2 shrink-0"><Layers size={18} /> Requisitos para el Paralelismo Vectorial</h4>
           <div className="space-y-2.5 text-[13px] flex-1 overflow-y-auto pr-1">
             <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
               <span className="text-cyan-300 font-bold block mb-0.5">1. Homogeneidad de Datos</span>

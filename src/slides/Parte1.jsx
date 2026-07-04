@@ -549,8 +549,8 @@ export function Slide1_LimitacionesSISD() {
             </div>
             <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1">
               <span className="text-amber-300 font-bold block">Spinlock (Espera Activa)</span>
-              <p className="text-slate-400 text-xs">Cuando un thread espera un recurso bloqueado por otro, entra en bucle quemando ciclos sin trabajo útil:</p>
-              <code className="block p-2 bg-slate-900 rounded text-amber-300 font-mono text-xs">while (lock.isLocked()) &#123; /* spinning */ &#125;</code>
+              <p className="text-slate-400 text-[13px]">Cuando un thread espera un recurso bloqueado por otro, entra en bucle quemando ciclos sin trabajo útil:</p>
+              <code className="block p-2 bg-slate-900 rounded text-amber-300 font-mono text-[13px]">while (lock.isLocked()) &#123; /* spinning */ &#125;</code>
             </div>
           </div>
         </div>

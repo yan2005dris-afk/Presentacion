@@ -190,7 +190,7 @@ export function Slide4_1() {
         initial={{ scale: 0.9 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="p-3 bg-cyan-500/10 border border-cyan-400/30 rounded-xl text-center text-cyan-300 font-bold text-sm"
+        className="p-3 bg-cyan-500/10 border border-cyan-400/30 rounded-xl text-center text-cyan-300 font-bold text-[13px]"
       >
         Speedup Real = 2004 ciclos / 285 ciclos ≈ <span className="text-2xl">7.0×</span>
       </motion.div>

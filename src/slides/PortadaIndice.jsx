@@ -80,7 +80,7 @@ export function SlideIndice({ onSelectSection }) {
               <span className="text-[13px] font-bold px-2 py-0.5 bg-slate-950 rounded border border-slate-800 text-slate-200">{a.member}</span>
               <ArrowRight size={16} className="text-slate-400" />
             </div>
-            <h4 className="font-bold text-sm text-slate-100">{a.title}</h4>
+            <h4 className="font-bold text-[13px] text-slate-100">{a.title}</h4>
             <p className="text-[13px] text-slate-400 leading-relaxed">{a.desc}</p>
           </motion.div>
         ))}

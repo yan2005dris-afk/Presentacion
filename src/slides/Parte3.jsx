@@ -40,7 +40,7 @@ export function Slide3_2() {
           {[...Array(8)].map((_, i) => <div key={i} className="p-2 rounded bg-cyan-500/20 border border-cyan-400 text-cyan-300">+32</div>)}
         </div>
         <div className="text-purple-400 font-bold pt-2">• Particionado como 32×8-bit (Bytes para píxeles RGB en PADDB)</div>
-        <div className="grid grid-cols-[repeat(32,minmax(0,1fr))] gap-0.5 text-center text-[10px] font-bold">
+        <div className="grid grid-cols-[repeat(32,minmax(0,1fr))] gap-0.5 text-center text-[11px] font-bold">
           {[...Array(32)].map((_, i) => <div key={i} className="p-1 rounded bg-purple-500/20 border border-purple-400 text-purple-300">+8</div>)}
         </div>
       </div>
@@ -273,7 +273,7 @@ export function Slide3_OrganizacionDatos() {
               {Array.from({ length: f.count }).map((_, i) => (
                 <div
                   key={i}
-                  className={`p-2.5 rounded-xl border text-center font-mono text-xs font-bold transition-all whitespace-nowrap ${f.color}`}
+                  className={`p-2.5 rounded-xl border text-center font-mono text-[11px] font-bold transition-all whitespace-nowrap ${f.color}`}
                 >
                   {f.count <= 8 ? `Elem [${f.count - 1 - i}]` : `[${f.count - 1 - i}]`}
                 </div>
@@ -289,19 +289,19 @@ export function Slide3_OrganizacionDatos() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-1">
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-[13px] space-y-1">
           <span className="text-cyan-400 font-bold font-mono block">32-bit Float</span>
           <span className="text-slate-400">8 elementos por instrucción en AVX (256-bit).</span>
         </div>
-        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-1">
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-[13px] space-y-1">
           <span className="text-emerald-400 font-bold font-mono block">64-bit Double</span>
           <span className="text-slate-400">4 elementos por instrucción en AVX (256-bit).</span>
         </div>
-        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-1">
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-[13px] space-y-1">
           <span className="text-purple-400 font-bold font-mono block">16-bit Short</span>
           <span className="text-slate-400">16 elementos por instrucción en AVX-2 (256-bit).</span>
         </div>
-        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-1">
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-[13px] space-y-1">
           <span className="text-amber-400 font-bold font-mono block">8-bit Byte</span>
           <span className="text-slate-400">32 elementos por instrucción en AVX-2 (256-bit).</span>
         </div>

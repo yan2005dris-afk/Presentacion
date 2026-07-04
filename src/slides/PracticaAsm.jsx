@@ -167,7 +167,7 @@ export function SlidePracticaAsm() {
           </div>
 
           {/* Stats & Register State */}
-          <div className="shrink-0 px-3 py-1.5 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between text-[12px] font-mono">
+          <div className="shrink-0 px-3 py-1.5 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between text-[13px] font-mono">
             <span className="text-slate-500">Instrucciones: <span className="text-red-300 font-bold">{sisdStats.insns}</span></span>
             <span className="text-red-400 font-bold bg-slate-950 px-2 py-0.5 rounded border border-red-500/30">
               XMM0: {sisdCodeHighlight === 2 ? `[ Load A[${sisdActiveIdx}] = ${A[sisdActiveIdx]} ]` : sisdCodeHighlight === 3 ? `[ ALU: ${A[sisdActiveIdx]}+${B[sisdActiveIdx]} ]` : sisdCodeHighlight === 4 ? `[ Store → C[${sisdActiveIdx}] ]` : '[ · ]'}
@@ -178,12 +178,12 @@ export function SlidePracticaAsm() {
           <div className="shrink-0 px-2 py-1.5 bg-slate-950/60 border-t border-slate-800">
             <div className="grid grid-cols-1 gap-0.5 text-center font-mono">
               <div className="flex items-center gap-0.5">
-                <span className="text-[10px] text-slate-600 w-3 shrink-0">A</span>
+                <span className="text-[11px] text-slate-600 w-3 shrink-0">A</span>
                 {A.map((v, i) => {
                   const isActive = i === sisdActiveIdx && sisdCodeHighlight === 2;
                   const isDone = i < sisdDone;
                   return (
-                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
+                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[11px] font-bold transition-all duration-200
                       ${isDone ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
                         : isActive ? 'bg-red-500/40 border border-red-400 text-red-100 animate-pulse scale-105'
                           : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
@@ -193,12 +193,12 @@ export function SlidePracticaAsm() {
                 })}
               </div>
               <div className="flex items-center gap-0.5">
-                <span className="text-[10px] text-slate-600 w-3 shrink-0">B</span>
+                <span className="text-[11px] text-slate-600 w-3 shrink-0">B</span>
                 {B.map((v, i) => {
                   const isActive = i === sisdActiveIdx && sisdCodeHighlight === 3;
                   const isDone = i < sisdDone;
                   return (
-                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
+                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[11px] font-bold transition-all duration-200
                       ${isDone ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
                         : isActive ? 'bg-amber-500/40 border border-amber-400 text-amber-100 animate-pulse scale-105'
                           : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
@@ -208,13 +208,13 @@ export function SlidePracticaAsm() {
                 })}
               </div>
               <div className="flex items-center gap-0.5">
-                <span className="text-[10px] text-slate-600 w-3 shrink-0">C</span>
+                <span className="text-[11px] text-slate-600 w-3 shrink-0">C</span>
                 {A.map((_, i) => {
                   const isWriting = i === sisdActiveIdx && sisdCodeHighlight === 4;
                   const done = i < sisdDone || isWriting;
                   const val = done ? A[i] + B[i] : '·';
                   return (
-                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
+                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[11px] font-bold transition-all duration-200
                       ${done ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
                         : 'bg-slate-800/60 border border-slate-700/50 text-slate-700'}`}>
                       {val}
@@ -254,7 +254,7 @@ export function SlidePracticaAsm() {
           </div>
 
           {/* Stats & Register State */}
-          <div className="shrink-0 px-3 py-1.5 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between text-[12px] font-mono">
+          <div className="shrink-0 px-3 py-1.5 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between text-[13px] font-mono">
             <span className="text-slate-500">Instrucciones: <span className="text-cyan-300 font-bold">{simdStats.insns}</span></span>
             <span className="text-cyan-400 font-bold bg-slate-950 px-2 py-0.5 rounded border border-cyan-500/30">
               XMM0: {simdCodeHighlight === 2 ? '[ Load 4 Floats A ]' : simdCodeHighlight === 3 ? '[ ALU: 4 Sumas SIMD ]' : simdCodeHighlight === 4 ? '[ Store → 4 RAM C ]' : '[ · ]'}
@@ -265,12 +265,12 @@ export function SlidePracticaAsm() {
           <div className="shrink-0 px-2 py-1.5 bg-slate-950/60 border-t border-slate-800">
             <div className="grid grid-cols-1 gap-0.5 text-center font-mono">
               <div className="flex items-center gap-0.5">
-                <span className="text-[10px] text-slate-600 w-3 shrink-0">A</span>
+                <span className="text-[11px] text-slate-600 w-3 shrink-0">A</span>
                 {A.map((v, i) => {
                   const inBatch = simdBatch.includes(i) && simdCodeHighlight === 2;
                   const isDone = i < simdDone;
                   return (
-                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
+                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[11px] font-bold transition-all duration-200
                       ${isDone ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
                         : inBatch ? 'bg-cyan-500/40 border border-cyan-400 text-cyan-100 animate-pulse scale-105'
                           : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
@@ -280,12 +280,12 @@ export function SlidePracticaAsm() {
                 })}
               </div>
               <div className="flex items-center gap-0.5">
-                <span className="text-[10px] text-slate-600 w-3 shrink-0">B</span>
+                <span className="text-[11px] text-slate-600 w-3 shrink-0">B</span>
                 {B.map((v, i) => {
                   const inBatch = simdBatch.includes(i) && simdCodeHighlight === 3;
                   const isDone = i < simdDone;
                   return (
-                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
+                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[11px] font-bold transition-all duration-200
                       ${isDone ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
                         : inBatch ? 'bg-cyan-500/40 border border-cyan-400 text-cyan-100 animate-pulse scale-105'
                           : 'bg-slate-800/60 border border-slate-700/50 text-slate-600'}`}>
@@ -295,13 +295,13 @@ export function SlidePracticaAsm() {
                 })}
               </div>
               <div className="flex items-center gap-0.5">
-                <span className="text-[10px] text-slate-600 w-3 shrink-0">C</span>
+                <span className="text-[11px] text-slate-600 w-3 shrink-0">C</span>
                 {A.map((_, i) => {
                   const isWriting = simdBatch.includes(i) && simdCodeHighlight === 4;
                   const done = i < simdDone || isWriting;
                   const val = done ? A[i] + B[i] : '·';
                   return (
-                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold transition-all duration-200
+                    <div key={i} className={`w-6 h-6 rounded flex items-center justify-center text-[11px] font-bold transition-all duration-200
                       ${done ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
                         : 'bg-slate-800/60 border border-slate-700/50 text-slate-700'}`}>
                       {val}
