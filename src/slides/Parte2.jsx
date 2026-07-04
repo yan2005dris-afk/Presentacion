@@ -37,21 +37,61 @@ export function Slide2_1() {
 /* ───────── Slide 2.2 — Registros Vectoriales ───────── */
 
 export function Slide2_2() {
+  const [reg, setReg] = useState('xmm');
+  const data = [3.14, 2.71, 1.41, 0.57, 4.20, 5.55, 6.28, 7.89, 8.31, 9.81, 10.5, 11.7, 12.3, 13.9, 14.2, 15.6];
+
+  const regConfig = {
+    xmm: { label: 'Registro Vectorial XMM (128 Bits)', count: 4, sub: '4 × float32 (SSE)', gridCols: 'grid-cols-4' },
+    ymm: { label: 'Registro Vectorial YMM (256 Bits)', count: 8, sub: '8 × float32 (AVX) — el ancho se duplica', gridCols: 'grid-cols-4' },
+    zmm: { label: 'Registro Vectorial ZMM (512 Bits)', count: 16, sub: '16 × float32 (AVX-512) — el ancho se duplica otra vez', gridCols: 'grid-cols-8' },
+  };
+  const cfg = regConfig[reg];
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
           <span className="text-[13px] text-slate-500 font-mono">Registro Escalar (32 Bits)</span>
           <div className="p-3 rounded-xl bg-slate-950 border border-slate-700 text-center font-mono text-slate-300 font-bold text-sm">[ 3.14159 ]</div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-900 border border-cyan-500/50 space-y-2">
-          <span className="text-[13px] text-cyan-400 font-mono">Registro Vectorial XMM (128 Bits)</span>
-          <div className="grid grid-cols-4 gap-1 p-1.5 rounded-xl bg-slate-950 border border-cyan-500/30 text-center font-mono text-[13px] font-bold text-cyan-300">
-            <div className="bg-cyan-500/20 p-1.5 rounded">3.14</div>
-            <div className="bg-cyan-500/20 p-1.5 rounded">2.71</div>
-            <div className="bg-cyan-500/20 p-1.5 rounded">1.41</div>
-            <div className="bg-cyan-500/20 p-1.5 rounded">0.57</div>
+        <div className="p-4 rounded-2xl bg-slate-900 border border-cyan-500/50 space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[12px] text-cyan-400 font-mono">{cfg.label}</span>
+            <div className="flex gap-1">
+              {['xmm', 'ymm', 'zmm'].map((r) => (
+                <button
+                  key={r}
+                  onClick={() => setReg(r)}
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-bold font-mono uppercase transition-all ${
+                    reg === r
+                      ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30'
+                      : 'bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700'
+                  }`}>
+                  {r}
+                </button>
+              ))}
+            </div>
+          </div>
+          <motion.div
+            key={reg}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.25 }}
+            className={`grid ${cfg.gridCols} gap-1 p-1.5 rounded-xl bg-slate-950 border border-cyan-500/30 text-center font-mono text-[11px] font-bold text-cyan-300`}>
+            {data.slice(0, cfg.count).map((val, i) => (
+              <motion.div
+                key={`${reg}-${i}`}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2, delay: i * 0.015 }}
+                className="bg-cyan-500/20 p-1.5 rounded">
+                {val}
+              </motion.div>
+            ))}
+          </motion.div>
+          <div className="text-[11px] text-slate-400 font-mono text-center pt-1">
+            {cfg.sub}
           </div>
         </div>
       </div>
@@ -68,25 +108,30 @@ export function Slide2_2() {
 /* ───────── Slide 2.3 — Array vs Vector Processor ───────── */
 
 export function Slide2_3() {
-  const [view, setView] = useState('diagram'); // 'diagram' | 'table'
+  const [view, setView] = useState('diagram'); // 'diagram' | 'array' | 'table'
 
   return (
     <div className="w-full h-full flex flex-col gap-3 max-w-6xl mx-auto">
       {/* Top Header & Selector */}
       <div className="shrink-0 flex items-center justify-between px-1">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setView('diagram')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'diagram' ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
-            🏛️ Esquema Arquitectura Vectorial (CRAY-1 / VMIPS)
+            🏛️ Arquitectura Vectorial (CRAY-1)
+          </button>
+          <button
+            onClick={() => setView('array')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'array' ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
+            🧮 Arquitectura Array (Espacio)
           </button>
           <button
             onClick={() => setView('table')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'table' ? 'bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
-            📊 Tabla Comparativa (Array vs Vector)
+            📊 Tabla Comparativa
           </button>
         </div>
-        <span className="text-xs font-mono text-slate-500">Dualidad Espacio-Tiempo (Sección 2.5)</span>
+        <span className="text-xs font-mono text-slate-500 hidden md:inline">Dualidad Espacio-Tiempo (Sección 2.5)</span>
       </div>
 
       {/* Main Content View */}
@@ -127,6 +172,60 @@ export function Slide2_3() {
             <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs space-y-1">
               <span className="font-bold text-purple-300 font-mono block">4. Functional Units Segmentadas</span>
               <p className="text-slate-400 leading-relaxed">ALUs independientes (FP Add, Multiply, Divide, Integer, Logical) operando en pipeline continuo.</p>
+            </div>
+          </div>
+        </div>
+      ) : view === 'array' ? (
+        <div className="flex-1 rounded-2xl border border-amber-500/30 bg-slate-900 p-4 flex flex-col gap-3 min-h-0 overflow-hidden">
+          {/* Control Unit */}
+          <div className="flex justify-center">
+            <div className="px-6 py-2.5 rounded-xl bg-amber-500/20 border-2 border-amber-400 text-amber-300 font-mono font-bold text-sm shadow-lg shadow-amber-500/10 flex items-center gap-2">
+              <span className="text-base">⚙️</span> Unidad de Control Única <span className="text-amber-500/80 text-[11px]">(broadcast de la instrucción)</span>
+            </div>
+          </div>
+
+          {/* Arrow visualization */}
+          <div className="flex justify-center gap-6 md:gap-10 text-amber-500/50 font-mono text-base leading-none select-none">
+            {'↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓'.split(' ').map((a, i) => (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 + i * 0.04 }}>
+                {a}
+              </motion.span>
+            ))}
+          </div>
+
+          {/* PEs Grid */}
+          <div className="flex-1 grid grid-cols-4 gap-2.5 min-h-0">
+            {[3.14, 2.71, 1.41, 0.57, 4.20, 5.55, 6.28, 7.89].map((val, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: 0.4 + i * 0.05 }}
+                className="rounded-xl bg-slate-950 border-2 border-amber-500/40 flex flex-col items-center justify-center gap-0.5 p-2 shadow-md shadow-amber-500/5">
+                <span className="text-[10px] font-mono text-amber-400 font-bold">PE{i}</span>
+                <span className="text-base font-mono font-bold text-amber-300">{val}</span>
+                <span className="text-[9px] text-slate-500 font-mono">dato{i}</span>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Info panels */}
+          <div className="shrink-0 grid grid-cols-1 md:grid-cols-3 gap-2 text-[12px]">
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">
+              <span className="font-bold text-amber-300 font-mono block mb-1 text-[11px]">Idea clave</span>
+              N unidades de procesamiento independientes, todas ejecutan la MISMA instrucción simultáneamente, cada una con su propio dato.
+            </div>
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">
+              <span className="font-bold text-amber-300 font-mono block mb-1 text-[11px]">Tradeoff</span>
+              Mucho hardware (N ALUs completas) → alto costo en silicio, pero latencia mínima (todos arrancan juntos en el mismo ciclo).
+            </div>
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">
+              <span className="font-bold text-amber-300 font-mono block mb-1 text-[11px]">Ejemplos</span>
+              ILLIAC IV (64 PEs, años 60) · Connection Machine CM-2 · systolic arrays modernos.
             </div>
           </div>
         </div>
