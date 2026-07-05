@@ -503,15 +503,15 @@ export function Slide1_4() {
   );
 }
 
-/* ───────── Slide 1.Limitaciones — Limitaciones del SISD y Problemas SMP (Secciones 1.3 y 1.4) ───────── */
+/* ───────── Slide 1.Limitaciones — Limitaciones del SISD (Sección 1.3) ───────── */
 
 export function Slide1_LimitacionesSISD() {
   return (
-    <div className="w-full h-full flex flex-col gap-4 max-w-6xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0">
-        {/* Left: Limitaciones SISD */}
-        <div className="p-5 rounded-2xl bg-slate-900 border border-red-500/40 flex flex-col gap-3 min-h-0">
-          <h4 className="text-sm font-bold text-red-400 font-mono uppercase tracking-widest shrink-0">
+    <div className="w-full h-full flex flex-col gap-4 max-w-3xl mx-auto items-center">
+      <div className="flex-1 min-h-0 w-full flex flex-col">
+        {/* Limitaciones SISD */}
+        <div className="p-5 rounded-2xl bg-slate-900 border border-red-500/40 flex flex-col gap-3 min-h-0 h-full">
+          <h4 className="text-sm font-bold text-red-400 font-mono uppercase tracking-widest shrink-0 text-center">
             ⚠ Limitaciones del Modelo SISD (Sección 1.3)
           </h4>
           <div className="space-y-2 text-[13px] flex-1 overflow-y-auto pr-1">
@@ -533,31 +533,10 @@ export function Slide1_LimitacionesSISD() {
             </div>
           </div>
         </div>
-
-        {/* Right: El Problema en MIMD/SMP */}
-        <div className="p-5 rounded-2xl bg-slate-900 border border-blue-500/40 flex flex-col gap-3 min-h-0">
-          <h4 className="text-sm font-bold text-blue-400 font-mono uppercase tracking-widest shrink-0">
-            ⚙️ El Desafío en MIMD / SMP (Sección 1.4)
-          </h4>
-          <div className="space-y-3 text-[13px] flex-1 overflow-y-auto pr-1">
-            <p className="text-slate-300">
-              En sistemas multinúcleo (MIMD/SMP), cada CPU corre de forma independiente, pero surgen cuellos de botella estructurales de coordinación:
-            </p>
-            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
-              <span className="text-blue-300 font-bold block mb-0.5">Bus Congestion (Congestión de Bus)</span>
-              Cuando múltiples CPUs intentan acceder a la misma memoria RAM compartida al mismo tiempo, el bus se satura.
-            </div>
-            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1">
-              <span className="text-amber-300 font-bold block">Spinlock (Espera Activa)</span>
-              <p className="text-slate-400 text-[13px]">Cuando un thread espera un recurso bloqueado por otro, entra en bucle quemando ciclos sin trabajo útil:</p>
-              <code className="block p-2 bg-slate-900 rounded text-amber-300 font-mono text-[13px]">while (lock.isLocked()) &#123; /* spinning */ &#125;</code>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <div className="shrink-0 p-3 bg-slate-900 border border-slate-800 rounded-xl text-[13px] text-center text-slate-400 font-mono">
-        💡 <span className="text-cyan-400 font-bold">Conclusión:</span> SISD se agotó en frecuencia y MIMD/SMP tiene overhead de coordinación. <span className="text-cyan-300 font-bold">SIMD es la solución especialista</span> para cómputo masivo síncrono.
+      <div className="shrink-0 p-3 bg-slate-900 border border-slate-800 rounded-xl text-[13px] text-center text-slate-400 font-mono w-full">
+        💡 <span className="text-cyan-400 font-bold">Conclusión:</span> SISD sigue siendo indispensable donde el orden y la integridad del dato importan más que la velocidad. Por ejemplo en transacciones bancarias, control secuencial crítico. Mientras el paralelismo prioriza throughput a costa de esa garantía.
       </div>
     </div>
   );
