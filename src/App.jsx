@@ -90,25 +90,25 @@ export default function App() {
     {
       id: '1.1',
       section: 1,
-      title: 'El Ciclo Fetch-Decode-Execute',
-      subtitle: 'Slide 1.1 · Fetch · Decode · Execute · Writeback',
-      speaker: "La CPU ejecuta instrucciones en 4 etapas: Fetch (trae de RAM), Decode (interpreta opcode), Execute (ALU opera), Writeback (guarda resultado). Es el latido del modelo Von Neumann y la base de todo procesamiento secuencial.",
-      component: <Slide1_2 />
-    },
-    {
-      id: '1.2',
-      section: 1,
       title: 'Taxonomía de Flynn — Diagrama Interactivo',
-      subtitle: 'Slide 1.3 · SISD · SIMD · MISD · MIMD · Hacé click para explorar',
+      subtitle: 'Slide 1.1 · SISD · SIMD · MISD · MIMD · Hacé click para explorar',
       speaker: "Flynn clasificó las arquitecturas en dos ejes: cuántos flujos de instrucciones y cuántos flujos de datos. SISD es Von Neumann clásico. SIMD es nuestro foco: 1 instrucción, N datos en paralelo. MIMD es el generalista multinúcleo. MISD es el caso teórico. Hacé click en cada componente para ver su rol en cada arquitectura.",
       component: <Slide1_1 />
     },
     {
+      id: '1.2',
+      section: 1,
+      title: 'El Ciclo Fetch-Decode-Execute',
+      subtitle: 'Slide 1.2 · Fetch · Decode · Execute · Writeback',
+      speaker: "La CPU ejecuta instrucciones en 4 etapas: Fetch (trae de RAM), Decode (interpreta opcode), Execute (ALU opera), Writeback (guarda resultado). Es el latido del modelo Von Neumann y la base de todo procesamiento secuencial.",
+      component: <Slide1_2 />
+    },
+    {
       id: '1.limitaciones',
       section: 1,
-      title: 'Limitaciones del SISD y Cuellos de Botella MIMD',
-      subtitle: 'Slide 1.4 · Von Neumann Bottleneck, Muro de Frecuencia y Spinlocks · Secciones 1.3 y 1.4',
-      speaker: "Para cerrar la Parte 1, analizamos por qué SISD se agotó: la frecuencia de reloj se estancó en 2005 por calor y el bus único de Von Neumann limita el ancho de banda. Y en MIMD/SMP, agregar más núcleos genera congestión de bus y spinlocks donde la CPU quema ciclos esperando recursos.",
+      title: 'Limitaciones del SISD',
+      subtitle: 'Slide 1.4 · Von Neumann Bottleneck y Muro de Frecuencia · Sección 1.3',
+      speaker: "Para cerrar la Parte 1, analizamos por qué SISD se agotó en frecuencia: el reloj se estancó en 2005 por calor y el bus único de Von Neumann limita el ancho de banda. Pero SISD no quedó obsoleto, sigue siendo indispensable donde el orden y la integridad del dato importan más que la velocidad, como transacciones bancarias o control secuencial crítico, mientras el paralelismo prioriza throughput a costa de esa garantía.",
       component: <Slide1_LimitacionesSISD />
     },
 
