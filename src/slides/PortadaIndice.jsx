@@ -7,7 +7,7 @@ import { Cpu, Zap, Users, ListOrdered, ArrowRight } from 'lucide-react';
 
 export function SlidePortada() {
   const members = [
-    { name: 'Reyes Ricardo', part: 'Parte 1', topic: 'Problema & Flynn' },
+    { name: 'Reyes Alisson', part: 'Parte 1', topic: 'Problema & Flynn' },
     { name: 'Rivera Yandris', part: 'Parte 2', topic: 'Principio Vectorial' },
     { name: 'Alejandro Andy', part: 'Parte 3', topic: 'Extensiones SIMD' },
     { name: 'Bermudez Gino', part: 'Parte 4', topic: 'Rendimiento & Apps' },
@@ -53,7 +53,7 @@ export function SlidePortada() {
 
 export function SlideIndice({ onSelectSection }) {
   const agenda = [
-    { id: 1, title: 'Parte 1: El Problema Secuencial y Taxonomía de Flynn', desc: 'Límite secuencial, ciclo Von Neumann, matriz 2x2 y SMP vs SIMD.', member: 'Expositor: Reyes Ricardo', color: 'border-cyan-500/40 text-cyan-300' },
+    { id: 1, title: 'Parte 1: El Problema Secuencial y Taxonomía de Flynn', desc: 'Límite secuencial, ciclo Von Neumann, matriz 2x2 y SMP vs SIMD.', member: 'Expositor: Reyes Alisson', color: 'border-cyan-500/40 text-cyan-300' },
     { id: 2, title: 'Parte 2: Arquitectura SIMD y Principio Vectorial', desc: 'El Comandante y 8 soldados, registros vectoriales, Array vs Vector Processor.', member: 'Expositor: Rivera Yandris', color: 'border-purple-500/40 text-purple-300' },
     { id: 3, title: 'Parte 3: Extensiones SIMD Modernas (MMX/SSE/AVX)', desc: 'Evolución 1996-2017, Subword Parallelism, FMA y AMD Zen vs Excavator.', member: 'Expositor: Alejandro Andy', color: 'border-amber-500/40 text-amber-300' },
     { id: 4, title: 'Parte 4: Rendimiento, Aplicaciones y Conclusiones', desc: 'Desglose 304 vs 7 instrs, Throughput, Ley de Amdahl, IA y SoCs Híbridos.', member: 'Expositor: Bermudez Gino', color: 'border-emerald-500/40 text-emerald-300' },
