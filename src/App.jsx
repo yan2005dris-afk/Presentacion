@@ -15,7 +15,7 @@ import {
 // --- SECTIONS METADATA WITH REAL MEMBER NAMES ---
 const SECTIONS = [
   { id: 0, title: 'Inicio y Agenda', member: 'Presentación', color: 'from-blue-600 to-indigo-600' },
-  { id: 1, title: 'Parte 1: El Problema y Taxonomía', member: 'Reyes Ricardo', color: 'from-cyan-500 to-blue-500' },
+  { id: 1, title: 'Parte 1: El Problema y Taxonomía', member: 'Reyes Alisson', color: 'from-cyan-500 to-blue-500' },
   { id: 2, title: 'Parte 2: El Principio Vectorial', member: 'Rivera Yandris', color: 'from-purple-500 to-pink-500' },
   { id: 3, title: 'Parte 3: Extensiones MMX/SSE/AVX', member: 'Alejandro Andy', color: 'from-amber-500 to-orange-500' },
   { id: 4, title: 'Parte 4: Rendimiento y Aplicaciones', member: 'Bermudez Gino', color: 'from-emerald-500 to-teal-500' },
@@ -55,20 +55,20 @@ export default function App() {
       section: 0,
       title: 'Índice General de la Exposición',
       subtitle: 'Agenda de Contenidos · 4 Partes',
-      speaker: "Nuestra exposición se divide en 4 partes temáticas presentadas por Reyes Ricardo, Rivera Yandris, Alejandro Andy y Bermudez Gino.",
+      speaker: "Nuestra exposición se divide en 4 partes temáticas presentadas por Reyes Alisson, Rivera Yandris, Alejandro Andy y Bermudez Gino.",
       component: <SlideIndice onSelectSection={(secId) => {
         const idx = slides.findIndex(s => s.id === `${secId}.intro`);
         if (idx !== -1) setCurrentSlide(idx);
       }} />
     },
 
-    // === PARTE 1: REYES RICARDO ===
+    // === PARTE 1: REYES Alisson ===
     {
       id: '1.intro',
       section: 1,
       title: 'Parte 1: El Problema Secuencial y la Taxonomía de Flynn',
-      subtitle: 'Expositor: Reyes Ricardo · Parte 1',
-      speaker: "Hola a todos, soy Reyes Ricardo. En esta primera parte abordaré el problema del modelo Von Neumann secuencial clásico y cómo Flynn clasificó las arquitecturas paralelas en 1966.",
+      subtitle: 'Expositor: Reyes Alisson · Parte 1',
+      speaker: "Hola a todos, soy Reyes Alisson. En esta primera parte abordaré el problema del modelo Von Neumann secuencial clásico y cómo Flynn clasificó las arquitecturas paralelas en 1966.",
       component: <SlideIntroParte1 />
     },
     {
