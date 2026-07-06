@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   html {
     @apply text-base;
@@ -12,10 +14,13 @@
   }
 
   body {
-    @apply bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-cyan-500 selection:text-black;
+    @apply bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen font-sans antialiased selection:bg-cyan-500 selection:text-black;
   }
 
   :fullscreen {
+    background: #f8fafc;
+  }
+  :fullscreen.dark {
     background: #020617;
   }
 }
