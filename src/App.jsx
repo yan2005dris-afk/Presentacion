@@ -6,7 +6,7 @@ import {
   SlidePortada, SlideIndice,
   Slide1_LimiteSec, Slide1_1, Slide1_1Anim, Slide1_2, Slide1_4, Slide1_LimitacionesSISD,
   SlideIntroParte1,
-  Slide2_1, Slide2_2, Slide2_3, Slide2_4, Slide2_Codigo, SlideIntroParte2,
+  Slide2_1, Slide2_2, Slide2_3, Slide2_4, Slide2_Codigo, Slide2_Divergencia, SlideIntroParte2,
   Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_Chaining, Slide3_4, Slide3_OrganizacionDatos, SlideIntroParte3,
   Slide4_1, Slide4_2, Slide4_3, Slide4_4, Slide4_5, Slide4_Divergencia, SlideIntroParte4,
   SlidePracticaAsm
@@ -124,9 +124,9 @@ export default function App() {
     {
       id: '2.1',
       section: 2,
-      title: 'SIMD: Una Orden, Ocho Soldados',
-      subtitle: 'Slide 2.1 · El Comandante y el Escuadrón',
-      speaker: "Un comandante da una sola orden '¡Saltar!' a 8 soldados. En silicio, una sola decodificación de instrucción emite el comando simultáneamente a N ALUs. Ahorro masivo de energía.",
+      title: '¿Qué es SIMD? Una Orden, Ocho Soldados',
+      subtitle: 'Slide 2.1 · Definición, Flynn, y Demostración Visual',
+      speaker: "Empezamos definiendo qué es SIMD: Single Instruction, Multiple Data. Una sola instrucción decodificada una vez aplicada a N datos en N ALUs en paralelo. La clave es que el costo de fetch+decode se amortiza entre N — por eso es energéticamente eficiente. Uso la analogía del comandante y el escuadrón, y lo conecto con la taxonomía de Flynn que vimos en la Parte 1. Luego paso a la demostración visual: la unidad de control emite 'SUMAR +10' y las 8 ALUs lo ejecutan simultáneamente.",
       component: <Slide2_1 />
     },
     {
@@ -160,6 +160,14 @@ export default function App() {
       subtitle: 'Slide 2.5 · Desglose de Código Secuencial vs Vectorial (Sección 2.3)',
       speaker: "Para profundizar en la sección 2.3 de nuestra guía, aquí comparamos explícitamente el código secuencial elemento por elemento contra la instrucción vectorial VADD que ejecuta la operación sobre todo el registro XMM en un solo ciclo.",
       component: <Slide2_Codigo />
+    },
+    {
+      id: '2.6',
+      section: 2,
+      title: 'Divergencia Condicional — La Kryptonita del SIMD',
+      subtitle: 'Slide 2.6 · Paso a paso del enmascaramiento con VMASK (Sección 5)',
+      speaker: "La Kryptonita del SIMD. Con el ejemplo b[i] = (a[i] > 0) ? a[i]*2 : 0, vemos cómo SIMD ejecuta AMBAS ramas del condicional en todas las lanes y luego usa la máscara VMASK para descartar las que no corresponden. El resultado es correcto, pero pagamos el doble de operaciones. En el peor caso (50% divergencia), el speedup se reduce a la mitad.",
+      component: <Slide2_Divergencia />
     },
 
     // === PARTE 3: ALEJANDRO ANDY ===

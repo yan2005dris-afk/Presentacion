@@ -6,30 +6,80 @@ import { Layers, Activity, CheckCircle2, ShieldAlert } from 'lucide-react';
 // === PARTE 2 — Rivera Yandris ===
 // ==========================================
 
-/* ───────── Slide 2.1 — Una Orden, Ocho Soldados ───────── */
+/* ───────── Slide 2.1 — ¿Qué es SIMD? + Una Orden, Ocho Soldados ───────── */
 
 export function Slide2_1() {
   return (
-    <div className="space-y-6 text-center max-w-5xl mx-auto">
-      <div className="p-4 rounded-2xl bg-slate-900 border border-cyan-400/40 inline-block px-8 shadow-lg shadow-cyan-500/10">
-        <span className="text-[13px] text-cyan-400 font-mono font-bold uppercase tracking-widest block">Unidad de Control Única</span>
-        <h4 className="text-base font-bold text-slate-100 mt-1">Comando: SUMAR +10</h4>
-      </div>
+    <div className="w-full h-full flex flex-col gap-4 max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0">
+        {/* ─── Left: ¿Qué es SIMD? ─── */}
+        <div className="p-5 rounded-2xl bg-slate-900 border border-cyan-500/40 flex flex-col gap-3 min-h-0 overflow-y-auto">
+          <h4 className="text-[12px] font-bold text-cyan-400 flex items-center gap-2 shrink-0">
+            <Layers size={18} /> ¿Qué es SIMD?
+          </h4>
 
-      <div className="grid grid-cols-4 md:grid-cols-8 gap-2 py-2">
-        {[5, 12, 3, 8, 15, 7, 2, 9].map((val, i) => (
-          <motion.div key={i} whileHover={{ y: -4 }} className="space-y-1.5">
-            <div className="p-1.5 rounded bg-slate-950 border border-slate-800 text-[13px] font-mono text-slate-400">ALU{i}</div>
-            <div className="p-2.5 rounded-xl bg-amber-500/20 border border-amber-400 text-amber-300 font-bold font-mono text-[13px]">{val}</div>
-            <div className="text-cyan-400 text-xs">↓</div>
-            <div className="p-2.5 rounded-xl bg-cyan-500/20 border border-cyan-400 text-cyan-300 font-bold font-mono text-[13px] shadow-md">{val + 10}</div>
-          </motion.div>
-        ))}
-      </div>
+          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-[13px] space-y-1">
+            <span className="text-cyan-300 font-bold block">Single Instruction, Multiple Data</span>
+            <p className="text-slate-300 leading-relaxed">
+              Una sola instrucción se decodifica <span className="text-cyan-400 font-bold">una vez</span> y se aplica sobre <span className="text-cyan-400 font-bold">N datos distintos</span> en <span className="text-cyan-400 font-bold">N ALUs en paralelo</span>.
+            </p>
+          </div>
 
-      <p className="text-[13px] text-slate-300 bg-slate-900 p-3 rounded-xl border border-slate-800 max-w-xl mx-auto">
-        💡 <span className="text-cyan-400 font-bold">Impacto Energético:</span> Decodificar es trabajo. Al decodificar 1 sola vez para 8 ALUs, el costo de Fetch/Decode se divide entre 8.
-      </p>
+          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-[13px] space-y-1">
+            <span className="text-amber-300 font-bold block">⚡ Clave: Eficiencia energética</span>
+            <p className="text-slate-300 leading-relaxed">
+              El costo de <span className="text-amber-400 font-mono font-bold">Fetch + Decode</span> se divide entre N elementos. <span className="text-amber-400 font-bold">No pagás N veces el control.</span>
+            </p>
+          </div>
+
+          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-[13px] space-y-1">
+            <span className="text-purple-300 font-bold block">🎖️ Analogía: Comandante + Escuadrón</span>
+            <p className="text-slate-300 leading-relaxed">
+              El comandante da <span className="text-purple-400 font-bold">UNA</span> orden. El escuadrón (N soldados) la ejecuta al mismo tiempo, cada uno sobre su propio objetivo. <span className="text-purple-400 font-bold">Una sola voz de mando, N acciones simultáneas.</span>
+            </p>
+          </div>
+
+          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-[12px] text-slate-400 space-y-1">
+            <span className="text-slate-500 font-mono font-bold">📍 Taxonomía de Flynn:</span>
+            <p className="text-slate-400">1 Instruction Stream · Múltiples Data Streams · 1 Unidad de Control · N ALUs</p>
+            <p className="text-slate-500 italic">(Retomando lo visto en la Parte 1 — Reyes Alisson)</p>
+          </div>
+        </div>
+
+        {/* ─── Right: Visual Demo ─── */}
+        <div className="p-5 rounded-2xl bg-slate-900 border border-cyan-500/40 flex flex-col gap-3 min-h-0">
+          <h4 className="text-[12px] font-bold text-cyan-400 flex items-center gap-2 shrink-0">
+            <Activity size={18} /> Una Orden, Ocho Soldados
+          </h4>
+
+          {/* Control Unit */}
+          <div className="shrink-0 text-center">
+            <div className="p-2.5 rounded-xl bg-slate-950 border border-cyan-400/40 inline-block px-5 shadow-lg shadow-cyan-500/10">
+              <span className="text-[11px] text-cyan-400 font-mono font-bold uppercase tracking-widest block">Unidad de Control Única</span>
+              <h4 className="text-base font-bold text-slate-100 mt-0.5">Comando: SUMAR +10</h4>
+            </div>
+          </div>
+
+          {/* 8 ALUs */}
+          <div className="flex-1 grid grid-cols-4 md:grid-cols-8 gap-1.5 min-h-0 items-center">
+            {[5, 12, 3, 8, 15, 7, 2, 9].map((val, i) => (
+              <motion.div key={i} whileHover={{ y: -4 }} className="space-y-1">
+                <div className="p-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono text-slate-500 text-center">ALU{i}</div>
+                <div className="p-1.5 rounded-lg bg-amber-500/20 border border-amber-400 text-amber-300 font-bold font-mono text-[12px] text-center">{val}</div>
+                <div className="text-cyan-400 text-[10px] text-center">↓</div>
+                <div className="p-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400 text-cyan-300 font-bold font-mono text-[12px] text-center shadow-sm">{val + 10}</div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Energy Impact */}
+          <div className="shrink-0 text-center">
+            <div className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-[12px] text-slate-300 inline-block px-3">
+              💡 <span className="text-cyan-400 font-bold">Resultado:</span> 1 decodificación → 8 resultados. Costo de control ÷ 8.
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -399,6 +449,194 @@ export function Slide2_Codigo() {
   );
 }
 
+/* ───────── Slide 2.6 — Divergencia Condicional (La Kryptonita) ───────── */
+
+export function Slide2_Divergencia() {
+  const [view, setView] = useState('demo');
+  const [step, setStep] = useState(0);
+
+  const steps = [
+    {
+      title: '1. Array de entrada',
+      values: [3, -1, 4, -2],
+      mask: [true, true, true, true],
+      desc: 'Cargamos 4 elementos en un registro XMM (SIMD de 4 lanes). Todos los lanes estan activos.'
+    },
+    {
+      title: '2. Evaluar condicion (a[i] > 0)',
+      values: ['?', '?', '?', '?'],
+      mask: [true, false, true, false],
+      desc: 'La condicion se evalua en paralelo en todas las lanes. Se genera el vector VMASK: 1 = TRUE, 0 = FALSE.'
+    },
+    {
+      title: '3. Ejecutar RAMA TRUE (a*2) en TODAS las lanes',
+      values: [6, -2, 8, -4],
+      mask: [true, false, true, false],
+      desc: 'La ALU ejecuta a*2 en TODAS las lanes, incluso donde no aplica. ⚡ Se desperdicia el calculo de las lanes 1 y 3.'
+    },
+    {
+      title: '4. Ejecutar RAMA FALSE (=0) en TODAS las lanes',
+      values: [0, 0, 0, 0],
+      mask: [false, true, false, true],
+      desc: 'La ALU ejecuta =0 en TODAS las lanes. 💸 Pagamos el costo de las DOS operaciones pero solo usamos la mitad.'
+    },
+    {
+      title: '5. Combinar con VMASK → RESULTADO FINAL',
+      values: [6, 0, 8, 0],
+      mask: [true, true, true, true],
+      desc: 'VMASK selecciona: resultado de TRUE donde mask=1, resultado de FALSE donde mask=0. ¡Resultado correcto, pero pagamos el DOBLE de operaciones!'
+    },
+  ];
+
+  const current = steps[step];
+
+  const next = () => {
+    if (step < steps.length - 1) setStep(s => s + 1);
+    else setStep(0);
+  };
+
+  return (
+    <div className="w-full h-full flex flex-col gap-3 max-w-6xl mx-auto">
+      {/* Top Selector */}
+      <div className="shrink-0 flex items-center justify-between">
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            onClick={() => { setView('demo'); setStep(0); }}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'demo' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
+            🎯 Demostración paso a paso
+          </button>
+          <button
+            onClick={() => setView('impact')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'impact' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
+            📊 Impacto numérico
+          </button>
+        </div>
+        <span className="text-xs font-mono text-slate-500 hidden md:inline">La Kryptonita del SIMD</span>
+      </div>
+
+      {view === 'demo' ? (
+        <div className="flex-1 flex flex-col gap-3 min-h-0">
+          {/* Rule card */}
+          <div className="shrink-0 p-3 rounded-xl bg-slate-900 border border-rose-500/30 text-center">
+            <span className="text-[13px] font-mono text-rose-300">
+              Regla: <span className="font-bold">{'b[i] = (a[i] > 0) ? a[i]*2 : 0'}</span>
+            </span>
+          </div>
+
+          {/* Main demo area */}
+          <div className="flex-1 rounded-2xl bg-slate-900 border border-rose-500/30 p-4 flex flex-col gap-3 min-h-0">
+            {/* Step header */}
+            <div className="shrink-0 flex items-center justify-between">
+              <span className="text-xs font-mono text-rose-400 font-bold flex items-center gap-2">
+                <ShieldAlert size={16} /> {current.title}
+              </span>
+              <span className="text-[11px] text-slate-500 font-mono">Paso {step + 1} / {steps.length}</span>
+            </div>
+
+            {/* 4-lane visualization */}
+            <div className="flex-1 grid grid-cols-4 gap-3 min-h-0 items-center">
+              {current.values.map((val, i) => (
+                <motion.div
+                  key={`${step}-${i}`}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25, delay: i * 0.08 }}
+                  className={`rounded-xl border-2 p-3 flex flex-col items-center justify-center gap-2 ${
+                    current.mask[i]
+                      ? 'bg-slate-950 border-rose-500/40 shadow-md shadow-rose-500/10'
+                      : 'bg-slate-950/50 border-slate-700/40 opacity-40'
+                  }`}>
+                  <span className="text-[10px] font-mono text-slate-500">Lane {i}</span>
+                  <span className={`text-2xl font-bold font-mono ${
+                    current.mask[i] ? 'text-rose-300' : 'text-slate-600'
+                  }`}>
+                    {typeof val === 'number' ? val : '?'}
+                  </span>
+                  <div className={`w-8 h-6 rounded text-[10px] font-mono font-bold flex items-center justify-center ${
+                    current.mask[i]
+                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                      : 'bg-slate-800 text-slate-600 border border-slate-700'
+                  }`}>
+                    {current.mask[i] ? 'M=1' : 'M=0'}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Description */}
+            <div className="shrink-0 p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[13px] text-slate-300 text-center leading-relaxed">
+              {current.desc}
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <div className="shrink-0 flex justify-center gap-4">
+            <button
+              onClick={next}
+              className="px-6 py-2 rounded-xl bg-rose-500/20 border border-rose-500/50 text-rose-300 font-bold text-xs font-mono hover:bg-rose-500/30 transition-all shadow-lg">
+              {step < steps.length - 1 ? 'Siguiente paso →' : '🔄 Repetir'}
+            </button>
+          </div>
+        </div>
+      ) : (
+        /* ─── Impacto numérico view ─── */
+        <div className="flex-1 flex flex-col gap-3 min-h-0">
+          {/* Table */}
+          <div className="flex-1 overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/90">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 bg-slate-950 text-slate-500">
+                  <th className="p-2 font-bold">Situación</th>
+                  <th className="p-2 font-bold text-rose-400">Lanes útiles</th>
+                  <th className="p-2 font-bold text-rose-400">Speedup teórico (AVX2, 8 lanes)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60 text-xs">
+                <tr>
+                  <td className="p-2 text-slate-300">Sin divergencia (100% misma operación)</td>
+                  <td className="p-2 text-emerald-400 font-semibold">8 de 8</td>
+                  <td className="p-2 text-emerald-400 font-semibold">8x</td>
+                </tr>
+                <tr>
+                  <td className="p-2 text-slate-300">50% divergencia (mitad de cada rama)</td>
+                  <td className="p-2 text-amber-400 font-semibold">4 de 8</td>
+                  <td className="p-2 text-amber-400 font-semibold">~4x</td>
+                </tr>
+                <tr>
+                  <td className="p-2 text-slate-300">25% divergencia</td>
+                  <td className="p-2 text-amber-400 font-semibold">6 de 8</td>
+                  <td className="p-2 text-amber-400 font-semibold">~6x</td>
+                </tr>
+                <tr>
+                  <td className="p-2 text-slate-300">Divergencia + datos no alineados</td>
+                  <td className="p-2 text-rose-400 font-semibold">variable</td>
+                  <td className="p-2 text-rose-400 font-semibold">&lt;2x o peor que escalar</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Key insight */}
+          <div className="shrink-0 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-[13px] text-rose-200 leading-relaxed">
+            💡 <span className="font-bold">Regla práctica:</span> cada condicional <span className="font-mono">if/else</span> dentro de un loop que esperas vectorizar te come ~50% del speedup teórico. Si encadenas varios condicionales, SIMD pierde sentido.
+          </div>
+
+          {/* Branchless tip */}
+          <div className="shrink-0 p-3 rounded-xl bg-slate-900 border border-slate-800 text-[13px] text-slate-300 leading-relaxed">
+            <span className="font-bold text-cyan-400">Truco branchless:</span> se puede reescribir como <span className="font-mono text-amber-300">b[i] = max(a[i] * 2, 0)</span> para evitar el <span className="font-mono">if</span> explícito y recuperar velocidad de vectorización.
+          </div>
+
+          {/* Oral version */}
+          <div className="shrink-0 p-3 rounded-xl bg-slate-900 border border-amber-500/30 text-[13px] text-slate-300 leading-relaxed italic">
+            "La kryptonita de SIMD es la divergencia condicional. Cuando algunos elementos necesitan una operación y otros otra, el hardware no puede apagar lanes: ejecuta ambas ramas para todos y enmascara las que no corresponden. Pagaste el doble de operaciones pero usaste la mitad."
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
 /* ───────── Carátula de Sección: Parte 2 ───────── */
 
 export function SlideIntroParte2() {
@@ -412,8 +650,9 @@ export function SlideIntroParte2() {
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.1: Una Orden, Ocho Soldados</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.2: Registros Vectoriales y Control</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.3: Array Processor vs Vector Processor</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.4: Ventajas y La Kryptonita (Divergencia)</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.5: Código Secuencial vs Vectorial (Sec. 2.3)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.4: Ventajas del Procesamiento Vectorial</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.5: Código Secuencial vs Vectorial</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-rose-400 font-semibold">• Slide 2.6: ⚡ Divergencia Condicional (Kryptonita)</div>
       </div>
     </div>
   );
