@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Maximize2, Minimize2, UserCheck, HelpCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Maximize2, Minimize2, UserCheck, HelpCircle, ChevronLeft, ChevronRight, Sun, Moon, Monitor } from 'lucide-react';
+import { useTheme } from './hooks/useTheme';
 
 import {
   SlidePortada, SlideIndice,
   Slide1_LimiteSec, Slide1_1, Slide1_1Anim, Slide1_2, Slide1_4, Slide1_LimitacionesSISD,
   SlideIntroParte1,
-  Slide2_1, Slide2_2, Slide2_3, Slide2_4, Slide2_5, SlideIntroParte2,
+  Slide2_1, Slide2_2, Slide2_3, Slide2_4, SlideIntroParte2,
   Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_Chaining, Slide3_4, Slide3_OrganizacionDatos, SlideIntroParte3,
   Slide4_1, Slide4_2, Slide4_3, Slide4_4, Slide4_5, Slide4_Divergencia, SlideIntroParte4,
   SlidePracticaAsm
@@ -25,6 +26,7 @@ export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showSpeakerNotes, setShowSpeakerNotes] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const { theme, cycle } = useTheme();
 
   useEffect(() => {
     const onFSChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -152,14 +154,6 @@ export default function App() {
       subtitle: 'Slide 2.4 · Ventajas Principales y Requisitos de Regularidad (Sección 2.7)',
       speaker: "En la sección 2.7 analizamos las ventajas clave: multiplicamos el throughput por N y dividimos el costo de decodificación entre N datos. Para aprovechar esto, el problema requiere datos homogéneos, contiguos en memoria y sin dependencias.",
       component: <Slide2_4 />
-    },
-    {
-      id: '2.5',
-      section: 2,
-      title: 'Código Secuencial vs Vectorial (SISD vs SIMD)',
-      subtitle: 'Slide 2.5 · Loop escalar vs VADDPS · Scroll virtual + cálculos',
-      speaker: "Comparamos el mismo problema — sumar dos arrays elemento a elemento — ejecutado como loop escalar SISD contra una instrucción vectorial VADDPS sobre XMM. El SISD hace 4 instrucciones ADD, una por iteración, totalizando 4 ciclos. La instrucción VADDPS ejecuta la suma sobre las 4 lanes del registro XMM en paralelo, totalizando 1 sola instrucción y 1 solo ciclo. Speedup real: 4× en este caso ideal con datos regulares. El scroll virtual arriba permite avanzar ciclo por ciclo para ver el progreso de cada procesador; el panel de cálculos al pie muestra la aritmética exacta en cada momento.",
-      component: <Slide2_5 />
     },
 
     // === PARTE 3: ALEJANDRO ANDY ===
@@ -310,10 +304,20 @@ export default function App() {
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
       if (e.key === 'ArrowLeft') prevSlide();
+      // Theme cycle shortcut — skip when modifiers are held or user is typing.
+      if ((e.key === 't' || e.key === 'T') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const tag = document.activeElement?.tagName;
+        const isEditable =
+          tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || document.activeElement?.isContentEditable;
+        if (!isEditable) {
+          e.preventDefault();
+          cycle();
+        }
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [cycle]);
 
   const slide = slides[currentSlide];
   const activeSection = SECTIONS.find(s => s.id === slide.section);
@@ -347,6 +351,23 @@ export default function App() {
           <span className="text-xs font-mono text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
             {currentSlide + 1} / {slides.length}
           </span>
+          <button
+            onClick={cycle}
+            aria-label={`Tema: ${theme === 'system' ? 'Automático' : theme === 'dark' ? 'Oscuro' : 'Claro'} — click o tecla T para cambiar`}
+            title={`Tema: ${theme} (T para cambiar)`}
+            className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold flex items-center gap-1 transition-all border ${
+              theme === 'system'
+                ? 'bg-slate-900 text-slate-400 border-slate-700'
+                : theme === 'dark'
+                  ? 'bg-slate-800 text-slate-100 border-slate-700'
+                  : 'bg-white text-slate-900 border-slate-300'
+            }`}
+          >
+            {theme === 'light' && <Sun size={14} />}
+            {theme === 'dark' && <Moon size={14} />}
+            {theme === 'system' && <Monitor size={14} />}
+            <span className="uppercase">{theme === 'system' ? 'Auto' : theme === 'dark' ? 'Dark' : 'Light'}</span>
+          </button>
           <button
             onClick={toggleFullscreen}
             className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-600 transition-all"
