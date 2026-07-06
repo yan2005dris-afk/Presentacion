@@ -6,7 +6,7 @@ import {
   SlidePortada, SlideIndice,
   Slide1_LimiteSec, Slide1_1, Slide1_1Anim, Slide1_2, Slide1_4, Slide1_LimitacionesSISD,
   SlideIntroParte1,
-  Slide2_1, Slide2_2, Slide2_3, Slide2_4, Slide2_Codigo, Slide2_Divergencia, SlideIntroParte2,
+  Slide2_1, Slide2_2, Slide2_3, Slide2_4, Slide2_5, SlideIntroParte2,
   Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_Chaining, Slide3_4, Slide3_OrganizacionDatos, SlideIntroParte3,
   Slide4_1, Slide4_2, Slide4_3, Slide4_4, Slide4_5, Slide4_Divergencia, SlideIntroParte4,
   SlidePracticaAsm
@@ -141,8 +141,8 @@ export default function App() {
       id: '2.3',
       section: 2,
       title: 'Dos Maneras de Ser SIMD (Space-Time Duality)',
-      subtitle: 'Slide 2.3 · Array Processor vs Vector Processor',
-      speaker: "Array Processor es paralelismo en espacio: N ALUs independientes en el mismo ciclo. Vector Processor es paralelismo en tiempo: un pipeline segmentado que procesa en cascada, como la CRAY-1.",
+      subtitle: 'Slide 2.3 · Array vs Vector Processors · Filtro interactivo con cálculos',
+      speaker: "Vista consolidada estilo Hennessy & Patterson. Arriba selector de ciclo (C0-C7) que resalta la fila actual en ambos grids. A la izquierda: Array Processor con su CU, los 4 PEs y la grilla Espacio-Tiempo donde en cada ciclo los 4 PEs hacen la MISMA operación sobre datos distintos — paralelismo en espacio, latencia baja, costo alto. A la derecha: Vector Processor con su pipeline de 3 etapas y su grilla Espacio-Tiempo donde se ve la diagonal característica del pipelining — en cada ciclo, las 4 etapas hacen operaciones DISTINTAS sobre el mismo elemento — paralelismo en tiempo, hardware menor, latencia de arranque alta. Ejemplos clásicos: ILLIAC IV (Array) y CRAY-1 (Vector).",
       component: <Slide2_3 />
     },
     {
@@ -156,18 +156,10 @@ export default function App() {
     {
       id: '2.5',
       section: 2,
-      title: 'Código Secuencial vs Vectorial',
-      subtitle: 'Slide 2.5 · Desglose de Código Secuencial vs Vectorial (Sección 2.3)',
-      speaker: "Para profundizar en la sección 2.3 de nuestra guía, aquí comparamos explícitamente el código secuencial elemento por elemento contra la instrucción vectorial VADD que ejecuta la operación sobre todo el registro XMM en un solo ciclo.",
-      component: <Slide2_Codigo />
-    },
-    {
-      id: '2.6',
-      section: 2,
-      title: 'Divergencia Condicional — La Kryptonita del SIMD',
-      subtitle: 'Slide 2.6 · Paso a paso del enmascaramiento con VMASK (Sección 5)',
-      speaker: "La Kryptonita del SIMD. Con el ejemplo b[i] = (a[i] > 0) ? a[i]*2 : 0, vemos cómo SIMD ejecuta AMBAS ramas del condicional en todas las lanes y luego usa la máscara VMASK para descartar las que no corresponden. El resultado es correcto, pero pagamos el doble de operaciones. En el peor caso (50% divergencia), el speedup se reduce a la mitad.",
-      component: <Slide2_Divergencia />
+      title: 'Código Secuencial vs Vectorial (SISD vs SIMD)',
+      subtitle: 'Slide 2.5 · Loop escalar vs VADDPS · Scroll virtual + cálculos',
+      speaker: "Comparamos el mismo problema — sumar dos arrays elemento a elemento — ejecutado como loop escalar SISD contra una instrucción vectorial VADDPS sobre XMM. El SISD hace 4 instrucciones ADD, una por iteración, totalizando 4 ciclos. La instrucción VADDPS ejecuta la suma sobre las 4 lanes del registro XMM en paralelo, totalizando 1 sola instrucción y 1 solo ciclo. Speedup real: 4× en este caso ideal con datos regulares. El scroll virtual arriba permite avanzar ciclo por ciclo para ver el progreso de cada procesador; el panel de cálculos al pie muestra la aritmética exacta en cada momento.",
+      component: <Slide2_5 />
     },
 
     // === PARTE 3: ALEJANDRO ANDY ===
