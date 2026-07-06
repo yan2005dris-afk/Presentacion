@@ -82,7 +82,7 @@ export default function App() {
     {
       id: '1.1b',
       section: 1,
-      title: 'Simulación: Cajero vs Paralelo',
+      title: 'Simulación: Secuencial vs Paralelo',
       subtitle: 'Slide 1.1b · Animación Interactiva · SISD vs SIMD en tiempo real',
       speaker: "Esta animación usa la analogía del chef. SISD es un sartén donde solo cabe 1 hamburguesa a la vez: el chef voltea una por una, 16 veces. SIMD es una parrilla con espacio para 4 hamburguesas y una espátula gigante: con un solo movimiento voltea las 4 a la vez, terminando 4 veces más rápido. La desventaja: si las hamburguesas necesitan cocciones distintas, la espátula gigante no sirve — eso es la divergencia.",
       component: <Slide1_1Anim />

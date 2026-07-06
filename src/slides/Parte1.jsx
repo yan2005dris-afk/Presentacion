@@ -556,7 +556,7 @@ export function SlideIntroParte1() {
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.1: Simulación SISD vs SIMD</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.2: Ciclo Fetch-Decode-Execute</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.3: Taxonomía de Flynn (Diagrama)</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.4: Limitaciones SISD y Cuellos MIMD</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 1.4: Limitaciones SISD</div>
       </div>
     </div>
   );
