@@ -176,7 +176,7 @@ export default function App() {
       section: 3,
       title: 'Parte 3: Extensiones SIMD Modernas (MMX, SSE, AVX)',
       subtitle: 'Expositor: Alejandro Andy · Parte 3',
-      speaker: "Buenas tardes, soy Alejandro Andy. Analizaremos cómo Intel y AMD evolucionaron los registros desde MMX hasta AVX-512, el truco del Subword Parallelism, la práctica en assembler y las instrucciones FMA.",
+      speaker: "Hola, soy Alejandro Andy. Parte 3 es el \"cómo funciona adentro\": historia (64→512 bits), circuito (subword), herramientas (AVX), y lo clave: ISA ≠ implementación (Excavator vs Zen).",
       component: <SlideIntroParte3 />
     },
     {
@@ -184,7 +184,7 @@ export default function App() {
       section: 3,
       title: '1996 → 2017: El Registro que No Para de Crecer',
       subtitle: 'Slide 3.1 · Evolución de Extensiones x86',
-      speaker: "Caso real Intel Atom (2009): sin SSE consumía 100% de CPU procesando video HD. Con SSE, el mismo chip lo manejaba al 40%. Las extensiones SIMD duplicaron el ancho de 64 bits (MMX) a 512 bits (AVX-512).",
+      speaker: "Hook: Atom 2009, video HD: 100% CPU sin SSE → 40% con SSE. Misma máquina. Evolución: MMX (1996, int) → SSE (1999, float) → AVX (2010, 256-bit) → AVX-512 (2017, 512-bit). Cada vez: duplicó ancho + nuevos registros. SSE aún vivo en legacy.",
       component: <Slide3_1 />
     },
     {
@@ -192,7 +192,7 @@ export default function App() {
       section: 3,
       title: 'El Truco del Silicio: Subword Parallelism',
       subtitle: 'Slide 3.2 · Particionamiento del Sumador',
-      speaker: "El circuito sumador de 256 bits es uno solo. Según la instrucción, el hardware ajusta la lógica de carry para funcionar como 8 sumadores de 32 bits, 16 de 16 bits o 32 de 8 bits.",
+      speaker: "Clave: UN sumador físico. Partición por carry (lógica interna). VADDPS = 8 sumadores de 32. PADDW = 16 de 16. PADDB = 32 de 8 (util imágenes). Misma ALU, distinto modo. Eficiencia de silicio.",
       component: <Slide3_2 />
     },
     {
@@ -200,7 +200,7 @@ export default function App() {
       section: 3,
       title: 'El Vocabulario SIMD: Instrucciones Clave y FMA',
       subtitle: 'Slide 3.3 · Ensamblador Vectorial AVX',
-      speaker: "Instrucciones como VMOVAPD y VBROADCASTSD preparan vectores. La estrella es VFMADDPD (Fused Multiply-Add), que calcula (A*B)+C en un solo ciclo con precisión extendida.",
+      speaker: "Toolbox: VMOVAPD (cargar 4 doubles), VBROADCASTSD (replicar escalar), VADDPD/VMULPD. Estrella: VFMADDPD = a*b+c en 1 ciclo (2 FLOPS). Base de AI moderno. 5 instrucciones AVX = 20+ escalares. SSE aún existe pero AVX es el presente.",
       component: <Slide3_3 />
     },
     {
@@ -208,7 +208,7 @@ export default function App() {
       section: 3,
       title: 'Organización de Datos Empaquetados en Registros',
       subtitle: 'Slide 3.4 · Formatos Float32, Double64, Int16 y Byte8 · Sección 3.4 de la Guía',
-      speaker: "En la sección 3.4 de la guía analizamos cómo un registro vectorial YMM de 256 bits subdivide físicamente su espacio: puede albergar 8 floats de 32-bit, 4 doubles de 64-bit, 16 Shorts de 16-bit o 32 bytes de 8-bit para procesamiento masivo.",
+      speaker: "YMM 256 bits → 4 formatos posibles: 8×float32 (gráficos), 4×double64 (física), 16×int16 (DSP), 32×byte (imágenes/redes neuronales INT8). Instrucción elige formato. Button interactivo para cambiar.",
       component: <Slide3_OrganizacionDatos />
     },
     {
@@ -216,7 +216,7 @@ export default function App() {
       section: 3,
       title: 'Práctica: Suma de Arreglos en Assembler',
       subtitle: 'Slide 3.5 · Código Escalar (SISD) vs Vectorial (SSE) · Sección 3.6 de la Guía',
-      speaker: "Para aplicar las instrucciones SSE vistas en la sección 3.6 de la guía, aquí comparamos el código assembler escalar contra el vectorial. Del lado izquierdo, el bucle SISD carga, suma y guarda un elemento por vez. Del lado derecho, con MOVAPS y ADDPS de SSE, procesamos 4 floats por instrucción. Observen la instrucción addps: una sola instrucción haciendo 4 sumas simultáneas.",
+      speaker: "Izq (SISD): cargar 1 float → sumar 1 float → guardar 1. Loop 50 veces. Derecha (SSE): MOVAPS carga 4 floats. ADDPS suma 4 en paralelo. 1 instrucción = 4 operaciones. Observá: SISD necesita 50 adiciones; SSE solo 13 instrucciones ADDPS.",
       component: <SlidePracticaAsm />
     },
     {
@@ -224,23 +224,23 @@ export default function App() {
       section: 3,
       title: 'Fetch-Decode-Execute en SIMD',
       subtitle: 'Slide 3.6 · El Pipeline Vectorial paso a paso',
-      speaker: "El pipeline interno para VADDPD: FETCH carga 1 instrucción, DECODE identifica que opera sobre 256 bits, EXECUTE activa 4 sumadores de 64 bits simultáneamente, y WRITEBACK escribe 256 bits de una vez. La diferencia clave con SISD: 1 decodificación para 4 operaciones efectivas.",
+      speaker: "Pipeline SIMD: FETCH 1 instr → DECODE \"suma 4 doubles\" → EXECUTE 4 sumadores de 64 activados en paralelo → WRITEBACK 256 bits. Vs SISD: Decode produce 1 microop. SIMD Decode produce 1 instr que activa N ALUs. Diferencia: eficiencia de decodificación.",
       component: <Slide3_FDE_SIMD />
     },
     {
-      id: '3.5',
+      id: '3.7',
       section: 3,
       title: 'Encadenamiento Vectorial (Vector Chaining)',
       subtitle: 'Slide 3.7 · Sección 3.8 · CRAY-1 (Seymour Cray, 1976)',
-      speaker: "En la sección 3.8 de la guía analizamos el encadenamiento vectorial introducido por Seymour Cray en la CRAY-1. Permite que el resultado de la ALU multiplicadora pase directamente a la ALU sumadora sin esperar al vector completo. Es el antepasado directo de la instrucción FMA moderna.",
+      speaker: "Chaining (CRAY-1, 1976): resultado de ALU multiplicadora →directamente→ ALU sumadora, sin esperar vector completo. Sin chaining: 11+4+6=21 ciclos. Con chaining: ~11 ciclos (paralelismo real). FMA moderno es la versión: a*b+c en 1 instrucción = chaining fusionado.",
       component: <Slide3_Chaining />
     },
     {
-      id: '3.6',
+      id: '3.8',
       section: 3,
       title: 'El ISA es el Mismo. El Hardware No.',
       subtitle: 'Slide 3.8 · AMD Excavator vs AMD Zen',
-      speaker: "Excavator coordinaba dos unidades FMAC de 128 bits con mayor latencia. Zen implementó una unidad nativa de 256 bits con crossbar, demostrando cómo la microarquitectura cambia el rendimiento real.",
+      speaker: "PLOT TWIST: Excavator = 2×FMAC-128 coordinadas (overhead). Zen = 1×FMAC-256 nativa (limpio). Mismo VFMADDPD. Zen ~40-50% más rápido, menos watts. ISA ≠ implementación. Mismo contrato, distinta solución de hardware. Por qué? Diseño, área, mercado.",
       component: <Slide3_4 />
     },
 
