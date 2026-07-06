@@ -13,50 +13,50 @@ export function Slide2_1() {
     <div className="w-full h-full flex flex-col gap-4 max-w-6xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0">
         {/* ─── Left: ¿Qué es SIMD? ─── */}
-        <div className="p-5 rounded-2xl bg-slate-900 border border-cyan-500/40 flex flex-col gap-3 min-h-0 overflow-y-auto">
-          <h4 className="text-[12px] font-bold text-cyan-400 flex items-center gap-2 shrink-0">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-cyan-500/40 flex flex-col gap-3 min-h-0 overflow-y-auto">
+          <h4 className="text-[12px] font-bold text-cyan-700 dark:text-cyan-400 flex items-center gap-2 shrink-0">
             <Layers size={18} /> ¿Qué es SIMD?
           </h4>
 
-          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-[13px] space-y-1">
-            <span className="text-cyan-300 font-bold block">Single Instruction, Multiple Data</span>
-            <p className="text-slate-300 leading-relaxed">
-              Una sola instrucción se decodifica <span className="text-cyan-400 font-bold">una vez</span> y se aplica sobre <span className="text-cyan-400 font-bold">N datos distintos</span> en <span className="text-cyan-400 font-bold">N ALUs en paralelo</span>.
+          <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-[13px] space-y-1">
+            <span className="text-cyan-700 dark:text-cyan-300 font-bold block">Single Instruction, Multiple Data</span>
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+              Una sola instrucción se decodifica <span className="text-cyan-700 dark:text-cyan-400 font-bold">una vez</span> y se aplica sobre <span className="text-cyan-700 dark:text-cyan-400 font-bold">N datos distintos</span> en <span className="text-cyan-700 dark:text-cyan-400 font-bold">N ALUs en paralelo</span>.
             </p>
           </div>
 
-          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-[13px] space-y-1">
-            <span className="text-amber-300 font-bold block">⚡ Clave: Eficiencia energética</span>
-            <p className="text-slate-300 leading-relaxed">
-              El costo de <span className="text-amber-400 font-mono font-bold">Fetch + Decode</span> se divide entre N elementos. <span className="text-amber-400 font-bold">No pagás N veces el control.</span>
+          <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-[13px] space-y-1">
+            <span className="text-amber-700 dark:text-amber-300 font-bold block">⚡ Clave: Eficiencia energética</span>
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+              El costo de <span className="text-amber-700 dark:text-amber-400 font-mono font-bold">Fetch + Decode</span> se divide entre N elementos. <span className="text-amber-700 dark:text-amber-400 font-bold">No pagás N veces el control.</span>
             </p>
           </div>
 
-          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-[13px] space-y-1">
-            <span className="text-purple-300 font-bold block">🎖️ Analogía: Comandante + Escuadrón</span>
-            <p className="text-slate-300 leading-relaxed">
-              El comandante da <span className="text-purple-400 font-bold">UNA</span> orden. El escuadrón (N soldados) la ejecuta al mismo tiempo, cada uno sobre su propio objetivo. <span className="text-purple-400 font-bold">Una sola voz de mando, N acciones simultáneas.</span>
+          <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-[13px] space-y-1">
+            <span className="text-purple-700 dark:text-purple-300 font-bold block">🎖️ Analogía: Comandante + Escuadrón</span>
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+              El comandante da <span className="text-purple-700 dark:text-purple-400 font-bold">UNA</span> orden. El escuadrón (N soldados) la ejecuta al mismo tiempo, cada uno sobre su propio objetivo. <span className="text-purple-700 dark:text-purple-400 font-bold">Una sola voz de mando, N acciones simultáneas.</span>
             </p>
           </div>
 
-          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-[12px] text-slate-400 space-y-1">
+          <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-[12px] text-slate-600 dark:text-slate-400 space-y-1">
             <span className="text-slate-500 font-mono font-bold">📍 Taxonomía de Flynn:</span>
-            <p className="text-slate-400">1 Instruction Stream · Múltiples Data Streams · 1 Unidad de Control · N ALUs</p>
+            <p className="text-slate-600 dark:text-slate-400">1 Instruction Stream · Múltiples Data Streams · 1 Unidad de Control · N ALUs</p>
             <p className="text-slate-500 italic">(Retomando lo visto en la Parte 1 — Reyes Alisson)</p>
           </div>
         </div>
 
         {/* ─── Right: Visual Demo ─── */}
-        <div className="p-5 rounded-2xl bg-slate-900 border border-cyan-500/40 flex flex-col gap-3 min-h-0">
-          <h4 className="text-[12px] font-bold text-cyan-400 flex items-center gap-2 shrink-0">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-cyan-500/40 flex flex-col gap-3 min-h-0">
+          <h4 className="text-[12px] font-bold text-cyan-700 dark:text-cyan-400 flex items-center gap-2 shrink-0">
             <Activity size={18} /> Una Orden, Ocho Soldados
           </h4>
 
           {/* Control Unit */}
           <div className="shrink-0 text-center">
-            <div className="p-2.5 rounded-xl bg-slate-950 border border-cyan-400/40 inline-block px-5 shadow-lg shadow-cyan-500/10">
-              <span className="text-[11px] text-cyan-400 font-mono font-bold uppercase tracking-widest block">Unidad de Control Única</span>
-              <h4 className="text-base font-bold text-slate-100 mt-0.5">Comando: SUMAR +10</h4>
+            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-cyan-500/40 dark:border-cyan-400/40 inline-block px-5 shadow-lg shadow-cyan-500/10">
+              <span className="text-[11px] text-cyan-700 dark:text-cyan-400 font-mono font-bold uppercase tracking-widest block">Unidad de Control Única</span>
+              <h4 className="text-base font-bold text-slate-900 dark:text-slate-100 mt-0.5">Comando: SUMAR +10</h4>
             </div>
           </div>
 
@@ -64,18 +64,18 @@ export function Slide2_1() {
           <div className="flex-1 grid grid-cols-4 md:grid-cols-8 gap-1.5 min-h-0 items-center">
             {[5, 12, 3, 8, 15, 7, 2, 9].map((val, i) => (
               <motion.div key={i} whileHover={{ y: -4 }} className="space-y-1">
-                <div className="p-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono text-slate-500 text-center">ALU{i}</div>
-                <div className="p-1.5 rounded-lg bg-amber-500/20 border border-amber-400 text-amber-300 font-bold font-mono text-[12px] text-center">{val}</div>
-                <div className="text-cyan-400 text-[10px] text-center">↓</div>
-                <div className="p-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400 text-cyan-300 font-bold font-mono text-[12px] text-center shadow-sm">{val + 10}</div>
+                <div className="p-1 rounded bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[10px] font-mono text-slate-500 dark:text-slate-500 text-center">ALU{i}</div>
+                <div className="p-1.5 rounded-lg bg-amber-500/20 border border-amber-500 dark:border-amber-400 text-amber-700 dark:text-amber-300 font-bold font-mono text-[12px] text-center">{val}</div>
+                <div className="text-cyan-700 dark:text-cyan-400 text-[10px] text-center">↓</div>
+                <div className="p-1.5 rounded-lg bg-cyan-500/20 border border-cyan-500 dark:border-cyan-400 text-cyan-700 dark:text-cyan-300 font-bold font-mono text-[12px] text-center shadow-sm">{val + 10}</div>
               </motion.div>
             ))}
           </div>
 
           {/* Energy Impact */}
           <div className="shrink-0 text-center">
-            <div className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-[12px] text-slate-300 inline-block px-3">
-              💡 <span className="text-cyan-400 font-bold">Resultado:</span> 1 decodificación → 8 resultados. Costo de control ÷ 8.
+            <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[12px] text-slate-700 dark:text-slate-300 inline-block px-3">
+              💡 <span className="text-cyan-700 dark:text-cyan-400 font-bold">Resultado:</span> 1 decodificación → 8 resultados. Costo de control ÷ 8.
             </div>
           </div>
         </div>
@@ -87,69 +87,232 @@ export function Slide2_1() {
 /* ───────── Slide 2.2 — Registros Vectoriales ───────── */
 
 export function Slide2_2() {
-  const [reg, setReg] = useState('xmm');
+  const [reg, setReg] = useState('ymm'); // Default to YMM (8 lanes) for a balanced view
+  const [vlen, setVlen] = useState(8);
+  const [stride, setStride] = useState(1);
+  const [mask, setMask] = useState(Array(16).fill(true));
+
   const data = [3.14, 2.71, 1.41, 0.57, 4.20, 5.55, 6.28, 7.89, 8.31, 9.81, 10.5, 11.7, 12.3, 13.9, 14.2, 15.6];
 
   const regConfig = {
-    xmm: { label: 'Registro Vectorial XMM (128 Bits)', count: 4, sub: '4 × float32 (SSE)', gridCols: 'grid-cols-4' },
-    ymm: { label: 'Registro Vectorial YMM (256 Bits)', count: 8, sub: '8 × float32 (AVX) — el ancho se duplica', gridCols: 'grid-cols-4' },
-    zmm: { label: 'Registro Vectorial ZMM (512 Bits)', count: 16, sub: '16 × float32 (AVX-512) — el ancho se duplica otra vez', gridCols: 'grid-cols-8' },
+    xmm: { label: 'Registro Vectorial XMM (128 Bits)', count: 4, sub: '4 × float32 (SSE)', gridCols: 'grid-cols-4', max: 4 },
+    ymm: { label: 'Registro Vectorial YMM (256 Bits)', count: 8, sub: '8 × float32 (AVX) — el ancho se duplica', gridCols: 'grid-cols-8', max: 8 },
+    zmm: { label: 'Registro Vectorial ZMM (512 Bits)', count: 16, sub: '16 × float32 (AVX-512) — el ancho se duplica otra vez', gridCols: 'grid-cols-16', max: 16 },
   };
+
   const cfg = regConfig[reg];
 
+  const handleRegChange = (newReg) => {
+    setReg(newReg);
+    const newMax = newReg === 'xmm' ? 4 : newReg === 'ymm' ? 8 : 16;
+    setVlen(newMax);
+  };
+
+  const toggleMask = (idx) => {
+    setMask(prev => {
+      const next = [...prev];
+      next[idx] = !next[idx];
+      return next;
+    });
+  };
+
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-        <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
-          <span className="text-[13px] text-slate-500 font-mono">Registro Escalar (32 Bits)</span>
-          <div className="p-3 rounded-xl bg-slate-950 border border-slate-700 text-center font-mono text-slate-300 font-bold text-sm">[ 3.14159 ]</div>
+    <div className="space-y-5 max-w-6xl mx-auto p-1 select-none">
+      {/* ── SECCIÓN 1: COMPARATIVA VISUAL DE ANCHO ── */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+
+        {/* Registro Escalar Físico */}
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+          <div>
+            <span className="text-[10px] text-slate-500 font-mono uppercase tracking-wider block">Registro Escalar (32 Bits)</span>
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">Procesa 1 solo operando de 32 bits a la vez.</p>
+          </div>
+          <div className="mt-3">
+            <div className="w-1/4 h-12 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 flex items-center justify-center font-mono text-slate-700 dark:text-slate-300 font-bold text-sm shadow-inner">
+              3.14
+            </div>
+            <span className="text-[9px] font-mono text-slate-500 dark:text-slate-600 block mt-1">lane 0</span>
+          </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-900 border border-cyan-500/50 space-y-3">
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-[12px] text-cyan-400 font-mono">{cfg.label}</span>
-            <div className="flex gap-1">
+        {/* Registro Vectorial Físico y Controles de Ancho */}
+        <div className="md:col-span-2 p-3.5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-cyan-500/30 flex flex-col justify-between">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <span className="text-[10px] text-cyan-700 dark:text-cyan-400 font-mono uppercase tracking-wider block">Registro Vectorial ({cfg.count * 32} Bits)</span>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">Múltiples lanes contiguas que operan en paralelo.</p>
+            </div>
+            <div className="flex gap-1 shrink-0">
               {['xmm', 'ymm', 'zmm'].map((r) => (
                 <button
                   key={r}
-                  onClick={() => setReg(r)}
-                  className={`px-2.5 py-1 rounded-md text-[11px] font-bold font-mono uppercase transition-all ${
+                  onClick={() => handleRegChange(r)}
+                  className={`px-3 py-1 rounded-lg text-[10px] font-bold font-mono uppercase transition-all ${
                     reg === r
-                      ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30'
-                      : 'bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700'
+                      ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30 ring-1 ring-cyan-400'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 border border-slate-300 dark:border-slate-700'
                   }`}>
                   {r}
                 </button>
               ))}
             </div>
           </div>
-          <motion.div
-            key={reg}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.25 }}
-            className={`grid ${cfg.gridCols} gap-1 p-1.5 rounded-xl bg-slate-950 border border-cyan-500/30 text-center font-mono text-[11px] font-bold text-cyan-300`}>
-            {data.slice(0, cfg.count).map((val, i) => (
-              <motion.div
-                key={`${reg}-${i}`}
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, delay: i * 0.015 }}
-                className="bg-cyan-500/20 p-1.5 rounded">
-                {val}
-              </motion.div>
-            ))}
-          </motion.div>
-          <div className="text-[11px] text-slate-400 font-mono text-center pt-1">
-            {cfg.sub}
+
+          {/* Render dinámico de las LANES */}
+          <div className="mt-3">
+            <div
+              className="grid gap-1 p-1 rounded-xl bg-slate-50 dark:bg-slate-950 border border-cyan-500/20 shadow-inner"
+              style={{ gridTemplateColumns: `repeat(${cfg.count}, minmax(0, 1fr))` }}
+            >
+              {data.slice(0, cfg.count).map((val, i) => {
+                const isIdle = i >= vlen;
+                const isMasked = !mask[i];
+                const isSkipped = stride === 2 && i % 2 !== 0;
+
+                let cellClass = "bg-cyan-500/10 border-cyan-500/40 text-cyan-700 dark:text-cyan-300";
+                let statusText = `${val}`;
+
+                if (isIdle) {
+                  cellClass = "bg-slate-100 dark:bg-slate-950 border-slate-300 dark:border-slate-900 text-slate-600 dark:text-slate-700 opacity-30";
+                  statusText = "IDLE";
+                } else if (isMasked) {
+                  cellClass = "bg-red-100/50 dark:bg-red-950/20 border-red-500/30 text-red-700/50 dark:text-red-500/50 line-through";
+                  statusText = "MASK";
+                } else if (isSkipped) {
+                  cellClass = "bg-amber-100/50 dark:bg-amber-950/20 border-amber-500/20 text-amber-700/40 dark:text-amber-500/40";
+                  statusText = "SKIP";
+                }
+
+                return (
+                  <div key={i} className="text-center font-mono">
+                    <motion.div
+                      animate={{ scale: isIdle ? 0.95 : 1 }}
+                      className={`h-11 rounded-lg border flex flex-col justify-center items-center transition-all duration-300 ${cellClass}`}
+                    >
+                      <span className="text-[10px] font-bold">{statusText}</span>
+                    </motion.div>
+                    <span className="text-[8px] text-slate-500 dark:text-slate-600 block mt-0.5">[{i}]</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="text-[10px] text-slate-500 dark:text-slate-500 font-mono text-center mt-1">
+              {cfg.sub}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 grid grid-cols-3 gap-4 text-[13px]">
-        <div className="bg-slate-950 p-3 rounded-xl border border-slate-800"><span className="text-cyan-400 font-mono font-bold block">VLEN (Vector Length)</span> Longitud o cantidad de elementos activos en el registro.</div>
-        <div className="bg-slate-950 p-3 rounded-xl border border-slate-800"><span className="text-amber-400 font-mono font-bold block">VSTR (Vector Stride)</span> Distancia en memoria entre elementos consecutivos.</div>
-        <div className="bg-slate-950 p-3 rounded-xl border border-slate-800"><span className="text-purple-400 font-mono font-bold block">VMASK (Vector Mask)</span> Máscara de bits para activar/desactivar elementos en condicionales.</div>
+      {/* ── SECCIÓN 2: CONTROL DECK INTERACTIVO ── */}
+      <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+        <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono uppercase tracking-wider block">Panel de Control de Registros</span>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          {/* Slider de VLEN */}
+          <div className="space-y-2">
+            <div className="flex justify-between items-center text-[11px] font-mono">
+              <span className="text-cyan-700 dark:text-cyan-400 font-bold">VLEN (Vector Length)</span>
+              <span className="bg-cyan-500/10 px-2 py-0.5 rounded text-cyan-700 dark:text-cyan-300 font-bold">{vlen} / {cfg.max}</span>
+            </div>
+            <input
+              type="range"
+              min="1"
+              max={cfg.max}
+              value={vlen}
+              onChange={(e) => setVlen(parseInt(e.target.value))}
+              className="w-full h-1.5 bg-slate-200 dark:bg-slate-950 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+            />
+            <p className="text-[10px] text-slate-500 leading-snug">Limita la cantidad de lanes activas para la operación actual.</p>
+          </div>
+
+          {/* Selector de VSTR (Stride) */}
+          <div className="space-y-2">
+            <div className="flex justify-between items-center text-[11px] font-mono">
+              <span className="text-amber-700 dark:text-amber-400 font-bold">VSTR (Stride)</span>
+              <span className="bg-amber-500/10 px-2 py-0.5 rounded text-amber-700 dark:text-amber-300 font-bold">Paso = {stride}</span>
+            </div>
+            <div className="flex gap-2">
+              {[1, 2].map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setStride(s)}
+                  className={`flex-1 py-1 rounded-lg text-[10.5px] font-mono font-bold transition-all border ${
+                    stride === s
+                      ? 'bg-amber-500/20 border-amber-500 dark:border-amber-400 text-amber-700 dark:text-amber-300'
+                      : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700'
+                  }`}
+                >
+                  Stride {s} ({s === 1 ? 'Contiguo' : 'Saltado'})
+                </button>
+              ))}
+            </div>
+            <p className="text-[10px] text-slate-500 leading-snug">Determina la distancia en memoria física al leer el vector.</p>
+          </div>
+
+          {/* Interruptor de VMASK (Interactive Pills) */}
+          <div className="space-y-2">
+            <div className="text-[11px] font-mono">
+              <span className="text-purple-700 dark:text-purple-400 font-bold">VMASK (Vector Mask)</span>
+              <span className="text-[9px] text-slate-500 ml-2">(Click lanes abajo para enmascarar)</span>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {Array.from({ length: cfg.count }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => toggleMask(i)}
+                  disabled={i >= vlen}
+                  className={`w-6 h-6 rounded text-[9px] font-mono font-bold transition-all ${
+                    i >= vlen
+                      ? 'bg-slate-100 dark:bg-slate-950 text-slate-400 dark:text-slate-800 border border-slate-200 dark:border-slate-950 cursor-not-allowed'
+                      : mask[i]
+                        ? 'bg-purple-500/20 border border-purple-500 dark:border-purple-400 text-purple-700 dark:text-purple-300 hover:bg-purple-500/30'
+                        : 'bg-red-500/20 border border-red-500/40 text-red-700 dark:text-red-400 hover:bg-red-500/30'
+                  }`}
+                >
+                  {i >= vlen ? '—' : mask[i] ? '1' : '0'}
+                </button>
+              ))}
+            </div>
+            <p className="text-[10px] text-slate-500 leading-snug">Predicado booleano. Las lanes en '0' bloquean la escritura del resultado.</p>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ── SECCIÓN 3: TARJETAS EXPLICATIVAS DINÁMICAS ── */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-[12px]">
+
+        {/* VLEN Info */}
+        <div className="bg-slate-50 dark:bg-slate-950/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-1.5">
+          <span className="text-cyan-700 dark:text-cyan-400 font-mono font-bold block text-[12px]">VLEN (Vector Length)</span>
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+            Actualmente procesando <span className="text-cyan-700 dark:text-cyan-300 font-bold">{vlen} elementos</span> en lugar del máximo de {cfg.max}.
+            Las lanes desde la <span className="text-slate-500 font-bold">[{vlen}]</span> en adelante quedan en estado <span className="text-slate-500 font-bold">IDLE</span> (inactivas).
+          </p>
+        </div>
+
+        {/* VSTR Info */}
+        <div className="bg-slate-50 dark:bg-slate-950/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-1.5">
+          <span className="text-amber-700 dark:text-amber-400 font-mono font-bold block text-[12px]">VSTR (Vector Stride)</span>
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+            {stride === 1 ? (
+              <span>Paso unitario (<span className="text-amber-700 dark:text-amber-300 font-bold">Stride 1</span>). La CPU lee los datos de memoria en forma consecutiva. Máximo aprovechamiento de la caché.</span>
+            ) : (
+              <span>Paso no unitario (<span className="text-amber-700 dark:text-amber-300 font-bold">Stride 2</span>). La CPU lee un elemento y salta el siguiente. Esto causa que las lanes impares queden marcadas como <span className="text-amber-700 dark:text-amber-300 font-bold">SKIP</span>.</span>
+            )}
+          </p>
+        </div>
+
+        {/* VMASK Info */}
+        <div className="bg-slate-50 dark:bg-slate-950/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-1.5">
+          <span className="text-purple-700 dark:text-purple-400 font-mono font-bold block text-[12px]">VMASK (Vector Mask)</span>
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+            Hay <span className="text-purple-700 dark:text-purple-300 font-bold">{mask.slice(0, vlen).filter(x => !x).length} lanes</span> con máscara '0' dentro del rango activo.
+            Aunque estas lanes ejecuten la operación físicamente en el silicio, el writeback en memoria será omitido (bloqueado).
+          </p>
+        </div>
+
       </div>
     </div>
   );
@@ -157,30 +320,12 @@ export function Slide2_2() {
 
 /* ───────── Slide 2.3 — Array vs Vector Processor (Interactivo) ───────── */
 
-const PIPE_STAGES = [
-  { id: 'load', short: 'LD', label: 'Load', op: 'LD' },
-  { id: 'mul', short: 'MUL', label: 'Multiply ×2', op: 'MUL' },
-  { id: 'add', short: 'ADD', label: 'Add +5', op: 'ADD' },
-  { id: 'store', short: 'ST', label: 'Store', op: 'ST' },
-];
-
 const ST_OPS = ['LD', 'MUL', 'ADD', 'ST'];
 const ST_COLORS = {
   LD: '#06b6d4',
   MUL: '#a855f7',
   ADD: '#f59e0b',
   ST: '#10b981',
-};
-
-// Función pura: aplica la etapa sIdx a un valor inicial a[i]
-const applyStage = (val, sIdx) => {
-  switch (sIdx) {
-    case 0: return val;          // LD: raw
-    case 1: return val * 2;       // MUL: ×2
-    case 2: return val * 2 + 5;   // ADD: +5
-    case 3: return val * 2 + 5;   // ST: resultado
-    default: return val;
-  }
 };
 
 function ArrayDiag({ cycle: externalCycle }) {
@@ -202,7 +347,7 @@ function ArrayDiag({ cycle: externalCycle }) {
   const glowColor = activeOp ? ST_COLORS[activeOp] : '#475569';
 
   return (
-    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-950/50 border border-slate-800 w-full h-full min-h-[280px]">
+    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 w-full h-full min-h-[280px]">
       <svg viewBox="0 0 420 260" className="w-full max-w-[420px] h-auto">
         {/* CU */}
         <rect x="110" y="10" width="200" height="35" rx="6" fill="#1e293b" stroke={glowColor} strokeWidth={activeOp ? 2 : 1} className="transition-all duration-300" />
@@ -211,7 +356,7 @@ function ArrayDiag({ cycle: externalCycle }) {
         </text>
 
         {/* Bus line from CU to PEs */}
-        <path d="M 210,45 L 210,70 M 60,70 L 360,70 M 60,70 L 60,95 M 160,70 L 160,95 M 260,70 L 260,95 M 360,70 L 360,95" 
+        <path d="M 210,45 L 210,70 M 60,70 L 360,70 M 60,70 L 60,95 M 160,70 L 160,95 M 260,70 L 260,95 M 360,70 L 360,95"
           stroke={activeOp ? glowColor : '#334155'} strokeWidth="1.5" fill="none" className="transition-all duration-300" />
 
         {/* PEs */}
@@ -219,7 +364,7 @@ function ArrayDiag({ cycle: externalCycle }) {
           const isPEActive = activeOp !== null;
           const peColor = isPEActive ? glowColor : '#334155';
           const rx = 60 + i * 100;
-          
+
           let valLabel = '—';
           if (cycle === 0) valLabel = `a[${i}]`;
           else if (cycle === 1) valLabel = `${DATA[i]}×2`;
@@ -307,7 +452,7 @@ function VectorDiag({ cycle: externalCycle }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-950/50 border border-slate-800 w-full h-full min-h-[280px]">
+    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 w-full h-full min-h-[280px]">
       <svg viewBox="0 0 540 200" className="w-full max-w-[540px] h-auto">
         {/* Stage Boxes */}
         {[
@@ -386,49 +531,16 @@ function VectorDiag({ cycle: externalCycle }) {
 }
 
 export function Slide2_3() {
-  const [cycle, setCycle] = useState(3);
   const [filter, setFilter] = useState('both'); // 'array' | 'vector' | 'both'
-
-  const DATA = [3, 12, 3, 8, 15, 7, 2, 9];
-
-  const next = () => {
-    setCycle(c => (c >= 10 ? 0 : c + 1));
-  };
 
   return (
     <div className="w-full h-full flex flex-col gap-2 max-w-7xl mx-auto p-2">
-      {/* ── Header con selector de ciclo (SOLO si filter === 'both') ── */}
+      {/* ── Header ── */}
       <div className="shrink-0 flex items-center justify-between px-2">
         <div>
-          <h3 className="text-base font-bold text-slate-100">Array <span className="text-slate-500">vs.</span> Vector Processors</h3>
+          <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">Array <span className="text-slate-500">vs.</span> Vector Processors</h3>
           <p className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">Dualidad Espacio-Tiempo · SIMD</p>
         </div>
-        {filter === 'both' && (
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] font-mono text-slate-500 shrink-0">Cycle:</span>
-            {/* ── Scroll Virtual ── */}
-            <div className="flex-1 max-w-[320px] overflow-x-auto scrollbar-thin scroll-smooth snap-x snap-mandatory"
-              style={{ scrollbarWidth: 'thin' }}>
-              <div className="flex items-center gap-1 px-1">
-                {Array.from({ length: 11 }, (_, i) => (
-                  <button key={i}
-                    onClick={() => setCycle(i)}
-                    className={`shrink-0 snap-center w-8 h-8 rounded-lg text-[11px] font-mono font-bold transition-all ${
-                      cycle === i
-                        ? 'bg-rose-500 text-white shadow-md shadow-rose-500/40 ring-2 ring-rose-400 scale-110'
-                        : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 hover:border-slate-600'
-                    }`}>
-                    {i}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <button onClick={next}
-              className="shrink-0 px-2.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 text-[10px] font-mono font-bold hover:bg-slate-700">
-              ▶ Next
-            </button>
-          </div>
-        )}
       </div>
 
       {/* ── Filtro: Array / Vector / Ambos ── */}
@@ -436,18 +548,18 @@ export function Slide2_3() {
         {[
           { id: 'array', label: '🧮 Array', desc: 'Solo Array Processor' },
           { id: 'vector', label: '🏭 Vector', desc: 'Solo Vector Processor' },
-          { id: 'both', label: '⚡ Ambos', desc: 'Comparativa lado a lado' },
+          { id: 'both', label: '⚡ Ambos', desc: 'Tabla Comparativa' },
         ].map(opt => (
           <button key={opt.id}
             onClick={() => setFilter(opt.id)}
             className={`px-3 py-1 rounded-lg text-[11px] font-mono font-bold transition-all ${
-filter === opt.id
+              filter === opt.id
                 ? opt.id === 'array'
                   ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/30'
                   : opt.id === 'vector'
                     ? 'bg-purple-500 text-white shadow-md shadow-purple-500/30'
                     : 'bg-rose-500 text-white shadow-md shadow-rose-500/30'
-                : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 hover:border-slate-600'
+                : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-slate-800 hover:text-slate-900 dark:hover:text-slate-200 hover:border-slate-400 dark:hover:border-slate-600'
             }`}>
             {opt.label}
           </button>
@@ -456,25 +568,25 @@ filter === opt.id
 
       {/* ── Content Area based on Filter ── */}
       {filter === 'array' && (
-        <div className="flex-1 flex flex-col md:flex-row gap-6 p-5 rounded-2xl bg-slate-900 border-2 border-amber-500/40 items-center justify-center min-h-0 overflow-y-auto">
+        <div className="flex-1 flex flex-col md:flex-row gap-6 p-5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-amber-500/40 items-center justify-center min-h-0 overflow-y-auto">
           <div className="flex-1 max-w-xl w-full">
             <ArrayDiag />
           </div>
           <div className="flex-1 flex flex-col gap-4 justify-center max-w-lg">
             <div className="space-y-1">
-              <span className="text-[10px] font-mono text-amber-500/70 uppercase tracking-wider block">Paralelismo en ESPACIO</span>
-              <h4 className="text-xl font-bold text-amber-400">Procesador Matricial (Array Processor)</h4>
+              <span className="text-[10px] font-mono text-amber-600/70 dark:text-amber-500/70 uppercase tracking-wider block">Paralelismo en ESPACIO</span>
+              <h4 className="text-xl font-bold text-amber-700 dark:text-amber-400">Procesador Matricial (Array Processor)</h4>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Consiste en un conjunto de <strong className="text-amber-300">N Unidades de Procesamiento (PEs) idénticas</strong> que ejecutan la misma instrucción de forma síncrona, cada una sobre su propio conjunto de datos.
+            <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+              Consiste en un conjunto de <strong className="text-amber-700 dark:text-amber-300">N Unidades de Procesamiento (PEs) idénticas</strong> que ejecutan la misma instrucción de forma síncrona, cada una sobre su propio conjunto de datos.
             </p>
-            <ul className="text-xs text-slate-400 space-y-2 list-disc list-inside">
+            <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-2 list-disc list-inside">
               <li>Una única **Unidad de Control (CU)** decodifica la instrucción y la transmite (broadcast) a todos los PEs.</li>
               <li>Cada PE cuenta con una **ALU idéntica y de propósito general** (capaz de realizar sumas, multiplicaciones, etc.) y memoria local.</li>
               <li>Todas las ALUs operan en **lockstep** (al unísono). Si la CU emite un ADD, todos los PEs suman en ese ciclo.</li>
-              <li>Ejemplo histórico emblemático: la supercomputadora <strong className="text-amber-300 font-mono">ILLIAC IV</strong> (década de 1960).</li>
+              <li>Ejemplo histórico emblemático: la supercomputadora <strong className="text-amber-700 dark:text-amber-300 font-mono">ILLIAC IV</strong> (década de 1960).</li>
             </ul>
-            <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200 leading-snug">
+            <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-200 leading-snug">
               <strong>Kryptonita:</strong> Si los datos requieren caminos de ejecución distintos (un condicional `if/else`), algunos PEs deben enmascararse (desactivarse), perdiendo paralelismo.
             </div>
           </div>
@@ -482,25 +594,25 @@ filter === opt.id
       )}
 
       {filter === 'vector' && (
-        <div className="flex-1 flex flex-col md:flex-row gap-6 p-5 rounded-2xl bg-slate-900 border-2 border-purple-500/40 items-center justify-center min-h-0 overflow-y-auto">
+        <div className="flex-1 flex flex-col md:flex-row gap-6 p-5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-purple-500/40 items-center justify-center min-h-0 overflow-y-auto">
           <div className="flex-1 max-w-xl w-full">
             <VectorDiag />
           </div>
           <div className="flex-1 flex flex-col gap-4 justify-center max-w-lg">
             <div className="space-y-1">
-              <span className="text-[10px] font-mono text-purple-500/70 uppercase tracking-wider block">Paralelismo en TIEMPO</span>
-              <h4 className="text-xl font-bold text-purple-400">Procesador Vectorial</h4>
+              <span className="text-[10px] font-mono text-purple-600/70 dark:text-purple-500/70 uppercase tracking-wider block">Paralelismo en TIEMPO</span>
+              <h4 className="text-xl font-bold text-purple-700 dark:text-purple-400">Procesador Vectorial</h4>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
               En lugar de replicar hardware completo, utiliza **unidades funcionales (ALUs) especializadas y profundamente segmentadas (pipelines)** por donde los elementos del vector fluyen de forma continua.
             </p>
-            <ul className="text-xs text-slate-400 space-y-2 list-disc list-inside">
+            <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-2 list-disc list-inside">
               <li>Cuenta con pipelines dedicados para operaciones específicas: suma vectorial, multiplicación vectorial, etc.</li>
               <li>El paralelismo se da en el tiempo: mientras un elemento se suma, el siguiente se multiplica en la etapa anterior.</li>
               <li>Ahorra transistores y área de silicio al compartir el mismo circuito físico para todo el vector.</li>
               <li>Permite **Vector Chaining**: encadenar la salida de una unidad especializada directamente como entrada de otra sin pasar por memoria.</li>
             </ul>
-            <div className="p-2.5 rounded-lg bg-purple-500/10 border border-purple-500/20 text-xs text-purple-200 leading-snug">
+            <div className="p-2.5 rounded-lg bg-purple-500/10 border border-purple-500/20 text-xs text-purple-800 dark:text-purple-200 leading-snug">
               <strong>Throughput:</strong> Al igual que el Array, entrega 1 resultado por ciclo una vez lleno el pipeline, pero con un costo de hardware significativamente menor.
             </div>
           </div>
@@ -508,374 +620,121 @@ filter === opt.id
       )}
 
       {filter === 'both' && (
-        <>
-          <div className="flex-1 grid grid-cols-2 gap-3 min-h-0">
-            {/* ── ARRAY PROCESSOR SIMULATOR ── */}
-            <div className="flex flex-col gap-1.5 p-3 rounded-2xl bg-slate-900 border-2 border-amber-500/40 overflow-hidden">
-              <div className="shrink-0 flex items-center justify-between">
-                <h4 className="text-sm font-bold text-amber-400 flex items-center gap-2">
-                  <Layers size={14} /> Array Processor
-                </h4>
-                <span className="text-[10px] font-mono text-amber-500/70 uppercase tracking-wider">Lockstep Espacial</span>
-              </div>
-              <div className="flex-1 min-h-0">
-                <ArrayDiag cycle={cycle} />
-              </div>
-              <div className="shrink-0 p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[10px] text-amber-200 leading-none">
-                <strong>Espacio:</strong> Los 4 PEs ejecutan la misma operación al mismo tiempo en paralelo.
-              </div>
-            </div>
-
-            {/* ── VECTOR PROCESSOR SIMULATOR ── */}
-            <div className="flex flex-col gap-1.5 p-3 rounded-2xl bg-slate-900 border-2 border-purple-500/40 overflow-hidden">
-              <div className="shrink-0 flex items-center justify-between">
-                <h4 className="text-sm font-bold text-purple-400 flex items-center gap-2">
-                  <Activity size={14} /> Vector Processor
-                </h4>
-                <span className="text-[10px] font-mono text-purple-500/70 uppercase tracking-wider">Pipeline Temporal</span>
-              </div>
-              <div className="flex-1 min-h-0">
-                <VectorDiag cycle={cycle} />
-              </div>
-              <div className="shrink-0 p-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-[10px] text-purple-200 leading-none">
-                <strong>Tiempo:</strong> Los elementos fluyen a través de etapas con operaciones distintas.
-              </div>
-            </div>
+        <div className="flex-1 flex flex-col justify-center p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 min-h-0 overflow-y-auto">
+          <div className="text-center mb-4">
+            <span className="text-[10px] font-mono text-rose-600 dark:text-rose-500 font-bold uppercase tracking-wider block">Tabla Comparativa</span>
+            <h4 className="text-lg font-bold text-slate-900 dark:text-slate-100">Diferencias de Arquitectura y Hardware</h4>
           </div>
 
-          {/* ── 📐 Panel de Cálculos alineado con el ciclo actual ── */}
-          <div className="shrink-0 p-2 rounded-xl bg-slate-950/80 border border-slate-700/50">
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-[10px] font-mono font-bold text-slate-300 uppercase tracking-wider">📐 Cálculos en Ejecución @ Ciclo {cycle}</span>
-              <span className="text-[9px] font-mono text-slate-600">Fórmula: a[i] = (a[i] × 2) + 5</span>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {/* Array calculations */}
-              <div className="p-1.5 rounded-lg bg-amber-500/5 border border-amber-500/20">
-                <div className="text-[9px] font-mono font-bold text-amber-400 mb-1">🧮 Array (lockstep: 4 elementos a la vez)</div>
-                {cycle < 4 ? (
-                  <div className="text-[10px] font-mono text-amber-200/90 leading-snug">
-                    <span className="font-bold">{ST_OPS[cycle]}</span> simultáneo en los 4 PEs:
-                    {' '}{DATA.slice(0, 4).map(v => {
-                      const r = applyStage(v, cycle);
-                      return `${v}${cycle === 0 ? '' : cycle === 1 ? '×2' : cycle === 2 ? '×2+5' : ''}=${r}`;
-                    }).join(' · ')}
-                  </div>
-                ) : (
-                  <div className="text-[10px] font-mono text-slate-500">Array ya completó sus 4 ciclos. Resultado final: [{DATA.slice(0, 4).map(v => v * 2 + 5).join(', ')}]</div>
-                )}
-              </div>
-              {/* Vector calculations */}
-              <div className="p-1.5 rounded-lg bg-purple-500/5 border border-purple-500/20">
-                <div className="text-[9px] font-mono font-bold text-purple-400 mb-1">🏭 Vector (flujo segmentado)</div>
-                <div className="text-[10px] font-mono text-purple-200/90 leading-snug">
-                  {PIPE_STAGES.map((stage, sIdx) => {
-                    const elemIdx = cycle - sIdx;
-                    const isActive = elemIdx >= 0 && elemIdx < DATA.length;
-                    return (
-                      <span key={sIdx} className="mr-2.5">
-                        <span className="font-bold" style={{ color: ST_COLORS[stage.op] }}>{stage.short}</span>
-                        : {isActive ? `a[${elemIdx}]=${applyStage(DATA[elemIdx], sIdx)}` : '—'}
-                      </span>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
+          <div className="w-full overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/30">
+            <table className="w-full border-collapse text-left text-xs">
+              <thead>
+                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/50">
+                  <th className="p-3 font-mono font-bold text-slate-700 dark:text-slate-400 w-1/4">Característica</th>
+                  <th className="p-3 font-mono font-bold text-amber-700 dark:text-amber-400 w-3/8">🧮 Array Processor (SIMD Matricial)</th>
+                  <th className="p-3 font-mono font-bold text-purple-700 dark:text-purple-400 w-3/8">🏭 Vector Processor (SIMD Vectorial)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200/50 dark:divide-slate-800/50">
+                {[
+                  {
+                    feat: "Estrategia de Paralelismo",
+                    array: "Paralelismo en ESPACIO. Se replican múltiples unidades de procesamiento (PEs) completas.",
+                    vector: "Paralelismo en TIEMPO. Se segmenta (pipeline) una única unidad funcional en etapas."
+                  },
+                  {
+                    feat: "Estructura del Hardware",
+                    array: "N ALUs de propósito general e idénticas operando en sintonía (lockstep).",
+                    vector: "ALUs especializadas y segmentadas (unidad de suma, multiplicación, carga, etc.)."
+                  },
+                  {
+                    feat: "Uso de Silicio (Costo)",
+                    array: "Muy alto. Requiere replicar ALU, registros y buses para cada elemento de procesamiento.",
+                    vector: "Muy eficiente. Se comparte el mismo hardware segmentado entre todos los elementos."
+                  },
+                  {
+                    feat: "Unidad de Control (CU)",
+                    array: "Una única CU decodifica y transmite la misma instrucción a todos los PEs a la vez.",
+                    vector: "La CU secuencia la carga y el paso de los elementos del vector por los pipelines."
+                  },
+                  {
+                    feat: "Vector Chaining",
+                    array: "No soportado nativamente (cada PE trabaja en su propia memoria local aislada).",
+                    vector: "Soportado y crucial. La salida de un pipeline alimenta directamente al siguiente sin pasar por memoria."
+                  },
+                  {
+                    feat: "Manejo de Ramificaciones",
+                    array: "Enmascaramiento de PEs. PEs inactivos quedan ociosos (desperdicio de hardware).",
+                    vector: "Registros de máscara (VMASK). El pipeline sigue corriendo pero inhabilita escrituras."
+                  },
+                  {
+                    feat: "Ejemplos Históricos",
+                    array: "ILLIAC IV, Goodyear MPP.",
+                    vector: "Cray-1, NEC SX-Aurora."
+                  }
+                ].map((row, idx) => (
+                  <tr key={idx} className="hover:bg-slate-100/40 dark:hover:bg-slate-900/40 transition-colors">
+                    <td className="p-3 font-semibold text-slate-700 dark:text-slate-300 border-r border-slate-200/40 dark:border-slate-800/40 font-mono text-[11px]">{row.feat}</td>
+                    <td className="p-3 text-slate-600 dark:text-slate-400 leading-relaxed border-r border-slate-200/40 dark:border-slate-800/40">{row.array}</td>
+                    <td className="p-3 text-slate-600 dark:text-slate-400 leading-relaxed">{row.vector}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
 }
 
-/* ───────── Slide 2.5 — Código Secuencial vs Vectorial (con scroll virtual) ───────── */
-
-export function Slide2_5() {
-  const [cycle, setCycle] = useState(0);
-
-  // Datos de prueba: A + B → C (4 elementos)
-  const A = [3, 12, 3, 8];
-  const B = [5, 7, 9, 2];
-  const N = A.length;
-  const C = A.map((a, i) => a + B[i]); // [8, 19, 12, 10]
-
-  // Estado por ciclo:
-  // Ciclo 0-3: SISD hace A[i]+B[i] para i=0..3
-  // Ciclo 0: SIMD hace TODO en 1 ciclo (VADD sobre 4 lanes)
-  const sisdActive = cycle < N;
-  const simdDone = cycle >= 0; // SIMD termina en el primer ciclo
-  const totalSisdCycles = N; // 4
-  const totalSimdCycles = 1;
-  const speedup = totalSisdCycles / totalSimdCycles;
-
-  const next = () => setCycle(c => (c >= N ? 0 : c + 1));
-
-  return (
-    <div className="w-full h-full flex flex-col gap-2 max-w-7xl mx-auto p-2">
-      {/* ── Header con selector de ciclo ── */}
-      <div className="shrink-0 flex items-center justify-between px-2">
-        <div>
-          <h3 className="text-base font-bold text-slate-100">
-            Código <span className="text-red-400">Secuencial</span> vs <span className="text-cyan-400">Vectorial</span>
-          </h3>
-          <p className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">
-            SISD vs SIMD · Loop escalar vs VADDPS sobre XMM (128b)
-          </p>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="text-[10px] font-mono text-slate-500 shrink-0">Cycle:</span>
-          {/* ── Scroll Virtual ── */}
-          <div
-            className="flex-1 max-w-[320px] overflow-x-auto scroll-smooth snap-x snap-mandatory"
-            style={{ scrollbarWidth: 'thin' }}
-          >
-            <div className="flex items-center gap-1 px-1">
-              {Array.from({ length: N + 1 }, (_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCycle(i)}
-                  className={`shrink-0 snap-center w-8 h-8 rounded-lg text-[11px] font-mono font-bold transition-all ${
-                    cycle === i
-                      ? 'bg-rose-500 text-white shadow-md shadow-rose-500/40 ring-2 ring-rose-400 scale-110'
-                      : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 hover:border-slate-600'
-                  }`}
-                >
-                  {i}
-                </button>
-              ))}
-            </div>
-          </div>
-          <button
-            onClick={next}
-            className="shrink-0 px-2.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 text-[10px] font-mono font-bold hover:bg-slate-700"
-          >
-            ▶ Next
-          </button>
-        </div>
-      </div>
-
-      {/* ── Dos columnas: SISD vs SIMD ── */}
-      <div className="flex-1 grid grid-cols-2 gap-3 min-h-0">
-        {/* ── SISD (Loop escalar) ── */}
-        <div className="flex flex-col gap-1.5 p-3 rounded-2xl bg-slate-900 border-2 border-red-500/40 overflow-hidden">
-          <div className="shrink-0 flex items-center justify-between">
-            <h4 className="text-sm font-bold text-red-400 flex items-center gap-2">
-              🐢 SISD · Loop escalar
-            </h4>
-            <span className="text-[10px] font-mono text-red-500/70 uppercase tracking-wider">
-              {totalSisdCycles} instrucciones · {totalSisdCycles} ciclos
-            </span>
-          </div>
-
-          {/* Código */}
-          <div className="shrink-0 p-2 rounded-lg bg-slate-950 border border-slate-800 font-mono text-[11px] text-slate-300 leading-snug">
-            <div className="text-slate-500">// 1 elemento por iteracion</div>
-            <div><span className="text-red-400">for</span> (i = 0; i &lt; {N}; i++)</div>
-            <div>&nbsp;&nbsp;<span className="text-red-400">c[i]</span> = a[i] + b[i];</div>
-          </div>
-
-          {/* Visualización del loop por iteracion */}
-          <div className="shrink-0">
-            <div className="text-[10px] font-mono text-slate-500 mb-1">Iteraciones del loop:</div>
-            <div className="grid grid-cols-{N} gap-1">
-              {A.map((a, i) => {
-                const isCurrent = i === cycle && sisdActive;
-                const isDone = i < cycle;
-                return (
-                  <div
-                    key={i}
-                    className={`p-1.5 rounded-lg border text-center transition-all ${
-                      isCurrent
-                        ? 'bg-red-500/20 border-red-400 ring-2 ring-red-400 shadow-md shadow-red-500/30 scale-105'
-                        : isDone
-                          ? 'bg-emerald-500/15 border-emerald-500/40'
-                          : 'bg-slate-950 border-slate-800 opacity-50'
-                    }`}
-                  >
-                    <div className="text-[9px] font-mono text-slate-500">c[{i}]</div>
-                    <div className={`text-sm font-bold font-mono ${
-                      isCurrent ? 'text-red-300' : isDone ? 'text-emerald-300' : 'text-slate-600'
-                    }`}>
-                      {isDone ? C[i] : isCurrent ? `${a}+${B[i]}=?` : '—'}
-                    </div>
-                    <div className={`text-[8px] font-mono ${
-                      isCurrent ? 'text-red-400' : isDone ? 'text-emerald-500/70' : 'text-slate-700'
-                    }`}>
-                      {isCurrent ? '⏳ procesando' : isDone ? '✓ listo' : 'pendiente'}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Estado actual */}
-          <div className="shrink-0 p-2 rounded-lg bg-slate-950/60 border border-red-500/20 text-[11px]">
-            {sisdActive ? (
-              <span className="text-red-200 font-mono">
-                <span className="font-bold">Ciclo {cycle}:</span> ADD A[{cycle}], B[{cycle}] → C[{cycle}] = {A[cycle]} + {B[cycle]} = <span className="font-bold text-emerald-300">{C[cycle]}</span>
-              </span>
-            ) : (
-              <span className="text-emerald-300 font-mono">
-                ✓ Loop completo. C = [{C.join(', ')}]. Total: {totalSisdCycles} instrucciones ejecutadas.
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* ── SIMD (VADDPS) ── */}
-        <div className="flex flex-col gap-1.5 p-3 rounded-2xl bg-slate-900 border-2 border-cyan-500/40 overflow-hidden">
-          <div className="shrink-0 flex items-center justify-between">
-            <h4 className="text-sm font-bold text-cyan-400 flex items-center gap-2">
-              ⚡ SIMD · VADDPS vectorial
-            </h4>
-            <span className="text-[10px] font-mono text-cyan-500/70 uppercase tracking-wider">
-              1 instrucción · 1 ciclo
-            </span>
-          </div>
-
-          {/* Código */}
-          <div className="shrink-0 p-2 rounded-lg bg-slate-950 border border-slate-800 font-mono text-[11px] text-slate-300 leading-snug">
-            <div className="text-slate-500">// 4 elementos por instrucción (XMM = 128b)</div>
-            <div><span className="text-cyan-300 font-bold">VADDPS</span> xmm0, xmm1, xmm2</div>
-            <div className="text-emerald-400/90 text-[10px] mt-0.5">└─ 4 sumas en paralelo: A+B → C</div>
-          </div>
-
-          {/* Visualización del vector register */}
-          <div className="shrink-0">
-            <div className="text-[10px] font-mono text-slate-500 mb-1">Registro XMM (128 bits = 4 lanes):</div>
-            <div className="grid grid-cols-4 gap-1">
-              {A.map((a, i) => {
-                const inFlight = cycle === 0;
-                const done = cycle >= 0;
-                return (
-                  <div
-                    key={i}
-                    className={`p-1.5 rounded-lg border text-center transition-all ${
-                      inFlight
-                        ? 'bg-cyan-500/20 border-cyan-400 ring-2 ring-cyan-400 shadow-md shadow-cyan-500/30 scale-105'
-                        : done
-                          ? 'bg-emerald-500/15 border-emerald-500/40'
-                          : 'bg-slate-950 border-slate-800 opacity-50'
-                    }`}
-                  >
-                    <div className="text-[9px] font-mono text-slate-500">lane {i}</div>
-                    <div className={`text-[10px] font-mono ${inFlight ? 'text-cyan-300' : done ? 'text-emerald-500/70' : 'text-slate-600'}`}>
-                      {a} + {B[i]}
-                    </div>
-                    <div className={`text-sm font-bold font-mono ${
-                      inFlight ? 'text-cyan-200' : done ? 'text-emerald-300' : 'text-slate-600'
-                    }`}>
-                      {done ? C[i] : '—'}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Estado actual */}
-          <div className="shrink-0 p-2 rounded-lg bg-slate-950/60 border border-cyan-500/20 text-[11px]">
-            {cycle === 0 ? (
-              <span className="text-cyan-200 font-mono">
-                <span className="font-bold">Ciclo 0:</span> VADDPS ejecuta en paralelo en las 4 lanes → C = [{C.join(', ')}] · <span className="text-emerald-300 font-bold">¡listo en 1 ciclo!</span>
-              </span>
-            ) : (
-              <span className="text-emerald-300 font-mono">
-                ✓ SIMD completo en 1 ciclo. Resultado: C = [{C.join(', ')}]. CPU idle mientras SISD sigue trabajando.
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ── 📐 Panel de cálculos alineado con el ciclo ── */}
-      <div className="shrink-0 p-2 rounded-xl bg-slate-950/80 border border-slate-700/50">
-        <div className="flex items-center gap-2 mb-1.5">
-          <span className="text-[10px] font-mono font-bold text-slate-300 uppercase tracking-wider">
-            📐 Cálculos @ Cycle {cycle}
-          </span>
-          <span className="text-[9px] font-mono text-slate-600">a[i] + b[i] → c[i]</span>
-        </div>
-        <div className="grid grid-cols-3 gap-2">
-          {/* SISD calc */}
-          <div className="p-1.5 rounded-lg bg-red-500/5 border border-red-500/20">
-            <div className="text-[9px] font-mono font-bold text-red-400 mb-1">🐢 SISD (1 elem/ciclo)</div>
-            <div className="text-[10px] font-mono text-red-200/90 leading-snug">
-              {sisdActive
-                ? <span><span className="font-bold">c[{cycle}]</span> = a[{cycle}] + b[{cycle}] = {A[cycle]} + {B[cycle]} = <span className="text-emerald-300 font-bold">{C[cycle]}</span></span>
-                : <span className="text-emerald-300">✓ Finalizado en ciclo {N - 1}</span>}
-            </div>
-          </div>
-
-          {/* SIMD calc */}
-          <div className="p-1.5 rounded-lg bg-cyan-500/5 border border-cyan-500/20">
-            <div className="text-[9px] font-mono font-bold text-cyan-400 mb-1">⚡ SIMD (4 elem/ciclo)</div>
-            <div className="text-[10px] font-mono text-cyan-200/90 leading-snug">
-              <span className="font-bold">[c0..c3]</span> = [a0..a3] + [b0..b3] = [{A.join('+')}] + [{B.join('+')}] = <span className="text-emerald-300 font-bold">[{C.join(',')}]</span>
-            </div>
-          </div>
-
-          {/* Speedup */}
-          <div className="p-1.5 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
-            <div className="text-[9px] font-mono font-bold text-emerald-400 mb-1">📊 Speedup real</div>
-            <div className="text-[10px] font-mono text-emerald-200/90 leading-snug">
-              <span className="font-bold">{totalSisdCycles} instr / {totalSimdCycles} instr</span> = <span className="text-emerald-300 font-bold text-base">{speedup}×</span> {cycle >= N - 1 && <span className="text-slate-500"> (techo)</span>}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 /* ───────── Slide 2.4 — Ventajas del Procesamiento Vectorial ───────── */
 
 export function Slide2_4() {
   const useCases = [
-    { label: 'Imágenes Digitales', desc: 'Filtros, convolución y ajuste de brillo píxel a píxel', color: 'text-cyan-400' },
-    { label: 'Audio y Video', desc: 'Codificación H.264/HEVC y equalización en tiempo real', color: 'text-emerald-400' },
-    { label: 'IA y Aprendizaje Profundo', desc: 'Multiplicación de matrices (GEMM) y capas CNN', color: 'text-purple-400' },
-    { label: 'Criptografía', desc: 'Instrucciones dedicadas AES-NI y cifrado en bloques', color: 'text-amber-400' },
+    { label: 'Imágenes Digitales', desc: 'Filtros, convolución y ajuste de brillo píxel a píxel', color: 'text-cyan-700 dark:text-cyan-400' },
+    { label: 'Audio y Video', desc: 'Codificación H.264/HEVC y equalización en tiempo real', color: 'text-emerald-700 dark:text-emerald-400' },
+    { label: 'IA y Aprendizaje Profundo', desc: 'Multiplicación de matrices (GEMM) y capas CNN', color: 'text-purple-700 dark:text-purple-400' },
+    { label: 'Criptografía', desc: 'Instrucciones dedicadas AES-NI y cifrado en bloques', color: 'text-amber-700 dark:text-amber-400' },
   ];
 
   return (
     <div className="w-full h-full flex flex-col gap-4 max-w-6xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0">
         {/* ─── Ventajas Clave ─── */}
-        <div className="p-5 rounded-2xl bg-slate-900 border border-emerald-500/40 flex flex-col gap-3 min-h-0">
-          <h4 className="text-[12px] font-bold text-emerald-400 flex items-center gap-2 shrink-0"><CheckCircle2 size={18} /> Ventajas Principales (Sección 2.7)</h4>
-          <ul className="text-[13px] text-slate-300 space-y-2 flex-1 overflow-y-auto pr-1">
-            <li className="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
-              ✓ <span className="text-emerald-300 font-bold">Throughput N× mayor:</span> Procesa múltiples datos en un solo ciclo de reloj según el ancho del registro vectorial.
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-emerald-500/40 flex flex-col gap-3 min-h-0">
+          <h4 className="text-[12px] font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2 shrink-0"><CheckCircle2 size={18} /> Ventajas Principales (Sección 2.7)</h4>
+          <ul className="text-[13px] text-slate-700 dark:text-slate-300 space-y-2 flex-1 overflow-y-auto pr-1">
+            <li className="bg-slate-50 dark:bg-slate-950/80 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+              ✓ <span className="text-emerald-700 dark:text-emerald-300 font-bold">Throughput N× mayor:</span> Procesa múltiples datos en un solo ciclo de reloj según el ancho del registro vectorial.
             </li>
-            <li className="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
-              ✓ <span className="text-emerald-300 font-bold">Eficiencia energética:</span> Una sola decodificación de instrucción emite el comando a N ALUs, reduciendo el consumo de la Control Unit.
+            <li className="bg-slate-50 dark:bg-slate-950/80 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+              ✓ <span className="text-emerald-700 dark:text-emerald-300 font-bold">Eficiencia energética:</span> Una sola decodificación de instrucción emite el comando a N ALUs, reduciendo el consumo de la Control Unit.
             </li>
-            <li className="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
-              ✓ <span className="text-emerald-300 font-bold">Menor presión en memoria de instrucciones:</span> Reduce drásticamente el número de instrucciones dinámicas y saltos de bucle.
+            <li className="bg-slate-50 dark:bg-slate-950/80 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+              ✓ <span className="text-emerald-700 dark:text-emerald-300 font-bold">Menor presión en memoria de instrucciones:</span> Reduce drásticamente el número de instrucciones dinámicas y saltos de bucle.
             </li>
-            <li className="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
-              ✓ <span className="text-emerald-300 font-bold">Amortización de latencia:</span> El pipeline vectorial absorbe el costo de arranque a lo largo de todo el vector de datos.
+            <li className="bg-slate-50 dark:bg-slate-950/80 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+              ✓ <span className="text-emerald-700 dark:text-emerald-300 font-bold">Amortización de latencia:</span> El pipeline vectorial absorbe el costo de arranque a lo largo de todo el vector de datos.
             </li>
           </ul>
         </div>
 
         {/* ─── Requisitos de Regularidad ─── */}
-        <div className="p-5 rounded-2xl bg-slate-900 border border-cyan-500/40 flex flex-col gap-3 min-h-0">
-          <h4 className="text-[12px] font-bold text-cyan-400 flex items-center gap-2 shrink-0"><Layers size={18} /> Requisitos para el Paralelismo Vectorial</h4>
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-cyan-500/40 flex flex-col gap-3 min-h-0">
+          <h4 className="text-[12px] font-bold text-cyan-700 dark:text-cyan-400 flex items-center gap-2 shrink-0"><Layers size={18} /> Requisitos para el Paralelismo Vectorial</h4>
           <div className="space-y-2.5 text-[13px] flex-1 overflow-y-auto pr-1">
-            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
-              <span className="text-cyan-300 font-bold block mb-0.5">1. Homogeneidad de Datos</span>
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span className="text-cyan-700 dark:text-cyan-300 font-bold block mb-0.5">1. Homogeneidad de Datos</span>
               Los datos deben ser del mismo tipo y tamaño (ej. vectores de 32-bit float) para ejecutarse en paralelo sin conversiones.
             </div>
-            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
-              <span className="text-amber-300 font-bold block mb-0.5">2. Alineación y Contigüidad en Memoria</span>
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span className="text-amber-700 dark:text-amber-300 font-bold block mb-0.5">2. Alineación y Contigüidad en Memoria</span>
               Los datos deben estar contiguos en RAM (stride = 1). Acceso disperso (gather/scatter) penaliza severamente el ancho de banda.
             </div>
-            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
-              <span className="text-purple-300 font-bold block mb-0.5">3. Ausencia de Dependencias</span>
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span className="text-purple-700 dark:text-purple-300 font-bold block mb-0.5">3. Ausencia de Dependencias</span>
               Cada elemento debe ser independiente (C[i] no puede depender de C[i-1]) para permitir cómputo simultáneo.
             </div>
           </div>
@@ -883,11 +742,11 @@ export function Slide2_4() {
       </div>
 
       {/* Casos de Uso Reales abajo */}
-      <div className="shrink-0 p-4 rounded-2xl bg-slate-900 border border-slate-800">
-        <h5 className="text-[13px] font-bold text-slate-400 mb-2">• Aplicaciones naturalmente vectoriales</h5>
+      <div className="shrink-0 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+        <h5 className="text-[13px] font-bold text-slate-600 dark:text-slate-400 mb-2">• Aplicaciones naturalmente vectoriales</h5>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {useCases.map((uc, i) => (
-            <div key={i} className="p-2 rounded-xl bg-slate-950/80 border border-slate-800 text-[13px] text-center">
+            <div key={i} className="p-2 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-[13px] text-center">
               <span className={`font-bold block ${uc.color}`}>{uc.label}</span>
               <span className="text-slate-500 text-xs">{uc.desc}</span>
             </div>
@@ -903,45 +762,45 @@ export function Slide2_4() {
 export function Slide2_Codigo() {
   return (
     <div className="space-y-4 max-w-6xl mx-auto text-[13px] font-mono">
-      <div className="p-3 rounded-xl bg-slate-900 border border-purple-500/30 text-center text-purple-300 font-bold">
+      <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-purple-500/30 text-center text-purple-700 dark:text-purple-300 font-bold">
         Sección 2.3 de la Guía · Desglose de Código Secuencial vs Vectorial
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* SISD */}
-        <div className="p-4 rounded-2xl bg-slate-900 border border-red-500/30 space-y-3">
-          <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-            <span className="font-bold text-red-400">Código Secuencial (SISD)</span>
-            <span className="text-xs px-2 py-0.5 rounded bg-red-500/20 text-red-300">4 Iteraciones</span>
+        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-red-500/30 space-y-3">
+          <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-2">
+            <span className="font-bold text-red-700 dark:text-red-400">Código Secuencial (SISD)</span>
+            <span className="text-xs px-2 py-0.5 rounded bg-red-500/20 text-red-700 dark:text-red-300">4 Iteraciones</span>
           </div>
-          <div className="p-3 bg-slate-950 rounded-xl text-slate-300 space-y-1.5 leading-relaxed">
+          <div className="p-3 bg-slate-50 dark:bg-slate-950 rounded-xl text-slate-700 dark:text-slate-300 space-y-1.5 leading-relaxed">
             <div className="text-slate-500">// Bucle tradicional elemento por elemento</div>
-            <div><span className="text-red-400">ADD</span> A[0], B[0] → C[0] <span className="text-slate-600">; Ciclo 1</span></div>
-            <div><span className="text-red-400">ADD</span> A[1], B[1] → C[1] <span className="text-slate-600">; Ciclo 2</span></div>
-            <div><span className="text-red-400">ADD</span> A[2], B[2] → C[2] <span className="text-slate-600">; Ciclo 3</span></div>
-            <div><span className="text-red-400">ADD</span> A[3], B[3] → C[3] <span className="text-slate-600">; Ciclo 4</span></div>
+            <div><span className="text-red-700 dark:text-red-400">ADD</span> A[0], B[0] → C[0] <span className="text-slate-500 dark:text-slate-600">; Ciclo 1</span></div>
+            <div><span className="text-red-700 dark:text-red-400">ADD</span> A[1], B[1] → C[1] <span className="text-slate-500 dark:text-slate-600">; Ciclo 2</span></div>
+            <div><span className="text-red-700 dark:text-red-400">ADD</span> A[2], B[2] → C[2] <span className="text-slate-500 dark:text-slate-600">; Ciclo 3</span></div>
+            <div><span className="text-red-700 dark:text-red-400">ADD</span> A[3], B[3] → C[3] <span className="text-slate-500 dark:text-slate-600">; Ciclo 4</span></div>
           </div>
-          <div className="text-xs text-slate-400">
+          <div className="text-xs text-slate-600 dark:text-slate-400">
             • 4 decodificaciones de instrucción<br/>
             • 4 saltos de bucle y comprobaciones de índice
           </div>
         </div>
 
         {/* SIMD */}
-        <div className="p-4 rounded-2xl bg-slate-900 border border-cyan-400/40 space-y-3">
-          <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-            <span className="font-bold text-cyan-400">Código Vectorial (SIMD)</span>
-            <span className="text-xs px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">1 Instrucción</span>
+        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-cyan-500/40 space-y-3">
+          <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-2">
+            <span className="font-bold text-cyan-700 dark:text-cyan-400">Código Vectorial (SIMD)</span>
+            <span className="text-xs px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-700 dark:text-cyan-300">1 Instrucción</span>
           </div>
-          <div className="p-3 bg-slate-950 rounded-xl text-slate-300 space-y-1.5 leading-relaxed">
+          <div className="p-3 bg-slate-50 dark:bg-slate-950 rounded-xl text-slate-700 dark:text-slate-300 space-y-1.5 leading-relaxed">
             <div className="text-slate-500">// Instrucción vectorial sobre registro XMM (128 bits)</div>
-            <div><span className="text-cyan-300 font-bold">VADD</span> XMM0, XMM1, XMM2</div>
-            <div className="text-emerald-400/90 text-xs pt-1">
+            <div><span className="text-cyan-700 dark:text-cyan-300 font-bold">VADD</span> XMM0, XMM1, XMM2</div>
+            <div className="text-emerald-700/90 dark:text-emerald-400/90 text-xs pt-1">
               └─ Suma en paralelo: <br/>
                  [A0+B0, A1+B1, A2+B2, A3+B3] en 1 solo ciclo
             </div>
           </div>
-          <div className="text-xs text-slate-400">
+          <div className="text-xs text-slate-600 dark:text-slate-400">
             • 1 sola decodificación en la Control Unit<br/>
             • Reducción de latencia y consumo eléctrico
           </div>
@@ -1004,12 +863,12 @@ export function Slide2_Divergencia() {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => { setView('demo'); setStep(0); }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'demo' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'demo' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 border border-slate-300 dark:border-slate-800'}`}>
             🎯 Demostración paso a paso
           </button>
           <button
             onClick={() => setView('impact')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'impact' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'impact' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 border border-slate-300 dark:border-slate-800'}`}>
             📊 Impacto numérico
           </button>
         </div>
@@ -1019,17 +878,17 @@ export function Slide2_Divergencia() {
       {view === 'demo' ? (
         <div className="flex-1 flex flex-col gap-3 min-h-0">
           {/* Rule card */}
-          <div className="shrink-0 p-3 rounded-xl bg-slate-900 border border-rose-500/30 text-center">
-            <span className="text-[13px] font-mono text-rose-300">
+          <div className="shrink-0 p-3 rounded-xl bg-white dark:bg-slate-900 border border-rose-500/30 text-center">
+            <span className="text-[13px] font-mono text-rose-700 dark:text-rose-300">
               Regla: <span className="font-bold">{'b[i] = (a[i] > 0) ? a[i]*2 : 0'}</span>
             </span>
           </div>
 
           {/* Main demo area */}
-          <div className="flex-1 rounded-2xl bg-slate-900 border border-rose-500/30 p-4 flex flex-col gap-3 min-h-0">
+          <div className="flex-1 rounded-2xl bg-white dark:bg-slate-900 border border-rose-500/30 p-4 flex flex-col gap-3 min-h-0">
             {/* Step header */}
             <div className="shrink-0 flex items-center justify-between">
-              <span className="text-xs font-mono text-rose-400 font-bold flex items-center gap-2">
+              <span className="text-xs font-mono text-rose-700 dark:text-rose-400 font-bold flex items-center gap-2">
                 <ShieldAlert size={16} /> {current.title}
               </span>
               <span className="text-[11px] text-slate-500 font-mono">Paso {step + 1} / {steps.length}</span>
@@ -1045,19 +904,19 @@ export function Slide2_Divergencia() {
                   transition={{ duration: 0.25, delay: i * 0.08 }}
                   className={`rounded-xl border-2 p-3 flex flex-col items-center justify-center gap-2 ${
                     current.mask[i]
-                      ? 'bg-slate-950 border-rose-500/40 shadow-md shadow-rose-500/10'
-                      : 'bg-slate-950/50 border-slate-700/40 opacity-40'
+                      ? 'bg-slate-50 dark:bg-slate-950 border-rose-500/40 shadow-md shadow-rose-500/10'
+                      : 'bg-slate-100/50 dark:bg-slate-950/50 border-slate-300 dark:border-slate-700/40 opacity-40'
                   }`}>
                   <span className="text-[10px] font-mono text-slate-500">Lane {i}</span>
                   <span className={`text-2xl font-bold font-mono ${
-                    current.mask[i] ? 'text-rose-300' : 'text-slate-600'
+                    current.mask[i] ? 'text-rose-700 dark:text-rose-300' : 'text-slate-500 dark:text-slate-600'
                   }`}>
                     {typeof val === 'number' ? val : '?'}
                   </span>
                   <div className={`w-8 h-6 rounded text-[10px] font-mono font-bold flex items-center justify-center ${
                     current.mask[i]
-                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
-                      : 'bg-slate-800 text-slate-600 border border-slate-700'
+                      ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/40'
+                      : 'bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-600 border border-slate-300 dark:border-slate-700'
                   }`}>
                     {current.mask[i] ? 'M=1' : 'M=0'}
                   </div>
@@ -1066,7 +925,7 @@ export function Slide2_Divergencia() {
             </div>
 
             {/* Description */}
-            <div className="shrink-0 p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[13px] text-slate-300 text-center leading-relaxed">
+            <div className="shrink-0 p-3 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-[13px] text-slate-700 dark:text-slate-300 text-center leading-relaxed">
               {current.desc}
             </div>
           </div>
@@ -1075,7 +934,7 @@ export function Slide2_Divergencia() {
           <div className="shrink-0 flex justify-center gap-4">
             <button
               onClick={next}
-              className="px-6 py-2 rounded-xl bg-rose-500/20 border border-rose-500/50 text-rose-300 font-bold text-xs font-mono hover:bg-rose-500/30 transition-all shadow-lg">
+              className="px-6 py-2 rounded-xl bg-rose-500/20 border border-rose-500/50 text-rose-700 dark:text-rose-300 font-bold text-xs font-mono hover:bg-rose-500/30 transition-all shadow-lg">
               {step < steps.length - 1 ? 'Siguiente paso →' : '🔄 Repetir'}
             </button>
           </div>
@@ -1084,52 +943,52 @@ export function Slide2_Divergencia() {
         /* ─── Impacto numérico view ─── */
         <div className="flex-1 flex flex-col gap-3 min-h-0">
           {/* Table */}
-          <div className="flex-1 overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/90">
+          <div className="flex-1 overflow-y-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-slate-800 bg-slate-950 text-slate-500">
+                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-500">
                   <th className="p-2 font-bold">Situación</th>
-                  <th className="p-2 font-bold text-rose-400">Lanes útiles</th>
-                  <th className="p-2 font-bold text-rose-400">Speedup teórico (AVX2, 8 lanes)</th>
+                  <th className="p-2 font-bold text-rose-700 dark:text-rose-400">Lanes útiles</th>
+                  <th className="p-2 font-bold text-rose-700 dark:text-rose-400">Speedup teórico (AVX2, 8 lanes)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 text-xs">
+              <tbody className="divide-y divide-slate-200/60 dark:divide-slate-800/60 text-xs">
                 <tr>
-                  <td className="p-2 text-slate-300">Sin divergencia (100% misma operación)</td>
-                  <td className="p-2 text-emerald-400 font-semibold">8 de 8</td>
-                  <td className="p-2 text-emerald-400 font-semibold">8x</td>
+                  <td className="p-2 text-slate-700 dark:text-slate-300">Sin divergencia (100% misma operación)</td>
+                  <td className="p-2 text-emerald-700 dark:text-emerald-400 font-semibold">8 de 8</td>
+                  <td className="p-2 text-emerald-700 dark:text-emerald-400 font-semibold">8x</td>
                 </tr>
                 <tr>
-                  <td className="p-2 text-slate-300">50% divergencia (mitad de cada rama)</td>
-                  <td className="p-2 text-amber-400 font-semibold">4 de 8</td>
-                  <td className="p-2 text-amber-400 font-semibold">~4x</td>
+                  <td className="p-2 text-slate-700 dark:text-slate-300">50% divergencia (mitad de cada rama)</td>
+                  <td className="p-2 text-amber-700 dark:text-amber-400 font-semibold">4 de 8</td>
+                  <td className="p-2 text-amber-700 dark:text-amber-400 font-semibold">~4x</td>
                 </tr>
                 <tr>
-                  <td className="p-2 text-slate-300">25% divergencia</td>
-                  <td className="p-2 text-amber-400 font-semibold">6 de 8</td>
-                  <td className="p-2 text-amber-400 font-semibold">~6x</td>
+                  <td className="p-2 text-slate-700 dark:text-slate-300">25% divergencia</td>
+                  <td className="p-2 text-amber-700 dark:text-amber-400 font-semibold">6 de 8</td>
+                  <td className="p-2 text-amber-700 dark:text-amber-400 font-semibold">~6x</td>
                 </tr>
                 <tr>
-                  <td className="p-2 text-slate-300">Divergencia + datos no alineados</td>
-                  <td className="p-2 text-rose-400 font-semibold">variable</td>
-                  <td className="p-2 text-rose-400 font-semibold">&lt;2x o peor que escalar</td>
+                  <td className="p-2 text-slate-700 dark:text-slate-300">Divergencia + datos no alineados</td>
+                  <td className="p-2 text-rose-700 dark:text-rose-400 font-semibold">variable</td>
+                  <td className="p-2 text-rose-700 dark:text-rose-400 font-semibold">&lt;2x o peor que escalar</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
           {/* Key insight */}
-          <div className="shrink-0 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-[13px] text-rose-200 leading-relaxed">
+          <div className="shrink-0 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-[13px] text-rose-800 dark:text-rose-200 leading-relaxed">
             💡 <span className="font-bold">Regla práctica:</span> cada condicional <span className="font-mono">if/else</span> dentro de un loop que esperas vectorizar te come ~50% del speedup teórico. Si encadenas varios condicionales, SIMD pierde sentido.
           </div>
 
           {/* Branchless tip */}
-          <div className="shrink-0 p-3 rounded-xl bg-slate-900 border border-slate-800 text-[13px] text-slate-300 leading-relaxed">
-            <span className="font-bold text-cyan-400">Truco branchless:</span> se puede reescribir como <span className="font-mono text-amber-300">b[i] = max(a[i] * 2, 0)</span> para evitar el <span className="font-mono">if</span> explícito y recuperar velocidad de vectorización.
+          <div className="shrink-0 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[13px] text-slate-700 dark:text-slate-300 leading-relaxed">
+            <span className="font-bold text-cyan-700 dark:text-cyan-400">Truco branchless:</span> se puede reescribir como <span className="font-mono text-amber-700 dark:text-amber-300">b[i] = max(a[i] * 2, 0)</span> para evitar el <span className="font-mono">if</span> explícito y recuperar velocidad de vectorización.
           </div>
 
           {/* Oral version */}
-          <div className="shrink-0 p-3 rounded-xl bg-slate-900 border border-amber-500/30 text-[13px] text-slate-300 leading-relaxed italic">
+          <div className="shrink-0 p-3 rounded-xl bg-white dark:bg-slate-900 border border-amber-500/30 text-[13px] text-slate-700 dark:text-slate-300 leading-relaxed italic">
             "La kryptonita de SIMD es la divergencia condicional. Cuando algunos elementos necesitan una operación y otros otra, el hardware no puede apagar lanes: ejecuta ambas ramas para todos y enmascara las que no corresponden. Pagaste el doble de operaciones pero usaste la mitad."
           </div>
         </div>
@@ -1143,17 +1002,16 @@ export function Slide2_Divergencia() {
 
 export function SlideIntroParte2() {
   return (
-    <div className="p-8 rounded-3xl bg-gradient-to-br from-purple-500/10 via-slate-900 to-pink-500/10 border-2 border-purple-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
-      <span className="px-4 py-1 bg-purple-500/20 text-purple-300 font-extrabold text-xs rounded-full border border-purple-400/30 uppercase tracking-widest">
+    <div className="p-8 rounded-3xl bg-gradient-to-br from-purple-500/10 via-white dark:via-slate-900 to-pink-500/10 border-2 border-purple-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
+      <span className="px-4 py-1 bg-purple-500/20 text-purple-700 dark:text-purple-300 font-extrabold text-xs rounded-full border border-purple-500/30 dark:border-purple-400/30 uppercase tracking-widest">
         Expositor: Rivera Yandris · Parte 2
       </span>
-      <h2 className="text-3xl font-extrabold text-slate-100">Arquitectura SIMD y el Principio Vectorial</h2>
+      <h2 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100">Arquitectura SIMD y el Principio Vectorial</h2>
       <div className="grid grid-cols-2 gap-3 text-left text-[13px] pt-2">
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.1: ¿Qué es SIMD? + Analogía</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.2: Registros Vectoriales y Control</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.3: Array vs Vector Processor</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.4: Ventajas del Procesamiento Vectorial</div>
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-cyan-400 font-semibold">• Slide 2.5: ⚡ SISD vs SIMD (Código)</div>
+        <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">• Slide 2.1: ¿Qué es SIMD? + Analogía</div>
+        <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">• Slide 2.2: Registros Vectoriales y Control</div>
+        <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">• Slide 2.3: Array vs Vector Processor</div>
+        <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">• Slide 2.4: Ventajas del Procesamiento Vectorial</div>
       </div>
     </div>
   );
