@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // ==========================================
 // === PARTE 3 — Alejandro Andy ===
@@ -218,172 +218,173 @@ export function Slide3_Chaining() {
 /* ───────── Slide 3.6 — Excavator vs Zen ───────── */
 
 export function Slide3_4() {
-  const [highlighted, setHighlighted] = useState(null);
+  const [step, setStep] = useState(0);
+
+  const steps = [
+    {
+      name: 'excavator',
+      title: 'AMD Excavator (Pre-2017)',
+      subtitle: '2×128-bit coordinadas',
+      color: 'purple',
+      bgGrad: 'from-purple-950 to-slate-900',
+      border: 'border-purple-500/40',
+      content: (
+        <div className="space-y-3">
+          <div className="text-center">
+            <div className="px-3 py-2 rounded-lg bg-purple-500/20 border border-purple-400/30 inline-block">
+              <p className="text-sm-responsive font-mono text-purple-300 font-bold">AVX-256 Input</p>
+              <p className="text-xs text-purple-400 font-mono mt-1">bits 0-255</p>
+            </div>
+          </div>
+          <motion.div animate={{ y: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-center text-2xl text-purple-400">↓</motion.div>
+          <div className="space-y-2">
+            <motion.div animate={{ borderColor: ['rgba(168, 85, 247, 0.6)', 'rgba(168, 85, 247, 1)', 'rgba(168, 85, 247, 0.6)'] }} transition={{ repeat: Infinity, duration: 2 }} className="p-3 rounded-lg bg-slate-900 border-2 text-center">
+              <p className="text-sm-responsive font-bold text-purple-300">FMAC-128 #0</p>
+              <p className="text-xs text-slate-400 font-mono mt-1">bits 0-127</p>
+            </motion.div>
+            <motion.div animate={{ borderColor: ['rgba(168, 85, 247, 0.6)', 'rgba(168, 85, 247, 1)', 'rgba(168, 85, 247, 0.6)'] }} transition={{ repeat: Infinity, duration: 2 }} className="p-3 rounded-lg bg-slate-900 border-2 text-center">
+              <p className="text-sm-responsive font-bold text-purple-300">FMAC-128 #1</p>
+              <p className="text-xs text-slate-400 font-mono mt-1">bits 128-255</p>
+            </motion.div>
+          </div>
+          <div className="text-center text-sm text-purple-400 font-mono">
+            ← 2 unidades coordinadas<br/>← Causa latencia mayor
+          </div>
+          <motion.div animate={{ y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 2, delay: 0.5 }} className="text-center">
+            <div className="px-3 py-2 rounded-lg bg-purple-600/20 border border-purple-400/40 inline-block">
+              <p className="text-xs-responsive font-mono text-purple-300 font-bold">Resultado AVX-256</p>
+              <p className="text-xs text-slate-500">(mayor latencia)</p>
+            </div>
+          </motion.div>
+        </div>
+      )
+    },
+    {
+      name: 'zen',
+      title: 'AMD Zen (2017+)',
+      subtitle: '1×256-bit nativa',
+      color: 'orange',
+      bgGrad: 'from-orange-950 to-slate-900',
+      border: 'border-orange-500/40',
+      content: (
+        <div className="space-y-3">
+          <div className="text-center">
+            <div className="px-3 py-2 rounded-lg bg-orange-500/20 border border-orange-400/30 inline-block">
+              <p className="text-sm-responsive font-mono text-orange-300 font-bold">AVX-256 Input</p>
+              <p className="text-xs text-orange-400 font-mono mt-1">bits 0-255</p>
+            </div>
+          </div>
+          <motion.div animate={{ y: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-center text-2xl text-orange-400">↓</motion.div>
+          <motion.div animate={{ borderColor: ['rgba(234, 88, 12, 0.6)', 'rgba(234, 88, 12, 1)', 'rgba(234, 88, 12, 0.6)'] }} transition={{ repeat: Infinity, duration: 2 }} className="p-3 rounded-lg bg-slate-900 border-2 text-center">
+            <p className="text-sm-responsive font-bold text-orange-300">FP Scheduler</p>
+            <p className="text-xs text-slate-400">← 1 planificador</p>
+          </motion.div>
+          <div className="text-center text-orange-400 text-2xl">↓</div>
+          <motion.div animate={{ borderColor: ['rgba(234, 88, 12, 0.6)', 'rgba(234, 88, 12, 1)', 'rgba(234, 88, 12, 0.6)'], boxShadow: ['0 0 0 rgba(234, 88, 12, 0)', '0 0 20px rgba(234, 88, 12, 0.4)', '0 0 0 rgba(234, 88, 12, 0)'] }} transition={{ repeat: Infinity, duration: 2 }} className="p-4 rounded-lg bg-orange-600/20 border-2 text-center">
+            <p className="text-base-responsive font-bold text-orange-200">FMAC-256 (Nativa)</p>
+            <p className="text-xs text-orange-300 font-mono mt-1">256 bits en 1 ciclo</p>
+            <p className="text-xs text-slate-400">← 1 unidad unificada</p>
+          </motion.div>
+          <div className="text-center text-sm text-orange-400 font-mono">
+            ← Crossbar integrado<br/>← Menor latencia
+          </div>
+          <motion.div animate={{ y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 2, delay: 0.5 }} className="text-center">
+            <div className="px-3 py-2 rounded-lg bg-orange-500/20 border border-orange-400/40 inline-block">
+              <p className="text-xs-responsive font-mono text-orange-300 font-bold">Resultado AVX-256</p>
+              <p className="text-xs text-slate-400">✓ menor latencia, menor energía</p>
+            </div>
+          </motion.div>
+        </div>
+      )
+    },
+    {
+      name: 'comparison',
+      title: 'Comparación Arquitectónica',
+      subtitle: 'Análisis final',
+      color: 'amber',
+      bgGrad: 'from-amber-950 to-slate-900',
+      border: 'border-amber-500/40',
+      content: (
+        <div className="space-y-4 text-sm-responsive">
+          <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/30">
+            <p className="text-purple-300 font-bold mb-2">Excavator: Arquitectura Coordinada</p>
+            <p className="text-slate-300 leading-relaxed">
+              • Dos unidades FMAC de 128 bits funcionan en paralelo<br/>
+              • Requieren coordinación por hardware (scheduler overhead)<br/>
+              • Latencia total mayor por sincronización<br/>
+              • Consumo de energía más alto
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-orange-500/10 border border-orange-500/30">
+            <p className="text-orange-300 font-bold mb-2">Zen: Arquitectura Unificada</p>
+            <p className="text-slate-300 leading-relaxed">
+              • Una sola unidad FMAC de 256 bits nativa<br/>
+              • Sin coordinación: crossbar integrado simplifica lógica<br/>
+              • Latencia mínima en un ciclo<br/>
+              • Consumo de energía optimizado
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
+            <p className="text-emerald-300 font-bold mb-2">Impacto en Rendimiento</p>
+            <p className="text-slate-300 leading-relaxed">
+              Zen es ~40-50% más eficiente en latencia para operaciones AVX-256. Revolucionó el diseño de CPUs modernas: un unidad grande es mejor que dos pequeñas coordinadas.
+            </p>
+          </div>
+        </div>
+      )
+    }
+  ];
+
+  const current = steps[step];
+  const colorClass = current.color === 'purple' ? 'text-purple-300' : current.color === 'orange' ? 'text-orange-300' : 'text-amber-300';
 
   return (
-    <div className="w-full h-full flex flex-col gap-3 max-w-7xl mx-auto px-3 sm:px-6">
+    <div className="w-full h-full flex flex-col gap-4 max-w-5xl mx-auto px-3 sm:px-6">
       {/* Title */}
       <div className="text-center shrink-0">
         <h2 className="text-title text-slate-100">Comparación Arquitectónica: AMD Excavator vs Zen</h2>
         <p className="text-sm-responsive text-slate-400 mt-1">Unidad FP para AVX-256</p>
       </div>
 
-      {/* Main comparison grid */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4 min-h-0">
-        {/* EXCAVATOR - Left */}
-        <motion.div
-          onHoverStart={() => setHighlighted('excavator')}
-          onHoverEnd={() => setHighlighted(null)}
-          animate={{ scale: highlighted === 'excavator' ? 1.02 : 1 }}
-          className="bg-gradient-to-br from-purple-950 to-slate-900 border-2 border-purple-500/40 rounded-lg lg:rounded-2xl p-3 lg:p-4 flex flex-col gap-2 lg:gap-3"
-        >
-          <div className="text-center pb-1 lg:pb-2 border-b border-purple-500/30">
-            <h3 className="text-base-responsive lg:text-lg-responsive font-bold text-purple-300">Izquierda — AMD Excavator</h3>
-            <p className="text-xs-responsive text-purple-400 font-mono mt-0.5">Pre-2017: 2×128-bit coordinadas</p>
-          </div>
-
-          {/* AVX-256 Input */}
-          <div className="text-center">
-            <div className="px-2 lg:px-3 py-1 lg:py-2 rounded-lg bg-purple-500/20 border border-purple-400/30 inline-block">
-              <p className="text-xs-responsive lg:text-sm-responsive font-mono text-purple-300 font-bold">AVX-256 Input</p>
-              <p className="text-xs text-purple-400 font-mono mt-0.5 lg:mt-1">bits 0-255</p>
+      {/* Main carousel view */}
+      <div className="flex-1 flex flex-col gap-3 min-h-0">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            className={`bg-gradient-to-br ${current.bgGrad} border-2 ${current.border} rounded-2xl p-5 flex-1 overflow-y-auto`}
+          >
+            <div className="text-center pb-3 border-b border-slate-500/30 mb-4">
+              <h3 className={`text-lg-responsive font-bold ${colorClass}`}>{current.title}</h3>
+              <p className="text-xs-responsive text-slate-400 font-mono mt-1">{current.subtitle}</p>
             </div>
-          </div>
-
-          {/* Flow down */}
-          <motion.div
-            animate={{ y: [0, 5, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="text-center text-xl text-purple-400"
-          >
-            ↓
+            {current.content}
           </motion.div>
-
-          {/* Two FMAC units */}
-          <div className="space-y-1 lg:space-y-2">
-            <motion.div
-              animate={{ borderColor: highlighted === 'excavator' ? ['rgba(168, 85, 247, 0.6)', 'rgba(168, 85, 247, 1)', 'rgba(168, 85, 247, 0.6)'] : 'rgba(168, 85, 247, 0.4)' }}
-              className="p-2 lg:p-3 rounded-lg bg-slate-900 border-2 text-center"
-            >
-              <p className="text-xs-responsive lg:text-sm-responsive font-bold text-purple-300">FMAC-128 #0</p>
-              <p className="text-xs text-slate-400 font-mono mt-0.5">bits 0-127</p>
-            </motion.div>
-            <motion.div
-              animate={{ borderColor: highlighted === 'excavator' ? ['rgba(168, 85, 247, 0.6)', 'rgba(168, 85, 247, 1)', 'rgba(168, 85, 247, 0.6)'] : 'rgba(168, 85, 247, 0.4)' }}
-              className="p-2 lg:p-3 rounded-lg bg-slate-900 border-2 text-center"
-            >
-              <p className="text-xs-responsive lg:text-sm-responsive font-bold text-purple-300">FMAC-128 #1</p>
-              <p className="text-xs text-slate-400 font-mono mt-0.5">bits 128-255</p>
-            </motion.div>
-          </div>
-
-          <div className="text-center text-xs-responsive text-purple-400 font-mono">
-            ← 2 unidades coordinadas
-            <br/>
-            ← Causa latencia mayor
-          </div>
-
-          {/* Result */}
-          <motion.div
-            animate={{ y: [0, -3, 0] }}
-            transition={{ repeat: Infinity, duration: 2, delay: 0.5 }}
-            className="text-center mt-1 lg:mt-2"
-          >
-            <div className="px-2 lg:px-3 py-1 lg:py-2 rounded-lg bg-purple-600/20 border border-purple-400/40 inline-block">
-              <p className="text-xs-responsive font-mono text-purple-300 font-bold">Resultado AVX-256</p>
-              <p className="text-xs text-slate-500">(mayor latencia)</p>
-            </div>
-          </motion.div>
-        </motion.div>
-
-        {/* ZEN - Right */}
-        <motion.div
-          onHoverStart={() => setHighlighted('zen')}
-          onHoverEnd={() => setHighlighted(null)}
-          animate={{ scale: highlighted === 'zen' ? 1.02 : 1 }}
-          className="bg-gradient-to-br from-orange-950 to-slate-900 border-2 border-orange-500/40 rounded-lg lg:rounded-2xl p-3 lg:p-4 flex flex-col gap-2 lg:gap-3"
-        >
-          <div className="text-center pb-1 lg:pb-2 border-b border-orange-500/30">
-            <h3 className="text-base-responsive lg:text-lg-responsive font-bold text-orange-300">Derecha — AMD Zen</h3>
-            <p className="text-xs-responsive text-orange-400 font-mono mt-0.5">2017+: 1×256-bit nativa</p>
-          </div>
-
-          {/* AVX-256 Input */}
-          <div className="text-center">
-            <div className="px-2 lg:px-3 py-1 lg:py-2 rounded-lg bg-orange-500/20 border border-orange-400/30 inline-block">
-              <p className="text-xs-responsive lg:text-sm-responsive font-mono text-orange-300 font-bold">AVX-256 Input</p>
-              <p className="text-xs text-orange-400 font-mono mt-0.5 lg:mt-1">bits 0-255</p>
-            </div>
-          </div>
-
-          {/* Flow down */}
-          <motion.div
-            animate={{ y: [0, 5, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="text-center text-xl text-orange-400"
-          >
-            ↓
-          </motion.div>
-
-          {/* FP Scheduler */}
-          <motion.div
-            animate={{ borderColor: highlighted === 'zen' ? ['rgba(234, 88, 12, 0.6)', 'rgba(234, 88, 12, 1)', 'rgba(234, 88, 12, 0.6)'] : 'rgba(234, 88, 12, 0.4)' }}
-            className="p-2 lg:p-3 rounded-lg bg-slate-900 border-2 text-center"
-          >
-            <p className="text-xs-responsive lg:text-sm-responsive font-bold text-orange-300">FP Scheduler</p>
-            <p className="text-xs text-slate-400">← 1 planificador</p>
-          </motion.div>
-
-          <div className="text-center text-orange-400 text-lg">↓</div>
-
-          {/* Native FMAC-256 */}
-          <motion.div
-            animate={{
-              borderColor: highlighted === 'zen' ? ['rgba(234, 88, 12, 0.6)', 'rgba(234, 88, 12, 1)', 'rgba(234, 88, 12, 0.6)'] : 'rgba(234, 88, 12, 0.4)',
-              boxShadow: highlighted === 'zen' ? ['0 0 0 rgba(234, 88, 12, 0)', '0 0 20px rgba(234, 88, 12, 0.4)', '0 0 0 rgba(234, 88, 12, 0)'] : 'none'
-            }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="p-3 lg:p-4 rounded-lg bg-orange-600/20 border-2 text-center"
-          >
-            <p className="text-sm-responsive lg:text-base-responsive font-bold text-orange-200">FMAC-256 (Nativa)</p>
-            <p className="text-xs text-orange-300 font-mono mt-0.5 lg:mt-1">256 bits en 1 ciclo</p>
-            <p className="text-xs text-slate-400">← 1 unidad unificada</p>
-          </motion.div>
-
-          <div className="text-center text-xs text-orange-400 font-mono">
-            ← Crossbar integrado
-            <br/>
-            ← Menor latencia
-          </div>
-
-          {/* Result */}
-          <motion.div
-            animate={{ y: [0, -3, 0] }}
-            transition={{ repeat: Infinity, duration: 2, delay: 0.5 }}
-            className="text-center mt-1 lg:mt-2"
-          >
-            <div className="px-2 lg:px-3 py-1 lg:py-2 rounded-lg bg-orange-500/20 border border-orange-400/40 inline-block">
-              <p className="text-xs-responsive font-mono text-orange-300 font-bold">Resultado AVX-256</p>
-              <p className="text-xs text-slate-400">✓ menor latencia, menor energía</p>
-            </div>
-          </motion.div>
-        </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* Comparison footer */}
-      <div className="shrink-0 grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-3 text-sm-responsive font-mono">
-        <motion.div
-          animate={{ borderColor: highlighted === 'excavator' ? 'rgba(168, 85, 247, 1)' : 'rgba(168, 85, 247, 0.3)' }}
-          className="p-2 lg:p-3 rounded-lg lg:rounded-xl bg-slate-900 border-2 text-slate-300"
+      {/* Navigation */}
+      <div className="shrink-0 flex justify-between items-center gap-3 pb-3">
+        <button
+          onClick={() => setStep(Math.max(0, step - 1))}
+          disabled={step === 0}
+          className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 font-mono text-sm hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          <span className="text-purple-400 font-bold">Excavator:</span> <span className="text-xs-responsive">2 mini-unidades + coordinación = overhead</span>
-        </motion.div>
-        <motion.div
-          animate={{ borderColor: highlighted === 'zen' ? 'rgba(234, 88, 12, 1)' : 'rgba(234, 88, 12, 0.3)' }}
-          className="p-2 lg:p-3 rounded-lg lg:rounded-xl bg-slate-900 border-2 text-slate-300"
+          ← Anterior
+        </button>
+        <span className="text-sm-responsive text-slate-400 font-mono">
+          {step + 1} de {steps.length}
+        </span>
+        <button
+          onClick={() => setStep(Math.min(steps.length - 1, step + 1))}
+          disabled={step === steps.length - 1}
+          className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 font-mono text-sm hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          <span className="text-orange-400 font-bold">Zen:</span> <span className="text-xs-responsive">1 unidad nativa = pipeline más eficiente</span>
-        </motion.div>
+          Siguiente →
+        </button>
       </div>
     </div>
   );
