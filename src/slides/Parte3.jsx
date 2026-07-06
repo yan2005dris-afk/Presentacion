@@ -10,15 +10,15 @@ import { motion } from 'framer-motion';
 export function Slide3_1() {
   return (
     <div className="space-y-4 max-w-5xl mx-auto">
-      <div className="p-3 rounded-xl bg-slate-900 border border-cyan-500/30 text-[13px] text-slate-300">
+      <div className="card-responsive bg-slate-900 border border-cyan-500/30 text-slate-300">
         <span className="font-bold text-cyan-400">Caso Real (Intel Atom 2009):</span> Sin extensiones SIMD, la CPU se saturaba al 100% procesando video HD. Con SSE habilitado, el mismo chip lo manejaba al 40%.
       </div>
 
-      <div className="space-y-2 text-[13px] font-mono">
-        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex justify-between items-center"><span className="text-blue-400 font-bold">1996 · MMX (64 Bits)</span> <span>8x int8 (Reutilizaba registros FPU)</span></div>
-        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex justify-between items-center"><span className="text-cyan-400 font-bold">1999 · SSE (128 Bits)</span> <span>4x Float32 (Nuevos registros XMM)</span></div>
-        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex justify-between items-center"><span className="text-purple-400 font-bold">2010 · AVX (256 Bits)</span> <span>8x Float32 / 4x Double64 (Registros YMM)</span></div>
-        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex justify-between items-center"><span className="text-amber-400 font-bold">2017 · AVX-512 (512 Bits)</span> <span>16x Float32 + Regs de Máscara k0-k7</span></div>
+      <div className="gap-responsive flex flex-col">
+        <div className="card-responsive bg-slate-900 border border-slate-800 flex justify-between items-center"><span className="text-blue-400 font-bold">1996 · MMX (64 Bits)</span> <span className="text-sm-responsive">8x int8 (Reutilizaba registros FPU)</span></div>
+        <div className="card-responsive bg-slate-900 border border-slate-800 flex justify-between items-center"><span className="text-cyan-400 font-bold">1999 · SSE (128 Bits)</span> <span className="text-sm-responsive">4x Float32 (Nuevos registros XMM)</span></div>
+        <div className="card-responsive bg-slate-900 border border-slate-800 flex justify-between items-center"><span className="text-purple-400 font-bold">2010 · AVX (256 Bits)</span> <span className="text-sm-responsive">8x Float32 / 4x Double64 (Registros YMM)</span></div>
+        <div className="card-responsive bg-slate-900 border border-slate-800 flex justify-between items-center"><span className="text-amber-400 font-bold">2017 · AVX-512 (512 Bits)</span> <span className="text-sm-responsive">16x Float32 + Regs de Máscara k0-k7</span></div>
       </div>
     </div>
   );
@@ -30,11 +30,11 @@ export function Slide3_2() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto text-center">
       <div className="p-4 rounded-2xl bg-slate-900 border border-amber-500/40">
-        <h4 className="text-sm font-bold text-amber-300">Subword Parallelism</h4>
-        <p className="text-[13px] text-slate-300 mt-1">Un solo sumador físico de 256 bits se particiona ajustando la lógica de acarreo interna según la instrucción.</p>
+        <h4 className="text-sm-responsive font-bold text-amber-300">Subword Parallelism</h4>
+        <p className="text-sm-responsive text-slate-300 mt-1">Un solo sumador físico de 256 bits se particiona ajustando la lógica de acarreo interna según la instrucción.</p>
       </div>
 
-      <div className="space-y-2 text-[13px] font-mono text-left">
+      <div className="space-y-2 text-sm-responsive font-mono text-left">
         <div className="text-cyan-400 font-bold">• Particionado como 8×32-bit (Floats en VADDPS)</div>
         <div className="grid grid-cols-8 gap-1 text-center font-bold">
           {[...Array(8)].map((_, i) => <div key={i} className="p-2 rounded bg-cyan-500/20 border border-cyan-400 text-cyan-300">+32</div>)}
@@ -55,10 +55,10 @@ export function Slide3_3() {
     <div className="space-y-4 max-w-6xl mx-auto">
       {/* SSE instructions table */}
       <div className="rounded-2xl bg-slate-900 border border-cyan-500/30 overflow-hidden">
-        <div className="px-4 py-2 bg-slate-950 border-b border-slate-800 text-[13px] font-bold text-cyan-400 font-mono flex items-center gap-2">
-          <span className="text-[13px] px-1.5 py-0.5 bg-cyan-500/20 rounded">SSE</span> Instrucciones básicas — Registros XMM (128 bits) · 4 × float32
+        <div className="px-4 py-2 bg-slate-950 border-b border-slate-800 text-sm-responsive font-bold text-cyan-400 font-mono flex items-center gap-2">
+          <span className="text-sm-responsive px-1.5 py-0.5 bg-cyan-500/20 rounded">SSE</span> Instrucciones básicas — Registros XMM (128 bits) · 4 × float32
         </div>
-        <div className="p-3 grid grid-cols-2 gap-x-6 gap-y-1.5 text-[13px] font-mono">
+        <div className="p-3 grid grid-cols-2 gap-x-6 gap-y-1.5 text-sm-responsive font-mono">
           <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">①</span><span className="text-cyan-300 font-bold drop-shadow-[0_0_4px_rgba(6,182,212,0.5)]">MOVAPS</span> <span className="text-slate-400">xmm0, [mem]</span> <span className="text-slate-600 ml-auto">; cargar 4 floats alineados</span></div>
           <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">②</span><span className="text-cyan-300 font-bold drop-shadow-[0_0_4px_rgba(6,182,212,0.5)]">ADDPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; sumar 4 floats</span></div>
           <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">③</span><span className="text-cyan-300 font-bold drop-shadow-[0_0_4px_rgba(6,182,212,0.5)]">MULPS</span> <span className="text-slate-400">xmm0, xmm1</span> <span className="text-slate-600 ml-auto">; multiplicar 4 floats</span></div>
@@ -69,10 +69,10 @@ export function Slide3_3() {
 
       {/* AVX instructions */}
       <div className="rounded-2xl bg-slate-900 border border-purple-500/30 overflow-hidden">
-        <div className="px-4 py-2 bg-slate-950 border-b border-slate-800 text-[13px] font-bold text-purple-400 font-mono flex items-center gap-2">
-          <span className="text-[13px] px-1.5 py-0.5 bg-purple-500/20 rounded">AVX</span> Instrucciones avanzadas — Registros YMM (256 bits) · 8 × float32
+        <div className="px-4 py-2 bg-slate-950 border-b border-slate-800 text-sm-responsive font-bold text-purple-400 font-mono flex items-center gap-2">
+          <span className="text-sm-responsive px-1.5 py-0.5 bg-purple-500/20 rounded">AVX</span> Instrucciones avanzadas — Registros YMM (256 bits) · 8 × float32
         </div>
-        <div className="p-3 text-[13px] font-mono space-y-2">
+        <div className="p-3 text-sm-responsive font-mono space-y-2">
           <div className="grid grid-cols-2 gap-x-6 gap-y-1.5">
             <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">①</span><span className="text-fuchsia-300 font-bold drop-shadow-[0_0_4px_rgba(217,70,239,0.5)]">VMOVAPD</span> <span className="text-slate-400">ymm, [mem]</span> <span className="text-slate-600 ml-auto">; mover 4 doubles</span></div>
             <div className="flex items-center gap-2"><span className="text-xs text-slate-700 w-4 shrink-0 text-right">②</span><span className="text-fuchsia-300 font-bold drop-shadow-[0_0_4px_rgba(217,70,239,0.5)]">VADDPD</span> <span className="text-slate-400">ymm, ymm, ymm</span> <span className="text-slate-600 ml-auto">; sumar 4 doubles</span></div>
@@ -88,13 +88,13 @@ export function Slide3_3() {
               <span className="text-emerald-400/80 text-[13px] ml-auto font-bold drop-shadow-[0_0_6px_rgba(52,211,153,0.5)]">★ FMA: a*b + c en 1 ciclo</span>
             </div>
           </div>
-          <div className="p-2 bg-slate-950 rounded-xl border border-purple-500/20 text-[13px] text-slate-400 leading-relaxed">
+          <div className="p-2 bg-slate-950 rounded-xl border border-purple-500/20 text-sm-responsive text-slate-400 leading-relaxed">
             <span className="text-fuchsia-300">Ejemplo:</span> <span className="text-slate-500">C[0..3] = A[0..3] × B[0..3] + D[0..3]</span>
           </div>
         </div>
       </div>
 
-      <p className="text-[13px] text-slate-400 text-center">FMA (Fused Multiply-Add) es la instrucción clave en Inteligencia Artificial: 2 operaciones por ciclo.</p>
+      <p className="text-sm-responsive text-slate-400 text-center">FMA (Fused Multiply-Add) es la instrucción clave en Inteligencia Artificial: 2 operaciones por ciclo.</p>
     </div>
   );
 }
@@ -105,25 +105,29 @@ export function Slide3_FDE_SIMD() {
   const stages = [
     { name: 'FETCH', color: 'border-cyan-400 text-cyan-300', bg: 'bg-cyan-500/10',
       desc: 'La CU busca VADDPD en el instruction cache. Es 1 instrucción que la CPU sabe que opera sobre 256 bits.',
+      example: 'Dirección: 0x40060A',
       detail: '1 instrucción cargada' },
     { name: 'DECODE', color: 'border-blue-400 text-blue-300', bg: 'bg-blue-500/10',
-      desc: 'Decodifica el opcode: "suma 4 doubles". Identifica operandos: YMM0, YMM1 → YMM2.',
+      desc: 'Decodifica el opcode: "suma 4 doubles". Identifica operandos: YMM1 (resultados ×2.5), Y → YMM2.',
+      example: 'YMM1=[2.5,5.0,7.5,10.0] + Y=[10,20,30,40]',
       detail: '1 decode → 4 ops efectivas' },
     { name: 'EXECUTE', color: 'border-amber-400 text-amber-300', bg: 'bg-amber-500/10',
       desc: 'Los 4 sumadores de 64 bits se activan simultáneamente. En vector processor: pipelineado.',
+      example: '⊕2.5+10=12.5 | ⊕5.0+20=25.0 | ⊕7.5+30=37.5 | ⊕10.0+40=50.0',
       detail: '4 ALUs activas en paralelo' },
     { name: 'WRITEBACK', color: 'border-purple-400 text-purple-300', bg: 'bg-purple-500/10',
       desc: 'Los 256 bits del resultado se escriben de vuelta al banco de registros YMM en 1 operación.',
+      example: 'YMM2 ← [12.5, 25.0, 37.5, 50.0]',
       detail: '256 bits en 1 write' },
   ];
 
   return (
     <div className="w-full h-full flex flex-col gap-4 max-w-6xl mx-auto">
       <div className="shrink-0 flex items-center gap-3 px-2">
-        <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-400/30 text-[13px] font-mono text-amber-300">
-          Instrucción: <span className="font-bold">VADDPD ymm2, ymm0, ymm1</span>
+        <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-400/30 text-sm-responsive font-mono text-amber-300">
+          Instrucción: <span className="font-bold">VADDPD ymm2, ymm1, [Y]</span>
         </div>
-        <div className="flex items-center gap-1 text-[13px] text-slate-600 font-mono">
+        <div className="flex items-center gap-1 text-sm-responsive text-slate-600 font-mono">
           <span className="w-2 h-2 rounded-full bg-cyan-400" /> Pipeline SIMD
         </div>
       </div>
@@ -138,13 +142,18 @@ export function Slide3_FDE_SIMD() {
             transition={{ delay: i * 0.15 }}
             className={`flex flex-col rounded-2xl border-2 ${s.color} ${s.bg} overflow-hidden`}
           >
-            <div className={`shrink-0 px-3 py-2 text-center font-bold font-mono text-sm border-b ${s.color} bg-slate-950/50`}>
+            <div className={`shrink-0 px-3 py-2 text-center font-bold font-mono text-sm-responsive border-b ${s.color} bg-slate-950/50`}>
               {i + 1}. {s.name}
             </div>
-            <div className="flex-1 p-3 flex flex-col justify-center text-center gap-2">
-              <p className="text-[13px] text-slate-300 leading-relaxed">{s.desc}</p>
-              <div className={`mt-auto px-2 py-1 rounded-lg ${s.color.replace('text-', 'bg-').replace('300', '500/20')} border ${s.color.replace('text-', 'border-').replace('300', '400/30')}`}>
-                <span className={`text-[13px] font-bold font-mono ${s.color}`}>◆ {s.detail}</span>
+            <div className="flex-1 p-3 flex flex-col justify-between text-center">
+              <p className="text-sm-responsive text-slate-300 leading-relaxed">{s.desc}</p>
+              {s.example && (
+                <div className={`px-2 py-1.5 rounded-lg bg-slate-950/50 border ${s.color.replace('text-', 'border-').replace('300', '400/40')}`}>
+                  <p className={`text-xs-responsive font-mono font-bold ${s.color}`}>{s.example}</p>
+                </div>
+              )}
+              <div className={`px-2 py-1 rounded-lg ${s.color.replace('text-', 'bg-').replace('300', '500/20')} border ${s.color.replace('text-', 'border-').replace('300', '400/30')}`}>
+                <span className={`text-sm-responsive font-bold font-mono ${s.color}`}>◆ {s.detail}</span>
               </div>
             </div>
           </motion.div>
@@ -152,7 +161,7 @@ export function Slide3_FDE_SIMD() {
       </div>
 
       {/* Comparison footer */}
-      <div className="shrink-0 grid grid-cols-2 gap-3 text-[13px] font-mono">
+      <div className="shrink-0 grid grid-cols-2 gap-3 text-sm-responsive font-mono">
         <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400">
           <span className="text-red-400 font-bold">SISD:</span> 1 Decode → 1 micro-op → 1 ALU → 1 resultado
         </div>
@@ -170,14 +179,14 @@ export function Slide3_Chaining() {
   return (
     <div className="space-y-5 max-w-5xl mx-auto">
       <div className="p-4 rounded-2xl bg-slate-900 border border-amber-500/40 text-center space-y-2">
-        <span className="text-[13px] text-amber-400 font-mono font-bold uppercase tracking-widest">Sección 3.8 · CRAY-1 (Seymour Cray, 1976)</span>
-        <h4 className="text-lg font-bold text-slate-100">Encadenamiento Vectorial (Vector Chaining)</h4>
-        <p className="text-[13px] text-slate-300 max-w-3xl mx-auto">
+        <span className="text-sm-responsive text-amber-400 font-mono font-bold uppercase tracking-widest">Sección 3.8 · CRAY-1 (Seymour Cray, 1976)</span>
+        <h4 className="text-lg-responsive font-bold text-slate-100">Encadenamiento Vectorial (Vector Chaining)</h4>
+        <p className="text-sm-responsive text-slate-300 max-w-3xl mx-auto">
           En una operación compuesta como <span className="font-mono text-cyan-300">(A × B) + C</span>, el encadenamiento permite que los resultados parciales de la ALU Multiplicadora pasen directo a la ALU Sumadora mediante un bus de forwarding interno sin esperar a que termine el vector completo.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[13px] font-mono">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm-responsive font-mono">
         <div className="p-4 rounded-2xl bg-slate-900 border border-red-500/30 space-y-2">
           <h5 className="font-bold text-red-400 flex items-center gap-2">❌ Sin Chaining (Tradicional)</h5>
           <p className="text-slate-300 leading-relaxed">
@@ -199,7 +208,7 @@ export function Slide3_Chaining() {
         </div>
       </div>
 
-      <div className="p-3 bg-amber-500/10 border border-amber-400/30 rounded-xl text-center text-amber-300 font-mono text-[13px]">
+      <div className="p-3 bg-amber-500/10 border border-amber-400/30 rounded-xl text-center text-amber-300 font-mono text-sm-responsive">
         💡 <span className="font-bold">Importancia Histórica y Moderna:</span> CRAY-1 demostró que el pipelining cruzado entre ALUs multiplica la velocidad sin aumentar los registros. En procesadores modernos x86/ARM, este principio dio origen a la instrucción nativa <span className="text-emerald-300 font-bold font-mono">FMA (Fused Multiply-Add)</span>.
       </div>
     </div>
@@ -209,18 +218,172 @@ export function Slide3_Chaining() {
 /* ───────── Slide 3.6 — Excavator vs Zen ───────── */
 
 export function Slide3_4() {
+  const [highlighted, setHighlighted] = useState(null);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-      <div className="p-5 rounded-2xl bg-slate-900 border border-purple-500/30 space-y-3">
-        <span className="text-[13px] text-purple-400 font-mono font-bold">AMD Excavator (Pre-2017)</span>
-        <h4 className="text-base font-bold text-slate-200">2x 128-bit FMAC Coordinados</h4>
-        <p className="text-[13px] text-slate-400">Coordinaba dos unidades de 128 bits para simular AVX-256, generando mayor latencia y complejidad de control.</p>
+    <div className="w-full h-full flex flex-col gap-3 max-w-7xl mx-auto px-3 sm:px-6">
+      {/* Title */}
+      <div className="text-center shrink-0">
+        <h2 className="text-title text-slate-100">Comparación Arquitectónica: AMD Excavator vs Zen</h2>
+        <p className="text-sm-responsive text-slate-400 mt-1">Unidad FP para AVX-256</p>
       </div>
 
-      <div className="p-5 rounded-2xl bg-slate-900 border border-cyan-500/40 space-y-3">
-        <span className="text-[13px] text-cyan-400 font-mono font-bold">AMD Zen (2017+)</span>
-        <h4 className="text-base font-bold text-slate-200">Unidad Nativa de 256-bit</h4>
-        <p className="text-[13px] text-slate-400">Un único planificador FP distribuye trabajo vía crossbar a una unidad FMAC-256 nativa con menor consumo.</p>
+      {/* Main comparison grid */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4 min-h-0">
+        {/* EXCAVATOR - Left */}
+        <motion.div
+          onHoverStart={() => setHighlighted('excavator')}
+          onHoverEnd={() => setHighlighted(null)}
+          animate={{ scale: highlighted === 'excavator' ? 1.02 : 1 }}
+          className="bg-gradient-to-br from-purple-950 to-slate-900 border-2 border-purple-500/40 rounded-lg lg:rounded-2xl p-3 lg:p-4 flex flex-col gap-2 lg:gap-3"
+        >
+          <div className="text-center pb-1 lg:pb-2 border-b border-purple-500/30">
+            <h3 className="text-base-responsive lg:text-lg-responsive font-bold text-purple-300">Izquierda — AMD Excavator</h3>
+            <p className="text-xs-responsive text-purple-400 font-mono mt-0.5">Pre-2017: 2×128-bit coordinadas</p>
+          </div>
+
+          {/* AVX-256 Input */}
+          <div className="text-center">
+            <div className="px-2 lg:px-3 py-1 lg:py-2 rounded-lg bg-purple-500/20 border border-purple-400/30 inline-block">
+              <p className="text-xs-responsive lg:text-sm-responsive font-mono text-purple-300 font-bold">AVX-256 Input</p>
+              <p className="text-xs text-purple-400 font-mono mt-0.5 lg:mt-1">bits 0-255</p>
+            </div>
+          </div>
+
+          {/* Flow down */}
+          <motion.div
+            animate={{ y: [0, 5, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="text-center text-xl text-purple-400"
+          >
+            ↓
+          </motion.div>
+
+          {/* Two FMAC units */}
+          <div className="space-y-1 lg:space-y-2">
+            <motion.div
+              animate={{ borderColor: highlighted === 'excavator' ? ['rgba(168, 85, 247, 0.6)', 'rgba(168, 85, 247, 1)', 'rgba(168, 85, 247, 0.6)'] : 'rgba(168, 85, 247, 0.4)' }}
+              className="p-2 lg:p-3 rounded-lg bg-slate-900 border-2 text-center"
+            >
+              <p className="text-xs-responsive lg:text-sm-responsive font-bold text-purple-300">FMAC-128 #0</p>
+              <p className="text-xs text-slate-400 font-mono mt-0.5">bits 0-127</p>
+            </motion.div>
+            <motion.div
+              animate={{ borderColor: highlighted === 'excavator' ? ['rgba(168, 85, 247, 0.6)', 'rgba(168, 85, 247, 1)', 'rgba(168, 85, 247, 0.6)'] : 'rgba(168, 85, 247, 0.4)' }}
+              className="p-2 lg:p-3 rounded-lg bg-slate-900 border-2 text-center"
+            >
+              <p className="text-xs-responsive lg:text-sm-responsive font-bold text-purple-300">FMAC-128 #1</p>
+              <p className="text-xs text-slate-400 font-mono mt-0.5">bits 128-255</p>
+            </motion.div>
+          </div>
+
+          <div className="text-center text-xs-responsive text-purple-400 font-mono">
+            ← 2 unidades coordinadas
+            <br/>
+            ← Causa latencia mayor
+          </div>
+
+          {/* Result */}
+          <motion.div
+            animate={{ y: [0, -3, 0] }}
+            transition={{ repeat: Infinity, duration: 2, delay: 0.5 }}
+            className="text-center mt-1 lg:mt-2"
+          >
+            <div className="px-2 lg:px-3 py-1 lg:py-2 rounded-lg bg-purple-600/20 border border-purple-400/40 inline-block">
+              <p className="text-xs-responsive font-mono text-purple-300 font-bold">Resultado AVX-256</p>
+              <p className="text-xs text-slate-500">(mayor latencia)</p>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* ZEN - Right */}
+        <motion.div
+          onHoverStart={() => setHighlighted('zen')}
+          onHoverEnd={() => setHighlighted(null)}
+          animate={{ scale: highlighted === 'zen' ? 1.02 : 1 }}
+          className="bg-gradient-to-br from-orange-950 to-slate-900 border-2 border-orange-500/40 rounded-lg lg:rounded-2xl p-3 lg:p-4 flex flex-col gap-2 lg:gap-3"
+        >
+          <div className="text-center pb-1 lg:pb-2 border-b border-orange-500/30">
+            <h3 className="text-base-responsive lg:text-lg-responsive font-bold text-orange-300">Derecha — AMD Zen</h3>
+            <p className="text-xs-responsive text-orange-400 font-mono mt-0.5">2017+: 1×256-bit nativa</p>
+          </div>
+
+          {/* AVX-256 Input */}
+          <div className="text-center">
+            <div className="px-2 lg:px-3 py-1 lg:py-2 rounded-lg bg-orange-500/20 border border-orange-400/30 inline-block">
+              <p className="text-xs-responsive lg:text-sm-responsive font-mono text-orange-300 font-bold">AVX-256 Input</p>
+              <p className="text-xs text-orange-400 font-mono mt-0.5 lg:mt-1">bits 0-255</p>
+            </div>
+          </div>
+
+          {/* Flow down */}
+          <motion.div
+            animate={{ y: [0, 5, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="text-center text-xl text-orange-400"
+          >
+            ↓
+          </motion.div>
+
+          {/* FP Scheduler */}
+          <motion.div
+            animate={{ borderColor: highlighted === 'zen' ? ['rgba(234, 88, 12, 0.6)', 'rgba(234, 88, 12, 1)', 'rgba(234, 88, 12, 0.6)'] : 'rgba(234, 88, 12, 0.4)' }}
+            className="p-2 lg:p-3 rounded-lg bg-slate-900 border-2 text-center"
+          >
+            <p className="text-xs-responsive lg:text-sm-responsive font-bold text-orange-300">FP Scheduler</p>
+            <p className="text-xs text-slate-400">← 1 planificador</p>
+          </motion.div>
+
+          <div className="text-center text-orange-400 text-lg">↓</div>
+
+          {/* Native FMAC-256 */}
+          <motion.div
+            animate={{
+              borderColor: highlighted === 'zen' ? ['rgba(234, 88, 12, 0.6)', 'rgba(234, 88, 12, 1)', 'rgba(234, 88, 12, 0.6)'] : 'rgba(234, 88, 12, 0.4)',
+              boxShadow: highlighted === 'zen' ? ['0 0 0 rgba(234, 88, 12, 0)', '0 0 20px rgba(234, 88, 12, 0.4)', '0 0 0 rgba(234, 88, 12, 0)'] : 'none'
+            }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="p-3 lg:p-4 rounded-lg bg-orange-600/20 border-2 text-center"
+          >
+            <p className="text-sm-responsive lg:text-base-responsive font-bold text-orange-200">FMAC-256 (Nativa)</p>
+            <p className="text-xs text-orange-300 font-mono mt-0.5 lg:mt-1">256 bits en 1 ciclo</p>
+            <p className="text-xs text-slate-400">← 1 unidad unificada</p>
+          </motion.div>
+
+          <div className="text-center text-xs text-orange-400 font-mono">
+            ← Crossbar integrado
+            <br/>
+            ← Menor latencia
+          </div>
+
+          {/* Result */}
+          <motion.div
+            animate={{ y: [0, -3, 0] }}
+            transition={{ repeat: Infinity, duration: 2, delay: 0.5 }}
+            className="text-center mt-1 lg:mt-2"
+          >
+            <div className="px-2 lg:px-3 py-1 lg:py-2 rounded-lg bg-orange-500/20 border border-orange-400/40 inline-block">
+              <p className="text-xs-responsive font-mono text-orange-300 font-bold">Resultado AVX-256</p>
+              <p className="text-xs text-slate-400">✓ menor latencia, menor energía</p>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Comparison footer */}
+      <div className="shrink-0 grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-3 text-sm-responsive font-mono">
+        <motion.div
+          animate={{ borderColor: highlighted === 'excavator' ? 'rgba(168, 85, 247, 1)' : 'rgba(168, 85, 247, 0.3)' }}
+          className="p-2 lg:p-3 rounded-lg lg:rounded-xl bg-slate-900 border-2 text-slate-300"
+        >
+          <span className="text-purple-400 font-bold">Excavator:</span> <span className="text-xs-responsive">2 mini-unidades + coordinación = overhead</span>
+        </motion.div>
+        <motion.div
+          animate={{ borderColor: highlighted === 'zen' ? 'rgba(234, 88, 12, 1)' : 'rgba(234, 88, 12, 0.3)' }}
+          className="p-2 lg:p-3 rounded-lg lg:rounded-xl bg-slate-900 border-2 text-slate-300"
+        >
+          <span className="text-orange-400 font-bold">Zen:</span> <span className="text-xs-responsive">1 unidad nativa = pipeline más eficiente</span>
+        </motion.div>
       </div>
     </div>
   );
@@ -244,7 +407,7 @@ export function Slide3_OrganizacionDatos() {
     <div className="w-full h-full flex flex-col gap-4 max-w-6xl mx-auto">
       <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
         <div className="flex justify-between items-center">
-          <h4 className="text-sm font-bold text-slate-200 font-mono">
+          <h4 className="text-sm-responsive font-bold text-slate-200 font-mono">
             Organización de Datos Empaquetados en Registro YMM (256 Bits) · Sección 3.4
           </h4>
           <div className="flex gap-2">
@@ -262,7 +425,7 @@ export function Slide3_OrganizacionDatos() {
 
         {/* Visual representation of 256-bit register */}
         <div className="space-y-2">
-          <div className="flex justify-between text-xs font-mono text-slate-500 px-1">
+          <div className="flex justify-between text-xs-responsive font-mono text-slate-500 px-1">
             <span>Bit 255 (MSB)</span>
             <span>Registro YMM (256 Bits de Silicio)</span>
             <span>Bit 0 (LSB)</span>
@@ -273,7 +436,7 @@ export function Slide3_OrganizacionDatos() {
               {Array.from({ length: f.count }).map((_, i) => (
                 <div
                   key={i}
-                  className={`p-2.5 rounded-xl border text-center font-mono text-[11px] font-bold transition-all whitespace-nowrap ${f.color}`}
+                  className={`p-2.5 rounded-xl border text-center font-mono text-xs-responsive font-bold transition-all whitespace-nowrap ${f.color}`}
                 >
                   {f.count <= 8 ? `Elem [${f.count - 1 - i}]` : `[${f.count - 1 - i}]`}
                 </div>
@@ -282,14 +445,14 @@ export function Slide3_OrganizacionDatos() {
           </div>
         </div>
 
-        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex items-center justify-between text-xs-responsive">
           <span className="text-slate-400">Formato activo: <span className="font-bold text-slate-200">{f.name}</span></span>
           <span className="text-slate-300 italic">{f.desc}</span>
         </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-[13px] space-y-1">
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-sm-responsive space-y-1">
           <span className="text-cyan-400 font-bold font-mono block">32-bit Float</span>
           <span className="text-slate-400">8 elementos por instrucción en AVX (256-bit).</span>
         </div>
@@ -310,16 +473,18 @@ export function Slide3_OrganizacionDatos() {
   );
 }
 
+/* ───────── Slide 3.6b — Data Flow Visualization ───────── */
+
 /* ───────── Carátula de Sección: Parte 3 ───────── */
 
 export function SlideIntroParte3() {
   return (
     <div className="p-8 rounded-3xl bg-gradient-to-br from-amber-500/10 via-slate-900 to-orange-500/10 border-2 border-amber-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
-      <span className="px-4 py-1 bg-amber-500/20 text-amber-300 font-extrabold text-xs rounded-full border border-amber-400/30 uppercase tracking-widest">
+      <span className="px-4 py-1 bg-amber-500/20 text-amber-300 font-extrabold text-xs-responsive rounded-full border border-amber-400/30 uppercase tracking-widest">
         Expositor: Alejandro Andy · Parte 3
       </span>
-      <h2 className="text-3xl font-extrabold text-slate-100">Extensiones SIMD Modernas (MMX, SSE, AVX)</h2>
-      <div className="grid grid-cols-2 gap-3 text-left text-[13px] pt-2">
+      <h2 className="text-title font-extrabold text-slate-100">Extensiones SIMD Modernas (MMX, SSE, AVX)</h2>
+      <div className="grid grid-cols-2 gap-3 text-left text-sm-responsive pt-2">
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.1: Evolución de Registros (1996-2017)</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.2: Subword Parallelism en Hardware</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.3: Instrucciones SSE y AVX + FMA</div>
