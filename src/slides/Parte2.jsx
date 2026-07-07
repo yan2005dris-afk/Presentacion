@@ -14,32 +14,32 @@ export function Slide2_1() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0">
         {/* ─── Left: ¿Qué es SIMD? ─── */}
         <div className="p-5 rounded-2xl bg-slate-900 border border-cyan-500/40 flex flex-col gap-3 min-h-0 overflow-y-auto">
-          <h4 className="text-[12px] font-bold text-cyan-400 flex items-center gap-2 shrink-0">
+          <h4 className="text-xs-responsive font-bold text-cyan-400 flex items-center gap-2 shrink-0">
             <Layers size={18} /> ¿Qué es SIMD?
           </h4>
 
-          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-[13px] space-y-1">
+          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-sm-responsive space-y-1">
             <span className="text-cyan-300 font-bold block">Single Instruction, Multiple Data</span>
             <p className="text-slate-300 leading-relaxed">
               Una sola instrucción se decodifica <span className="text-cyan-400 font-bold">una vez</span> y se aplica sobre <span className="text-cyan-400 font-bold">N datos distintos</span> en <span className="text-cyan-400 font-bold">N ALUs en paralelo</span>.
             </p>
           </div>
 
-          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-[13px] space-y-1">
+          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-sm-responsive space-y-1">
             <span className="text-amber-300 font-bold block">⚡ Clave: Eficiencia energética</span>
             <p className="text-slate-300 leading-relaxed">
               El costo de <span className="text-amber-400 font-mono font-bold">Fetch + Decode</span> se divide entre N elementos. <span className="text-amber-400 font-bold">No pagás N veces el control.</span>
             </p>
           </div>
 
-          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-[13px] space-y-1">
+          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-sm-responsive space-y-1">
             <span className="text-purple-300 font-bold block">🎖️ Analogía: Comandante + Escuadrón</span>
             <p className="text-slate-300 leading-relaxed">
               El comandante da <span className="text-purple-400 font-bold">UNA</span> orden. El escuadrón (N soldados) la ejecuta al mismo tiempo, cada uno sobre su propio objetivo. <span className="text-purple-400 font-bold">Una sola voz de mando, N acciones simultáneas.</span>
             </p>
           </div>
 
-          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-[12px] text-slate-400 space-y-1">
+          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-xs-responsive text-slate-400 space-y-1">
             <span className="text-slate-500 font-mono font-bold">📍 Taxonomía de Flynn:</span>
             <p className="text-slate-400">1 Instruction Stream · Múltiples Data Streams · 1 Unidad de Control · N ALUs</p>
             <p className="text-slate-500 italic">(Retomando lo visto en la Parte 1 — Reyes Alisson)</p>
@@ -48,15 +48,15 @@ export function Slide2_1() {
 
         {/* ─── Right: Visual Demo ─── */}
         <div className="p-5 rounded-2xl bg-slate-900 border border-cyan-500/40 flex flex-col gap-3 min-h-0">
-          <h4 className="text-[12px] font-bold text-cyan-400 flex items-center gap-2 shrink-0">
+          <h4 className="text-xs-responsive font-bold text-cyan-400 flex items-center gap-2 shrink-0">
             <Activity size={18} /> Una Orden, Ocho Soldados
           </h4>
 
           {/* Control Unit */}
           <div className="shrink-0 text-center">
             <div className="p-2.5 rounded-xl bg-slate-950 border border-cyan-400/40 inline-block px-5 shadow-lg shadow-cyan-500/10">
-              <span className="text-[11px] text-cyan-400 font-mono font-bold uppercase tracking-widest block">Unidad de Control Única</span>
-              <h4 className="text-base font-bold text-slate-100 mt-0.5">Comando: SUMAR +10</h4>
+              <span className="text-xs-responsive text-cyan-400 font-mono font-bold uppercase tracking-widest block">Unidad de Control Única</span>
+              <h4 className="text-base-responsive font-bold text-slate-100 mt-0.5">Comando: SUMAR +10</h4>
             </div>
           </div>
 
@@ -64,17 +64,17 @@ export function Slide2_1() {
           <div className="flex-1 grid grid-cols-4 md:grid-cols-8 gap-1.5 min-h-0 items-center">
             {[5, 12, 3, 8, 15, 7, 2, 9].map((val, i) => (
               <motion.div key={i} whileHover={{ y: -4 }} className="space-y-1">
-                <div className="p-1 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono text-slate-500 text-center">ALU{i}</div>
-                <div className="p-1.5 rounded-lg bg-amber-500/20 border border-amber-400 text-amber-300 font-bold font-mono text-[12px] text-center">{val}</div>
-                <div className="text-cyan-400 text-[10px] text-center">↓</div>
-                <div className="p-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400 text-cyan-300 font-bold font-mono text-[12px] text-center shadow-sm">{val + 10}</div>
+                <div className="p-1 rounded bg-slate-950 border border-slate-800 text-xs-responsive font-mono text-slate-500 text-center">ALU{i}</div>
+                <div className="p-1.5 rounded-lg bg-amber-500/20 border border-amber-400 text-amber-300 font-bold font-mono text-sm-responsive text-center">{val}</div>
+                <div className="text-cyan-400 text-xs-responsive text-center">↓</div>
+                <div className="p-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400 text-cyan-300 font-bold font-mono text-sm-responsive text-center shadow-sm">{val + 10}</div>
               </motion.div>
             ))}
           </div>
 
           {/* Energy Impact */}
           <div className="shrink-0 text-center">
-            <div className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-[12px] text-slate-300 inline-block px-3">
+            <div className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-sm-responsive text-slate-300 inline-block px-3">
               💡 <span className="text-cyan-400 font-bold">Resultado:</span> 1 decodificación → 8 resultados. Costo de control ÷ 8.
             </div>
           </div>
@@ -101,19 +101,19 @@ export function Slide2_2() {
     <div className="space-y-6 max-w-5xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
-          <span className="text-[13px] text-slate-500 font-mono">Registro Escalar (32 Bits)</span>
+          <span className="text-sm-responsive text-slate-500 font-mono">Registro Escalar (32 Bits)</span>
           <div className="p-3 rounded-xl bg-slate-950 border border-slate-700 text-center font-mono text-slate-300 font-bold text-sm">[ 3.14159 ]</div>
         </div>
 
         <div className="p-4 rounded-2xl bg-slate-900 border border-cyan-500/50 space-y-3">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[12px] text-cyan-400 font-mono">{cfg.label}</span>
+            <span className="text-xs-responsive text-cyan-400 font-mono">{cfg.label}</span>
             <div className="flex gap-1">
               {['xmm', 'ymm', 'zmm'].map((r) => (
                 <button
                   key={r}
                   onClick={() => setReg(r)}
-                  className={`px-2.5 py-1 rounded-md text-[11px] font-bold font-mono uppercase transition-all ${
+                  className={`px-2.5 py-1 rounded-md text-xs-responsive font-bold font-mono uppercase transition-all ${
                     reg === r
                       ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30'
                       : 'bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700'
@@ -128,7 +128,7 @@ export function Slide2_2() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.25 }}
-            className={`grid ${cfg.gridCols} gap-1 p-1.5 rounded-xl bg-slate-950 border border-cyan-500/30 text-center font-mono text-[11px] font-bold text-cyan-300`}>
+            className={`grid ${cfg.gridCols} gap-1 p-1.5 rounded-xl bg-slate-950 border border-cyan-500/30 text-center font-mono text-xs-responsive font-bold text-cyan-300`}>
             {data.slice(0, cfg.count).map((val, i) => (
               <motion.div
                 key={`${reg}-${i}`}
@@ -140,13 +140,13 @@ export function Slide2_2() {
               </motion.div>
             ))}
           </motion.div>
-          <div className="text-[11px] text-slate-400 font-mono text-center pt-1">
+          <div className="text-xs-responsive text-slate-400 font-mono text-center pt-1">
             {cfg.sub}
           </div>
         </div>
       </div>
 
-      <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 grid grid-cols-3 gap-4 text-[13px]">
+      <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 grid grid-cols-3 gap-4 text-sm-responsive">
         <div className="bg-slate-950 p-3 rounded-xl border border-slate-800"><span className="text-cyan-400 font-mono font-bold block">VLEN (Vector Length)</span> Longitud o cantidad de elementos activos en el registro.</div>
         <div className="bg-slate-950 p-3 rounded-xl border border-slate-800"><span className="text-amber-400 font-mono font-bold block">VSTR (Vector Stride)</span> Distancia en memoria entre elementos consecutivos.</div>
         <div className="bg-slate-950 p-3 rounded-xl border border-slate-800"><span className="text-purple-400 font-mono font-bold block">VMASK (Vector Mask)</span> Máscara de bits para activar/desactivar elementos en condicionales.</div>
@@ -167,21 +167,21 @@ export function Slide2_3() {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setView('diagram')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'diagram' ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
+            className={`px-3 py-1.5 rounded-xl text-xs-responsive font-bold font-mono transition-all ${view === 'diagram' ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
             🏛️ Arquitectura Vectorial (CRAY-1)
           </button>
           <button
             onClick={() => setView('array')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'array' ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
+            className={`px-3 py-1.5 rounded-xl text-xs-responsive font-bold font-mono transition-all ${view === 'array' ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
             🧮 Arquitectura Array (Espacio)
           </button>
           <button
             onClick={() => setView('table')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'table' ? 'bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
+            className={`px-3 py-1.5 rounded-xl text-xs-responsive font-bold font-mono transition-all ${view === 'table' ? 'bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
             📊 Tabla Comparativa
           </button>
         </div>
-        <span className="text-xs font-mono text-slate-500 hidden md:inline">Dualidad Espacio-Tiempo (Sección 2.5)</span>
+        <span className="text-xs-responsive font-mono text-slate-500 hidden md:inline">Dualidad Espacio-Tiempo (Sección 2.5)</span>
       </div>
 
       {/* Main Content View */}
@@ -200,26 +200,26 @@ export function Slide2_3() {
 
           {/* Explanation sidebar */}
           <div className="flex-1 min-w-0 flex flex-col gap-2 overflow-y-auto pr-1">
-            <h4 className="text-xs font-bold font-mono text-purple-400 uppercase tracking-widest flex items-center gap-1.5">
+            <h4 className="text-xs-responsive font-bold font-mono text-purple-400 uppercase tracking-widest flex items-center gap-1.5">
               <Activity size={16} /> Componentes Clave
             </h4>
             
-            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs space-y-1">
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs-responsive space-y-1">
               <span className="font-bold text-cyan-300 font-mono block">1. Vector Registers</span>
               <p className="text-slate-400 leading-relaxed">Bancos de registros capaces de almacenar vectores completos de datos contiguos.</p>
             </div>
 
-            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs space-y-1">
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs-responsive space-y-1">
               <span className="font-bold text-amber-300 font-mono block">2. Scalar Registers</span>
               <p className="text-slate-400 leading-relaxed">Registros tradicionales para operandos individuales y punteros de control.</p>
             </div>
 
-            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs space-y-1">
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs-responsive space-y-1">
               <span className="font-bold text-emerald-300 font-mono block">3. Vector Load/Store Unit</span>
               <p className="text-slate-400 leading-relaxed">Unidad dedicada a la transferencia masiva y ordenada entre RAM y los registros vectoriales.</p>
             </div>
 
-            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs space-y-1">
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs-responsive space-y-1">
               <span className="font-bold text-purple-300 font-mono block">4. Functional Units Segmentadas</span>
               <p className="text-slate-400 leading-relaxed">ALUs independientes (FP Add, Multiply, Divide, Integer, Logical) operando en pipeline continuo.</p>
             </div>
@@ -256,25 +256,25 @@ export function Slide2_3() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3, delay: 0.4 + i * 0.05 }}
                 className="rounded-xl bg-slate-950 border-2 border-amber-500/40 flex flex-col items-center justify-center gap-0.5 p-2 shadow-md shadow-amber-500/5">
-                <span className="text-[10px] font-mono text-amber-400 font-bold">PE{i}</span>
-                <span className="text-base font-mono font-bold text-amber-300">{val}</span>
-                <span className="text-[9px] text-slate-500 font-mono">dato{i}</span>
+                <span className="text-xs-responsive font-mono text-amber-400 font-bold">PE{i}</span>
+                <span className="text-base-responsive font-mono font-bold text-amber-300">{val}</span>
+                <span className="text-xs-responsive text-slate-500 font-mono">dato{i}</span>
               </motion.div>
             ))}
           </div>
 
           {/* Info panels */}
-          <div className="shrink-0 grid grid-cols-1 md:grid-cols-3 gap-2 text-[12px]">
+          <div className="shrink-0 grid grid-cols-1 md:grid-cols-3 gap-2 text-xs-responsive">
             <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">
-              <span className="font-bold text-amber-300 font-mono block mb-1 text-[11px]">Idea clave</span>
+              <span className="font-bold text-amber-300 font-mono block mb-1 text-xs-responsive">Idea clave</span>
               N unidades de procesamiento independientes, todas ejecutan la MISMA instrucción simultáneamente, cada una con su propio dato.
             </div>
             <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">
-              <span className="font-bold text-amber-300 font-mono block mb-1 text-[11px]">Tradeoff</span>
+              <span className="font-bold text-amber-300 font-mono block mb-1 text-xs-responsive">Tradeoff</span>
               Mucho hardware (N ALUs completas) → alto costo en silicio, pero latencia mínima (todos arrancan juntos en el mismo ciclo).
             </div>
             <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">
-              <span className="font-bold text-amber-300 font-mono block mb-1 text-[11px]">Ejemplos</span>
+              <span className="font-bold text-amber-300 font-mono block mb-1 text-xs-responsive">Ejemplos</span>
               ILLIAC IV (64 PEs, años 60) · Connection Machine CM-2 · systolic arrays modernos.
             </div>
           </div>
@@ -284,18 +284,18 @@ export function Slide2_3() {
           {/* Dual description */}
           <div className="shrink-0 grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="p-3.5 rounded-2xl bg-slate-900 border border-amber-500/30 space-y-1.5">
-              <h4 className="text-xs font-bold text-amber-400 flex items-center gap-2"><Layers size={16} /> Array Processor <span className="text-[11px] font-mono text-amber-500">(Espacio)</span></h4>
-              <p className="text-xs text-slate-300">Múltiples PEs físicos independientes operando exactamente en el mismo ciclo de reloj.</p>
-              <div className="p-2 bg-slate-950 rounded-xl font-mono text-[11px] text-amber-300 border border-slate-800">
+              <h4 className="text-xs-responsive font-bold text-amber-400 flex items-center gap-2"><Layers size={16} /> Array Processor <span className="text-xs-responsive font-mono text-amber-500">(Espacio)</span></h4>
+              <p className="text-xs-responsive text-slate-300">Múltiples PEs físicos independientes operando exactamente en el mismo ciclo de reloj.</p>
+              <div className="p-2 bg-slate-950 rounded-xl font-mono text-xs-responsive text-amber-300 border border-slate-800">
                 • 4 obreros trabajando al mismo tiempo<br />
                 • GPUs · Connection Machine CM-2
               </div>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-900 border border-purple-500/30 space-y-1.5">
-              <h4 className="text-xs font-bold text-purple-400 flex items-center gap-2"><Activity size={16} /> Vector Processor <span className="text-[11px] font-mono text-purple-500">(Tiempo)</span></h4>
-              <p className="text-xs text-slate-300">Un pipeline segmentado que procesa elementos en pasos consecutivos usando el mismo circuito físico.</p>
-              <div className="p-2 bg-slate-950 rounded-xl font-mono text-[11px] text-purple-300 border border-slate-800">
+              <h4 className="text-xs-responsive font-bold text-purple-400 flex items-center gap-2"><Activity size={16} /> Vector Processor <span className="text-xs-responsive font-mono text-purple-500">(Tiempo)</span></h4>
+              <p className="text-xs-responsive text-slate-300">Un pipeline segmentado que procesa elementos en pasos consecutivos usando el mismo circuito físico.</p>
+              <div className="p-2 bg-slate-950 rounded-xl font-mono text-xs-responsive text-purple-300 border border-slate-800">
                 • Línea de ensamblaje de fábrica<br />
                 • CRAY-1 (1976) · procesadores vectoriales
               </div>
@@ -303,7 +303,7 @@ export function Slide2_3() {
           </div>
 
           {/* Comparison table */}
-          <div className="flex-1 overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/90 text-xs">
+          <div className="flex-1 overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/90 text-xs-responsive">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-slate-800 bg-slate-950 text-slate-500">
@@ -343,8 +343,8 @@ export function Slide2_4() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0">
         {/* ─── Ventajas Clave ─── */}
         <div className="p-5 rounded-2xl bg-slate-900 border border-emerald-500/40 flex flex-col gap-3 min-h-0">
-          <h4 className="text-[12px] font-bold text-emerald-400 flex items-center gap-2 shrink-0"><CheckCircle2 size={18} /> Ventajas Principales (Sección 2.7)</h4>
-          <ul className="text-[13px] text-slate-300 space-y-2 flex-1 overflow-y-auto pr-1">
+          <h4 className="text-xs-responsive font-bold text-emerald-400 flex items-center gap-2 shrink-0"><CheckCircle2 size={18} /> Ventajas Principales (Sección 2.7)</h4>
+          <ul className="text-sm-responsive text-slate-300 space-y-2 flex-1 overflow-y-auto pr-1">
             <li className="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
               ✓ <span className="text-emerald-300 font-bold">Throughput N× mayor:</span> Procesa múltiples datos en un solo ciclo de reloj según el ancho del registro vectorial.
             </li>
@@ -362,7 +362,7 @@ export function Slide2_4() {
 
         {/* ─── Requisitos de Regularidad ─── */}
         <div className="p-5 rounded-2xl bg-slate-900 border border-cyan-500/40 flex flex-col gap-3 min-h-0">
-          <h4 className="text-[12px] font-bold text-cyan-400 flex items-center gap-2 shrink-0"><Layers size={18} /> Requisitos para el Paralelismo Vectorial</h4>
+          <h4 className="text-xs-responsive font-bold text-cyan-400 flex items-center gap-2 shrink-0"><Layers size={18} /> Requisitos para el Paralelismo Vectorial</h4>
           <div className="space-y-2.5 text-[13px] flex-1 overflow-y-auto pr-1">
             <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
               <span className="text-cyan-300 font-bold block mb-0.5">1. Homogeneidad de Datos</span>
@@ -382,10 +382,10 @@ export function Slide2_4() {
 
       {/* Casos de Uso Reales abajo */}
       <div className="shrink-0 p-4 rounded-2xl bg-slate-900 border border-slate-800">
-        <h5 className="text-[13px] font-bold text-slate-400 mb-2">• Aplicaciones naturalmente vectoriales</h5>
+        <h5 className="text-sm-responsive font-bold text-slate-400 mb-2">• Aplicaciones naturalmente vectoriales</h5>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {useCases.map((uc, i) => (
-            <div key={i} className="p-2 rounded-xl bg-slate-950/80 border border-slate-800 text-[13px] text-center">
+            <div key={i} className="p-2 rounded-xl bg-slate-950/80 border border-slate-800 text-sm-responsive text-center">
               <span className={`font-bold block ${uc.color}`}>{uc.label}</span>
               <span className="text-slate-500 text-xs">{uc.desc}</span>
             </div>
@@ -400,8 +400,8 @@ export function Slide2_4() {
 
 export function Slide2_Codigo() {
   return (
-    <div className="space-y-4 max-w-6xl mx-auto text-[13px] font-mono">
-      <div className="p-3 rounded-xl bg-slate-900 border border-purple-500/30 text-center text-purple-300 font-bold">
+    <div className="space-y-4 max-w-6xl mx-auto text-sm-responsive font-mono">
+      <div className="p-3 rounded-xl bg-slate-900 border border-purple-500/30 text-center text-purple-300 font-bold text-sm-responsive">
         Sección 2.3 de la Guía · Desglose de Código Secuencial vs Vectorial
       </div>
 
@@ -410,7 +410,7 @@ export function Slide2_Codigo() {
         <div className="p-4 rounded-2xl bg-slate-900 border border-red-500/30 space-y-3">
           <div className="flex justify-between items-center border-b border-slate-800 pb-2">
             <span className="font-bold text-red-400">Código Secuencial (SISD)</span>
-            <span className="text-xs px-2 py-0.5 rounded bg-red-500/20 text-red-300">4 Iteraciones</span>
+            <span className="text-xs-responsive px-2 py-0.5 rounded bg-red-500/20 text-red-300">4 Iteraciones</span>
           </div>
           <div className="p-3 bg-slate-950 rounded-xl text-slate-300 space-y-1.5 leading-relaxed">
             <div className="text-slate-500">// Bucle tradicional elemento por elemento</div>
@@ -419,7 +419,7 @@ export function Slide2_Codigo() {
             <div><span className="text-red-400">ADD</span> A[2], B[2] → C[2] <span className="text-slate-600">; Ciclo 3</span></div>
             <div><span className="text-red-400">ADD</span> A[3], B[3] → C[3] <span className="text-slate-600">; Ciclo 4</span></div>
           </div>
-          <div className="text-xs text-slate-400">
+          <div className="text-xs-responsive text-slate-400">
             • 4 decodificaciones de instrucción<br/>
             • 4 saltos de bucle y comprobaciones de índice
           </div>
@@ -429,17 +429,17 @@ export function Slide2_Codigo() {
         <div className="p-4 rounded-2xl bg-slate-900 border border-cyan-400/40 space-y-3">
           <div className="flex justify-between items-center border-b border-slate-800 pb-2">
             <span className="font-bold text-cyan-400">Código Vectorial (SIMD)</span>
-            <span className="text-xs px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">1 Instrucción</span>
+            <span className="text-xs-responsive px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">1 Instrucción</span>
           </div>
           <div className="p-3 bg-slate-950 rounded-xl text-slate-300 space-y-1.5 leading-relaxed">
             <div className="text-slate-500">// Instrucción vectorial sobre registro XMM (128 bits)</div>
             <div><span className="text-cyan-300 font-bold">VADD</span> XMM0, XMM1, XMM2</div>
-            <div className="text-emerald-400/90 text-xs pt-1">
+            <div className="text-emerald-400/90 text-xs-responsive pt-1">
               └─ Suma en paralelo: <br/>
                  [A0+B0, A1+B1, A2+B2, A3+B3] en 1 solo ciclo
             </div>
           </div>
-          <div className="text-xs text-slate-400">
+          <div className="text-xs-responsive text-slate-400">
             • 1 sola decodificación en la Control Unit<br/>
             • Reducción de latencia y consumo eléctrico
           </div>
@@ -502,23 +502,23 @@ export function Slide2_Divergencia() {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => { setView('demo'); setStep(0); }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'demo' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
+            className={`px-3 py-1.5 rounded-xl text-xs-responsive font-bold font-mono transition-all ${view === 'demo' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
             🎯 Demostración paso a paso
           </button>
           <button
             onClick={() => setView('impact')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all ${view === 'impact' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
+            className={`px-3 py-1.5 rounded-xl text-xs-responsive font-bold font-mono transition-all ${view === 'impact' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'}`}>
             📊 Impacto numérico
           </button>
         </div>
-        <span className="text-xs font-mono text-slate-500 hidden md:inline">La Kryptonita del SIMD</span>
+        <span className="text-xs-responsive font-mono text-slate-500 hidden md:inline">La Kryptonita del SIMD</span>
       </div>
 
       {view === 'demo' ? (
         <div className="flex-1 flex flex-col gap-3 min-h-0">
           {/* Rule card */}
           <div className="shrink-0 p-3 rounded-xl bg-slate-900 border border-rose-500/30 text-center">
-            <span className="text-[13px] font-mono text-rose-300">
+            <span className="text-sm-responsive font-mono text-rose-300">
               Regla: <span className="font-bold">{'b[i] = (a[i] > 0) ? a[i]*2 : 0'}</span>
             </span>
           </div>
@@ -642,11 +642,11 @@ export function Slide2_Divergencia() {
 export function SlideIntroParte2() {
   return (
     <div className="p-8 rounded-3xl bg-gradient-to-br from-purple-500/10 via-slate-900 to-pink-500/10 border-2 border-purple-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
-      <span className="px-4 py-1 bg-purple-500/20 text-purple-300 font-extrabold text-xs rounded-full border border-purple-400/30 uppercase tracking-widest">
+      <span className="px-4 py-1 bg-purple-500/20 text-purple-300 font-extrabold text-xs-responsive rounded-full border border-purple-400/30 uppercase tracking-widest">
         Expositor: Rivera Yandris · Parte 2
       </span>
-      <h2 className="text-3xl font-extrabold text-slate-100">Arquitectura SIMD y el Principio Vectorial</h2>
-      <div className="grid grid-cols-2 gap-3 text-left text-[13px] pt-2">
+      <h2 className="text-title font-extrabold text-slate-100">Arquitectura SIMD y el Principio Vectorial</h2>
+      <div className="grid grid-cols-2 gap-3 text-left text-sm-responsive pt-2">
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.1: Una Orden, Ocho Soldados</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.2: Registros Vectoriales y Control</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 2.3: Array Processor vs Vector Processor</div>

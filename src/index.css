@@ -2,13 +2,9 @@
 
 @layer base {
   html {
+    /* Fluid typography: responsive font size based on viewport */
+    font-size: clamp(14px, 1.2vw, 18px);
     @apply text-base;
-  }
-
-  @media (min-width: 1536px) {
-    html {
-      font-size: 18px;
-    }
   }
 
   body {
@@ -17,6 +13,53 @@
 
   :fullscreen {
     background: #020617;
+  }
+}
+
+/* Responsive text size utilities */
+@layer components {
+  /* Título principal - slides */
+  .text-title {
+    @apply text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight;
+  }
+
+  /* Subtítulo */
+  .text-subtitle {
+    @apply text-[clamp(1.25rem,3vw,2rem)] font-semibold;
+  }
+
+  /* Texto grande */
+  .text-lg-responsive {
+    @apply text-[clamp(1.125rem,2.5vw,1.5rem)];
+  }
+
+  /* Texto normal (body) */
+  .text-base-responsive {
+    @apply text-[clamp(0.875rem,1.5vw,1.125rem)];
+  }
+
+  /* Texto pequeño (detalles) */
+  .text-sm-responsive {
+    @apply text-[clamp(0.75rem,1.2vw,0.95rem)];
+  }
+
+  /* Texto muy pequeño (metadata) */
+  .text-xs-responsive {
+    @apply text-[clamp(0.65rem,0.9vw,0.85rem)];
+  }
+
+  /* Monospace text (código) */
+  .text-mono-responsive {
+    @apply font-mono text-[clamp(0.7rem,1vw,0.9rem)];
+  }
+
+  /* Para bloques de texto con padding/espaciado responsive */
+  .card-responsive {
+    @apply p-[clamp(0.75rem,2vw,1.5rem)] rounded-[clamp(0.5rem,1vw,1.25rem)];
+  }
+
+  .gap-responsive {
+    @apply gap-[clamp(0.5rem,1.5vw,1.5rem)];
   }
 }
 
