@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Maximize2, Minimize2, UserCheck, HelpCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Maximize2, Minimize2, UserCheck, HelpCircle, ChevronLeft, ChevronRight, Sun, Moon, Monitor } from 'lucide-react';
+import { useTheme } from './hooks/useTheme';
 
 import {
   SlidePortada, SlideIndice,
   Slide1_LimiteSec, Slide1_1, Slide1_1Anim, Slide1_2, Slide1_4, Slide1_LimitacionesSISD,
   SlideIntroParte1,
-  Slide2_1, Slide2_2, Slide2_3, Slide2_4, Slide2_Codigo, Slide2_Divergencia, SlideIntroParte2,
+  Slide2_1, Slide2_2, Slide2_3, Slide2_4, SlideIntroParte2,
   Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_Chaining, Slide3_4, Slide3_OrganizacionDatos, SlideIntroParte3,
   Slide4_1, Slide4_2, Slide4_3, Slide4_4, Slide4_5, Slide4_Divergencia, SlideIntroParte4,
   SlidePracticaAsm
@@ -25,6 +26,7 @@ export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showSpeakerNotes, setShowSpeakerNotes] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const { theme, cycle } = useTheme();
 
   useEffect(() => {
     const onFSChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -82,7 +84,7 @@ export default function App() {
     {
       id: '1.1b',
       section: 1,
-      title: 'Simulación: Cajero vs Paralelo',
+      title: 'Simulación: Secuencial vs Paralelo',
       subtitle: 'Slide 1.1b · Animación Interactiva · SISD vs SIMD en tiempo real',
       speaker: "Esta animación usa la analogía del chef. SISD es un sartén donde solo cabe 1 hamburguesa a la vez: el chef voltea una por una, 16 veces. SIMD es una parrilla con espacio para 4 hamburguesas y una espátula gigante: con un solo movimiento voltea las 4 a la vez, terminando 4 veces más rápido. La desventaja: si las hamburguesas necesitan cocciones distintas, la espátula gigante no sirve — eso es la divergencia.",
       component: <Slide1_1Anim />
@@ -141,8 +143,8 @@ export default function App() {
       id: '2.3',
       section: 2,
       title: 'Dos Maneras de Ser SIMD (Space-Time Duality)',
-      subtitle: 'Slide 2.3 · Array Processor vs Vector Processor',
-      speaker: "Array Processor es paralelismo en espacio: N ALUs independientes en el mismo ciclo. Vector Processor es paralelismo en tiempo: un pipeline segmentado que procesa en cascada, como la CRAY-1.",
+      subtitle: 'Slide 2.3 · Array vs Vector Processors · Filtro interactivo con cálculos',
+      speaker: "Vista consolidada estilo Hennessy & Patterson. Arriba selector de ciclo (C0-C7) que resalta la fila actual en ambos grids. A la izquierda: Array Processor con su CU, los 4 PEs y la grilla Espacio-Tiempo donde en cada ciclo los 4 PEs hacen la MISMA operación sobre datos distintos — paralelismo en espacio, latencia baja, costo alto. A la derecha: Vector Processor con su pipeline de 3 etapas y su grilla Espacio-Tiempo donde se ve la diagonal característica del pipelining — en cada ciclo, las 4 etapas hacen operaciones DISTINTAS sobre el mismo elemento — paralelismo en tiempo, hardware menor, latencia de arranque alta. Ejemplos clásicos: ILLIAC IV (Array) y CRAY-1 (Vector).",
       component: <Slide2_3 />
     },
     {
@@ -152,22 +154,6 @@ export default function App() {
       subtitle: 'Slide 2.4 · Ventajas Principales y Requisitos de Regularidad (Sección 2.7)',
       speaker: "En la sección 2.7 analizamos las ventajas clave: multiplicamos el throughput por N y dividimos el costo de decodificación entre N datos. Para aprovechar esto, el problema requiere datos homogéneos, contiguos en memoria y sin dependencias.",
       component: <Slide2_4 />
-    },
-    {
-      id: '2.5',
-      section: 2,
-      title: 'Código Secuencial vs Vectorial',
-      subtitle: 'Slide 2.5 · Desglose de Código Secuencial vs Vectorial (Sección 2.3)',
-      speaker: "Para profundizar en la sección 2.3 de nuestra guía, aquí comparamos explícitamente el código secuencial elemento por elemento contra la instrucción vectorial VADD que ejecuta la operación sobre todo el registro XMM en un solo ciclo.",
-      component: <Slide2_Codigo />
-    },
-    {
-      id: '2.6',
-      section: 2,
-      title: 'Divergencia Condicional — La Kryptonita del SIMD',
-      subtitle: 'Slide 2.6 · Paso a paso del enmascaramiento con VMASK (Sección 5)',
-      speaker: "La Kryptonita del SIMD. Con el ejemplo b[i] = (a[i] > 0) ? a[i]*2 : 0, vemos cómo SIMD ejecuta AMBAS ramas del condicional en todas las lanes y luego usa la máscara VMASK para descartar las que no corresponden. El resultado es correcto, pero pagamos el doble de operaciones. En el peor caso (50% divergencia), el speedup se reduce a la mitad.",
-      component: <Slide2_Divergencia />
     },
 
     // === PARTE 3: ALEJANDRO ANDY ===
@@ -318,46 +304,73 @@ export default function App() {
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
       if (e.key === 'ArrowLeft') prevSlide();
+      // Theme cycle shortcut — skip when modifiers are held or user is typing.
+      if ((e.key === 't' || e.key === 'T') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const tag = document.activeElement?.tagName;
+        const isEditable =
+          tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || document.activeElement?.isContentEditable;
+        if (!isEditable) {
+          e.preventDefault();
+          cycle();
+        }
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [cycle]);
 
   const slide = slides[currentSlide];
   const activeSection = SECTIONS.find(s => s.id === slide.section);
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-slate-950 text-slate-100 font-sans select-none overflow-hidden border-4 border-slate-900 relative">
+    <div className="flex flex-col h-screen w-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans select-none overflow-hidden border-4 border-slate-200 dark:border-slate-900 relative">
       {/* Dynamic Background Pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-30 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-40 dark:opacity-30 pointer-events-none" />
 
       {/* Top Header Bar */}
-      <header className="flex justify-between items-center px-6 py-3 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md z-20">
+      <header className="flex justify-between items-center px-6 py-3 border-b border-slate-200 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md z-20">
         <div className="flex items-center gap-4">
           <div className={`px-3 py-1 rounded-lg bg-gradient-to-r ${activeSection.color} text-black font-extrabold text-xs shadow-lg uppercase tracking-wider`}>
             {activeSection.member}
           </div>
           <div>
-            <h1 className="text-base font-bold text-slate-100 flex items-center gap-2">
+            <h1 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
               {slide.title}
             </h1>
-            <p className="text-xs text-cyan-400 font-mono">{slide.subtitle}</p>
+            <p className="text-xs text-cyan-600 dark:text-cyan-400 font-mono">{slide.subtitle}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowSpeakerNotes(!showSpeakerNotes)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all border ${showSpeakerNotes ? 'bg-amber-500/20 border-amber-500/50 text-amber-300' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'}`}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all border ${showSpeakerNotes ? 'bg-amber-500/20 border-amber-500/50 text-amber-700 dark:text-amber-300' : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}
           >
             <HelpCircle size={14} /> [HABLAR] Guión
           </button>
-          <span className="text-xs font-mono text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
+          <span className="text-xs font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-800">
             {currentSlide + 1} / {slides.length}
           </span>
           <button
+            onClick={cycle}
+            aria-label={`Tema: ${theme === 'system' ? 'Automático' : theme === 'dark' ? 'Oscuro' : 'Claro'} — click o tecla T para cambiar`}
+            title={`Tema: ${theme} (T para cambiar)`}
+            className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold flex items-center gap-1 transition-all border ${
+              theme === 'system'
+                ? 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
+                : theme === 'dark'
+                  ? 'bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700'
+                  : 'bg-white text-slate-900 border-slate-300'
+            }`}
+          >
+            {theme === 'light' && <Sun size={14} />}
+            {theme === 'dark' && <Moon size={14} />}
+            {theme === 'system' && <Monitor size={14} />}
+            <span className="uppercase">{theme === 'system' ? 'Auto' : theme === 'dark' ? 'Dark' : 'Light'}</span>
+          </button>
+          <button
             onClick={toggleFullscreen}
-            className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-600 transition-all"
+            className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:border-slate-400 dark:hover:border-slate-600 transition-all"
             title={isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
           >
             {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
@@ -388,30 +401,30 @@ export default function App() {
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
-            className="absolute bottom-16 left-6 right-6 bg-slate-900/95 border-2 border-amber-500/40 p-4 rounded-2xl shadow-2xl z-30 backdrop-blur-lg flex items-start gap-3"
+            className="absolute bottom-16 left-6 right-6 bg-white/95 dark:bg-slate-900/95 border-2 border-amber-500/40 p-4 rounded-2xl shadow-2xl z-30 backdrop-blur-lg flex items-start gap-3"
           >
-            <UserCheck size={24} className="text-amber-400 shrink-0 mt-1" />
+            <UserCheck size={24} className="text-amber-600 dark:text-amber-400 shrink-0 mt-1" />
             <div>
-              <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">Guión del Orador (Resumen):</h4>
-              <p className="text-sm text-slate-200 font-medium leading-relaxed font-serif italic">"{slide.speaker}"</p>
+              <h4 className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-1">Guión del Orador (Resumen):</h4>
+              <p className="text-sm text-slate-800 dark:text-slate-200 font-medium leading-relaxed font-serif italic">"{slide.speaker}"</p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Footer Navigation & Progress */}
-      <footer className="px-6 py-3 border-t border-slate-800/80 bg-slate-950/95 flex flex-col gap-2 z-20">
-        <div className="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden flex">
+      <footer className="px-6 py-3 border-t border-slate-200 dark:border-slate-800/80 bg-white/95 dark:bg-slate-950/95 flex flex-col gap-2 z-20">
+        <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-900 rounded-full overflow-hidden flex">
           {slides.map((s, idx) => (
             <div
               key={s.id}
               onClick={() => setCurrentSlide(idx)}
-              className={`flex-1 h-full cursor-pointer transition-all border-r border-slate-950 ${idx === currentSlide ? 'bg-gradient-to-r from-cyan-400 to-purple-500 shadow-glow' : idx < currentSlide ? 'bg-slate-700' : 'bg-slate-900'}`}
+              className={`flex-1 h-full cursor-pointer transition-all border-r border-white dark:border-slate-950 ${idx === currentSlide ? 'bg-gradient-to-r from-cyan-400 to-purple-500 shadow-glow' : idx < currentSlide ? 'bg-slate-500 dark:bg-slate-700' : 'bg-slate-200 dark:bg-slate-900'}`}
             />
           ))}
         </div>
 
-        <div className="flex justify-between items-center text-xs text-slate-400">
+        <div className="flex justify-between items-center text-xs text-slate-600 dark:text-slate-400">
           <div className="flex gap-2">
             {SECTIONS.map(sec => (
               <button
@@ -421,7 +434,7 @@ export default function App() {
                   const firstIdx = slides.findIndex(s => s.section === sec.id);
                   if (firstIdx !== -1) setCurrentSlide(firstIdx);
                 }}
-                className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-all ${slide.section === sec.id ? 'bg-slate-800 text-cyan-300 border border-cyan-500/40' : 'text-slate-500 hover:text-slate-300'}`}
+                className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-all ${slide.section === sec.id ? 'bg-slate-200 dark:bg-slate-800 text-cyan-700 dark:text-cyan-300 border border-cyan-500/40' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
               >
                 P{sec.id}
               </button>
@@ -429,10 +442,10 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button onClick={prevSlide} disabled={currentSlide === 0} className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-30">
+            <button onClick={prevSlide} disabled={currentSlide === 0} className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-30">
               <ChevronLeft size={16} />
             </button>
-            <button onClick={nextSlide} disabled={currentSlide === slides.length - 1} className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-30">
+            <button onClick={nextSlide} disabled={currentSlide === slides.length - 1} className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-30">
               <ChevronRight size={16} />
             </button>
           </div>

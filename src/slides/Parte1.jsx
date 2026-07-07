@@ -64,10 +64,10 @@ export function Slide1_1() {
   const [active, setActive] = useState(null);
 
   const ARCHS = {
-    SISD: { full: 'Single Instruction · Single Data', bdr: 'border-slate-500', txt: 'text-slate-300', bg: 'bg-slate-500/10', desc: 'Von Neumann clásico. 1 CU, 1 ALU, 1 dato por ciclo. Todo procesamiento es estrictamente secuencial.', ex: 'Intel 8086 · ARM Cortex-A escalar' },
-    SIMD: { full: 'Single Instruction · Multiple Data', bdr: 'border-cyan-500', txt: 'text-cyan-300', bg: 'bg-cyan-500/10', desc: '1 CU hace broadcast de 1 instrucción a N ALUs en paralelo. El foco de esta exposición.', ex: 'SSE/AVX · GPU shaders · ARM NEON' },
-    MISD: { full: 'Multiple Instruction · Single Data', bdr: 'border-amber-500', txt: 'text-amber-300', bg: 'bg-amber-500/10', desc: 'N CUs con instrucciones distintas operan sobre el mismo dato. Caso teórico / fault-tolerance.', ex: 'Systolic Arrays · Fault-tolerant' },
-    MIMD: { full: 'Multiple Instruction · Multiple Data', bdr: 'border-blue-500', txt: 'text-blue-300', bg: 'bg-blue-500/10', desc: 'N CPUs completamente independientes. El generalista: instrucciones distintas, datos distintos.', ex: 'Intel Core i9 · AMD Ryzen · SMP' },
+    SISD: { full: 'Single Instruction · Single Data', bdr: 'border-slate-500', txt: 'text-slate-700 dark:text-slate-300', bg: 'bg-slate-500/10', desc: 'Von Neumann clásico. 1 CU, 1 ALU, 1 dato por ciclo. Todo procesamiento es estrictamente secuencial.', ex: 'Intel 8086 · ARM Cortex-A escalar' },
+    SIMD: { full: 'Single Instruction · Multiple Data', bdr: 'border-cyan-500', txt: 'text-cyan-700 dark:text-cyan-300', bg: 'bg-cyan-500/10', desc: '1 CU hace broadcast de 1 instrucción a N ALUs en paralelo. El foco de esta exposición.', ex: 'SSE/AVX · GPU shaders · ARM NEON' },
+    MISD: { full: 'Multiple Instruction · Single Data', bdr: 'border-amber-500', txt: 'text-amber-700 dark:text-amber-300', bg: 'bg-amber-500/10', desc: 'N CUs con instrucciones distintas operan sobre el mismo dato. Caso teórico / fault-tolerance.', ex: 'Systolic Arrays · Fault-tolerant' },
+    MIMD: { full: 'Multiple Instruction · Multiple Data', bdr: 'border-blue-500', txt: 'text-blue-700 dark:text-blue-300', bg: 'bg-blue-500/10', desc: 'N CPUs completamente independientes. El generalista: instrucciones distintas, datos distintos.', ex: 'Intel Core i9 · AMD Ryzen · SMP' },
   };
 
   const INFO = {
@@ -113,9 +113,9 @@ export function Slide1_1() {
   const Cell = ({ label, type, rowIdx }) => {
     if (!label) {
       if (type === 'CU' && mode === 'SIMD')
-        return <div className="h-9 flex items-center justify-center"><div className="w-px h-full bg-slate-800" /></div>;
+        return <div className="h-9 flex items-center justify-center"><div className="w-px h-full bg-slate-300 dark:bg-slate-800" /></div>;
       if ((type === 'ALU' || type === 'DS') && mode === 'MISD')
-        return <div className="h-9 flex items-center justify-center"><div className="w-px h-full bg-slate-800" /></div>;
+        return <div className="h-9 flex items-center justify-center"><div className="w-px h-full bg-slate-300 dark:bg-slate-800" /></div>;
       return <div className="h-9 opacity-0 pointer-events-none rounded-lg border-2 border-transparent" />;
     }
     const on = active === type;
@@ -130,7 +130,7 @@ export function Slide1_1() {
 
   const Arr = ({ vis }) => (
     <div className={`flex items-center transition-opacity ${vis ? 'opacity-100' : 'opacity-0'}`}>
-      <div className="flex-1 h-px bg-slate-700" /><span className="text-slate-600 text-[13px] shrink-0">▶</span>
+      <div className="flex-1 h-px bg-slate-400 dark:bg-slate-700" /><span className="text-slate-500 dark:text-slate-600 text-[13px] shrink-0">▶</span>
     </div>
   );
 
@@ -144,7 +144,7 @@ export function Slide1_1() {
         ))}
       </div>
 
-      <div className={`shrink-0 rounded-xl border-2 px-4 py-2.5 min-h-[52px] flex items-start bg-slate-900 transition-all duration-200 ${arch.bdr}/50`}>
+      <div className={`shrink-0 rounded-xl border-2 px-4 py-2.5 min-h-[52px] flex items-start bg-white dark:bg-slate-900 transition-all duration-200 ${arch.bdr}/50`}>
         {active
           ? <div>
             <p className={`text-sm-responsive font-bold mb-0.5 ${arch.txt}`}>{INFO[active]?.title}</p>
@@ -230,12 +230,12 @@ export function Slide1_1Anim() {
   const simdQueueStart = simdDone + simdBatchIdxs.length;
   const simdQueue = Array.from({ length: Math.max(0, TOTAL - simdQueueStart) }, (_, i) => simdQueueStart + i);
 
-  const ItemChip = ({ idx, size = 'sm', ring = false, accent = 'bg-slate-700 border border-slate-600' }) => {
+  const ItemChip = ({ idx, size = 'sm', ring = false, accent = 'bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600' }) => {
     const cls = size === 'lg'
       ? 'w-11 h-11 text-sm rounded-xl'
       : 'w-6 h-6 text-sm rounded-lg';
     return (
-      <div className={`${cls} ${accent} flex items-center justify-center font-bold font-mono text-slate-200 shrink-0 ${ring ? 'ring-2 ring-white/40 ring-offset-1 ring-offset-slate-950' : ''}`}>
+      <div className={`${cls} ${accent} flex items-center justify-center font-bold font-mono text-slate-800 dark:text-slate-200 shrink-0 ${ring ? 'ring-2 ring-white/40 dark:ring-white/40 ring-offset-1 ring-offset-white dark:ring-offset-slate-950' : ''}`}>
         {idx + 1}
       </div>
     );
@@ -259,7 +259,7 @@ export function Slide1_1Anim() {
 
       <div className="flex-1 grid grid-cols-2 gap-4 min-h-0">
         {/* SISD panel */}
-        <div className={`flex flex-col p-4 rounded-2xl border bg-slate-900 transition-colors duration-300 ${sisdFinished ? 'border-emerald-500/50' : 'border-red-500/30'}`}>
+        <div className={`flex flex-col p-4 rounded-2xl border bg-white dark:bg-slate-900 transition-colors duration-300 ${sisdFinished ? 'border-emerald-500/50' : 'border-red-500/30'}`}>
           <div className="flex items-center justify-between mb-3 shrink-0">
             <div>
               <span className="text-sm-responsive font-bold text-red-400 font-mono">SISD — 1 Sartén</span>
@@ -277,9 +277,9 @@ export function Slide1_1Anim() {
                 const done = i < sisdDone;
                 const active = i === sisdAtCajero;
                 return (
-                  <div key={i} className={`w-full h-8 rounded-lg flex items-center justify-center text-xs font-bold font-mono transition-all duration-200 ${done ? 'bg-slate-800/60 border border-slate-700/40 text-slate-600'
+                  <div key={i} className={`w-full h-8 rounded-lg flex items-center justify-center text-xs font-bold font-mono transition-all duration-200 ${done ? 'bg-slate-200 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700/40 text-slate-500 dark:text-slate-600'
                     : active ? 'bg-red-500 text-white animate-[glow-pulse_1.5s_ease-in-out_infinite] shadow-none'
-                      : 'bg-slate-700 border border-slate-600 text-slate-300'
+                      : 'bg-slate-300 dark:bg-slate-700 border border-slate-400 dark:border-slate-600 text-slate-700 dark:text-slate-300'
                     }`}>
                     {done ? '✓' : i + 1}
                   </div>
@@ -298,7 +298,7 @@ export function Slide1_1Anim() {
                     ? <motion.div key={sisdAtCajero} initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.4, opacity: 0 }} transition={{ duration: 0.2 }}>
                       <ItemChip idx={sisdAtCajero} size="lg" ring accent="bg-red-500 border-0" />
                     </motion.div>
-                    : <motion.span key="ok" initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-emerald-400 text-xl">✓</motion.span>
+                    : <motion.span key="ok" initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-emerald-600 dark:text-emerald-400 text-xl">✓</motion.span>
                   }
                 </AnimatePresence>
               </div>
@@ -311,7 +311,7 @@ export function Slide1_1Anim() {
         </div>
 
         {/* SIMD panel */}
-        <div className={`flex flex-col p-4 rounded-2xl border bg-slate-900 transition-colors duration-300 ${simdFinished ? 'border-emerald-500/50' : 'border-cyan-500/40'}`}>
+        <div className={`flex flex-col p-4 rounded-2xl border bg-white dark:bg-slate-900 transition-colors duration-300 ${simdFinished ? 'border-emerald-500/50' : 'border-cyan-500/40'}`}>
           <div className="flex items-center justify-between mb-3 shrink-0">
             <div>
               <span className="text-sm-responsive font-bold text-cyan-400 font-mono">SIMD — 1 Parrilla · {SIMD_W} Hamburguesas</span>
@@ -329,9 +329,9 @@ export function Slide1_1Anim() {
                 const done = i < simdDone;
                 const active = !simdFinished && i >= simdDone && i < simdDone + SIMD_W;
                 return (
-                  <div key={i} className={`w-full h-8 rounded-lg flex items-center justify-center text-xs font-bold font-mono transition-all duration-200 ${done ? 'bg-slate-800/60 border border-slate-700/40 text-slate-600'
+                  <div key={i} className={`w-full h-8 rounded-lg flex items-center justify-center text-xs font-bold font-mono transition-all duration-200 ${done ? 'bg-slate-200 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700/40 text-slate-500 dark:text-slate-600'
                     : active ? 'bg-cyan-500 text-white animate-[glow-pulse-cyan_1.5s_ease-in-out_infinite] shadow-none'
-                      : 'bg-slate-700 border border-slate-600 text-slate-300'
+                      : 'bg-slate-300 dark:bg-slate-700 border border-slate-400 dark:border-slate-600 text-slate-700 dark:text-slate-300'
                     }`}>
                     {done ? '✓' : i + 1}
                   </div>
@@ -347,14 +347,14 @@ export function Slide1_1Anim() {
                 const itemIdx = simdBatchIdxs[lane] ?? null;
                 return (
                   <div key={lane} className="flex items-center gap-1.5">
-                    <div className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-colors duration-200 ${itemIdx !== null ? 'border-cyan-400 bg-slate-800' : simdFinished ? 'border-emerald-500/30 bg-emerald-500/10' : 'border-slate-700 bg-slate-800'
+                    <div className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-colors duration-200 ${itemIdx !== null ? 'border-cyan-500 dark:border-cyan-400 bg-slate-200 dark:bg-slate-800' : simdFinished ? 'border-emerald-500/30 bg-emerald-500/10' : 'border-slate-400 dark:border-slate-700 bg-slate-200 dark:bg-slate-800'
                       }`}>
                       <AnimatePresence mode="wait">
                         {itemIdx !== null
                           ? <motion.div key={`${tick}-${lane}`} initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.4, opacity: 0 }} transition={{ duration: 0.2 }}>
                             <ItemChip idx={itemIdx} ring accent="bg-cyan-500 border-0" />
                           </motion.div>
-                          : <motion.span key="ok" initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-emerald-400 text-sm">✓</motion.span>
+                          : <motion.span key="ok" initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-emerald-600 dark:text-emerald-400 text-sm">✓</motion.span>
                         }
                       </AnimatePresence>
                     </div>
@@ -375,10 +375,10 @@ export function Slide1_1Anim() {
       <div className={`shrink-0 p-3 rounded-xl border text-center text-sm-responsive font-mono transition-all duration-300 ${tick === 0
         ? 'border-slate-800 bg-slate-900/50 text-slate-700'
         : simdFinished && !sisdFinished
-          ? 'bg-cyan-500/10 border-cyan-400/40 text-cyan-300'
+          ? 'bg-cyan-500/10 border-cyan-500/40 dark:border-cyan-400/40 text-cyan-700 dark:text-cyan-300'
           : sisdFinished && simdFinished
-            ? 'bg-emerald-500/10 border-emerald-400/40 text-emerald-300'
-            : 'bg-slate-900 border-slate-800 text-slate-400'
+            ? 'bg-emerald-500/10 border-emerald-500/40 dark:border-emerald-400/40 text-emerald-700 dark:text-emerald-300'
+            : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-800 text-slate-600 dark:text-slate-400'
         }`}>
         {tick === 0
           ? 'Presioná "Iniciar Simulación" para ver la diferencia en tiempo real'
@@ -469,32 +469,32 @@ export function Slide1_4() {
       <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/90 text-sm-responsive">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-800 bg-slate-950 text-slate-400">
+            <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400">
               <th className="p-3">Dimensión</th>
-              <th className="p-3 text-blue-400 font-bold">⚙️ SMP / MIMD (El Generalista)</th>
-              <th className="p-3 text-cyan-400 font-bold">⚡ SIMD (El Especialista)</th>
+              <th className="p-3 text-blue-700 dark:text-blue-400 font-bold">⚙️ SMP / MIMD (El Generalista)</th>
+              <th className="p-3 text-cyan-700 dark:text-cyan-400 font-bold">⚡ SIMD (El Especialista)</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60">
+          <tbody className="divide-y divide-slate-200/60 dark:divide-slate-800/60">
             <tr>
-              <td className="p-3 font-bold text-slate-300">Tarea típica</td>
-              <td className="p-3 text-slate-400">Multitarea asíncrona (Sistemas Operativos, DBs)</td>
-              <td className="p-3 text-cyan-300 font-semibold">Procesamiento masivo síncrono (Multimedia, IA)</td>
+              <td className="p-3 font-bold text-slate-700 dark:text-slate-300">Tarea típica</td>
+              <td className="p-3 text-slate-600 dark:text-slate-400">Multitarea asíncrona (Sistemas Operativos, DBs)</td>
+              <td className="p-3 text-cyan-700 dark:text-cyan-300 font-semibold">Procesamiento masivo síncrono (Multimedia, IA)</td>
             </tr>
             <tr>
-              <td className="p-3 font-bold text-slate-300">Instrucciones</td>
-              <td className="p-3 text-slate-400">Múltiples instrucciones distintas simultáneas</td>
-              <td className="p-3 text-cyan-300 font-semibold">Una sola instrucción emitida para N datos</td>
+              <td className="p-3 font-bold text-slate-700 dark:text-slate-300">Instrucciones</td>
+              <td className="p-3 text-slate-600 dark:text-slate-400">Múltiples instrucciones distintas simultáneas</td>
+              <td className="p-3 text-cyan-700 dark:text-cyan-300 font-semibold">Una sola instrucción emitida para N datos</td>
             </tr>
             <tr>
-              <td className="p-3 font-bold text-slate-300">Problemas típicos</td>
-              <td className="p-3 text-red-400 font-semibold">Bus congestion & Spinlocks en recursos compartidos</td>
-              <td className="p-3 text-red-400 font-semibold">Divergencia condicional con enmascaramiento</td>
+              <td className="p-3 font-bold text-slate-700 dark:text-slate-300">Problemas típicos</td>
+              <td className="p-3 text-red-700 dark:text-red-400 font-semibold">Bus congestion & Spinlocks en recursos compartidos</td>
+              <td className="p-3 text-red-700 dark:text-red-400 font-semibold">Divergencia condicional con enmascaramiento</td>
             </tr>
             <tr>
-              <td className="p-3 font-bold text-slate-300">Eficiencia Energética</td>
-              <td className="p-3 text-slate-400">Moderada (overhead de control por núcleo)</td>
-              <td className="p-3 text-amber-300 font-semibold">Ultra-alta (costo de decode dividido entre N)</td>
+              <td className="p-3 font-bold text-slate-700 dark:text-slate-300">Eficiencia Energética</td>
+              <td className="p-3 text-slate-600 dark:text-slate-400">Moderada (overhead de control por núcleo)</td>
+              <td className="p-3 text-amber-700 dark:text-amber-300 font-semibold">Ultra-alta (costo de decode dividido entre N)</td>
             </tr>
           </tbody>
         </table>
@@ -519,16 +519,16 @@ export function Slide1_LimitacionesSISD() {
               <span className="text-red-300 font-bold block mb-0.5">1. Throughput Lineal</span>
               Procesar N datos toma estrictamente N veces más tiempo. Sin paralelismo, la latencia escala linealmente.
             </div>
-            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
-              <span className="text-amber-300 font-bold block mb-0.5">2. Cuello de Botella de Von Neumann</span>
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span className="text-amber-700 dark:text-amber-300 font-bold block mb-0.5">2. Cuello de Botella de Von Neumann</span>
               Un solo bus de datos entre la CPU y la RAM limita dramáticamente el ancho de banda transferido por ciclo.
             </div>
-            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
-              <span className="text-slate-300 font-bold block mb-0.5">3. Subutilización de Silicio</span>
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span className="text-slate-700 dark:text-slate-300 font-bold block mb-0.5">3. Subutilización de Silicio</span>
               El chip mantiene una sola ALU en serie cuando físicamente podría albergar múltiples unidades activas.
             </div>
-            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800">
-              <span className="text-cyan-300 font-bold block mb-0.5">4. Muro de Frecuencia Agotada</span>
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span className="text-cyan-700 dark:text-cyan-300 font-bold block mb-0.5">4. Muro de Frecuencia Agotada</span>
               Desde ~2005, la velocidad de reloj se estancó por límites físicos de calor y densidad. La única salida es el paralelismo.
             </div>
           </div>
@@ -546,8 +546,8 @@ export function Slide1_LimitacionesSISD() {
 
 export function SlideIntroParte1() {
   return (
-    <div className="p-8 rounded-3xl bg-gradient-to-br from-cyan-500/10 via-slate-900 to-blue-500/10 border-2 border-cyan-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
-      <span className="px-4 py-1 bg-cyan-500/20 text-cyan-300 font-extrabold text-xs rounded-full border border-cyan-400/30 uppercase tracking-widest">
+    <div className="p-8 rounded-3xl bg-gradient-to-br from-cyan-500/10 via-white dark:via-slate-900 to-blue-500/10 border-2 border-cyan-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
+      <span className="px-4 py-1 bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 font-extrabold text-xs rounded-full border border-cyan-500/30 dark:border-cyan-400/30 uppercase tracking-widest">
         Expositor: Reyes Ricardo · Parte 1
       </span>
       <h2 className="text-title font-extrabold text-slate-100">El Problema Secuencial y la Taxonomía de Flynn</h2>

@@ -153,14 +153,14 @@ export function SlidePracticaAsm() {
           {/* Code listing */}
           <div className="flex-1 bg-slate-950/80 p-3 font-mono text-sm-responsive leading-relaxed overflow-y-auto pr-1">
             {CODE_SISD.map((c, i) => (
-              <div key={i} className={`flex items-center gap-2 py-[1px] rounded px-1 transition-colors ${sisdCodeHighlight === i ? 'bg-red-500/20 border-l-2 border-red-400' : 'border-l-2 border-transparent'} ${c.label ? 'text-slate-600 mt-1' : ''} ${sisdDone >= N ? 'opacity-50' : ''}`}>
-                {!c.label && <span className="text-xs text-slate-700 w-4 shrink-0 text-right">{i}</span>}
-                {c.label && <span className="text-xs text-slate-700 w-4 shrink-0" />}
-                <span className={`${sisdCodeHighlight === i ? 'text-red-200 font-bold' : c.label ? 'text-slate-600' : 'text-slate-400'}`}>
+              <div key={i} className={`flex items-center gap-2 py-[1px] rounded px-1 transition-colors ${sisdCodeHighlight === i ? 'bg-red-500/20 border-l-2 border-red-500 dark:border-red-400' : 'border-l-2 border-transparent'} ${c.label ? 'text-slate-500 dark:text-slate-600 mt-1' : ''} ${sisdDone >= N ? 'opacity-50' : ''}`}>
+                {!c.label && <span className="text-xs text-slate-500 dark:text-slate-700 w-4 shrink-0 text-right">{i}</span>}
+                {c.label && <span className="text-xs text-slate-500 dark:text-slate-700 w-4 shrink-0" />}
+                <span className={`${sisdCodeHighlight === i ? 'text-red-700 dark:text-red-200 font-bold' : c.label ? 'text-slate-500 dark:text-slate-600' : 'text-slate-700 dark:text-slate-400'}`}>
                   {c.line}
                 </span>
                 {c.highlight && sisdCodeHighlight === i && (
-                  <span className="ml-auto text-[13px] text-red-300 font-bold shrink-0">◄ 1 dato</span>
+                  <span className="ml-auto text-[13px] text-red-700 dark:text-red-300 font-bold shrink-0">◄ 1 dato</span>
                 )}
               </div>
             ))}
@@ -175,7 +175,7 @@ export function SlidePracticaAsm() {
           </div>
 
           {/* ── SISD Data Viz ── */}
-          <div className="shrink-0 px-2 py-1.5 bg-slate-950/60 border-t border-slate-800">
+          <div className="shrink-0 px-2 py-1.5 bg-slate-50 dark:bg-slate-950/60 border-t border-slate-200 dark:border-slate-800">
             <div className="grid grid-cols-1 gap-0.5 text-center font-mono">
               <div className="flex items-center gap-0.5">
                 <span className="text-xs-responsive text-slate-600 w-3 shrink-0">A</span>
@@ -240,14 +240,14 @@ export function SlidePracticaAsm() {
           {/* Code listing */}
           <div className="flex-1 bg-slate-950/80 p-3 font-mono text-sm-responsive leading-relaxed overflow-y-auto pr-1">
             {CODE_SIMD.map((c, i) => (
-              <div key={i} className={`flex items-center gap-2 py-[1px] rounded px-1 transition-colors ${simdCodeHighlight === i ? 'bg-cyan-500/20 border-l-2 border-cyan-400' : 'border-l-2 border-transparent'} ${c.label ? 'text-slate-600 mt-1' : ''} ${simdDone >= N ? 'opacity-50' : ''}`}>
-                {!c.label && <span className="text-xs text-slate-700 w-4 shrink-0 text-right">{i}</span>}
-                {c.label && <span className="text-xs text-slate-700 w-4 shrink-0" />}
-                <span className={`${simdCodeHighlight === i ? 'text-cyan-200 font-bold' : c.label ? 'text-slate-600' : c.neon ? 'text-cyan-400 drop-shadow-[0_0_4px_rgba(6,182,212,0.35)]' : 'text-slate-400'}`}>
+              <div key={i} className={`flex items-center gap-2 py-[1px] rounded px-1 transition-colors ${simdCodeHighlight === i ? 'bg-cyan-500/20 border-l-2 border-cyan-500 dark:border-cyan-400' : 'border-l-2 border-transparent'} ${c.label ? 'text-slate-500 dark:text-slate-600 mt-1' : ''} ${simdDone >= N ? 'opacity-50' : ''}`}>
+                {!c.label && <span className="text-xs text-slate-500 dark:text-slate-700 w-4 shrink-0 text-right">{i}</span>}
+                {c.label && <span className="text-xs text-slate-500 dark:text-slate-700 w-4 shrink-0" />}
+                <span className={`${simdCodeHighlight === i ? 'text-cyan-700 dark:text-cyan-200 font-bold' : c.label ? 'text-slate-500 dark:text-slate-600' : c.neon ? 'text-cyan-600 dark:text-cyan-400 drop-shadow-[0_0_4px_rgba(6,182,212,0.35)]' : 'text-slate-700 dark:text-slate-400'}`}>
                   {c.line}
                 </span>
                 {c.highlight && simdCodeHighlight === i && (
-                  <span className="ml-auto text-[13px] text-cyan-300 font-bold shrink-0">◄ 4 datos</span>
+                  <span className="ml-auto text-[13px] text-cyan-700 dark:text-cyan-300 font-bold shrink-0">◄ 4 datos</span>
                 )}
               </div>
             ))}
@@ -262,7 +262,7 @@ export function SlidePracticaAsm() {
           </div>
 
           {/* ── SIMD Data Viz ── */}
-          <div className="shrink-0 px-2 py-1.5 bg-slate-950/60 border-t border-slate-800">
+          <div className="shrink-0 px-2 py-1.5 bg-slate-50 dark:bg-slate-950/60 border-t border-slate-200 dark:border-slate-800">
             <div className="grid grid-cols-1 gap-0.5 text-center font-mono">
               <div className="flex items-center gap-0.5">
                 <span className="text-xs-responsive text-slate-600 w-3 shrink-0">A</span>
@@ -326,7 +326,7 @@ export function SlidePracticaAsm() {
             <Play size={13} /> {running ? 'Pausar' : 'Auto'}
           </button>
           <button onClick={reset}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-400 text-xs hover:text-slate-200 transition-all">
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-xs hover:text-slate-900 dark:hover:text-slate-200 transition-all">
             <RotateCcw size={13} /> Reset
           </button>
         </div>
@@ -339,7 +339,7 @@ export function SlidePracticaAsm() {
                 : 'bg-slate-900 border-slate-700 text-slate-300'}`}>
               {allDone
                 ? <>SIMD terminó en un tercio de iteraciones 🎉</>
-                : <>Speedup: <span className="text-cyan-300">{speedup}</span>× — corriendo...</>}
+                : <>Speedup: <span className="text-cyan-700 dark:text-cyan-300">{speedup}</span>× — corriendo...</>}
             </motion.div>
           )}
         </AnimatePresence>

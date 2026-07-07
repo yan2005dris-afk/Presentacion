@@ -19,16 +19,16 @@ export function SlidePortada() {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="p-8 rounded-3xl bg-gradient-to-br from-cyan-500/10 via-slate-900 to-purple-500/10 border-2 border-cyan-500/30 backdrop-blur-md shadow-2xl shadow-cyan-500/10"
+        className="p-8 rounded-3xl bg-gradient-to-br from-cyan-500/10 via-white dark:via-slate-900 to-purple-500/10 border-2 border-cyan-500/30 backdrop-blur-md shadow-2xl shadow-cyan-500/10"
       >
-        <div className="flex justify-center gap-4 mb-4 text-cyan-400">
+        <div className="flex justify-center gap-4 mb-4 text-cyan-600 dark:text-cyan-400">
           <Cpu size={56} className="animate-pulse" />
-          <Zap size={56} className="text-purple-400 animate-bounce" />
+          <Zap size={56} className="text-purple-600 dark:text-purple-400 animate-bounce" />
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-teal-300 to-purple-400">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 via-teal-700 to-purple-600 dark:from-cyan-400 dark:via-teal-300 dark:to-purple-400">
           SIMD y Arquitecturas Paralelas
         </h1>
-        <p className="mt-3 text-sm md:text-base text-slate-300 max-w-3xl mx-auto font-medium">
+        <p className="mt-3 text-sm md:text-base text-slate-700 dark:text-slate-300 max-w-3xl mx-auto font-medium">
           Exposición Oficial · Arquitectura y Organización de Computadoras
         </p>
       </motion.div>
@@ -38,7 +38,7 @@ export function SlidePortada() {
           <motion.div
             key={i}
             whileHover={{ scale: 1.05 }}
-            className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-center space-y-1"
+            className="p-4 rounded-2xl bg-white/90 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-center space-y-1"
           >
             <Users size={20} className="mx-auto text-cyan-400" />
             <div className="text-sm-responsive font-bold text-slate-100">{m.name}</div>
@@ -74,7 +74,7 @@ export function SlideIndice({ onSelectSection }) {
             key={a.id}
             whileHover={{ scale: 1.02 }}
             onClick={() => onSelectSection(a.id)}
-            className={`p-4 rounded-2xl bg-slate-900 border-2 ${a.color} cursor-pointer space-y-2 transition-all shadow-md`}
+            className={`p-4 rounded-2xl bg-white dark:bg-slate-900 border-2 ${a.color} cursor-pointer space-y-2 transition-all shadow-md`}
           >
             <div className="flex justify-between items-center">
               <span className="text-sm-responsive font-bold px-2 py-0.5 bg-slate-950 rounded border border-slate-800 text-slate-200">{a.member}</span>
