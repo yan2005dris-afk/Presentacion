@@ -422,8 +422,6 @@ function VectorDiag({ cycle: externalCycle }) {
 }
 
 export function Slide2_3() {
-  const [filter, setFilter] = useState('both'); // 'array' | 'vector' | 'both'
-
   return (
     <div className="w-full h-full flex flex-col gap-3 max-w-6xl mx-auto">
       {/* Top Header & Selector */}
@@ -489,9 +487,7 @@ export function Slide2_3() {
             </div>
           </div>
         </div>
-      )}
-
-      {filter === 'vector' && (
+      ) : view === 'array' ? (
         <div className="flex-1 flex flex-col md:flex-row gap-6 p-5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-purple-500/40 items-center justify-center min-h-0 overflow-y-auto">
           <div className="flex-1 max-w-xl w-full">
             <VectorDiag />
@@ -529,7 +525,7 @@ export function Slide2_3() {
             </div>
           </div>
         </div>
-      ) : (
+      ) : view === 'table' ? (
         <div className="flex-1 flex flex-col gap-3 min-h-0">
           {/* Dual description */}
           <div className="shrink-0 grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -610,7 +606,7 @@ export function Slide2_3() {
             </table>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
