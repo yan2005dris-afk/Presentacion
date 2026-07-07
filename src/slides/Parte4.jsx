@@ -67,16 +67,16 @@ export function Slide4_Divergencia() {
     <div className="w-full h-full flex flex-col gap-3 max-w-5xl mx-auto">
       <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-red-500/40 flex flex-col gap-3 min-h-0">
         <div className="flex justify-between items-center shrink-0">
-          <h4 className="text-base font-bold text-red-700 dark:text-red-400 flex items-center gap-2">
+          <h4 className="text-base-responsive font-bold text-red-400 flex items-center gap-2">
             <ShieldAlert size={20} /> La Kryptonita del SIMD: Divergencia Condicional (Sección 4.5)
           </h4>
-          <span className="text-xs px-2.5 py-1 rounded bg-red-500/20 text-red-700 dark:text-red-300 font-mono border border-red-500/30">
+          <span className="text-xs-responsive px-2.5 py-1 rounded bg-red-500/20 text-red-300 font-mono border border-red-500/30">
             Enmascaramiento (Masking)
           </span>
         </div>
 
-        <p className="text-[13px] text-slate-700 dark:text-slate-300 shrink-0">
-          Código analizado: <span className="font-mono text-cyan-700 dark:text-cyan-300">if (A[i] &gt; 0) C[i] = A[i] + 1; else C[i] = A[i] * 2;</span> con datos <span className="font-mono text-amber-700 dark:text-amber-300">[5, -2, 10, -1]</span>
+        <p className="text-sm-responsive text-slate-300 shrink-0">
+          Código analizado: <span className="font-mono text-cyan-300">if (A[i] &gt; 0) C[i] = A[i] + 1; else C[i] = A[i] * 2;</span> con datos <span className="font-mono text-amber-300">[5, -2, 10, -1]</span>
         </p>
 
         {/* Animated masking viewer */}
@@ -101,7 +101,7 @@ export function Slide4_Divergencia() {
                 const isInactive = s.inactive.includes(idx);
                 return (
                   <div key={idx} className="flex flex-col items-center gap-1">
-                    <span className="text-xs font-mono text-slate-500">A[{idx}] = {val}</span>
+                    <span className="text-xs-responsive font-mono text-slate-500">A[{idx}] = {val}</span>
                     <div className={`w-full p-2.5 rounded-xl text-center font-mono text-sm font-bold transition-all duration-300 ${
                       isActive
                         ? 'bg-amber-500/20 border border-amber-500/60 dark:border-amber-400/60 text-amber-800 dark:text-amber-200 shadow-md shadow-amber-500/10'
@@ -109,7 +109,7 @@ export function Slide4_Divergencia() {
                     }`}>
                       {s.result[idx]}
                     </div>
-                    <span className={`text-xs font-bold ${isActive ? 'text-amber-700 dark:text-amber-400' : isInactive ? 'text-red-700 dark:text-red-400' : 'text-transparent'}`}>
+                    <span className={`text-xs-responsive font-bold ${isActive ? 'text-amber-400' : isInactive ? 'text-red-400' : 'text-transparent'}`}>
                       {isActive ? 'ACTIVO (✓)' : isInactive ? 'DESCARTADO (✗)' : '-'}
                     </span>
                   </div>
@@ -117,7 +117,7 @@ export function Slide4_Divergencia() {
               })}
             </div>
 
-            <p className="text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed text-center italic">{s.desc}</p>
+            <p className="text-sm-responsive text-slate-400 leading-relaxed text-center italic">{s.desc}</p>
 
             {s.error && (
               <motion.div
@@ -125,7 +125,7 @@ export function Slide4_Divergencia() {
                 animate={{ scale: 1, opacity: 1 }}
                 className="p-2 bg-red-500/10 rounded-xl border border-red-500/30 text-center"
               >
-                <span className="text-red-700 dark:text-red-300 font-bold text-[13px]">⚠ {s.error}</span>
+                <span className="text-red-300 font-bold text-sm-responsive">⚠ {s.error}</span>
               </motion.div>
             )}
           </motion.div>
@@ -134,7 +134,7 @@ export function Slide4_Divergencia() {
         {/* Controls */}
         <div className="shrink-0 flex items-center justify-between gap-2 pt-1">
           <button onClick={() => setStep(p => (p - 1 + 4) % 4)}
-            className="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all text-xs font-bold">◀ Anterior</button>
+            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all text-xs-responsive font-bold">◀ Anterior</button>
 
           <div className="flex items-center gap-2">
             {[0, 1, 2, 3].map(i => (
@@ -153,8 +153,8 @@ export function Slide4_Divergencia() {
           </div>
         </div>
 
-        <div className="shrink-0 p-2.5 bg-red-500/10 rounded-xl border border-red-500/30 text-xs text-slate-700 dark:text-slate-300 text-center">
-          <span className="font-bold text-red-700 dark:text-red-400">Conclusión de la Sección 4.5:</span> La divergencia destruye el throughput paralelo al obligar al hardware a ejecutar secuencialmente todos los caminos condicionales.
+        <div className="shrink-0 p-2.5 bg-red-500/10 rounded-xl border border-red-500/30 text-xs-responsive text-slate-300 text-center">
+          <span className="font-bold text-red-400">Conclusión de la Sección 4.5:</span> La divergencia destruye el throughput paralelo al obligar al hardware a ejecutar secuencialmente todos los caminos condicionales.
         </div>
       </div>
     </div>
@@ -165,7 +165,7 @@ export function Slide4_Divergencia() {
 
 export function Slide4_1() {
   return (
-    <div className="space-y-4 max-w-6xl mx-auto text-[13px] font-mono">
+    <div className="space-y-4 max-w-6xl mx-auto text-sm-responsive font-mono">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-red-500/30 space-y-2">
           <h4 className="font-bold text-red-700 dark:text-red-400">Escalar (304 Instrucciones Dinámicas):</h4>
@@ -205,16 +205,16 @@ export function Slide4_2() {
     <div className="w-full h-full flex flex-col gap-3 max-w-6xl mx-auto">
       <div className="flex-1 grid grid-cols-2 gap-3 min-h-0">
         {/* Throughput */}
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-cyan-500/30 flex flex-col gap-2">
-          <h4 className="text-sm font-bold text-cyan-700 dark:text-cyan-400 shrink-0">Throughput</h4>
+        <div className="p-4 rounded-2xl bg-slate-900 border border-cyan-500/30 flex flex-col gap-2">
+          <h4 className="text-sm-responsive font-bold text-cyan-400 shrink-0">Throughput</h4>
           <div className="flex-1 flex flex-col justify-center gap-2">
-            <div className="p-2 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-center font-mono text-[13px]">
-              <span className="text-slate-600 dark:text-slate-400">Throughput = </span>
-              <span className="text-cyan-700 dark:text-cyan-300 font-bold">Datos procesados / Tiempo</span>
+            <div className="p-2 bg-slate-950 rounded-xl border border-slate-800 text-center font-mono text-sm-responsive">
+              <span className="text-slate-400">Throughput = </span>
+              <span className="text-cyan-300 font-bold">Datos procesados / Tiempo</span>
             </div>
-            <div className="space-y-1.5 text-[13px] font-mono">
-              <div className="flex items-center justify-between p-1.5 bg-slate-50 dark:bg-slate-950/80 rounded-lg border border-slate-200 dark:border-slate-800">
-                <span className="text-slate-600 dark:text-slate-400">Escalar (1 float)</span>
+            <div className="space-y-1.5 text-sm-responsive font-mono">
+              <div className="flex items-center justify-between p-1.5 bg-slate-950/80 rounded-lg border border-slate-800">
+                <span className="text-slate-400">Escalar (1 float)</span>
                 <span className="text-slate-500">3 GFLOPS</span>
               </div>
               <div className="flex items-center justify-between p-1.5 bg-slate-50 dark:bg-slate-950/80 rounded-lg border border-slate-200 dark:border-slate-800">
@@ -238,15 +238,15 @@ export function Slide4_2() {
         </div>
 
         {/* Amdahl */}
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-purple-500/30 flex flex-col gap-2">
-          <h4 className="text-sm font-bold text-purple-700 dark:text-purple-400 shrink-0">Ley de Amdahl</h4>
+        <div className="p-4 rounded-2xl bg-slate-900 border border-purple-500/30 flex flex-col gap-2">
+          <h4 className="text-sm-responsive font-bold text-purple-400 shrink-0">Ley de Amdahl</h4>
           <div className="flex-1 flex flex-col justify-center gap-2">
-            <div className="p-2 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-center font-mono text-[13px]">
-              <span className="text-slate-600 dark:text-slate-400">Speedup máximo = </span>
-              <span className="text-purple-700 dark:text-purple-300 font-bold">1 / (S + P/N)</span>
+            <div className="p-2 bg-slate-950 rounded-xl border border-slate-800 text-center font-mono text-sm-responsive">
+              <span className="text-slate-400">Speedup máximo = </span>
+              <span className="text-purple-300 font-bold">1 / (S + P/N)</span>
             </div>
-            <div className="space-y-1.5 text-[13px] font-mono">
-              <div className="flex items-center gap-2 p-2 bg-slate-50 dark:bg-slate-950/80 rounded-lg border border-slate-200 dark:border-slate-800">
+            <div className="space-y-1.5 text-sm-responsive font-mono">
+              <div className="flex items-center gap-2 p-2 bg-slate-950/80 rounded-lg border border-slate-800">
                 <span className="text-slate-500 shrink-0">20% secuencial, 80% paralelo:</span>
               </div>
               <div className="grid grid-cols-2 gap-1.5">
@@ -272,8 +272,8 @@ export function Slide4_2() {
         </div>
       </div>
 
-      <div className="shrink-0 p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-[13px] text-slate-600 dark:text-slate-400 text-center leading-relaxed">
-        <span className="text-cyan-700 dark:text-cyan-400 font-bold">Conclusión:</span> el throughput escala con el ancho de registro, pero la Ley de Amdahl te recuerda que la porción secuencial siempre pone un techo.
+      <div className="shrink-0 p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm-responsive text-slate-400 text-center leading-relaxed">
+        <span className="text-cyan-400 font-bold">Conclusión:</span> el throughput escala con el ancho de registro, pero la Ley de Amdahl te recuerda que la porción secuencial siempre pone un techo.
       </div>
     </div>
   );
@@ -301,10 +301,10 @@ export function Slide4_3() {
           transition={{ delay: i * 0.08 }}
           className={`p-3 rounded-xl bg-white dark:bg-slate-900 border ${a.color} space-y-1`}
         >
-          <h4 className={`text-[13px] font-bold flex items-center gap-1.5 ${a.color}`}>
+          <h4 className={`text-sm-responsive font-bold flex items-center gap-1.5 ${a.color}`}>
             <span>{a.icon}</span> {a.title}
           </h4>
-          <p className="text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed">{a.desc}</p>
+          <p className="text-sm-responsive text-slate-400 leading-relaxed">{a.desc}</p>
         </motion.div>
       ))}
     </div>
@@ -315,8 +315,8 @@ export function Slide4_3() {
 
 export function Slide4_4() {
   return (
-    <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 max-w-5xl mx-auto space-y-4 text-center text-[13px]">
-      <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">SoC Híbrido Moderno</h4>
+    <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 max-w-5xl mx-auto space-y-4 text-center text-sm-responsive">
+      <h4 className="text-sm-responsive font-bold text-slate-200">SoC Híbrido Moderno</h4>
       <div className="grid grid-cols-2 gap-4 text-left">
         <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30">
           <span className="font-bold text-blue-700 dark:text-blue-400">CPU (MIMD)</span> Orquesta el Sistema Operativo y código secuencial irregular.
@@ -350,8 +350,8 @@ export function Slide4_5() {
             transition={{ delay: i * 0.15 }}
             className={`flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border ${p.color}`}
           >
-            <span className="text-lg font-bold text-cyan-700 dark:text-cyan-400 shrink-0">{p.icon}</span>
-            <p className="text-[13px] text-slate-700 dark:text-slate-300 leading-relaxed">{p.text}</p>
+            <span className="text-lg font-bold text-cyan-400 shrink-0">{p.icon}</span>
+            <p className="text-sm-responsive text-slate-300 leading-relaxed">{p.text}</p>
           </motion.div>
         ))}
       </div>
@@ -362,8 +362,8 @@ export function Slide4_5() {
         transition={{ delay: 0.8 }}
         className="mt-4 p-4 rounded-2xl bg-gradient-to-br from-cyan-500/10 via-white dark:via-slate-900 to-purple-500/10 border border-cyan-500/30 text-center max-w-3xl"
       >
-        <Sparkles size={28} className="text-cyan-700 dark:text-cyan-400 mx-auto animate-bounce mb-2" />
-        <p className="text-[13px] text-slate-700 dark:text-slate-300 italic font-semibold">
+        <Sparkles size={28} className="text-cyan-400 mx-auto animate-bounce mb-2" />
+        <p className="text-sm-responsive text-slate-300 italic font-semibold">
           "El límite secuencial era real. SIMD lo rompió — un registro a la vez, un bit más ancho por generación."
         </p>
       </motion.div>
@@ -375,18 +375,18 @@ export function Slide4_5() {
 
 export function SlideIntroParte4() {
   return (
-    <div className="p-8 rounded-3xl bg-gradient-to-br from-emerald-500/10 via-white dark:via-slate-900 to-teal-500/10 border-2 border-emerald-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
-      <span className="px-4 py-1 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-extrabold text-xs rounded-full border border-emerald-500/30 dark:border-emerald-400/30 uppercase tracking-widest">
+    <div className="p-8 rounded-3xl bg-gradient-to-br from-emerald-500/10 via-slate-900 to-teal-500/10 border-2 border-emerald-500/40 text-center space-y-6 max-w-3xl mx-auto shadow-2xl">
+      <span className="px-4 py-1 bg-emerald-500/20 text-emerald-300 font-extrabold text-xs-responsive rounded-full border border-emerald-400/30 uppercase tracking-widest">
         Expositor: Bermudez Gino · Parte 4
       </span>
-      <h2 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100">Rendimiento, Aplicaciones Reales y Conclusiones</h2>
-      <div className="grid grid-cols-2 gap-3 text-left text-[13px] pt-2">
-        <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">• Slide 4.1: Desglose Dinámico (304 vs 7 instrs & Speedup)</div>
-        <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">• Slide 4.2: Throughput y Ley de Amdahl</div>
-        <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">• Slide 4.3: SIMD en el Mundo Real (6 dominios)</div>
-        <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">• Slide 4.4: Paradigma Híbrido: SoC Moderno</div>
-        <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">• Slide 4.5: Diagnóstico Final (SMP vs SIMD)</div>
-        <div className="p-3 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">• Slide 4.6: Conclusiones y Cierre</div>
+      <h2 className="text-title font-extrabold text-slate-100">Rendimiento, Aplicaciones Reales y Conclusiones</h2>
+      <div className="grid grid-cols-2 gap-3 text-left text-sm-responsive pt-2">
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.1: Desglose Dinámico (304 vs 7 instrs & Speedup)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.2: Throughput y Ley de Amdahl</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.3: SIMD en el Mundo Real (6 dominios)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.4: Paradigma Híbrido: SoC Moderno</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.5: Diagnóstico Final (SMP vs SIMD)</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 4.6: Conclusiones y Cierre</div>
       </div>
     </div>
   );
