@@ -39,6 +39,10 @@ export function Slide3_2() {
         <div className="grid grid-cols-8 gap-1 text-center font-bold">
           {[...Array(8)].map((_, i) => <div key={i} className="p-2 rounded bg-cyan-500/20 border border-cyan-500 dark:border-cyan-400 text-cyan-700 dark:text-cyan-300">+32</div>)}
         </div>
+        <div className="text-amber-400 font-bold pt-2">• Particionado como 16×16-bit (Shorts para audio DSP en PADDW)</div>
+        <div className="grid grid-cols-16 gap-0.5 text-center text-[12px] font-bold">
+          {[...Array(16)].map((_, i) => <div key={i} className="p-1 rounded bg-amber-500/20 border border-amber-500 dark:border-amber-400 text-amber-700 dark:text-amber-300">+16</div>)}
+        </div>
         <div className="text-purple-700 dark:text-purple-400 font-bold pt-2">• Particionado como 32×8-bit (Bytes para píxeles RGB en PADDB)</div>
         <div className="grid grid-cols-[repeat(32,minmax(0,1fr))] gap-0.5 text-center text-[11px] font-bold">
           {[...Array(32)].map((_, i) => <div key={i} className="p-1 rounded bg-purple-500/20 border border-purple-500 dark:border-purple-400 text-purple-700 dark:text-purple-300">+8</div>)}
