@@ -181,49 +181,118 @@ export function Slide2_2() {
         <div className="flex-1 overflow-y-auto space-y-3 pr-1 min-h-0">
           {viewMode === 'practica' ? (
             <div className="space-y-3">
+              {/* Ejemplo paso a paso */}
               <div className="bg-slate-950/60 rounded-xl p-3 border border-cyan-500/30">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-3">
-                    <span className="text-cyan-400 font-mono font-bold text-sm">VLEN</span>
-                    <span className="text-slate-400 text-xs">Vector Length</span>
+                <div className="text-xs font-mono font-bold text-cyan-400 mb-2">Instrucción: VADDPS ymm0, ymm1, ymm2</div>
+                <div className="grid grid-cols-3 gap-2 text-[10px] font-mono mb-2">
+                  <div className="bg-slate-900/80 rounded p-1.5 border border-slate-700"><span className="text-cyan-400">ymm1</span> = Vector A</div>
+                  <div className="bg-slate-900/80 rounded p-1.5 border border-slate-700"><span className="text-cyan-400">ymm2</span> = Vector B</div>
+                  <div className="bg-slate-900/80 rounded p-1.5 border border-slate-700"><span className="text-cyan-400">ymm0</span> = A + B</div>
+                </div>
+                <div className="text-[10px] font-mono text-slate-500 mb-2">Estado actual:</div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
+                  <div className="bg-slate-900/80 rounded p-2 border border-cyan-700/40">
+                    <span className="text-cyan-400 font-bold text-xs">VLEN</span>
+                    <div className="flex gap-1 mt-1">
+                      <button onClick={() => setVlen(Math.max(1, vlen - 1))} className="w-6 h-6 rounded bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 font-bold text-xs flex items-center justify-center">−</button>
+                      <span className="font-mono text-sm"><span className="text-cyan-300 font-bold">{vlen}</span><span className="text-slate-500">/{cfg.max}</span></span>
+                      <button onClick={() => setVlen(Math.min(cfg.max, vlen + 1))} className="w-6 h-6 rounded bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 font-bold text-xs flex items-center justify-center">+</button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="font-mono text-xs"><span className="text-cyan-300 font-bold text-lg">{vlen}</span><span className="text-slate-500"> / </span><span className="text-slate-400">{cfg.max}</span></span>
-                    <button onClick={() => setVlen(Math.max(1, vlen - 1))} className="w-7 h-7 rounded bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 font-bold text-sm flex items-center justify-center">−</button>
-                    <button onClick={() => setVlen(Math.min(cfg.max, vlen + 1))} className="w-7 h-7 rounded bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 font-bold text-sm flex items-center justify-center">+</button>
+                  <div className="bg-slate-900/80 rounded p-2 border border-amber-700/40">
+                    <span className="text-amber-400 font-bold text-xs">VSTR</span>
+                    <div className="flex gap-1 mt-1">
+                      {[1, 2].map((s) => (<button key={s} onClick={() => setStride(s)} className={`px-2 py-1 rounded text-xs font-bold transition-all ${stride === s ? s === 1 ? 'bg-amber-500 text-slate-950' : 'bg-orange-500 text-slate-950' : 'bg-slate-800 text-slate-500 border border-slate-700'}`}>S{s}</button>))}
+                    </div>
+                  </div>
+                  <div className="bg-slate-900/80 rounded p-2 border border-purple-700/40">
+                    <span className="text-purple-400 font-bold text-xs">VMASK</span>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {mask.slice(0, cfg.max).map((active, i) => {
+                        const isIdle = i >= vlen;
+                        return (<button key={i} onClick={() => !isIdle && toggleMask(i)} disabled={isIdle} className={`w-6 h-6 rounded text-[10px] font-mono font-bold flex items-center justify-center transition-all ${isIdle ? 'bg-slate-800 text-slate-700 cursor-not-allowed' : active ? 'bg-purple-500/20 border border-purple-500 text-purple-300' : 'bg-slate-800 border border-slate-700 text-slate-600'}`}>{active ? 1 : 0}</button>);
+                      })}
+                    </div>
                   </div>
                 </div>
-                <input type="range" min={1} max={cfg.max} value={vlen} onChange={(e) => setVlen(Number(e.target.value))} className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-cyan-500 bg-slate-800" />
-                <div className="flex justify-between text-[10px] font-mono text-slate-600 mt-1">{[...Array(cfg.max)].map((_, i) => (<span key={i} className={`${i === vlen - 1 ? 'text-cyan-400 font-bold' : 'text-slate-600'}`}>{i + 1}</span>))}</div>
-                <p className="text-xs text-slate-500 mt-1.5">Lanes <span className="text-cyan-400 font-bold">[{vlen}–{cfg.max}]</span> quedan <span className="text-slate-500 font-bold">IDLE</span> (inactivas)</p>
               </div>
-              <div className="bg-slate-950/60 rounded-xl p-3 border border-amber-500/30">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-amber-400 font-mono font-bold text-sm">VSTR</span>
-                    <span className="text-slate-400 text-xs">Vector Stride</span>
-                  </div>
-                  <div className="flex gap-1.5">
-                    {[1, 2].map((s) => (<button key={s} onClick={() => setStride(s)} className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${stride === s ? s === 1 ? 'bg-amber-500 text-slate-950 shadow shadow-amber-500/30' : 'bg-orange-500 text-slate-950 shadow shadow-orange-500/30' : 'bg-slate-800 text-slate-500 hover:text-slate-300 border border-slate-700'}`}>Stride {s}</button>))}
+
+              {/* Ejecución paso a paso */}
+              <div className="bg-slate-950/60 rounded-xl p-3 border border-slate-700">
+                <div className="text-[10px] font-mono text-slate-500 mb-2 flex items-center justify-between">
+                  <span>Ejecución: <span className="text-slate-300 font-bold">VADDPS ymm0, ymm1, ymm2</span></span>
+                  <span className="text-cyan-400 font-bold">Resultado</span>
+                </div>
+                {/* Header lanes */}
+                <div className={`${reg === 'zmm' ? 'overflow-x-auto' : ''}`}>
+                  <div className={`grid ${cfg.gridCols} gap-1 mb-1`}>
+                    {[...Array(cfg.count)].map((_, i) => (
+                      <div key={i} className={`text-center text-[9px] font-mono font-bold px-1 py-0.5 rounded ${i >= vlen ? 'text-slate-700' : 'text-slate-400'}`}>Lane {i}</div>
+                    ))}
                   </div>
                 </div>
-                <p className="text-xs text-slate-500 mt-2">{stride === 1 ? (<><span className="text-amber-400 font-bold">Stride 1</span> → lectura consecutiva. Máximo aprovechamiento de caché.</>) : (<><span className="text-orange-400 font-bold">Stride 2</span> → salto de un elemento. Lanes impares quedan como <span className="text-orange-400 font-bold">SKIP</span>.</>)}</p>
+                {/* Registros ymm1 (A) */}
+                <div className={`${reg === 'zmm' ? 'overflow-x-auto' : ''}`}>
+                  <div className={`grid ${cfg.gridCols} gap-1 mb-1`}>
+                    {[...Array(cfg.count)].map((_, i) => {
+                      const isIdle = i >= vlen;
+                      const val = stride === 1 ? data[i] : data[i * 2] ?? '—';
+                      return (<div key={i} className={`text-center text-[10px] font-mono px-1 py-1 rounded border ${isIdle ? 'bg-slate-900/40 border-slate-800/40 text-slate-700' : 'bg-cyan-500/10 border-cyan-700/30 text-cyan-300'}`}>{isIdle ? '—' : val}</div>);
+                    })}
+                  </div>
+                </div>
+                {/* Registros ymm2 (B) */}
+                <div className={`${reg === 'zmm' ? 'overflow-x-auto' : ''}`}>
+                  <div className={`grid ${cfg.gridCols} gap-1 mb-1`}>
+                    {[...Array(cfg.count)].map((_, i) => {
+                      const isIdle = i >= vlen;
+                      const val = stride === 1 ? data[i + 1] : data[(i * 2) + 1] ?? '—';
+                      return (<div key={i} className={`text-center text-[10px] font-mono px-1 py-1 rounded border ${isIdle ? 'bg-slate-900/40 border-slate-800/40 text-slate-700' : 'bg-amber-500/10 border-amber-700/30 text-amber-300'}`}>{isIdle ? '—' : val}</div>);
+                    })}
+                  </div>
+                </div>
+                {/* Resultado ymm0 (A+B) */}
+                <div className={`${reg === 'zmm' ? 'overflow-x-auto' : ''}`}>
+                  <div className={`grid ${cfg.gridCols} gap-1`}>
+                    {[...Array(cfg.count)].map((_, i) => {
+                      const isIdle = i >= vlen;
+                      const m = mask[i] !== undefined ? mask[i] : false;
+                      const valA = stride === 1 ? data[i] : data[i * 2];
+                      const valB = stride === 1 ? data[i + 1] : data[(i * 2) + 1];
+                      const result = isIdle ? null : (valA !== undefined && valB !== undefined) ? (m ? (Number(valA) + Number(valB)).toFixed(2) : 'DROP') : '—';
+                      const isDrop = !isIdle && m === false && valA !== undefined && valB !== undefined;
+                      return (<div key={i} className={`text-center text-[10px] font-mono font-bold px-1 py-1.5 rounded border ${isIdle ? 'bg-slate-900/40 border-slate-800/40 text-slate-700' : m ? 'bg-emerald-500/20 border-emerald-600/40 text-emerald-300' : 'bg-red-500/20 border-red-700/40 text-red-400'}`}>{isIdle ? '—' : result}</div>);
+                    })}
+                  </div>
+                </div>
+                {/* Labels */}
+                <div className={`grid ${cfg.gridCols} gap-1 mt-1 ${reg === 'zmm' ? 'overflow-x-auto' : ''}`}>
+                  <div className="text-[9px] font-mono text-slate-600 text-center">ymm1 (A)</div>
+                  <div className="text-[9px] font-mono text-slate-600 text-center">ymm2 (B)</div>
+                  <div className="text-[9px] font-mono text-slate-600 text-center">ymm0 (A+B)</div>
+                </div>
+                {/* Legend */}
+                <div className="flex flex-wrap gap-3 mt-2 pt-2 border-t border-slate-800 text-[10px] font-mono">
+                  <div className="flex items-center gap-1"><div className="w-3 h-3 rounded bg-emerald-500/20 border border-emerald-600/40"></div><span className="text-emerald-300">Compute + Writeback</span></div>
+                  <div className="flex items-center gap-1"><div className="w-3 h-3 rounded bg-red-500/20 border border-red-700/40"></div><span className="text-red-400">Compute + <span className="line-through">Writeback</span></span></div>
+                  <div className="flex items-center gap-1"><div className="w-3 h-3 rounded bg-slate-800/40 border border-slate-700/40"></div><span className="text-slate-600">IDLE (VLEN)</span></div>
+                </div>
               </div>
-              <div className="bg-slate-950/60 rounded-xl p-3 border border-purple-500/30">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-3">
-                    <span className="text-purple-400 font-mono font-bold text-sm">VMASK</span>
-                    <span className="text-slate-400 text-xs">Vector Mask</span>
-                  </div>
-                  <span className="text-xs font-mono"><span className="text-purple-300 font-bold">{mask.slice(0, vlen).filter(x => x).length}</span><span className="text-slate-500"> / </span><span className="text-slate-400">{vlen}</span><span className="text-slate-500 ml-1">activas</span></span>
+
+              {/* Resumen de qué hace cada control */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div className="bg-slate-950/60 rounded-xl p-2.5 border border-cyan-700/40">
+                  <span className="text-cyan-400 font-mono font-bold text-xs block mb-1">VLEN = {vlen}</span>
+                  <p className="text-[10px] text-slate-400 leading-relaxed">Lanes <span className="text-cyan-300 font-bold">[{vlen}–{cfg.max}]</span> = IDLE. El hardware ignora estos elementos en la operación.</p>
                 </div>
-                <div className="flex flex-wrap gap-1.5 mb-2">
-                  {mask.slice(0, cfg.max).map((active, i) => {
-                    const isIdle = i >= vlen;
-                    return (<button key={i} onClick={() => !isIdle && toggleMask(i)} disabled={isIdle} className={`w-8 h-8 rounded-lg font-mono text-xs font-bold transition-all flex items-center justify-center ${isIdle ? 'bg-slate-800 text-slate-700 cursor-not-allowed' : active ? 'bg-purple-500/20 border border-purple-500 text-purple-300 hover:bg-purple-500/30' : 'bg-slate-800 border border-slate-700 text-slate-600 hover:bg-slate-700'}`}>{i}</button>);
-                  })}
+                <div className="bg-slate-950/60 rounded-xl p-2.5 border border-amber-700/40">
+                  <span className="text-amber-400 font-mono font-bold text-xs block mb-1">VSTR = {stride}</span>
+                  <p className="text-[10px] text-slate-400 leading-relaxed">{stride === 1 ? 'Stride 1 → elementos consecutivos → caché óptima.' : `Stride ${stride} → salto de ${stride} → requiere más accesos de memoria.`}</p>
                 </div>
-                <p className="text-xs text-slate-500">Lanes con mask=<span className="text-slate-600 font-bold bg-slate-800 px-1 rounded">0</span> ejecutan pero omiten writeback{mask.slice(0, vlen).filter(x => !x).length > 0 && (<span className="text-purple-400 ml-1">({mask.slice(0, vlen).filter(x => !x).length} silenciadas)</span>)}</p>
+                <div className="bg-slate-950/60 rounded-xl p-2.5 border border-purple-700/40">
+                  <span className="text-purple-400 font-mono font-bold text-xs block mb-1">VMASK</span>
+                  <p className="text-[10px] text-slate-400 leading-relaxed">Lanes con <span className="text-slate-600 font-bold bg-slate-800 px-0.5 rounded">0</span> → ejecutan pero <span className="text-red-400 font-bold">descartan resultado</span>. Las demás escriben normalmente.</p>
+                </div>
               </div>
             </div>
           ) : null}
@@ -241,10 +310,19 @@ export function Slide2_2() {
               <div className="bg-slate-950/60 rounded-xl p-4 border border-amber-500/30">
                 <div className="flex items-center gap-3 mb-2"><span className="text-amber-400 font-mono font-bold text-base">VSTR</span><span className="text-amber-300/70 font-mono text-sm">(Vector Stride)</span></div>
                 <p className="text-slate-300 text-xs leading-relaxed mb-2">Especifica <span className="text-amber-400 font-bold">la distancia en bytes entre elementos consecutivos</span> en memoria. Controla cómo se accede a los datos.</p>
-                <div className="bg-slate-900/80 rounded-lg p-2.5 font-mono text-[11px] text-slate-400 border border-slate-800/80 space-y-1">
-                  <div><span className="text-amber-400">Stride 1:</span> Elementos consecutivos → máximo aprovechamiento de caché, mejor throughput</div>
-                  <div><span className="text-orange-400">Stride ≠ 1:</span> Saltos en memoria → caché misses, lanes ociosas, rendimiento cae drásticamente</div>
-                  <div><span className="text-amber-400">Aplicación:</span> Operaciones sobre matrices por columnas (stride = N) vs. filas (stride = 1)</div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="bg-slate-900/80 rounded-lg p-2.5 font-mono text-[10px] text-slate-300 border border-slate-800/80">
+                    <div className="text-amber-400 font-bold mb-1">Stride 1 vs Stride ≠ 1</div>
+                    <div className="mb-1"><span className="text-amber-300">Filas:</span> stride=1 → a[i], a[i+1] → caché óptima</div>
+                    <div><span className="text-orange-400">Columnas:</span> stride=N → a[i], a[i+N] → saltos</div>
+                  </div>
+                  <div className="bg-red-950/40 rounded-lg p-2.5 font-mono text-[10px] text-red-300 border border-red-800/50">
+                    <div className="text-red-400 font-bold mb-1">⚠️ Sin datos suficientes</div>
+                    <div className="mb-0.5">// 8 elementos: data[0..7]</div>
+                    <div>VLEN=8, VSTR=2:</div>
+                    <div className="text-red-400">data[8], data[9] → basura</div>
+                    <div className="text-slate-500">// segmentation fault</div>
+                  </div>
                 </div>
               </div>
               <div className="bg-slate-950/60 rounded-xl p-4 border border-purple-500/30">
