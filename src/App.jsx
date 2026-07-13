@@ -379,7 +379,7 @@ export default function App() {
       </header>
 
       {/* Main Content Viewport */}
-      <main className="flex-1 relative p-6 md:p-8 overflow-hidden flex flex-col justify-center z-10">
+      <main className="flex-1 relative p-6 md:p-8 z-10 overflow-y-auto">
         <AnimatePresence mode="wait">
           <motion.div
             key={slide.id}
@@ -387,7 +387,7 @@ export default function App() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -15 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="w-full max-w-7xl 2xl:max-w-[90vw] mx-auto h-full flex flex-col justify-center"
+            className="w-full max-w-7xl 2xl:max-w-[90vw] mx-auto"
           >
             {slide.component}
           </motion.div>

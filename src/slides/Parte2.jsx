@@ -91,6 +91,7 @@ export function Slide2_2() {
   const [vlen, setVlen] = useState(8);
   const [stride, setStride] = useState(1);
   const [mask, setMask] = useState(Array(16).fill(true));
+  const [viewMode, setViewMode] = useState('practica'); // 'practica' | 'teoria'
 
   const data = [3.14, 2.71, 1.41, 0.57, 4.20, 5.55, 6.28, 7.89, 8.31, 9.81, 10.5, 11.7, 12.3, 13.9, 14.2, 15.6];
 
@@ -142,69 +143,124 @@ export function Slide2_2() {
               ))}
             </div>
           </div>
-          <motion.div
-            key={reg}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.25 }}
-            className={`grid ${cfg.gridCols} gap-1 p-1.5 rounded-xl bg-slate-950 border border-cyan-500/30 text-center font-mono text-xs-responsive font-bold text-cyan-300`}>
-            {data.slice(0, cfg.count).map((val, i) => (
-              <motion.div
-                key={`${reg}-${i}`}
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, delay: i * 0.015 }}
-                className="bg-cyan-500/20 p-1.5 rounded">
-                {val}
-              </motion.div>
-            ))}
-          </motion.div>
+          <div className={reg === 'zmm' ? 'overflow-x-auto' : ''}>
+            <motion.div
+              key={reg}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.25 }}
+              className={`grid ${cfg.gridCols} gap-1 p-1.5 rounded-xl bg-slate-950 border border-cyan-500/30 text-center font-mono text-xs-responsive font-bold text-cyan-300 ${reg === 'zmm' ? 'w-max' : ''}`}>
+              {data.slice(0, cfg.count).map((val, i) => (
+                <motion.div
+                  key={`${reg}-${i}`}
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2, delay: i * 0.015 }}
+                  className="bg-cyan-500/20 p-1.5 rounded">
+                  {val}
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
           <div className="text-xs-responsive text-slate-400 font-mono text-center pt-1">
             {cfg.sub}
           </div>
         </div>
       </div>
 
-      <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 grid grid-cols-3 gap-4 text-sm-responsive">
-        <div className="bg-slate-950 p-3 rounded-xl border border-slate-800"><span className="text-cyan-400 font-mono font-bold block">VLEN (Vector Length)</span> Longitud o cantidad de elementos activos en el registro.</div>
-        <div className="bg-slate-950 p-3 rounded-xl border border-slate-800"><span className="text-amber-400 font-mono font-bold block">VSTR (Vector Stride)</span> Distancia en memoria entre elementos consecutivos.</div>
-        <div className="bg-slate-950 p-3 rounded-xl border border-slate-800"><span className="text-purple-400 font-mono font-bold block">VMASK (Vector Mask)</span> Máscara de bits para activar/desactivar elementos en condicionales.</div>
+      {/* ── SECCIÓN 2: REGISTROS DE CONTROL — PRÁCTICA / TEORÍA ── */}
+      <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col min-h-0 overflow-hidden max-h-[540px]">
+        <div className="shrink-0 flex items-center justify-between mb-3">
+          <div className="text-xs-responsive font-mono font-bold text-slate-400 uppercase tracking-widest">Registros de Control SIMD</div>
+          <div className="flex gap-2">
+            <button onClick={() => setViewMode('practica')} className={`px-4 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${viewMode === 'practica' ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30' : 'bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700'}`}>🧪 Práctica</button>
+            <button onClick={() => setViewMode('teoria')} className={`px-4 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${viewMode === 'teoria' ? 'bg-purple-500 text-white shadow-md shadow-purple-500/30' : 'bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700'}`}>📖 Teoría</button>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto space-y-3 pr-1 min-h-0">
+          {viewMode === 'practica' ? (
+            <div className="space-y-3">
+              <div className="bg-slate-950/60 rounded-xl p-3 border border-cyan-500/30">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <span className="text-cyan-400 font-mono font-bold text-sm">VLEN</span>
+                    <span className="text-slate-400 text-xs">Vector Length</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono text-xs"><span className="text-cyan-300 font-bold text-lg">{vlen}</span><span className="text-slate-500"> / </span><span className="text-slate-400">{cfg.max}</span></span>
+                    <button onClick={() => setVlen(Math.max(1, vlen - 1))} className="w-7 h-7 rounded bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 font-bold text-sm flex items-center justify-center">−</button>
+                    <button onClick={() => setVlen(Math.min(cfg.max, vlen + 1))} className="w-7 h-7 rounded bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 font-bold text-sm flex items-center justify-center">+</button>
+                  </div>
+                </div>
+                <input type="range" min={1} max={cfg.max} value={vlen} onChange={(e) => setVlen(Number(e.target.value))} className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-cyan-500 bg-slate-800" />
+                <div className="flex justify-between text-[10px] font-mono text-slate-600 mt-1">{[...Array(cfg.max)].map((_, i) => (<span key={i} className={`${i === vlen - 1 ? 'text-cyan-400 font-bold' : 'text-slate-600'}`}>{i + 1}</span>))}</div>
+                <p className="text-xs text-slate-500 mt-1.5">Lanes <span className="text-cyan-400 font-bold">[{vlen}–{cfg.max}]</span> quedan <span className="text-slate-500 font-bold">IDLE</span> (inactivas)</p>
+              </div>
+              <div className="bg-slate-950/60 rounded-xl p-3 border border-amber-500/30">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-amber-400 font-mono font-bold text-sm">VSTR</span>
+                    <span className="text-slate-400 text-xs">Vector Stride</span>
+                  </div>
+                  <div className="flex gap-1.5">
+                    {[1, 2].map((s) => (<button key={s} onClick={() => setStride(s)} className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${stride === s ? s === 1 ? 'bg-amber-500 text-slate-950 shadow shadow-amber-500/30' : 'bg-orange-500 text-slate-950 shadow shadow-orange-500/30' : 'bg-slate-800 text-slate-500 hover:text-slate-300 border border-slate-700'}`}>Stride {s}</button>))}
+                  </div>
+                </div>
+                <p className="text-xs text-slate-500 mt-2">{stride === 1 ? (<><span className="text-amber-400 font-bold">Stride 1</span> → lectura consecutiva. Máximo aprovechamiento de caché.</>) : (<><span className="text-orange-400 font-bold">Stride 2</span> → salto de un elemento. Lanes impares quedan como <span className="text-orange-400 font-bold">SKIP</span>.</>)}</p>
+              </div>
+              <div className="bg-slate-950/60 rounded-xl p-3 border border-purple-500/30">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <span className="text-purple-400 font-mono font-bold text-sm">VMASK</span>
+                    <span className="text-slate-400 text-xs">Vector Mask</span>
+                  </div>
+                  <span className="text-xs font-mono"><span className="text-purple-300 font-bold">{mask.slice(0, vlen).filter(x => x).length}</span><span className="text-slate-500"> / </span><span className="text-slate-400">{vlen}</span><span className="text-slate-500 ml-1">activas</span></span>
+                </div>
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {mask.slice(0, cfg.max).map((active, i) => {
+                    const isIdle = i >= vlen;
+                    return (<button key={i} onClick={() => !isIdle && toggleMask(i)} disabled={isIdle} className={`w-8 h-8 rounded-lg font-mono text-xs font-bold transition-all flex items-center justify-center ${isIdle ? 'bg-slate-800 text-slate-700 cursor-not-allowed' : active ? 'bg-purple-500/20 border border-purple-500 text-purple-300 hover:bg-purple-500/30' : 'bg-slate-800 border border-slate-700 text-slate-600 hover:bg-slate-700'}`}>{i}</button>);
+                  })}
+                </div>
+                <p className="text-xs text-slate-500">Lanes con mask=<span className="text-slate-600 font-bold bg-slate-800 px-1 rounded">0</span> ejecutan pero omiten writeback{mask.slice(0, vlen).filter(x => !x).length > 0 && (<span className="text-purple-400 ml-1">({mask.slice(0, vlen).filter(x => !x).length} silenciadas)</span>)}</p>
+              </div>
+            </div>
+          ) : null}
+
+          {viewMode === 'teoria' ? (
+            <div className="space-y-3">
+              <div className="bg-slate-950/60 rounded-xl p-4 border border-cyan-500/30">
+                <div className="flex items-center gap-3 mb-2"><span className="text-cyan-400 font-mono font-bold text-base">VLEN</span><span className="text-cyan-300/70 font-mono text-sm">(Vector Length)</span></div>
+                <p className="text-slate-300 text-xs leading-relaxed mb-2">Define <span className="text-cyan-400 font-bold">cuántos elementos del registro vectorial están activos</span> en la operación actual. El hardware puede tener más lanes de las que se usan.</p>
+                <div className="bg-slate-900/80 rounded-lg p-2.5 font-mono text-[11px] text-slate-400 border border-slate-800/80 space-y-1">
+                  <div><span className="text-cyan-400">Ejemplo:</span> ZMM con 16 lanes, VLEN=8 → solo las primeras 8 lanes procesan, las lanes [8–15] quedan <span className="text-slate-600 font-bold">IDLE</span></div>
+                  <div><span className="text-cyan-400">Why:</span> Permite operar con vectores más cortos sin desperdiciar energía ni lógica en lanes innecesarias</div>
+                </div>
+              </div>
+              <div className="bg-slate-950/60 rounded-xl p-4 border border-amber-500/30">
+                <div className="flex items-center gap-3 mb-2"><span className="text-amber-400 font-mono font-bold text-base">VSTR</span><span className="text-amber-300/70 font-mono text-sm">(Vector Stride)</span></div>
+                <p className="text-slate-300 text-xs leading-relaxed mb-2">Especifica <span className="text-amber-400 font-bold">la distancia en bytes entre elementos consecutivos</span> en memoria. Controla cómo se accede a los datos.</p>
+                <div className="bg-slate-900/80 rounded-lg p-2.5 font-mono text-[11px] text-slate-400 border border-slate-800/80 space-y-1">
+                  <div><span className="text-amber-400">Stride 1:</span> Elementos consecutivos → máximo aprovechamiento de caché, mejor throughput</div>
+                  <div><span className="text-orange-400">Stride ≠ 1:</span> Saltos en memoria → caché misses, lanes ociosas, rendimiento cae drásticamente</div>
+                  <div><span className="text-amber-400">Aplicación:</span> Operaciones sobre matrices por columnas (stride = N) vs. filas (stride = 1)</div>
+                </div>
+              </div>
+              <div className="bg-slate-950/60 rounded-xl p-4 border border-purple-500/30">
+                <div className="flex items-center gap-3 mb-2"><span className="text-purple-400 font-mono font-bold text-base">VMASK</span><span className="text-purple-300/70 font-mono text-sm">(Vector Mask)</span></div>
+                <p className="text-slate-300 text-xs leading-relaxed mb-2">Registro de <span className="text-purple-400 font-bold">predicado por elemento</span>: define qué lanes escriben a memoria y cuáles no.</p>
+                <div className="bg-slate-900/80 rounded-lg p-2.5 font-mono text-[11px] text-slate-400 border border-slate-800/80 space-y-1">
+                  <div><span className="text-purple-400">mask=1:</span> Lane activa → ejecuta operación + escribe resultado normalmente</div>
+                  <div><span className="text-slate-600">mask=0:</span> Lane silenciada → ejecuta en silicio pero <span className="text-slate-500">omite el writeback</span></div>
+                  <div><span className="text-purple-400">Kryptonita:</span> If/else por elemento → ambas ramas se ejecutan, se enmascara → speedup se evapora</div>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
 
-      {/* ── SECCIÓN 3: TARJETAS EXPLICATIVAS DINÁMICAS ── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-[12px]">
-
-        {/* VLEN Info */}
-        <div className="bg-slate-50 dark:bg-slate-950/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-1.5">
-          <span className="text-cyan-700 dark:text-cyan-400 font-mono font-bold block text-[12px]">VLEN (Vector Length)</span>
-          <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-            Actualmente procesando <span className="text-cyan-700 dark:text-cyan-300 font-bold">{vlen} elementos</span> en lugar del máximo de {cfg.max}.
-            Las lanes desde la <span className="text-slate-500 font-bold">[{vlen}]</span> en adelante quedan en estado <span className="text-slate-500 font-bold">IDLE</span> (inactivas).
-          </p>
-        </div>
-
-        {/* VSTR Info */}
-        <div className="bg-slate-50 dark:bg-slate-950/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-1.5">
-          <span className="text-amber-700 dark:text-amber-400 font-mono font-bold block text-[12px]">VSTR (Vector Stride)</span>
-          <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-            {stride === 1 ? (
-              <span>Paso unitario (<span className="text-amber-700 dark:text-amber-300 font-bold">Stride 1</span>). La CPU lee los datos de memoria en forma consecutiva. Máximo aprovechamiento de la caché.</span>
-            ) : (
-              <span>Paso no unitario (<span className="text-amber-700 dark:text-amber-300 font-bold">Stride 2</span>). La CPU lee un elemento y salta el siguiente. Esto causa que las lanes impares queden marcadas como <span className="text-amber-700 dark:text-amber-300 font-bold">SKIP</span>.</span>
-            )}
-          </p>
-        </div>
-
-        {/* VMASK Info */}
-        <div className="bg-slate-50 dark:bg-slate-950/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-1.5">
-          <span className="text-purple-700 dark:text-purple-400 font-mono font-bold block text-[12px]">VMASK (Vector Mask)</span>
-          <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-            Hay <span className="text-purple-700 dark:text-purple-300 font-bold">{mask.slice(0, vlen).filter(x => !x).length} lanes</span> con máscara '0' dentro del rango activo.
-            Aunque estas lanes ejecuten la operación físicamente en el silicio, el writeback en memoria será omitido (bloqueado).
-          </p>
-        </div>
-
-      </div>
     </div>
   );
 }
@@ -422,6 +478,7 @@ function VectorDiag({ cycle: externalCycle }) {
 }
 
 export function Slide2_3() {
+  const [view, setView] = useState('diagram');
   return (
     <div className="w-full h-full flex flex-col gap-3 max-w-6xl mx-auto">
       {/* Top Header & Selector */}
@@ -488,40 +545,42 @@ export function Slide2_3() {
           </div>
         </div>
       ) : view === 'array' ? (
-        <div className="flex-1 flex flex-col md:flex-row gap-6 p-5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-purple-500/40 items-center justify-center min-h-0 overflow-y-auto">
-          <div className="flex-1 max-w-xl w-full">
-            <VectorDiag />
+        <div className="flex-1 rounded-2xl border border-amber-500/30 bg-slate-900 p-3 flex flex-col md:flex-row gap-4 min-h-0 overflow-hidden">
+          {/* Array Architecture Image Container */}
+          <div className="shrink-0 md:w-[420px] bg-slate-950 rounded-xl p-3 border border-slate-800/80 flex items-center justify-center min-h-0 relative group">
+            <div className="bg-white rounded-xl p-2.5 shadow-xl max-h-full flex items-center justify-center">
+              <img
+                src="/array_arch.png"
+                alt="Arquitectura Array Processor (SIMD)"
+                className="max-h-[330px] w-auto object-contain rounded"
+              />
+            </div>
           </div>
 
-          {/* PEs Grid */}
-          <div className="flex-1 grid grid-cols-4 gap-2.5 min-h-0">
-            {[3.14, 2.71, 1.41, 0.57, 4.20, 5.55, 6.28, 7.89].map((val, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: 0.4 + i * 0.05 }}
-                className="rounded-xl bg-slate-950 border-2 border-amber-500/40 flex flex-col items-center justify-center gap-0.5 p-2 shadow-md shadow-amber-500/5">
-                <span className="text-xs-responsive font-mono text-amber-400 font-bold">PE{i}</span>
-                <span className="text-base-responsive font-mono font-bold text-amber-300">{val}</span>
-                <span className="text-xs-responsive text-slate-500 font-mono">dato{i}</span>
-              </motion.div>
-            ))}
-          </div>
+          {/* Explanation sidebar */}
+          <div className="flex-1 min-w-0 flex flex-col gap-2 overflow-y-auto pr-1">
+            <h4 className="text-xs-responsive font-bold font-mono text-amber-400 uppercase tracking-widest flex items-center gap-1.5">
+              <Layers size={16} /> Componentes Clave
+            </h4>
 
-          {/* Info panels */}
-          <div className="shrink-0 grid grid-cols-1 md:grid-cols-3 gap-2 text-xs-responsive">
-            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">
-              <span className="font-bold text-amber-300 font-mono block mb-1 text-xs-responsive">Idea clave</span>
-              N unidades de procesamiento independientes, todas ejecutan la MISMA instrucción simultáneamente, cada una con su propio dato.
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs-responsive space-y-1">
+              <span className="font-bold text-amber-300 font-mono block">1. N ALUs Idénticas (PEs)</span>
+              <p className="text-slate-400 leading-relaxed">N copias exactas del mismo circuito operando en lockstep. Cada PE tiene sus propios registros y memoria local.</p>
             </div>
-            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">
-              <span className="font-bold text-amber-300 font-mono block mb-1 text-xs-responsive">Tradeoff</span>
-              Mucho hardware (N ALUs completas) → alto costo en silicio, pero latencia mínima (todos arrancan juntos en el mismo ciclo).
+
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs-responsive space-y-1">
+              <span className="font-bold text-amber-300 font-mono block">2. Unidad de Control (CU)</span>
+              <p className="text-slate-400 leading-relaxed">Una única CU decodifica y transmite la MISMA instrucción a todos los PEs simultáneamente.</p>
             </div>
-            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">
-              <span className="font-bold text-amber-300 font-mono block mb-1 text-xs-responsive">Ejemplos</span>
-              ILLIAC IV (64 PEs, años 60) · Connection Machine CM-2 · systolic arrays modernos.
+
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs-responsive space-y-1">
+              <span className="font-bold text-amber-300 font-mono block">3. Lockstep Execution</span>
+              <p className="text-slate-400 leading-relaxed">En cada ciclo, TODAS las ALUs ejecutan la misma operación sobre datos distintos. La instrucción cambia por ciclo, pero todas responden juntas.</p>
+            </div>
+
+            <div className="p-2.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs-responsive space-y-1">
+              <span className="font-bold text-amber-300 font-mono block">4. Ejemplo clásico: ILLIAC IV</span>
+              <p className="text-slate-400 leading-relaxed">64 PEs idénticos. Cada uno con su ALU, registros y memoria local. Todas las operaciones en lockstep. Década del 60.</p>
             </div>
           </div>
         </div>

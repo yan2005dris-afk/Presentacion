@@ -9,6 +9,23 @@ import { Play, RotateCcw, ArrowRight, Layers, Activity } from 'lucide-react';
 /* ───────── Slide 1.0 — Límite Secuencial ───────── */
 
 export function Slide1_LimiteSec() {
+  const [showLocal, setShowLocal] = useState(false);
+  const timerRef = useRef(null);
+  const iframeRef = useRef(null);
+
+  useEffect(() => {
+    // Si YouTube no carga en 3s, mostrar fallback local
+    timerRef.current = setTimeout(() => {
+      setShowLocal(true);
+    }, 3000);
+    return () => clearTimeout(timerRef.current);
+  }, []);
+
+  const handleIframeLoad = () => {
+    clearTimeout(timerRef.current);
+    setShowLocal(false);
+  };
+
   return (
     <div className="w-full h-full flex flex-col gap-2 max-w-6xl mx-auto select-none">
       {/* Main content */}
@@ -43,13 +60,29 @@ export function Slide1_LimiteSec() {
             <span className="text-xs-responsive font-mono text-slate-500">YouTube Embed</span>
           </div>
           <div className="flex-1 relative w-full h-full bg-black">
-            <iframe
-              className="absolute inset-0 w-full h-full border-0"
-              src="https://www.youtube.com/embed/8_ZTvG1WQxM?autoplay=0"
-              title="SIMD vs SISD Video Explicativo"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
+            {!showLocal && (
+              <iframe
+                className="absolute inset-0 w-full h-full border-0"
+                src="https://www.youtube.com/embed/8_ZTvG1WQxM?autoplay=0"
+                title="SIMD vs SISD Video Explicativo"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                onLoad={handleIframeLoad}
+                ref={iframeRef}
+              />
+            )}
+            {showLocal && (
+              <video
+                className="absolute inset-0 w-full h-full object-contain"
+                controls
+                autoPlay
+                muted
+                playsInline
+                src="/simd_fallback.mp4"
+              >
+                Tu navegador no soporta video HTML5.
+              </video>
+            )}
           </div>
         </div>
       </div>
