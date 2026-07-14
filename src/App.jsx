@@ -8,7 +8,7 @@ import {
   Slide1_LimiteSec, Slide1_1, Slide1_1Anim, Slide1_2, Slide1_4, Slide1_LimitacionesSISD,
   SlideIntroParte1,
   Slide2_1, Slide2_2, Slide2_3, Slide2_4, SlideIntroParte2,
-  Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_Chaining, Slide3_4, Slide3_OrganizacionDatos, SlideIntroParte3,
+  Slide3_1, Slide3_2, Slide3_3, Slide3_FDE_SIMD, Slide3_Chaining, Slide3_4, Slide3_OrganizacionDatos, Slide3_9, SlideIntroParte3,
   Slide4_1, Slide4_2, Slide4_3, Slide4_4, Slide4_5, Slide4_Divergencia, SlideIntroParte4,
   SlidePracticaAsm
 } from './slides';
@@ -294,6 +294,14 @@ export default function App() {
       subtitle: 'Slide 4.7 · La División del Trabajo Computacional',
       speaker: "SIMD no es una optimización opcional; es el mecanismo estructural por el cual la computación moderna superó el límite de frecuencia de reloj.",
       component: <Slide4_5 />
+    },
+    {
+      id: '5.video',
+      section: 4,
+      title: 'Ver la Exposición Completa',
+      subtitle: 'Slide Final · Enlaces de Video (YouTube y OneDrive)',
+      speaker: "Si quieren ver la exposición completa grabada, está disponible en dos plataformas: YouTube para acceso público directo, y OneDrive/SharePoint UPSE para la versión institucional. Mismo contenido en ambas plataformas. Gracias por seguir toda la presentación.",
+      component: <Slide3_9 />
     }
   ];
 

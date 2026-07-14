@@ -489,6 +489,55 @@ export function Slide3_OrganizacionDatos() {
 
 /* ───────── Slide 3.6b — Data Flow Visualization ───────── */
 
+/* ───────── Slide 3.9 — Video de Exposición Completa ───────── */
+
+export function Slide3_9() {
+  return (
+    <div className="space-y-6 max-w-4xl mx-auto text-center">
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-2 border-cyan-500/40">
+        <h3 className="text-2xl font-bold text-slate-100 mb-2">Ver la Exposición Completa</h3>
+        <p className="text-sm-responsive text-slate-400">Arquitectura y Organización de Computadoras — Parte 3</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* YouTube */}
+        <a
+          href="https://youtu.be/Q7UO6XdY3y8"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group p-6 rounded-2xl bg-gradient-to-br from-red-900/20 to-red-950/20 border-2 border-red-500/40 hover:border-red-500/80 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/20"
+        >
+          <div className="text-4xl mb-3">🎥</div>
+          <h4 className="text-lg font-bold text-red-300 mb-2">YouTube</h4>
+          <p className="text-sm-responsive text-slate-400 mb-3">Ver en YouTube — acceso público sin restricciones</p>
+          <div className="text-xs font-mono text-red-400 break-all group-hover:text-red-300 transition-colors">
+            youtu.be/Q7UO6XdY3y8
+          </div>
+        </a>
+
+        {/* OneDrive */}
+        <a
+          href="https://upse-my.sharepoint.com/:v:/g/personal/andy_alejandrovera4290_upse_edu_ec/IQBpchQH5sjrT6L-7U7fovt2AXvuLnu9xc-3NDlZQLAH_bM?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=XNpJcd"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group p-6 rounded-2xl bg-gradient-to-br from-blue-900/20 to-blue-950/20 border-2 border-blue-500/40 hover:border-blue-500/80 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20"
+        >
+          <div className="text-4xl mb-3">📁</div>
+          <h4 className="text-lg font-bold text-blue-300 mb-2">OneDrive (UPSE)</h4>
+          <p className="text-sm-responsive text-slate-400 mb-3">Versión institucional en SharePoint UPSE</p>
+          <div className="text-xs font-mono text-blue-400 break-all group-hover:text-blue-300 transition-colors">
+            upse-my.sharepoint.com › ...
+          </div>
+        </a>
+      </div>
+
+      <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-sm-responsive text-slate-400">
+        <span className="text-slate-300">✓ Mismo contenido en ambas plataformas — elige la que prefieras</span>
+      </div>
+    </div>
+  );
+}
+
 /* ───────── Carátula de Sección: Parte 3 ───────── */
 
 export function SlideIntroParte3() {
@@ -507,6 +556,7 @@ export function SlideIntroParte3() {
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.6: Fetch-Decode-Execute Vectorial</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.7: Encadenamiento Vectorial (Chaining)</div>
         <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.8: AMD Zen vs AMD Excavator</div>
+        <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-slate-300">• Slide 3.9: Enlaces de Video (YouTube y OneDrive)</div>
       </div>
     </div>
   );

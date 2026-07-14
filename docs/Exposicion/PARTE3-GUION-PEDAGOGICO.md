@@ -1,8 +1,8 @@
 # PARTE 3 — Extensiones SIMD Modernas: MMX, SSE, AVX
 ## Guión Pedagógico Completo — Integrante 3
 
-**Duración estimada**: 15-18 minutos  
-**Slides**: 8 totales (Slide 3.1 → 3.8) — Todas con guión completo  
+**Duración estimada**: 15-18 minutos (+ 1 min cierre video)  
+**Slides**: 9 totales (Slide 3.1 → 3.9) — Todas con guión completo  
 **Objetivo**: Mostrar cómo SIMD evolucionó desde registros simples (64 bits) hasta arquitecturas modernas de 512 bits, cómo funciona el circuito interno, qué instrucciones usas, y por qué la implementación de hardware determina rendimiento.
 
 ---
@@ -169,16 +169,24 @@ Prefijo `V` distingue: `VADDPD` no es `ADDPS`.
 **VFMADDPD es la reina**:
 "Esta es la instrucción que revolucionó AI en CPU. Hace 2 operaciones (multiply + add) en 1 ciclo. Cuenta como 2 FLOPS para benchmarks."
 
-Mostrar ejemplo:
+**La slide muestra**: Ejemplo lineal visual
+```
+C[0..3] = A[0..3] × B[0..3] + D[0..3]
+```
+
+"Eso que ves en la slide: una línea. En assembler, eso se vería así (mencionar verbalmente):"
+
 ```asm
 VMOVAPD ymm0, [A]          ; cargar 4 doubles
 VMOVAPD ymm1, [B]          ; cargar 4 doubles
-VMOVAPD ymm2, [C]          ; cargar 4 doubles
-VFMADDPD ymm3, ymm0, ymm1, ymm2  ; YMM3 = YMM0*YMM1 + YMM2 (4 operaciones)
+VMOVAPD ymm2, [D]          ; cargar 4 doubles
+VFMADDPD ymm3, ymm0, ymm1, ymm2  ; YMM3 = YMM0*YMM1 + YMM2 (4 ops simultáneas)
 VMOVAPD [resultado], ymm3  ; guardar 4 resultados
 ```
 
-"5 instrucciones para computar 4× (a*b + c). En escalar, serían 20+ instrucciones."
+"5 instrucciones assembler. En código escalar, serían 20+ instrucciones (load, mult, load, add, store × 4 elementos). Acá: 5 total."
+
+**Nota para Q&A**: Si alguien pregunta "¿cómo se ve en código?", tienes el bloque assembler listo. Sino, la línea visual en la slide es suficiente para entender el concepto.
 
 **Detalle de sintaxis** (si preguntan):
 - Orden de operandos: `VFMADDPD destino, multiplicando1, multiplicando2, sumando`
@@ -664,4 +672,33 @@ ación
 
 ---
 
-✅ **Fin Parte 3 — Extensiones SIMD Modernas (Guión Completo, Todas las Slides Documentadas)**
+---
+
+---
+
+## Slide 3.9 — Exposición Completa (Video)
+
+### Título
+"Arquitectura y Organización de Computadoras — Parte 3 (Video Completo)"
+
+### Lo que ves en la slide
+- **Encabezado grande**: "Ver la Exposición Completa"
+- **2 botones/links destacados**:
+  - 🎥 **YouTube**: https://youtu.be/Q7UO6XdY3y8
+  - 📁 **OneDrive**: https://upse-my.sharepoint.com/:v:/g/personal/andy_alejandrovera4290_upse_edu_ec/IQBpchQH5sjrT6L-7U7fovt2AXvuLnu9xc-3NDlZQLAH_bM?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=XNpJcd
+- **Descripción**: "Exposición completa: Arquitectura y Organización de Computadoras — Parte 3: Extensiones SIMD Modernas (MMX, SSE, AVX)"
+
+### Qué decir (guión)
+
+**Cierre final**:
+"Si quieren ver la exposición completa grabada, está disponible en dos plataformas:"
+
+"**YouTube**: para verla directamente en la web, compartirla, y acceder sin restricciones."
+
+"**OneDrive/SharePoint**: versión institucional UPSE, con control de acceso. Mismo contenido."
+
+"Gracias por seguir toda la Parte 3. Preguntas finales."
+
+---
+
+✅ **Fin Parte 3 — Extensiones SIMD Modernas (Guión Completo, Todas las Slides Documentadas + Video Final)**
