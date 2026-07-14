@@ -493,25 +493,27 @@ export function Slide3_OrganizacionDatos() {
 
 export function Slide3_9() {
   return (
-    <div className="space-y-6 max-w-4xl mx-auto text-center">
-      <div className="p-6 rounded-3xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-2 border-cyan-500/40">
-        <h3 className="text-2xl font-bold text-slate-100 mb-2">Ver la Exposición Completa</h3>
-        <p className="text-sm-responsive text-slate-400">Arquitectura y Organización de Computadoras — Parte 3</p>
+    <div className="w-full h-full flex flex-col gap-8 max-w-7xl mx-auto text-center justify-center px-4 sm:px-8">
+      {/* Header */}
+      <div className="p-8 lg:p-10 rounded-3xl bg-gradient-to-br from-cyan-500/15 to-blue-500/15 border-2 border-cyan-500/50 space-y-3">
+        <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-100">Ver la Exposición Completa</h2>
+        <p className="text-lg lg:text-xl text-slate-300">Arquitectura y Organización de Computadoras — Todas las Partes</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Video Links Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         {/* YouTube */}
         <a
           href="https://youtu.be/Q7UO6XdY3y8"
           target="_blank"
           rel="noopener noreferrer"
-          className="group p-6 rounded-2xl bg-gradient-to-br from-red-900/20 to-red-950/20 border-2 border-red-500/40 hover:border-red-500/80 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/20"
+          className="group h-full p-8 lg:p-10 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-red-900/25 to-red-950/25 border-3 border-red-500/50 hover:border-red-500 hover:from-red-900/40 hover:to-red-950/40 transition-all duration-300 hover:shadow-2xl hover:shadow-red-500/30 flex flex-col items-center justify-center gap-4"
         >
-          <div className="text-4xl mb-3">🎥</div>
-          <h4 className="text-lg font-bold text-red-300 mb-2">YouTube</h4>
-          <p className="text-sm-responsive text-slate-400 mb-3">Ver en YouTube — acceso público sin restricciones</p>
-          <div className="text-xs font-mono text-red-400 break-all group-hover:text-red-300 transition-colors">
-            youtu.be/Q7UO6XdY3y8
+          <div className="text-8xl lg:text-9xl">🎥</div>
+          <h3 className="text-3xl lg:text-4xl font-extrabold text-red-300">YouTube</h3>
+          <p className="text-base lg:text-lg text-slate-300 max-w-xs">Acceso público sin restricciones · Visualización directa</p>
+          <div className="px-6 py-3 bg-red-500/20 border border-red-500/50 rounded-lg group-hover:bg-red-500/30 transition-all">
+            <span className="text-sm lg:text-base font-mono font-bold text-red-400 group-hover:text-red-300">youtu.be/Q7UO6XdY3y8</span>
           </div>
         </a>
 
@@ -520,19 +522,20 @@ export function Slide3_9() {
           href="https://upse-my.sharepoint.com/:v:/g/personal/andy_alejandrovera4290_upse_edu_ec/IQBpchQH5sjrT6L-7U7fovt2AXvuLnu9xc-3NDlZQLAH_bM?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=XNpJcd"
           target="_blank"
           rel="noopener noreferrer"
-          className="group p-6 rounded-2xl bg-gradient-to-br from-blue-900/20 to-blue-950/20 border-2 border-blue-500/40 hover:border-blue-500/80 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20"
+          className="group h-full p-8 lg:p-10 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-blue-900/25 to-blue-950/25 border-3 border-blue-500/50 hover:border-blue-500 hover:from-blue-900/40 hover:to-blue-950/40 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/30 flex flex-col items-center justify-center gap-4"
         >
-          <div className="text-4xl mb-3">📁</div>
-          <h4 className="text-lg font-bold text-blue-300 mb-2">OneDrive (UPSE)</h4>
-          <p className="text-sm-responsive text-slate-400 mb-3">Versión institucional en SharePoint UPSE</p>
-          <div className="text-xs font-mono text-blue-400 break-all group-hover:text-blue-300 transition-colors">
-            upse-my.sharepoint.com › ...
+          <div className="text-8xl lg:text-9xl">📁</div>
+          <h3 className="text-3xl lg:text-4xl font-extrabold text-blue-300">OneDrive (UPSE)</h3>
+          <p className="text-base lg:text-lg text-slate-300 max-w-xs">Versión institucional · SharePoint UPSE</p>
+          <div className="px-6 py-3 bg-blue-500/20 border border-blue-500/50 rounded-lg group-hover:bg-blue-500/30 transition-all">
+            <span className="text-sm lg:text-base font-mono font-bold text-blue-400 group-hover:text-blue-300">upse-my.sharepoint.com</span>
           </div>
         </a>
       </div>
 
-      <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-sm-responsive text-slate-400">
-        <span className="text-slate-300">✓ Mismo contenido en ambas plataformas — elige la que prefieras</span>
+      {/* Footer note */}
+      <div className="p-5 lg:p-6 rounded-2xl bg-slate-950/80 border-2 border-slate-800 text-center">
+        <span className="text-base lg:text-lg text-slate-300 font-semibold">✓ Mismo contenido en ambas plataformas — elige la que prefieras</span>
       </div>
     </div>
   );
