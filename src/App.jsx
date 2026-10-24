@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Maximize2, Minimize2, UserCheck, HelpCircle, ChevronLeft, ChevronRight, Sun, Moon, Monitor } from 'lucide-react';
+import { Maximize2, Minimize2, UserCheck, HelpCircle, ChevronLeft, ChevronRight, Sun, Moon, Monitor, FolderGit2 } from 'lucide-react';
 import { useTheme } from './hooks/useTheme';
 
 import {
@@ -13,8 +13,10 @@ import {
   SlidePracticaAsm
 } from './slides';
 
-// --- SECTIONS METADATA WITH REAL MEMBER NAMES ---
-const SECTIONS = [
+import { SECTIONS_STATS, getStatsSlides } from './deckStats';
+
+// --- SECTIONS METADATA WITH REAL MEMBER NAMES (SIMD) ---
+const SECTIONS_SIMD = [
   { id: 0, title: 'Inicio y Agenda', member: 'Presentación', color: 'from-blue-600 to-indigo-600' },
   { id: 1, title: 'Parte 1: El Problema y Taxonomía', member: 'Reyes Alisson', color: 'from-cyan-500 to-blue-500' },
   { id: 2, title: 'Parte 2: El Principio Vectorial', member: 'Rivera Yandris', color: 'from-purple-500 to-pink-500' },
@@ -23,6 +25,7 @@ const SECTIONS = [
 ];
 
 export default function App() {
+  const [deckTheme, setDeckTheme] = useState('stats'); // 'simd' | 'stats'
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showSpeakerNotes, setShowSpeakerNotes] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -42,7 +45,7 @@ export default function App() {
     }
   };
 
-  const slides = [
+  const slidesSIMD = [
     // === PORTADA Y AGENDA ===
     {
       id: '0.0',
@@ -59,7 +62,7 @@ export default function App() {
       subtitle: 'Agenda de Contenidos · 4 Partes',
       speaker: "Nuestra exposición se divide en 4 partes temáticas presentadas por Reyes Alisson, Rivera Yandris, Alejandro Andy y Bermudez Gino.",
       component: <SlideIndice onSelectSection={(secId) => {
-        const idx = slides.findIndex(s => s.id === `${secId}.intro`);
+        const idx = slidesSIMD.findIndex(s => s.id === `${secId}.intro`);
         if (idx !== -1) setCurrentSlide(idx);
       }} />
     },
@@ -305,6 +308,15 @@ export default function App() {
     }
   ];
 
+  const slidesStats = getStatsSlides((secId) => {
+    const idx = slidesStats.findIndex(s => s.section === secId);
+    if (idx !== -1) setCurrentSlide(idx);
+  });
+
+  const isStats = deckTheme === 'stats';
+  const slides = isStats ? slidesStats : slidesSIMD;
+  const SECTIONS = isStats ? SECTIONS_STATS : SECTIONS_SIMD;
+
   const nextSlide = () => setCurrentSlide(c => Math.min(c + 1, slides.length - 1));
   const prevSlide = () => setCurrentSlide(c => Math.max(c - 1, 0));
 
@@ -350,6 +362,36 @@ export default function App() {
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Switcher de Presentaciones */}
+          <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-1 rounded-lg border border-slate-300 dark:border-slate-800">
+            <button
+              onClick={() => {
+                setDeckTheme('stats');
+                setCurrentSlide(0);
+              }}
+              className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
+                isStats
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+              }`}
+            >
+              Estadística Inferencial
+            </button>
+            <button
+              onClick={() => {
+                setDeckTheme('simd');
+                setCurrentSlide(0);
+              }}
+              className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
+                !isStats
+                  ? 'bg-purple-600 text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+              }`}
+            >
+              SIMD / Arquitectura
+            </button>
+          </div>
+
           <button
             onClick={() => setShowSpeakerNotes(!showSpeakerNotes)}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all border ${showSpeakerNotes ? 'bg-amber-500/20 border-amber-500/50 text-amber-700 dark:text-amber-300' : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}
