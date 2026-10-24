@@ -253,7 +253,9 @@ export function SlideHipotesisH0H1() {
               estado por defecto
             </span>
           </div>
-          <p className="text-lg font-black text-slate-100">p<sub>B</sub> = p<sub>A</sub></p>
+          <p className="text-lg font-black text-slate-100">
+            <span className="text-slate-500 font-bold">H₀:</span> p<sub>B</sub> = p<sub>A</sub>
+          </p>
           <p className="text-xs text-slate-400 leading-relaxed">
             "La conversión de la variante B es igual a la de A." Cualquier variación observada se atribuye al azar.
           </p>
@@ -267,7 +269,12 @@ export function SlideHipotesisH0H1() {
             </span>
           </div>
           <p className="text-lg font-black text-rose-200">
-            {bilateral ? 'p_B ≠ p_A' : 'p_B > p_A'}
+            <span className="text-rose-400/70 font-bold">H₁:</span>{' '}
+            {bilateral ? (
+              <>p<sub>B</sub> ≠ p<sub>A</sub></>
+            ) : (
+              <>p<sub>B</sub> &gt; p<sub>A</sub></>
+            )}
           </p>
           <p className="text-xs text-slate-300 leading-relaxed">
             {bilateral
@@ -282,8 +289,8 @@ export function SlideHipotesisH0H1() {
         <Etiqueta>¿Qué querías demostrar antes de ver los datos?</Etiqueta>
         <div className="flex flex-wrap items-center gap-2">
           {[
-            { id: true, label: 'Bilateral · p_B ≠ p_A' },
-            { id: false, label: 'Unilateral · p_B > p_A' },
+            { id: true, pre: 'Bilateral · ', post: <>p<sub>B</sub> ≠ p<sub>A</sub></> },
+            { id: false, pre: 'Unilateral · ', post: <>p<sub>B</sub> &gt; p<sub>A</sub></> },
           ].map((opt) => (
             <button
               key={String(opt.id)}
@@ -294,7 +301,8 @@ export function SlideHipotesisH0H1() {
                   : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200'
               }`}
             >
-              {opt.label}
+              {opt.pre}
+              {opt.post}
             </button>
           ))}
         </div>
@@ -521,8 +529,8 @@ export function SlidePValorSorpresa() {
           <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2">
             <Etiqueta>Los dos números</Etiqueta>
             <div className="space-y-1.5 text-xs text-slate-300">
-              <div className="flex justify-between"><span>Bilateral (p_B ≠ p_A)</span><span className="font-mono font-bold text-cyan-300">{pBil.toFixed(4)}</span></div>
-              <div className="flex justify-between"><span>Unilateral (p_B &gt; p_A)</span><span className="font-mono font-bold text-cyan-300">{pUni.toFixed(4)}</span></div>
+              <div className="flex justify-between"><span>Bilateral (p<sub>B</sub> ≠ p<sub>A</sub>)</span><span className="font-mono font-bold text-cyan-300">{pBil.toFixed(4)}</span></div>
+              <div className="flex justify-between"><span>Unilateral (p<sub>B</sub> &gt; p<sub>A</sub>)</span><span className="font-mono font-bold text-cyan-300">{pUni.toFixed(4)}</span></div>
             </div>
             <p className="text-[11px] text-slate-500 leading-relaxed">
               El p-valor siempre se calcula. La decisión se toma comparándolo con α.
