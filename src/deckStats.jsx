@@ -2,7 +2,7 @@ import React from 'react';
 import {
   SlidePortada2, SlideIndice2,
   SlideInferencialFundamentos, SlidePoissonNegocio,
-  SlideNormalGauss, SlideTLC,
+  SlideNormalFundamentos, SlideNormalCampanaLectura, SlideNormalSoftwareCaso, SlideTLC,
   SlideIntervalosConfianza,
   SlideHipotesisPValor, SlideComparacionMedias,
   SlideABTestingAplicaciones, SlideConclusionesInferencial
@@ -11,7 +11,7 @@ import {
 export const SECTIONS_STATS = [
   { id: 0, title: 'Portada e Índice', member: 'Grupo 3 y 4', color: 'from-blue-600 to-indigo-600' },
   { id: 1, title: 'Distribuciones de Probabilidad & Poisson', member: 'Said', color: 'from-cyan-500 to-blue-500' },
-  { id: 2, title: 'Distribución Normal & Gauss', member: 'Yandris', color: 'from-purple-500 to-indigo-500' },
+  { id: 2, title: 'Distribución Normal & Gauss en Software', member: 'Yandris', color: 'from-purple-500 to-indigo-500' },
   { id: 3, title: 'Teorema del Límite Central (TLC)', member: 'Allison', color: 'from-teal-500 to-emerald-500' },
   { id: 4, title: 'Margen de Error & Intervalos', member: 'Gino', color: 'from-amber-500 to-orange-500' },
   { id: 5, title: 'Nivel de Significancia (α) & P-Valor', member: 'Andy', color: 'from-rose-500 to-pink-500' },
@@ -32,7 +32,7 @@ export const getStatsSlides = (onSelectSection) => [
     section: 0,
     title: 'Agenda de Estadística Inferencial',
     subtitle: 'Asignación de Temas por Expositor',
-    speaker: 'Nuestra agenda está distribuida entre Said (Distribuciones y Poisson), Yandris (Distribución Normal), Allison (Teorema del Límite Central), Gino (Intervalos de Confianza) y Andy (Significancia y P-Valor).',
+    speaker: 'Nuestra agenda está distribuida entre Said (Distribuciones y Poisson), Yandris (Distribución Normal en Sistemas y Monitoreo), Allison (Teorema del Límite Central), Gino (Intervalos de Confianza) y Andy (Significancia y P-Valor).',
     component: <SlideIndice2 onSelectSection={onSelectSection} />
   },
 
@@ -54,14 +54,34 @@ export const getStatsSlides = (onSelectSection) => [
     component: <SlidePoissonNegocio />
   },
 
-  // === YANDRIS: DISTRIBUCIÓN NORMAL ===
+  // === YANDRIS: SLIDE 2.0 (TEORÍA Y ANATOMÍA DE LA FÓRMULA) ===
   {
     id: 'stats-2.0',
     section: 2,
-    title: 'Distribución Normal & Campana de Gauss',
-    subtitle: 'Expositor: Yandris · Simetría, Z-Score y Regla Empírica 68-95-99.7',
-    speaker: 'Soy Yandris. La distribución normal es el modelo continuo por excelencia: simétrica, con media, mediana y moda coincidentes en mu, y una regla empírica que cuantifica la dispersión en 1, 2 y 3 desviaciones estándar mediante la puntuación Z.',
-    component: <SlideNormalGauss />
+    title: 'Distribución Normal: Variables & Anatomía de la Ecuación',
+    subtitle: 'Expositor: Yandris · Slide 2.0 · Modelado Continuo, Parámetro de Centro (μ) y Escala (σ)',
+    speaker: 'Soy Yandris. Comenzamos con la base teórica: en infraestructura las métricas son continuas con infinitos decimales (latencia en ms, uso de CPU o RAM). La función de densidad f(x) describe esta realidad usando dos parámetros clave: mu, que posiciona el centro nominal del sistema, y sigma, que define la dispersión e incertidumbre.',
+    component: <SlideNormalFundamentos />
+  },
+
+  // === YANDRIS: SLIDE 2.1 (CÓMO LEER LA CAMPANA: FORMAS Y REGLA DE LAS 3 SIGMAS) ===
+  {
+    id: 'stats-2.1',
+    section: 2,
+    title: 'Cómo Interpretar la Campana de Gauss: Formas y Variación',
+    subtitle: 'Expositor: Yandris · Slide 2.1 · Significado de ±1σ, ±2σ, ±3σ y qué pasa cuando cambian los datos',
+    speaker: 'En esta segunda diapositiva aprendemos a leer la campana: el área total siempre representa el 100% de los eventos. Las franjas mas o menos 1 sigma, 2 sigma y 3 sigma son márgenes de seguridad fijos: 68% en la primera franja, 95.4% en la segunda y 99.7% en la tercera. Además, si el sistema es muy estable (sigma chico), la campana es esbelta y alta; si el sistema sufre fluctuación de red (sigma grande), la campana se aplana y se ensancha.',
+    component: <SlideNormalCampanaLectura />
+  },
+
+  // === YANDRIS: SLIDE 2.2 (CASO REAL DE SOFTWARE POST /users) ===
+  {
+    id: 'stats-2.2',
+    section: 2,
+    title: 'Ejemplo Real en Software: POST /api/v1/users (Creación de Usuario)',
+    subtitle: 'Expositor: Yandris · Slide 2.2 · Hashing Argon2/Bcrypt, Z-Score Dinámico y Detección de Anomalías',
+    speaker: 'Ahora que entendemos la teoría y la forma de la campana, veamos el caso real: crear un usuario con POST /users. Este proceso suma el hash de clave en CPU, la conexión SQL y el bus de Kafka. La suma de estas demoras converge a una campana con media de 150 ms y desvío de 20 ms. Con el Z-Score calculamos si una latencia de 190 ms cumple el SLA del 97.7% o si un intento anómalo de 220 ms exige rate limiting de inmediato.',
+    component: <SlideNormalSoftwareCaso />
   },
 
   // === ALLISON: TEOREMA DEL LÍMITE CENTRAL (TLC) ===

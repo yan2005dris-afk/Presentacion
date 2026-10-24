@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Split, ShieldAlert, Cpu, Sparkles, TrendingUp, CheckCircle, Terminal, Layers } from 'lucide-react';
+import { InteractiveCodeBlock } from '../components/InteractiveCodeBlock';
 
 export function SlideABTestingAplicaciones() {
   const [activeTab, setActiveTab] = useState('abtesting');
@@ -172,26 +173,13 @@ export function SlideABTestingAplicaciones() {
       )}
 
       {activeTab === 'pipelines' && (
-        <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
-          <div className="flex items-center gap-2 text-teal-400 font-bold text-sm">
-            <Terminal className="w-4 h-4" />
-            Automatización de Pruebas en Pipelines de Analítica y CI/CD
+        <div className="space-y-4">
+          <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300">
+            <strong className="text-teal-300">Arquitectura de Pipelines Autónomos:</strong> Integración de funciones estadísticas para calcular automáticamente los estadísticos de prueba (t, Z, χ²) y desencadenar despliegues automatizados de features ganadoras en LaunchDarkly, Statsig o GrowthBook.
           </div>
-          <p className="text-xs text-slate-300 leading-relaxed">
-            Integración de librerías estadísticas (<code className="text-teal-300 font-mono">scipy.stats</code>, <code className="text-teal-300 font-mono">statsmodels</code> en Python) para computar automáticamente los estadísticos de prueba (t, Z, χ²) y desencadenar despliegues automatizados de features ganadoras.
-          </p>
 
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-200 overflow-x-auto space-y-1">
-            <div className="text-slate-500"># Pipeline automático de decisión A/B Testing con SciPy</div>
-            <div><span className="text-purple-400">from</span> scipy <span className="text-purple-400">import</span> stats</div>
-            <div className="pt-2">stat, p_val = stats.ttest_ind(conversion_A, conversion_B)</div>
-            <div className="pt-2"><span className="text-blue-400">if</span> p_val &lt;= <span className="text-emerald-400">0.05</span>:</div>
-            <div className="pl-4 text-emerald-300">deploy_feature_flag(<span className="text-amber-300">"variant_B"</span>, rollout=<span className="text-emerald-400">1.0</span>)</div>
-            <div className="pl-4 text-slate-500"># Rechazo formal de H0: efecto significativo validado</div>
-            <div><span className="text-blue-400">else</span>:</div>
-            <div className="pl-4 text-rose-300">rollback_experiment(<span className="text-amber-300">"variant_B"</span>)</div>
-            <div className="pl-4 text-slate-500"># p &gt; 0.05: No hay evidencia suficiente; evitar deuda técnica</div>
-          </div>
+          {/* Bloque de Código Interactivo con Selector de Lenguaje */}
+          <InteractiveCodeBlock />
         </div>
       )}
     </div>

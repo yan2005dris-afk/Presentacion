@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Maximize2, Minimize2, UserCheck, HelpCircle, ChevronLeft, ChevronRight, Sun, Moon, Monitor, FolderGit2 } from 'lucide-react';
+import { Maximize2, Minimize2, UserCheck, HelpCircle, ChevronLeft, ChevronRight, Sun, Moon, Monitor, Eye, EyeOff } from 'lucide-react';
 import { useTheme } from './hooks/useTheme';
+import { SlideStepProvider, useSlideStep } from './context/SlideStepContext';
 
 import {
   SlidePortada, SlideIndice,
@@ -27,9 +28,25 @@ const SECTIONS_SIMD = [
 export default function App() {
   const [deckTheme, setDeckTheme] = useState('stats'); // 'simd' | 'stats'
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  return (
+    <SlideStepProvider currentSlide={currentSlide}>
+      <DeckContainer 
+        deckTheme={deckTheme} 
+        setDeckTheme={setDeckTheme} 
+        currentSlide={currentSlide} 
+        setCurrentSlide={setCurrentSlide} 
+      />
+    </SlideStepProvider>
+  );
+}
+
+function DeckContainer({ deckTheme, setDeckTheme, currentSlide, setCurrentSlide }) {
   const [showSpeakerNotes, setShowSpeakerNotes] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isZenMode, setIsZenMode] = useState(false); // Modo Zen: oculta Header y Footer para 100% de pantalla útil
   const { theme, cycle } = useTheme();
+  const { nextStep, prevStep } = useSlideStep();
 
   useEffect(() => {
     const onFSChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -103,192 +120,192 @@ export default function App() {
     {
       id: '1.2',
       section: 1,
-      title: 'El Ciclo Fetch-Decode-Execute',
-      subtitle: 'Slide 1.2 · Fetch · Decode · Execute · Writeback',
-      speaker: "La CPU ejecuta instrucciones en 4 etapas: Fetch (trae de RAM), Decode (interpreta opcode), Execute (ALU opera), Writeback (guarda resultado). Es el latido del modelo Von Neumann y la base de todo procesamiento secuencial.",
+      title: 'Comparativa Global: SISD vs SIMD vs MISD vs MIMD',
+      subtitle: 'Slide 1.2 · Matriz de Decisión y Cuándo Usar Cada Una',
+      speaker: "Esta tabla resume la taxonomía con métricas reales. Miren la ganancia típica: SIMD ofrece entre 4x y 16x en datos regulares, mientras que MIMD escala con el número de núcleos pero sufre por sincronización. La clave para recordar: SIMD es paralelismo de datos (DLP), MIMD es paralelismo de hilos (TLP).",
       component: <Slide1_2 />
     },
     {
-      id: '1.limitaciones',
+      id: '1.4',
       section: 1,
-      title: 'Limitaciones del SISD',
-      subtitle: 'Slide 1.4 · Von Neumann Bottleneck y Muro de Frecuencia · Sección 1.3',
-      speaker: "Para cerrar la Parte 1, analizamos por qué SISD se agotó en frecuencia: el reloj se estancó en 2005 por calor y el bus único de Von Neumann limita el ancho de banda. Pero SISD no quedó obsoleto, sigue siendo indispensable donde el orden y la integridad del dato importan más que la velocidad, como transacciones bancarias o control secuencial crítico, mientras el paralelismo prioriza throughput a costa de esa garantía.",
+      title: 'La Barrera de la Ley de Amdahl y Gustafson',
+      subtitle: 'Slide 1.4 · Calculadora Interactiva de Speedup Teórico',
+      speaker: "Amdahl demostró que la porción secuencial f de un programa pone un techo duro al speedup: si f es 10%, el aceleramiento máximo teórico es 10x, aunque tengamos mil procesadores. Usen los sliders para ver cómo varía el speedup al cambiar f y N.",
+      component: <Slide1_4 />
+    },
+    {
+      id: '1.5',
+      section: 1,
+      title: 'Por qué fracasó escalar SISD: El Muro de Potencia',
+      subtitle: 'Slide 1.5 · Frecuencia vs Consumo · El fin de la escala de Dennard (2004)',
+      speaker: "Durante 30 años la industria aceleró SISD subiendo la frecuencia: de 5 MHz en 1981 a 3.8 GHz en el Pentium 4 Prescott en 2004. Ahí chocamos contra el Power Wall: la potencia escala con f al cubo. Prescott consumía 115 Watts en 90 nanómetros — disipaba tanto calor como una plancha eléctrica. Si seguíamos subiendo frecuencia, el chip se derretía. La única salida: no subir el reloj, sino procesar más datos por ciclo. Eso es exactamente SIMD.",
       component: <Slide1_LimitacionesSISD />
     },
 
-    // === PARTE 2: RIVERA YANDRIS ===
+    // === PARTE 2: RIVERA Yandris ===
     {
       id: '2.intro',
       section: 2,
-      title: 'Parte 2: Arquitectura SIMD y el Principio Vectorial',
+      title: 'Parte 2: El Principio Vectorial y el Modelo de Ejecución',
       subtitle: 'Expositor: Rivera Yandris · Parte 2',
-      speaker: "Saludos, soy Rivera Yandris. En esta segunda parte explicaré el funcionamiento interno de SIMD: registros vectoriales, la dualidad espacio-tiempo y los requisitos de regularidad de datos.",
+      speaker: "Hola a todos, soy Rivera Yandris. En esta segunda parte veremos el salto conceptual del procesamiento escalar al vectorial: los registros anchos de 128 a 512 bits, los tres estilos de procesador vectorial y cómo se alinean los datos en memoria.",
       component: <SlideIntroParte2 />
     },
     {
       id: '2.1',
       section: 2,
-      title: '¿Qué es SIMD? Una Orden, Ocho Soldados',
-      subtitle: 'Slide 2.1 · Definición, Flynn, y Demostración Visual',
-      speaker: "Empezamos definiendo qué es SIMD: Single Instruction, Multiple Data. Una sola instrucción decodificada una vez aplicada a N datos en N ALUs en paralelo. La clave es que el costo de fetch+decode se amortiza entre N — por eso es energéticamente eficiente. Uso la analogía del comandante y el escuadrón, y lo conecto con la taxonomía de Flynn que vimos en la Parte 1. Luego paso a la demostración visual: la unidad de control emite 'SUMAR +10' y las 8 ALUs lo ejecutan simultáneamente.",
+      title: 'El Principio Vectorial: De 1 a N Elementos en Paralelo',
+      subtitle: 'Slide 2.1 · Registros de 128, 256 y 512 bits · Comparativa Visual',
+      speaker: "El concepto fundamental de SIMD es tomar una palabra de registro muy ancha y subdividirla en carriles o lanes independientes. Un registro de 128 bits puede contener 16 enteros de 8 bits, 8 de 16, 4 de 32 o 2 flotantes de 64 bits. Con AVX-512 llegamos a 16 floats de 32 bits en una sola instrucción. Cambien los tipos de datos para ver la subdivisión.",
       component: <Slide2_1 />
     },
     {
       id: '2.2',
       section: 2,
-      title: 'Los Registros: De Escalar a Vector',
-      subtitle: 'Slide 2.2 · Registros Vectoriales y Control',
-      speaker: "Un registro vectorial almacena N valores del mismo tipo. Además del registro de datos, la arquitectura incluye VLEN (longitud activa), VSTR (stride de memoria) y VMASK (máscara de predicación).",
+      title: 'Los Tres Estilos de Procesador Vectorial',
+      subtitle: 'Slide 2.2 · Memoria-Memoria vs Registro-Vector vs SIMD Moderno',
+      speaker: "Históricamente hubo tres enfoques: Memoria-Memoria en los 70 (CDC STAR-100), Registro-Vector que inventó Seymour Cray con la Cray-1 en 1976 —el estándar de supercómputo—, y el SIMD moderno en CPUs convencionales que comenzó con MMX en 1996. Cada uno resolvió el ancho de banda de memoria de forma distinta.",
       component: <Slide2_2 />
     },
     {
       id: '2.3',
       section: 2,
-      title: 'Dos Maneras de Ser SIMD (Space-Time Duality)',
-      subtitle: 'Slide 2.3 · Array vs Vector Processors · Filtro interactivo con cálculos',
-      speaker: "Vista consolidada estilo Hennessy & Patterson. Arriba selector de ciclo (C0-C7) que resalta la fila actual en ambos grids. A la izquierda: Array Processor con su CU, los 4 PEs y la grilla Espacio-Tiempo donde en cada ciclo los 4 PEs hacen la MISMA operación sobre datos distintos — paralelismo en espacio, latencia baja, costo alto. A la derecha: Vector Processor con su pipeline de 3 etapas y su grilla Espacio-Tiempo donde se ve la diagonal característica del pipelining — en cada ciclo, las 4 etapas hacen operaciones DISTINTAS sobre el mismo elemento — paralelismo en tiempo, hardware menor, latencia de arranque alta. Ejemplos clásicos: ILLIAC IV (Array) y CRAY-1 (Vector).",
+      title: 'La Cray-1: La Máquina que Definió la Computación Vectorial',
+      subtitle: 'Slide 2.3 · Anatomía, Ficha Técnica y el Concepto de Vector Chaining',
+      speaker: "La Cray-1 de 1976 es una obra de arte de la ingeniería. Corría a 80 MHz con un tiempo de ciclo de 12.5 nanosegundos, logrando 160 MegaFLOPS con solo 8 MB de memoria. Seymour Cray introdujo el Chaining: conectar la salida de una unidad funcional vectorial directamente a la entrada de la siguiente sin esperar a que termine el vector completo.",
       component: <Slide2_3 />
     },
     {
       id: '2.4',
       section: 2,
-      title: 'Ventajas del Procesamiento Vectorial',
-      subtitle: 'Slide 2.4 · Ventajas Principales y Requisitos de Regularidad (Sección 2.7)',
-      speaker: "En la sección 2.7 analizamos las ventajas clave: multiplicamos el throughput por N y dividimos el costo de decodificación entre N datos. Para aprovechar esto, el problema requiere datos homogéneos, contiguos en memoria y sin dependencias.",
+      title: 'Alineación de Memoria: El Cuello de Botella Silencioso',
+      subtitle: 'Slide 2.4 · Accesos Alineados vs No Alineados · Impacto en Rendimiento',
+      speaker: "Un registro AVX de 256 bits necesita 32 bytes de memoria. Si esa dirección de memoria no es múltiplo de 32, el controlador tiene que hacer dos accesos al bus y luego fusionar los datos en el registro. Esa penalización puede degradar el rendimiento hasta un 40%.",
       component: <Slide2_4 />
     },
 
-    // === PARTE 3: ALEJANDRO ANDY ===
+    // === PARTE 3: ALEJANDRO Andy ===
     {
       id: '3.intro',
       section: 3,
-      title: 'Parte 3: Extensiones SIMD Modernas (MMX, SSE, AVX)',
+      title: 'Parte 3: La Evolución de las Extensiones SIMD en x86',
       subtitle: 'Expositor: Alejandro Andy · Parte 3',
-      speaker: "Hola, soy Alejandro Andy. Parte 3 es el \"cómo funciona adentro\": historia (64→512 bits), circuito (subword), herramientas (AVX), y lo clave: ISA ≠ implementación (Excavator vs Zen).",
+      speaker: "Hola a todos, soy Alejandro Andy. En esta tercera parte analizaremos la cronología técnica de Intel y AMD: desde los 64 bits de MMX en 1996 hasta los 512 bits de AVX-512, y cómo el pipeline de ejecución se adapta a estas instrucciones.",
       component: <SlideIntroParte3 />
     },
     {
       id: '3.1',
       section: 3,
-      title: '1996 → 2017: El Registro que No Para de Crecer',
-      subtitle: 'Slide 3.1 · Evolución de Extensiones x86',
-      speaker: "Hook: Atom 2009, video HD: 100% CPU sin SSE → 40% con SSE. Misma máquina. Evolución: MMX (1996, int) → SSE (1999, float) → AVX (2010, 256-bit) → AVX-512 (2017, 512-bit). Cada vez: duplicó ancho + nuevos registros. SSE aún vivo en legacy.",
+      title: 'Cronología de Extensiones SIMD en x86 (1996 - 2024)',
+      subtitle: 'Slide 3.1 · Línea de Tiempo Interactiva · De 64 bits a 512 bits',
+      speaker: "Esta línea de tiempo muestra 28 años de evolución continua. Cada salto duplicó el ancho del registro: MMX (64 bits, 1996), SSE (128 bits con floats, 1999), AVX (256 bits, 2011) y AVX-512 (512 bits, 2016). Hacé click en cada hito para ver los registros y el conjunto de instrucciones.",
       component: <Slide3_1 />
     },
     {
       id: '3.2',
       section: 3,
-      title: 'El Truco del Silicio: Subword Parallelism',
-      subtitle: 'Slide 3.2 · Particionamiento del Sumador',
-      speaker: "Clave: UN sumador físico. Partición por carry (lógica interna). VADDPS = 8 sumadores de 32. PADDW = 16 de 16. PADDB = 32 de 8 (util imágenes). Misma ALU, distinto modo. Eficiencia de silicio.",
+      title: 'MMX: El Inicio Humilde y el Error de Diseño de los Registros',
+      subtitle: 'Slide 3.2 · Aliasing con los Registros FPU x87 y la Instrucción EMMS',
+      speaker: "MMX introdujo 57 instrucciones en 1996, pero cometió un pecado original de arquitectura: para no modificar el sistema operativo, Intel reutilizó los 8 registros de la FPU x87. No se podían mezclar instrucciones MMX y flotantes en el mismo código sin ejecutar EMMS, que costaba hasta 50 ciclos.",
       component: <Slide3_2 />
     },
     {
       id: '3.3',
       section: 3,
-      title: 'El Vocabulario SIMD: Instrucciones Clave y FMA',
-      subtitle: 'Slide 3.3 · Ensamblador Vectorial AVX',
-      speaker: "Toolbox: VMOVAPD (cargar 4 doubles), VBROADCASTSD (replicar escalar), VADDPD/VMULPD. Estrella: VFMADDPD = a*b+c en 1 ciclo (2 FLOPS). Base de AI moderno. 5 instrucciones AVX = 20+ escalares. SSE aún existe pero AVX es el presente.",
+      title: 'SSE y AVX: Registros Propios, FMA y 3 Operandos',
+      subtitle: 'Slide 3.3 · SSE1 a SSE4.2 (XMM 128b) · AVX a AVX2 (YMM 256b) · FMA3',
+      speaker: "SSE en 1999 corrigió el error de MMX creando 8 registros independientes XMM de 128 bits para flotantes de precisión simple. Con AVX en 2011, Intel duplicó los registros a 256 bits (YMM) e introdujo la codificación VEX de 3 operandos.",
       component: <Slide3_3 />
     },
     {
-      id: '3.organizacion',
+      id: '3.fde',
       section: 3,
-      title: 'Organización de Datos Empaquetados en Registros',
-      subtitle: 'Slide 3.4 · Formatos Float32, Double64, Int16 y Byte8 · Sección 3.4 de la Guía',
-      speaker: "YMM 256 bits → 4 formatos posibles: 8×float32 (gráficos), 4×double64 (física), 16×int16 (DSP), 32×byte (imágenes/redes neuronales INT8). Instrucción elige formato. Button interactivo para cambiar.",
-      component: <Slide3_OrganizacionDatos />
+      title: 'Pipeline de Ejecución: SISD vs SIMD en Ciclos Reales',
+      subtitle: 'Slide 3.4 · Animación Interactiva Paso a Paso · Fetch, Decode, Execute, Writeback',
+      speaker: "Miren la diferencia estructural en el pipeline de 4 etapas. Para procesar 4 sumas, SISD tiene que ejecutar el ciclo completo de Fetch, Decode, Execute y Writeback cuatro veces consecutivas: 4 fetches, 4 decodes, 4 ejecuciones. SIMD hace 1 solo Fetch y 1 solo Decode para los 4 datos.",
+      component: <Slide3_FDE_SIMD />
     },
     {
-      id: 'asm.practice',
+      id: '3.chaining',
       section: 3,
-      title: 'Práctica: Suma de Arreglos en Assembler',
-      subtitle: 'Slide 3.5 · Código Escalar (SISD) vs Vectorial (SSE) · Sección 3.6 de la Guía',
-      speaker: "Izq (SISD): cargar 1 float → sumar 1 float → guardar 1. Loop 50 veces. Derecha (SSE): MOVAPS carga 4 floats. ADDPS suma 4 en paralelo. 1 instrucción = 4 operaciones. Observá: SISD necesita 50 adiciones; SSE solo 13 instrucciones ADDPS.",
-      component: <SlidePracticaAsm />
+      title: 'Vector Chaining en Profundidad: La Invención de Seymour Cray',
+      subtitle: 'Slide 3.5 · Simulación Interactiva · Sin Chaining (Secuencial) vs Con Chaining (Pipelined)',
+      speaker: "Esta animación muestra el invento más brillante de Cray en 1976. Supongan que calculamos C = A * B + D sobre un vector de 64 elementos. Sin Chaining, la suma no puede arrancar hasta que los 64 elementos de la multiplicación estén completamente escritos en el registro intermedio. Con Chaining, apenas el primer elemento sale del multiplicador, entra directamente al sumador en el siguiente ciclo.",
+      component: <Slide3_Chaining />
+    },
+    {
+      id: '3.org',
+      section: 3,
+      title: 'Organización de Datos en Memoria: AoS vs SoA',
+      subtitle: 'Slide 3.6 · Array of Structures vs Structure of Arrays · El Impacto en SIMD',
+      speaker: "Este es el problema más común en la práctica. Si organizamos los datos como Array of Structures —struct Punto { float x, y, z; } p[N]—, en memoria los bytes están intercalados: x0, y0, z0, x1, y1, z1. Para cargar 8 coordenadas X en un registro AVX, la CPU tiene que saltar de 12 en 12 bytes. Eso requiere instrucciones Gather, que son lentas. La solución es SoA: Struct of Arrays. Todas las X juntas, todas las Y juntas, todas las Z juntas.",
+      component: <Slide3_OrganizacionDatos />
     },
     {
       id: '3.4',
       section: 3,
-      title: 'Fetch-Decode-Execute en SIMD',
-      subtitle: 'Slide 3.6 · El Pipeline Vectorial paso a paso',
-      speaker: "Pipeline SIMD: FETCH 1 instr → DECODE \"suma 4 doubles\" → EXECUTE 4 sumadores de 64 activados en paralelo → WRITEBACK 256 bits. Vs SISD: Decode produce 1 microop. SIMD Decode produce 1 instr que activa N ALUs. Diferencia: eficiencia de decodificación.",
-      component: <Slide3_FDE_SIMD />
-    },
-    {
-      id: '3.7',
-      section: 3,
-      title: 'Encadenamiento Vectorial (Vector Chaining)',
-      subtitle: 'Slide 3.7 · Sección 3.8 · CRAY-1 (Seymour Cray, 1976)',
-      speaker: "Chaining (CRAY-1, 1976): resultado de ALU multiplicadora →directamente→ ALU sumadora, sin esperar vector completo. Sin chaining: 11+4+6=21 ciclos. Con chaining: ~11 ciclos (paralelismo real). FMA moderno es la versión: a*b+c en 1 instrucción = chaining fusionado.",
-      component: <Slide3_Chaining />
-    },
-    {
-      id: '3.8',
-      section: 3,
-      title: 'El ISA es el Mismo. El Hardware No.',
-      subtitle: 'Slide 3.8 · AMD Excavator vs AMD Zen',
-      speaker: "PLOT TWIST: Excavator = 2×FMAC-128 coordinadas (overhead). Zen = 1×FMAC-256 nativa (limpio). Mismo VFMADDPD. Zen ~40-50% más rápido, menos watts. ISA ≠ implementación. Mismo contrato, distinta solución de hardware. Por qué? Diseño, área, mercado.",
+      title: 'Tabla Maestra: Todas las Extensiones SIMD Comparadas',
+      subtitle: 'Slide 3.7 · MMX · SSE1-4.2 · AVX · AVX2 · AVX-512 · AVX10 · Ficha Técnica Completa',
+      speaker: "Esta tabla es el resumen definitivo de la evolución técnica: registros, ancho, tipos soportados, número de instrucciones y aplicación principal. Noten la transición: de enteros multimedia de 8 bits en MMX a floats de precisión doble con FMA en AVX2, y finalmente precisión mixta para IA en AVX-512 y AVX10.",
       component: <Slide3_4 />
     },
 
-    // === PARTE 4: BERMUDEZ GINO ===
+    // === PARTE 4: BERMUDEZ Gino ===
     {
       id: '4.intro',
       section: 4,
-      title: 'Parte 4: Rendimiento, Aplicaciones y Conclusiones',
+      title: 'Parte 4: Rendimiento Real, Divergencia y Aplicaciones',
       subtitle: 'Expositor: Bermudez Gino · Parte 4',
-      speaker: "Hola a todos, soy Bermudez Gino. En esta parte final revisaremos el desglose numérico de speedup real, Throughput, Ley de Amdahl, la divergencia condicional, aplicaciones reales en IA y SoCs híbridos.",
+      speaker: "Hola a todos, soy Bermudez Gino. En esta parte final veremos los números reales: el speedup medido en benchmarks de álgebra lineal, el problema de la divergencia de ramas, y las aplicaciones en procesamiento de imágenes, audio, motores de videojuegos y modelos de inteligencia artificial.",
       component: <SlideIntroParte4 />
     },
     {
       id: '4.1',
       section: 4,
-      title: 'El Argumento Definitivo: Desglose de Instrucciones',
-      subtitle: 'Slide 4.1 · Desglose Dinámico: 304 vs 7 Instrucciones (Sección 4.2)',
-      speaker: "Como vimos en la sección 4.2 de la guía, en la suma de 50 elementos el bucle escalar ejecuta 100 Loads, 50 ADDS, 50 Shifts, 50 Stores y 50 Branches (304 instrs). En vectorial, 2 cargas, 1 VADD, 1 VSHFR y 1 VST lo hacen todo en 7 instrucciones y 285 ciclos. Logramos un Speedup real de 7.0x.",
+      title: 'Speedup Real vs Teórico: ¿Por qué no obtenemos 8x?',
+      subtitle: 'Slide 4.1 · Benchmarks Reales de Multiplicación de Matrices y Convolución',
+      speaker: "Teóricamente, AVX con 8 floats por registro debería acelerar el código 8x. En la práctica real, los benchmarks muestran entre 3.8x y 5.5x. ¿Por qué se pierde el resto? La ley de Amdahl, los fallos de caché L1/L2, los accesos a memoria no alineados y el throttling térmico de la CPU cuando activa AVX-512.",
       component: <Slide4_1 />
+    },
+    {
+      id: '4.divergencia',
+      section: 4,
+      title: 'El Problema de la Divergencia de Ramas en SIMD',
+      subtitle: 'Slide 4.2 · Simulación Interactiva · Qué pasa cuando los datos toman caminos distintos',
+      speaker: "Este es el talón de Aquiles de SIMD. ¿Qué pasa si dentro del bucle hay un if-else? Recuerden: hay una sola unidad de control. No puede ejecutar el 'if' para los carriles pares y el 'else' para los impares simultáneamente. La solución de hardware es la máscara de predicado: primero ejecuta la rama 'then' enmascarando los carriles donde la condición fue falsa; luego ejecuta la rama 'else' enmascarando los contrarios.",
+      component: <Slide4_Divergencia />
     },
     {
       id: '4.2',
       section: 4,
-      title: 'Throughput y Ley de Amdahl',
-      subtitle: 'Slide 4.2 · Las Dos Métricas Fundamentales (Secciones 4.3 y 4.4)',
-      speaker: "Throughput (GFLOPS) escala con el ancho del registro. Pero la Ley de Amdahl establece un techo: si el 20% del código es secuencial, el speedup máximo teórico jamás superará 5x.",
+      title: 'Aplicaciones Modernas: Dónde Vive SIMD Hoy',
+      subtitle: 'Slide 4.3 · Gráficos, Audio, Videojuegos, Criptografía, Machine Learning',
+      speaker: "SIMD está en todas partes aunque el usuario no lo sepa. En codecs de video como H.264 y AV1 para la estimación de movimiento; en procesamiento de audio para FFT en tiempo real; en motores de videojuegos como Unreal Engine para la física y animación de esqueletos; y en IA moderna para la inferencia de redes neuronales y multiplicación de matrices densas.",
       component: <Slide4_2 />
-    },
-    {
-      id: '4.kryptonita',
-      section: 4,
-      title: 'La Kryptonita del SIMD: Divergencia Condicional',
-      subtitle: 'Slide 4.3 · Animación Interactiva de Enmascaramiento · Sección 4.5 de la Guía',
-      speaker: "Llegamos a la sección 4.5 de nuestra guía: la kryptonita del SIMD. Cuando ejecutamos un 'if/else' donde algunos datos entran por el camino verdadero y otros por el falso, SIMD se ve obligado a ejecutar AMBOS caminos aplicando una máscara de bits (VMASK) para descartar los inactivos. Esto penaliza severamente el rendimiento.",
-      component: <Slide4_Divergencia />
     },
     {
       id: '4.3',
       section: 4,
-      title: 'SIMD en el Mundo Real',
-      subtitle: 'Slide 4.4 · Aplicaciones en la Computación Actual',
-      speaker: "Al ejecutar np.dot en Python o procesar imágenes en Photoshop, estás usando SIMD. BLAS, redes neuronales (CNNs) y cifrado AES-NI dependen 100% de estas extensiones.",
+      title: 'Demostración Interactiva: Procesamiento de Imágenes con SIMD',
+      subtitle: 'Slide 4.4 · Filtro de Brillo y Escala de Grises · Escalar vs AVX2 en Tiempo Real',
+      speaker: "Esta demo procesa una imagen pixel a pixel. En el modelo secuencial, un bucle visita cada canal R, G, B de cada pixel de forma individual: para 1 millón de pixeles son 3 millones de iteraciones. Con AVX2, cargamos 32 bytes en un registro y aplicamos la suma de brillo a 32 canales a la vez en una sola instrucción.",
       component: <Slide4_3 />
     },
     {
       id: '4.4',
       section: 4,
-      title: 'El Paradigma Híbrido: SoC Moderno',
-      subtitle: 'Slide 4.5 · CPU (MIMD) + GPU (SIMD) en el Mismo Silicio',
-      speaker: "Los chips modernos de smartphones y laptops combinan núcleos CPU para control asíncrono y miles de cores SIMD en la GPU integrados por un bus de alta velocidad.",
+      title: 'Cómo Programar SIMD: De Compiladores a Intrinsics y Ensamblador',
+      subtitle: 'Slide 4.5 · Auto-vectorización (-O3) · OpenMP SIMD · Intrinsics de C/C++',
+      speaker: "Hay tres formas de usar SIMD: la más fácil es dejar que el compilador lo haga con banderas como -O3 y -march=native. La intermedia son las directivas OpenMP pragmas. La profesional, usada en bibliotecas de alto rendimiento, son los Intrinsics: funciones de C como _mm256_add_ps que mapean directamente a una instrucción máquina específica sin lidiar con ensamblador puro.",
       component: <Slide4_4 />
     },
     {
-      id: '4.smp_simd',
+      id: '4.asm',
       section: 4,
-      title: 'Tabla de Diagnóstico Final: SMP vs SIMD',
-      subtitle: 'Slide 4.6 · Diagnóstico y Comparación Estructural (Sección 4.8)',
-      speaker: "Como tabla de diagnóstico final según la sección 4.8 de la guía, comparamos SMP (MIMD) contra SIMD en cuatro ejes: tarea típica, instrucciones dinámicas, cuellos de botella (congestión de bus vs divergencia) y eficiencia energética.",
-      component: <Slide1_4 />
+      title: 'Práctica: Ensamblador x86-64 con Intrinsics AVX2',
+      subtitle: 'Slide 4.6 · Editor Interactivo · Suma Vectorial en C vs Ensamblador Generado',
+      speaker: "Aquí vemos el código real en C con intrinsics AVX2 y su traducción directa a ensamblador x86-64. Observen cómo _mm256_load_ps compila a vmovaps, _mm256_add_ps compila a vaddps, y _mm256_store_ps a vmovaps. Con solo 3 instrucciones vectoriales sumamos 8 flotantes en paralelo.",
+      component: <SlidePracticaAsm />
     },
     {
       id: '4.5',
@@ -317,13 +334,38 @@ export default function App() {
   const slides = isStats ? slidesStats : slidesSIMD;
   const SECTIONS = isStats ? SECTIONS_STATS : SECTIONS_SIMD;
 
-  const nextSlide = () => setCurrentSlide(c => Math.min(c + 1, slides.length - 1));
-  const prevSlide = () => setCurrentSlide(c => Math.max(c - 1, 0));
+  const nextSlide = () => {
+    // Si la diapositiva tiene pasos internos sin revelar, avanza el paso primero
+    const handledByStep = nextStep();
+    if (!handledByStep) {
+      setCurrentSlide(c => Math.min(c + 1, slides.length - 1));
+    }
+  };
+
+  const prevSlide = () => {
+    // Si la diapositiva tiene pasos internos activos, retrocede el paso primero
+    const handledByStep = prevStep();
+    if (!handledByStep) {
+      setCurrentSlide(c => Math.max(c - 1, 0));
+    }
+  };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
       if (e.key === 'ArrowLeft') prevSlide();
+
+      // Atajo 'H' o 'Z' para alternar Modo Zen (ocultar navbar y footer)
+      if ((e.key === 'h' || e.key === 'H' || e.key === 'z' || e.key === 'Z') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const tag = document.activeElement?.tagName;
+        const isEditable =
+          tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || document.activeElement?.isContentEditable;
+        if (!isEditable) {
+          e.preventDefault();
+          setIsZenMode(prev => !prev);
+        }
+      }
+
       // Theme cycle shortcut — skip when modifiers are held or user is typing.
       if ((e.key === 't' || e.key === 'T') && !e.ctrlKey && !e.metaKey && !e.altKey) {
         const tag = document.activeElement?.tagName;
@@ -337,7 +379,7 @@ export default function App() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [cycle]);
+  }, [cycle, currentSlide, nextStep, prevStep]);
 
   const slide = slides[currentSlide];
   const activeSection = SECTIONS.find(s => s.id === slide.section);
@@ -347,86 +389,104 @@ export default function App() {
       {/* Dynamic Background Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-40 dark:opacity-30 pointer-events-none" />
 
-      {/* Top Header Bar */}
-      <header className="flex justify-between items-center px-6 py-3 border-b border-slate-200 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md z-20">
-        <div className="flex items-center gap-4">
-          <div className={`px-3 py-1 rounded-lg bg-gradient-to-r ${activeSection.color} text-black font-extrabold text-xs shadow-lg uppercase tracking-wider`}>
-            {activeSection.member}
-          </div>
-          <div>
-            <h1 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              {slide.title}
-            </h1>
-            <p className="text-xs text-cyan-600 dark:text-cyan-400 font-mono">{slide.subtitle}</p>
-          </div>
-        </div>
+      {/* Top Header Bar - Se contrae con Modo Zen */}
+      <AnimatePresence>
+        {!isZenMode && (
+          <motion.header
+            initial={{ y: -60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -60, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="flex justify-between items-center px-6 py-2.5 border-b border-slate-200 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md z-20 shrink-0"
+          >
+            <div className="flex items-center gap-4">
+              <div className={`px-3 py-1 rounded-lg bg-gradient-to-r ${activeSection.color} text-black font-extrabold text-xs shadow-lg uppercase tracking-wider`}>
+                {activeSection.member}
+              </div>
+              <div>
+                <h1 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                  {slide.title}
+                </h1>
+                <p className="text-xs text-cyan-600 dark:text-cyan-400 font-mono">{slide.subtitle}</p>
+              </div>
+            </div>
 
-        <div className="flex items-center gap-3">
-          {/* Switcher de Presentaciones */}
-          <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-1 rounded-lg border border-slate-300 dark:border-slate-800">
-            <button
-              onClick={() => {
-                setDeckTheme('stats');
-                setCurrentSlide(0);
-              }}
-              className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
-                isStats
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-              }`}
-            >
-              Estadística Inferencial
-            </button>
-            <button
-              onClick={() => {
-                setDeckTheme('simd');
-                setCurrentSlide(0);
-              }}
-              className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
-                !isStats
-                  ? 'bg-purple-600 text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-              }`}
-            >
-              SIMD / Arquitectura
-            </button>
-          </div>
+            <div className="flex items-center gap-3">
+              {/* Switcher de Presentaciones */}
+              <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-1 rounded-lg border border-slate-300 dark:border-slate-800">
+                <button
+                  onClick={() => {
+                    setDeckTheme('stats');
+                    setCurrentSlide(0);
+                  }}
+                  className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
+                    isStats
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                  }`}
+                >
+                  Estadística Inferencial
+                </button>
+                <button
+                  onClick={() => {
+                    setDeckTheme('simd');
+                    setCurrentSlide(0);
+                  }}
+                  className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
+                    !isStats
+                      ? 'bg-purple-600 text-white shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                  }`}
+                >
+                  SIMD / Arquitectura
+                </button>
+              </div>
 
-          <button
-            onClick={() => setShowSpeakerNotes(!showSpeakerNotes)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all border ${showSpeakerNotes ? 'bg-amber-500/20 border-amber-500/50 text-amber-700 dark:text-amber-300' : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}
-          >
-            <HelpCircle size={14} /> [HABLAR] Guión
-          </button>
-          <span className="text-xs font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-800">
-            {currentSlide + 1} / {slides.length}
-          </span>
-          <button
-            onClick={cycle}
-            aria-label={`Tema: ${theme === 'system' ? 'Automático' : theme === 'dark' ? 'Oscuro' : 'Claro'} — click o tecla T para cambiar`}
-            title={`Tema: ${theme} (T para cambiar)`}
-            className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold flex items-center gap-1 transition-all border ${
-              theme === 'system'
-                ? 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
-                : theme === 'dark'
-                  ? 'bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700'
-                  : 'bg-white text-slate-900 border-slate-300'
-            }`}
-          >
-            {theme === 'light' && <Sun size={14} />}
-            {theme === 'dark' && <Moon size={14} />}
-            {theme === 'system' && <Monitor size={14} />}
-            <span className="uppercase">{theme === 'system' ? 'Auto' : theme === 'dark' ? 'Dark' : 'Light'}</span>
-          </button>
-          <button
-            onClick={toggleFullscreen}
-            className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:border-slate-400 dark:hover:border-slate-600 transition-all"
-            title={isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
-          >
-            {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-          </button>
-        </div>
-      </header>
+              <button
+                onClick={() => setShowSpeakerNotes(!showSpeakerNotes)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all border ${showSpeakerNotes ? 'bg-amber-500/20 border-amber-500/50 text-amber-700 dark:text-amber-300' : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}
+              >
+                <HelpCircle size={14} /> [HABLAR] Guión
+              </button>
+              <span className="text-xs font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-800">
+                {currentSlide + 1} / {slides.length}
+              </span>
+              <button
+                onClick={cycle}
+                aria-label={`Tema: ${theme === 'system' ? 'Automático' : theme === 'dark' ? 'Oscuro' : 'Claro'} — click o tecla T para cambiar`}
+                title={`Tema: ${theme} (T para cambiar)`}
+                className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold flex items-center gap-1 transition-all border ${
+                  theme === 'system'
+                    ? 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
+                    : theme === 'dark'
+                      ? 'bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700'
+                      : 'bg-white text-slate-900 border-slate-300'
+                }`}
+              >
+                {theme === 'light' && <Sun size={14} />}
+                {theme === 'dark' && <Moon size={14} />}
+                {theme === 'system' && <Monitor size={14} />}
+                <span className="uppercase">{theme === 'system' ? 'Auto' : theme === 'dark' ? 'Dark' : 'Light'}</span>
+              </button>
+              <button
+                onClick={() => setIsZenMode(true)}
+                className="p-1.5 rounded-lg border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-all flex items-center gap-1 text-xs font-semibold"
+                title="Modo Zen (Ocultar barras para 100% espacio - Tecla H)"
+              >
+                <EyeOff size={15} />
+                <span className="hidden sm:inline">Zen (H)</span>
+              </button>
+              <button
+                onClick={toggleFullscreen}
+                className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:border-slate-400 dark:hover:border-slate-600 transition-all"
+                title={isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
+              >
+                {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+              </button>
+            </div>
+          </motion.header>
+        )}
+      </AnimatePresence>
 
       {/* Main Content Viewport */}
       <main className="flex-1 relative p-6 md:p-8 z-10 overflow-y-auto">
@@ -462,46 +522,84 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Footer Navigation & Progress */}
-      <footer className="px-6 py-3 border-t border-slate-200 dark:border-slate-800/80 bg-white/95 dark:bg-slate-950/95 flex flex-col gap-2 z-20">
-        <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-900 rounded-full overflow-hidden flex">
-          {slides.map((s, idx) => (
-            <div
-              key={s.id}
-              onClick={() => setCurrentSlide(idx)}
-              className={`flex-1 h-full cursor-pointer transition-all border-r border-white dark:border-slate-950 ${idx === currentSlide ? 'bg-gradient-to-r from-cyan-400 to-purple-500 shadow-glow' : idx < currentSlide ? 'bg-slate-500 dark:bg-slate-700' : 'bg-slate-200 dark:bg-slate-900'}`}
-            />
-          ))}
-        </div>
+      {/* Footer Navigation & Progress - Se contrae en Modo Zen y deja solo una barra fina de 3px */}
+      <AnimatePresence>
+        {!isZenMode ? (
+          <motion.footer
+            initial={{ y: 60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 60, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="px-6 py-2.5 border-t border-slate-200 dark:border-slate-800/80 bg-white/95 dark:bg-slate-950/95 flex flex-col gap-2 z-20 shrink-0"
+          >
+            <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-900 rounded-full overflow-hidden flex">
+              {slides.map((s, idx) => (
+                <div
+                  key={s.id}
+                  onClick={() => setCurrentSlide(idx)}
+                  className={`flex-1 h-full cursor-pointer transition-all border-r border-white dark:border-slate-950 ${idx === currentSlide ? 'bg-gradient-to-r from-cyan-400 to-purple-500 shadow-glow' : idx < currentSlide ? 'bg-slate-500 dark:bg-slate-700' : 'bg-slate-200 dark:bg-slate-900'}`}
+                />
+              ))}
+            </div>
 
-        <div className="flex justify-between items-center text-xs text-slate-600 dark:text-slate-400">
-          <div className="flex gap-2">
-            {SECTIONS.map(sec => (
-              <button
-                key={sec.id}
-                title={`${sec.title} — ${sec.member}`}
-                onClick={() => {
-                  const firstIdx = slides.findIndex(s => s.section === sec.id);
-                  if (firstIdx !== -1) setCurrentSlide(firstIdx);
-                }}
-                className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-all ${slide.section === sec.id ? 'bg-slate-200 dark:bg-slate-800 text-cyan-700 dark:text-cyan-300 border border-cyan-500/40' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
-              >
-                P{sec.id}
-              </button>
-            ))}
-          </div>
+            <div className="flex justify-between items-center text-xs text-slate-600 dark:text-slate-400">
+              <div className="flex gap-2">
+                {SECTIONS.map(sec => (
+                  <button
+                    key={sec.id}
+                    title={`${sec.title} — ${sec.member}`}
+                    onClick={() => {
+                      const firstIdx = slides.findIndex(s => s.section === sec.id);
+                      if (firstIdx !== -1) setCurrentSlide(firstIdx);
+                    }}
+                    className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-all ${slide.section === sec.id ? 'bg-slate-200 dark:bg-slate-800 text-cyan-700 dark:text-cyan-300 border border-cyan-500/40' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                  >
+                    P{sec.id}
+                  </button>
+                ))}
+              </div>
 
-          <div className="flex items-center gap-2">
-            <button onClick={prevSlide} disabled={currentSlide === 0} className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-30">
-              <ChevronLeft size={16} />
+              <div className="flex items-center gap-2">
+                <button onClick={prevSlide} disabled={currentSlide === 0} className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-30">
+                  <ChevronLeft size={16} />
+                </button>
+                <button onClick={nextSlide} disabled={currentSlide === slides.length - 1} className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-30">
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+          </motion.footer>
+        ) : (
+          /* En Modo Zen: Barra ultra delgada de 3px pegada al fondo + botón discreto para salir */
+          <div className="absolute bottom-0 left-0 right-0 z-30 flex flex-col items-center">
+            {/* Botón flotante sutil al pasar el mouse cerca del fondo */}
+            <button
+              onClick={() => setIsZenMode(false)}
+              className="mb-2 px-3 py-1 rounded-full bg-slate-900/80 hover:bg-slate-900 text-slate-400 hover:text-white border border-slate-700/60 backdrop-blur-md text-[11px] font-mono flex items-center gap-1.5 opacity-40 hover:opacity-100 transition-opacity shadow-lg cursor-pointer"
+              title="Salir de Modo Zen (Tecla H)"
+            >
+              <Eye size={12} />
+              <span>Mostrar Barras (H)</span>
             </button>
-            <button onClick={nextSlide} disabled={currentSlide === slides.length - 1} className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-30">
-              <ChevronRight size={16} />
-            </button>
+
+            {/* Micro barra de progreso de 3px */}
+            <div className="w-full h-1 bg-slate-900/60 overflow-hidden flex">
+              {slides.map((s, idx) => (
+                <div
+                  key={s.id}
+                  className={`flex-1 h-full transition-all ${
+                    idx === currentSlide 
+                      ? 'bg-purple-500 shadow-glow' 
+                      : idx < currentSlide 
+                        ? 'bg-slate-700' 
+                        : 'bg-transparent'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </footer>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
-

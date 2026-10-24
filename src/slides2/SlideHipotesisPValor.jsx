@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Scale, CheckCircle2, XCircle, AlertOctagon, HelpCircle, AlertTriangle } from 'lucide-react';
+import { DecisionTreeDiagramSVG } from '../components/DecisionTreeDiagramSVG';
 
 export function SlideHipotesisPValor() {
   const [alpha, setAlpha] = useState(0.05);
@@ -152,16 +153,19 @@ export function SlideHipotesisPValor() {
 
 export function SlideComparacionMedias() {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-4 space-y-6">
-      <div className="border-b border-slate-800 pb-4">
+    <div className="max-w-5xl mx-auto px-4 py-4 space-y-5">
+      <div className="border-b border-slate-800 pb-3">
         <span className="text-xs uppercase tracking-wider text-purple-400 font-bold">Pruebas de Significancia</span>
-        <h2 className="text-3xl font-black text-white tracking-tight">Comparación de Medias entre Grupos</h2>
-        <p className="text-slate-400 text-sm mt-1">
+        <h2 className="text-3xl font-black text-white tracking-tight">Comparación de Medias & Pruebas Estadísticas</h2>
+        <p className="text-slate-400 text-sm mt-0.5">
           Cómo seleccionar la prueba inferencial correcta según el número de variables y grupos a comparar.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Árbol de Decisión Interactivo SVG */}
+      <DecisionTreeDiagramSVG />
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
           <div>
             <div className="inline-block px-2.5 py-0.5 rounded text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20 mb-3">
