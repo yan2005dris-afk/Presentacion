@@ -102,15 +102,15 @@ export function SlideIndice2({ onSelectSection }) {
       speaker: "Andy",
       color: "border-rose-500/40 text-rose-400",
       title: "5. Nivel de Significancia (α) & P-Valor",
-      desc: "Criterio de validación (p ≤ α), matriz de errores I/II y contraste entre grupos.",
+      desc: "Del umbral α a la regla p ≤ α: qué tan raro fue el resultado, los errores que no son y el criterio automatizado en software.",
       tag: "Andy"
     },
     {
       idx: 6,
       speaker: "Equipo",
       color: "border-blue-500/40 text-blue-400",
-      title: "6. Aplicaciones en Software & Cierre",
-      desc: "A/B Testing en checkout, feature selection en ML y pipelines automáticos.",
+      title: "6. Contraste, Aplicaciones & Cierre",
+      desc: "T-Test, ANOVA y Chi-Cuadrado; A/B Testing en checkout, feature selection en ML y pipelines automáticos.",
       tag: "Equipo"
     }
   ];
