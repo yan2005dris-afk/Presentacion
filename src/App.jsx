@@ -385,7 +385,11 @@ function DeckContainer({ deckTheme, setDeckTheme, currentSlide, setCurrentSlide 
   const activeSection = SECTIONS.find(s => s.id === slide.section);
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans select-none overflow-hidden border-4 border-slate-200 dark:border-slate-900 relative">
+    // El deck de Estadística Inferencial es dark-only por diseño (las slides
+    // usan text-white sobre slate-900/80). El switcher de tema global es para
+    // el deck SIMD, así que aquí se fuerza `dark` para no dejar texto blanco
+    // sobre fondo blanco cuando el sistema está en modo claro.
+    <div className={`flex flex-col h-screen w-screen ${isStats ? 'dark' : ''} bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans select-none overflow-hidden border-4 border-slate-200 dark:border-slate-900 relative`}>
       {/* Dynamic Background Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-40 dark:opacity-30 pointer-events-none" />
 
