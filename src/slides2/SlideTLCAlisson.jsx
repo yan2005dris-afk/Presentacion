@@ -261,10 +261,10 @@ export function SlideTLCConcepto() {
 // 3.1 · Condiciones de aplicación (con el histograma según n)
 // ==================================================================
 const CONDICIONES_APLICACION = [
-  { icono: Shuffle, nombre: 'Aleatoriedad' },
-  { icono: Unlink, nombre: 'Independencia' },
-  { icono: Users, nombre: 'Tamaño de muestra (n ≥ 30)', depende: true },
-  { icono: InfinityIcon, nombre: 'Varianza finita' },
+  { icono: Shuffle, nombre: 'Aleatoriedad', desc: 'Selección al azar que evita sesgos o tendencias hacia un lado' },
+  { icono: Unlink, nombre: 'Independencia', desc: 'Un dato no influye en otro' },
+  { icono: Users, nombre: 'Tamaño de muestra (n ≥ 30)', desc: 'Suficiente para que las medias sigan una distribución normal', depende: true },
+  { icono: InfinityIcon, nombre: 'Varianza finita', desc: 'Los datos pueden variar, pero no alejarse sin control' },
 ];
 
 const OPCIONES_N = [1, 5, 10, 30, 100];
@@ -294,7 +294,7 @@ export function SlideTLCTamanoMuestra() {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
       <div className="flex flex-col gap-2.5">
-        {CONDICIONES_APLICACION.map(({ icono: Icono, nombre, depende }, i) => {
+        {CONDICIONES_APLICACION.map(({ icono: Icono, nombre, desc, depende }) => {
           const falla = depende && !suficiente;
           return (
             <div key={nombre}
@@ -307,13 +307,11 @@ export function SlideTLCTamanoMuestra() {
                 <Icono size={20} className={falla ? 'text-rose-300' : 'text-teal-300'} />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="text-[10px] font-bold text-slate-500">{i + 1}</div>
                 <div className="text-sm font-black text-white leading-tight">{nombre}</div>
+                <div className="text-[11px] text-slate-400 leading-snug mt-0.5">{desc}</div>
               </div>
-              {depende && (
-                <span className={`text-xs font-mono font-bold ${falla ? 'text-rose-300' : 'text-teal-300'}`}>
-                  {falla ? `n = ${n}` : '✓'}
-                </span>
+              {depende && !falla && (
+                <span className="text-xs font-mono font-bold text-teal-300">✓</span>
               )}
             </div>
           );
@@ -676,11 +674,12 @@ function Formula({ children }) {
 }
 
 // ==================================================================
-// 3.4 · Ejemplo práctico: escenario, pregunta y datos
+// 3.4 · Ejemplo práctico: escenario (con los datos) y pregunta
 // ==================================================================
 const DATOS_API = [
-  { etiqueta: 'Media poblacional (μ)', valor: '200', unidad: 'ms' },
-  { etiqueta: 'Desviación estándar poblacional (σ)', valor: '50', unidad: 'ms' },
+  { etiqueta: 'Media (μ)', valor: '200 ms' },
+  { etiqueta: 'Desviación (σ)', valor: '50 ms' },
+  { etiqueta: 'Lote (n)', valor: '100' },
 ];
 
 export function SlideTLCEscenario() {
@@ -698,10 +697,30 @@ export function SlideTLCEscenario() {
         <div className="space-y-1">
           <div className="text-xs font-bold text-teal-300 uppercase tracking-wider">Escenario</div>
           <p className="text-sm sm:text-base text-slate-100 leading-relaxed">
-            Un equipo de ingeniería monitorea el <strong className="text-white">tiempo de respuesta (latencia)</strong> de un microservicio de autenticación.
-            Las peticiones individuales de los usuarios tienen una <strong className="text-rose-300">distribución asimétrica a la derecha</strong>{' '}
-            (la gran mayoría responde rápido en milisegundos, pero algunas sufren retardos por la base de datos o almacenamiento en caché).
+            Un equipo de DevOps monitorea el <strong className="text-white">rendimiento de un microservicio de autenticación</strong>.
+            Históricamente, las peticiones de los usuarios tienen una <strong className="text-rose-300">distribución asimétrica a la derecha</strong>{' '}
+            (la mayoría responde en pocos milisegundos, pero algunas sufren retardos por la base de datos o almacenamiento en caché),
+            con una media poblacional de <strong className="text-white font-mono whitespace-nowrap">μ = 200 ms</strong> y una desviación estándar poblacional
+            de <strong className="text-white font-mono whitespace-nowrap">σ = 50 ms</strong>.
           </p>
+          <p className="text-sm sm:text-base text-slate-100 leading-relaxed">
+            Para verificar el estado del servidor, la herramienta de monitoreo analiza de forma aleatoria e independiente
+            un lote de <strong className="text-white font-mono whitespace-nowrap">n = 100</strong> peticiones.
+          </p>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-stretch gap-2">
+        {DATOS_API.map((d) => (
+          <div key={d.etiqueta} className="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-baseline gap-2">
+            <span className="text-[11px] text-slate-400">{d.etiqueta}</span>
+            <span className="text-base font-black text-white font-mono">{d.valor}</span>
+          </div>
+        ))}
+        <div className="px-3 py-1.5 rounded-xl bg-rose-950/30 border border-rose-900/50 flex items-center gap-2">
+          <span className="text-[11px] text-slate-400">Distribución</span>
+          <span className="text-sm font-black text-rose-300">Asimétrica</span>
+          <MiniPoblacionAPI alto={60} className="w-16 h-5" />
         </div>
       </div>
 
@@ -713,31 +732,10 @@ export function SlideTLCEscenario() {
           <div className="space-y-1">
             <div className="text-xs font-bold text-amber-300 uppercase tracking-wider">Pregunta</div>
             <p className="text-sm sm:text-base text-slate-100 leading-relaxed">
-              Si la herramienta de monitoreo toma una muestra aleatoria de <strong className="text-white font-mono">n = 100</strong> peticiones,
+              Si la herramienta de monitoreo toma una muestra aleatoria de <strong className="text-white font-mono whitespace-nowrap">n = 100</strong> peticiones,
               ¿cuál es la probabilidad de que el tiempo medio de respuesta (X̄) de esa muestra{' '}
               <strong className="text-amber-300">supere los 210 ms</strong>?
             </p>
-          </div>
-        </div>
-      </RevealStep>
-
-      <RevealStep stepIndex={2}>
-        <div className="space-y-1.5">
-          <div className="text-xs font-bold text-slate-300 uppercase tracking-wider">Datos</div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {DATOS_API.map((d) => (
-              <div key={d.etiqueta} className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col items-center justify-center text-center">
-                <div className="text-xs text-slate-400">{d.etiqueta}</div>
-                <div className="text-4xl font-black text-white font-mono">{d.valor}</div>
-                <div className="text-sm text-teal-300 font-bold">{d.unidad}</div>
-              </div>
-            ))}
-            <div className="p-3 rounded-2xl bg-rose-950/30 border border-rose-900/50 flex flex-col items-center text-center">
-              <div className="text-xs text-slate-400">Distribución original</div>
-              <div className="text-xl font-black text-rose-300">Asimétrica</div>
-              <div className="text-xs text-rose-200/80 font-bold">(no normal)</div>
-              <MiniPoblacionAPI alto={90} className="w-full h-12 mt-1" />
-            </div>
           </div>
         </div>
       </RevealStep>
