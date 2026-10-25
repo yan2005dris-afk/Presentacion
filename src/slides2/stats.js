@@ -99,6 +99,18 @@ export function nForPower(target, delta, p0, alpha) {
   return Math.round(hi);
 }
 
+// ───────── Contraste de dos proporciones ─────────
+// z del contraste de A contra B con `n` observaciones por grupo y un efecto
+// `delta` sobre una tasa base `p0`. Usa el estimador pooled, el mismo que
+// stats.proportions_ztest de SciPy:
+//   z = 0.016 / sqrt(0.108 * 0.892 * 2/4000) = 2.3054  ->  p = 0.0211
+export function zProporciones(n, delta, p0) {
+  if (n <= 0) return 0;
+  const pooled = p0 + delta / 2;
+  const se = Math.sqrt(pooled * (1 - pooled) * (2 / n));
+  return delta / se;
+}
+
 // ───────── Formato seguro para etiquetas ─────────
 // Evita que un NaN se muestre en pantalla
 export function num(val, decimales = 4, sufijo = '') {

@@ -4,7 +4,17 @@ import {
   Scale, Target, CheckCircle2, XCircle, AlertTriangle, Mic, Code2,
   ShieldCheck, TrendingUp, Ban, Lightbulb, Gavel, ChevronRight
 } from 'lucide-react';
-import { normPdf, normCdf, zCritico, binomialHist, binomialTail, powerForEffect } from './stats';
+import {
+  normPdf,
+  normCdf,
+  zCritico,
+  binomialHist,
+  binomialTail,
+  powerForEffect,
+  nForPower,
+  pFromZ,
+  zProporciones,
+} from './stats';
 
 // ==========================================
 // === ANDY — NIVEL DE SIGNIFICANCIA (α) Y P-VALOR ===
@@ -877,7 +887,7 @@ export function SlideReglaDecision() {
 
       <NotaTecnica>
         "No rechazar H₀" <strong>no</strong> es "aceptar H₀": es ausencia de evidencia, no evidencia de igualdad. Con
-        n = 4,000 por grupo el poder para detectar 1.6 pp de conversión es{' '}
+        n = 4.000 por grupo el poder para detectar 1.6 pp de conversión es{' '}
         <strong className="text-slate-100">66.5%</strong> (β = 33.5%); un resultado no significativo aquí no descarta el
         efecto. En control de calidad, p = 0.2587 deja la línea dentro de lo esperado.
       </NotaTecnica>
@@ -892,28 +902,30 @@ export function SlidePValorNoEs() {
   const errores = [
     {
       t: 'NO es la probabilidad de que H₀ sea verdadera',
-      r: 'Es P(datos | H₀). La probabilidad está condicionada al revés: una probabilidad de los datos dada la hipótesis, no de la hipótesis dada los datos.',
+      r: 'Es P(datos | H₀): la probabilidad de los datos dada la hipótesis, no de la hipótesis dada los datos.',
       icon: Ban,
     },
     {
       t: 'NO es la probabilidad de que fuera azar',
-      r: 'Es qué tan raro es el resultado SI fuera azar. Mide compatibilidad con H₀, no la causa de los datos.',
+      r: 'Mide qué tan raro es el resultado SI fuera azar. Compatibilidad con H₀, no la causa de los datos.',
       icon: Ban,
     },
     {
       t: 'NO mide el tamaño ni el impacto del efecto',
-      r: 'Con 1 millón de usuarios por grupo, 0.1 pp de diferencia da p = 0.0184 → "significativo". Son 1.000 órdenes extra: 50.000 $ al mes con ticket de 50 $. Significativo ≠ útil.',
+      r: 'Con 1 M de usuarios por grupo, 0.1 pp de diferencia da p = 0.0184: "significativo".',
+      cifra: '1.000 órdenes extra',
+      sub: '≈ 50.000 $/mes con ticket de 50 $. Significativo ≠ útil.',
       icon: Scale,
     },
     {
       t: 'NO rechazar H₀ no es aceptar H₀',
-      r: 'Es "no tengo poder para detectarlo". Con muestra suficiente y α adecuado, un H₀ falso acabaría rechazándose.',
+      r: 'Es "no tengo poder para detectarlo". Con muestra suficiente, un H₀ falso acabaría rechazándose.',
       icon: AlertTriangle,
     },
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-4 space-y-5">
+    <div className="max-w-5xl mx-auto px-4 py-4 space-y-4">
       <div className="border-b border-slate-800 pb-3">
         <span className="text-xs uppercase tracking-wider text-rose-400 font-bold">Las trampas</span>
         <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
@@ -924,30 +936,36 @@ export function SlidePValorNoEs() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {errores.map((e, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: i * 0.07 }}
-            className="p-4 rounded-2xl bg-slate-900/80 border border-rose-900/40 space-y-2"
+            className="p-3.5 rounded-2xl bg-slate-900/80 border border-rose-900/40 space-y-1.5"
           >
             <div className="flex items-start gap-2.5">
               <e.icon size={16} className="text-rose-400 shrink-0 mt-0.5" />
               <div className="text-sm font-bold text-rose-200 leading-snug">{e.t}</div>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed pl-6">{e.r}</p>
+            {e.cifra && (
+              <div className="pl-6 pt-0.5">
+                <div className="text-base font-black text-amber-300 font-mono">{e.cifra}</div>
+                <div className="text-[11px] text-slate-400 leading-snug">{e.sub}</div>
+              </div>
+            )}
           </motion.div>
         ))}
       </div>
 
-      <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-1.5">
-        <Etiqueta>El dato que duele</Etiqueta>
+      <div className="px-3.5 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 flex items-start gap-2.5">
+        <Lightbulb size={15} className="text-cyan-400 shrink-0 mt-0.5" />
         <p className="text-xs text-slate-300 leading-relaxed">
-          Significancia estadística y <strong className="text-slate-100">significancia práctica</strong> son cosas
-          distintas. Por eso el p-valor nunca viaja solo: se reporta <strong>con</strong> el tamaño del efecto y{' '}
-          <strong>con</strong> el intervalo de confianza.
+          <strong className="text-slate-100">Significancia estadística ≠ significancia práctica.</strong> Por eso el
+          p-valor nunca viaja solo: se reporta <strong className="text-slate-100">con</strong> el tamaño del efecto y{' '}
+          <strong className="text-slate-100">con</strong> el intervalo de confianza.
         </p>
       </div>
 
@@ -960,28 +978,127 @@ export function SlidePValorNoEs() {
   );
 }
 
+// ───────── V5 · Slider de n: el poder del experimento ─────────
+// El efecto NO cambia (1.6 pp sobre una base del 10 %). Lo que cambia al
+// mover n es la capacidad de detectarlo: z, p-valor, decisión y poder 1 − β
+// se recalculan en vivo con las mismas fórmulas del resto del tema.
+const ESCALA_N = [500, 1000, 2000, 4000, 8000, 16000, 50000];
+const P0_A = 0.1; // tasa del grupo A (control)
+const DELTA = 0.016; // efecto medido: 10.0 % -> 11.6 %
+const ALPHA_FIXO = 0.05;
+
+// Separador de miles con punto, como el resto del deck (5.519, no 5,519)
+const miles = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+function fmtP(p) {
+  return p < 0.0001 ? '< 0.0001' : p.toFixed(4);
+}
+
+function SliderN({ n, setN }) {
+  const z = zProporciones(n, DELTA, P0_A);
+  const p = pFromZ(z, true);
+  const poder = powerForEffect(n, DELTA, P0_A, ALPHA_FIXO);
+  const ship = p <= ALPHA_FIXO;
+  const idx = ESCALA_N.indexOf(n);
+  const n80 = nForPower(0.8, DELTA, P0_A, ALPHA_FIXO);
+
+  const lecturas = [
+    { k: 'z', v: z.toFixed(4), c: 'text-cyan-300' },
+    { k: 'p-valor', v: fmtP(p), c: 'text-cyan-300' },
+    { k: 'decisión', v: ship ? 'ship B' : 'sin evidencia', c: ship ? 'text-emerald-300' : 'text-amber-300' },
+    { k: 'poder 1−β', v: `${(poder * 100).toFixed(1)}%`, c: 'text-blue-300' },
+  ];
+
+  return (
+    <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col gap-3">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <Etiqueta>Antes de empezar · ¿cuánta muestra necesito?</Etiqueta>
+        <span className="text-xs font-mono text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
+          n = {miles(n)} por grupo
+        </span>
+      </div>
+
+      <div className="space-y-1.5">
+        <input
+          type="range"
+          min={0}
+          max={ESCALA_N.length - 1}
+          step={1}
+          value={idx}
+          onChange={(e) => setN(ESCALA_N[Number(e.target.value)])}
+          aria-label="Muestra por grupo"
+          className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+        />
+        <div className="flex justify-between">
+          {ESCALA_N.map((v) => (
+            <button
+              key={v}
+              onClick={() => setN(v)}
+              className={`text-[10px] font-mono transition-colors ${
+                v === n ? 'text-cyan-300 font-bold' : 'text-slate-500 hover:text-slate-300'
+              }`}
+            >
+              {miles(v)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        {lecturas.map((l) => (
+          <div key={l.k} className="p-2 rounded-lg bg-slate-950/70 border border-slate-800 leading-tight">
+            <div className="text-[10px] uppercase tracking-wider text-slate-500">{l.k}</div>
+            <div className={`text-xs font-mono font-bold ${l.c}`}>{l.v}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="pt-2.5 border-t border-slate-800 space-y-1 mt-auto">
+        <p className="text-[11px] text-slate-400 leading-relaxed">
+          n = 4.000 → poder <strong className="text-slate-200">66.5%</strong> · n ≈{' '}
+          <strong className="text-slate-200">{miles(n80)}</strong> → 80 % de poder · con 500 personas, solo{' '}
+          <strong className="text-slate-200">13.5%</strong>.
+        </p>
+        <p className="text-[11px] text-slate-300 leading-relaxed">
+          El efecto no cambia: <strong className="text-slate-100">1.6 pp</strong>. Cambia tu capacidad de detectarlo.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // ==================================================================
 // 5.5 · En software: el criterio automatizado
 // ==================================================================
 export function SlideCriterioSoftware() {
-  const [alpha, setAlpha] = useState(0.05);
-  const p = 0.0211;
-  const ship = p <= alpha;
+  const [n, setN] = useState(4000);
+
+  const z = zProporciones(n, DELTA, P0_A);
+  const p = pFromZ(z, true);
+  const ship = p <= ALPHA_FIXO;
+  const a = Math.round(n * P0_A);
+  const b = Math.round(n * (P0_A + DELTA));
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-4 space-y-5">
-      <div className="border-b border-slate-800 pb-3">
-        <span className="text-xs uppercase tracking-wider text-rose-400 font-bold">En producción</span>
-        <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-          El criterio estadístico, automatizado
-        </h2>
-        <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
-          En software no decide una persona: decide una línea de código.
-        </p>
+    <div className="max-w-5xl mx-auto px-4 py-4 space-y-4">
+      <div className="border-b border-slate-800 pb-3 flex flex-col sm:flex-row justify-between sm:items-end gap-3">
+        <div>
+          <span className="text-xs uppercase tracking-wider text-rose-400 font-bold">En producción</span>
+          <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            El criterio estadístico, automatizado
+          </h2>
+          <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
+            En software no decide una persona: decide una línea de código.
+          </p>
+        </div>
+        <div className="flex items-center gap-2 bg-slate-900 px-2.5 py-1.5 rounded-xl border border-slate-800 shrink-0">
+          <span className="text-xs text-slate-400">α en config:</span>
+          <span className="text-xs font-mono font-bold text-rose-300">0.05</span>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        {/* Código */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Terminal */}
         <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-2 bg-slate-900 border-b border-slate-800">
             <span className="text-xs font-mono font-bold text-slate-300 flex items-center gap-2">
@@ -994,12 +1111,9 @@ export function SlideCriterioSoftware() {
 
 ALPHA = 0.05          # en config, no hardcodeado
 
-# Variante A: 400/4000    Variante B: 464/4000
 stat, p_value = stats.proportions_ztest(
-    [400, 464], [4000, 4000]
+    [${a}, ${b}], [${n}, ${n}]
 )
-
-print(f"z = {stat:.3f}, p = {p_value:.4f}")
 
 if p_value <= ALPHA:
     print("ship B — el efecto es real")
@@ -1008,81 +1122,59 @@ else:
           </pre>
           <div className="px-4 py-2.5 bg-slate-900 border-t border-slate-800 font-mono text-[11px] text-slate-400">
             <span className="text-slate-500">$</span> python test_conversion.py
-            <div className="text-emerald-300 mt-1">z = 2.305, p = 0.0211</div>
+            <div className="text-emerald-300 mt-1">
+              z = {z.toFixed(3)}, p = {fmtP(p)}
+            </div>
             <div className={ship ? 'text-emerald-300' : 'text-amber-300'}>
               {ship ? 'ship B — el efecto es real' : 'no hay evidencia; se mantiene A'}
             </div>
           </div>
         </div>
 
-        {/* Dónde vive */}
-        <div className="space-y-3">
-          <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2.5">
-            <Etiqueta>Dónde vive este criterio en tu stack</Etiqueta>
-            <div className="space-y-2">
-              <div className="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800 flex items-start gap-2.5">
-                <TrendingUp size={14} className="text-cyan-400 shrink-0 mt-0.5" />
-                <p className="text-xs text-slate-300 leading-snug">
-                  <strong className="text-slate-100">Auto-deploy de A/B:</strong> si p ≤ α, se promotes la variante
-                  ganadora sin intervención humana.
-                </p>
-              </div>
-              <div className="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800 flex items-start gap-2.5">
-                <ShieldCheck size={14} className="text-emerald-400 shrink-0 mt-0.5" />
-                <p className="text-xs text-slate-300 leading-snug">
-                  <strong className="text-slate-100">Feature selection:</strong> una variable entra al modelo si su
-                  coeficiente es significativamente distinto de 0.
-                </p>
-              </div>
-              <div className="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800 flex items-start gap-2.5">
-                <AlertTriangle size={14} className="text-amber-400 shrink-0 mt-0.5" />
-                <p className="text-xs text-slate-300 leading-snug">
-                  <strong className="text-slate-100">Alertas de anomalías:</strong> la desviación se contrasta contra
-                  H₀ y se dispara solo si es significativa.
-                </p>
-              </div>
-            </div>
-          </div>
+        {/* V5 · Slider de n */}
+        <SliderN n={n} setN={setN} />
+      </div>
 
-          <div className="p-4 rounded-xl bg-rose-950/20 border border-rose-900/40 space-y-2">
-            <Etiqueta>Dos detalles de ingeniería que importan</Etiqueta>
-            <p className="text-[11px] text-slate-300 leading-relaxed">
-              <strong className="text-rose-200">α en configuración, no en la lógica.</strong> Si cada experimento
-              hereda un umbral hardcodeado que nadie revisó, nadie sabe qué criterio se está aplicando.
-            </p>
-            <p className="text-[11px] text-slate-300 leading-relaxed">
-              <strong className="text-rose-200">20 tests al 5% ⟶ 64% de probabilidad</strong> de al menos un falso
-              positivo. Por eso existen el ajuste de comparaciones múltiples (Bonferroni, FDR) y el pre-registro del
-              análisis.
+      {/* Los 3 usos, en tira de una línea */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+        {[
+          {
+            icon: TrendingUp,
+            color: 'text-cyan-400',
+            t: 'Auto-deploy de A/B',
+            d: 'si p ≤ α, la variante ganadora se promueve sin intervención humana.',
+          },
+          {
+            icon: ShieldCheck,
+            color: 'text-emerald-400',
+            t: 'Feature selection',
+            d: 'una variable entra al modelo si su coeficiente es ≠ 0 con significancia.',
+          },
+          {
+            icon: AlertTriangle,
+            color: 'text-amber-400',
+            t: 'Alertas de anomalías',
+            d: 'la desviación se contrasta contra H₀ y se dispara sola.',
+          },
+        ].map((u) => (
+          <div
+            key={u.t}
+            className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-start gap-2.5"
+          >
+            <u.icon size={14} className={`${u.color} shrink-0 mt-0.5`} />
+            <p className="text-[11px] text-slate-300 leading-snug">
+              <strong className="text-slate-100">{u.t}:</strong> {u.d}
             </p>
           </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-300 font-semibold">Umbral en ejecución:</span>
-            {[0.05, 0.01].map((a) => (
-              <button
-                key={a}
-                onClick={() => setAlpha(a)}
-                className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
-                  alpha === a
-                    ? 'bg-rose-500 text-white shadow-sm'
-                    : 'bg-slate-800 text-slate-400 hover:text-white'
-                }`}
-              >
-                α = {a}
-              </button>
-            ))}
-            <span className={`text-xs font-mono ${ship ? 'text-emerald-300' : 'text-amber-300'}`}>
-              {ship ? '→ ship B' : '→ no hay evidencia'}
-            </span>
-          </div>
-        </div>
+        ))}
       </div>
 
       <NotaTecnica>
-        <code>stats.proportions_ztest(counts, nobs)</code> · <code>ttest_ind</code> ·{' '}
-        <code>mannwhitneyu</code>. Reportar <strong>p-valor + tamaño del efecto + intervalo de confianza</strong>, y
-        calcular el <strong>poder</strong> antes de recoger datos, no después.
+        <strong className="text-rose-200">α en configuración, no en la lógica:</strong> si cada experimento hereda un
+        umbral hardcodeado que nadie revisó, nadie sabe qué criterio se aplica. Y{' '}
+        <strong className="text-rose-200">20 tests al 5% ⟶ 64.15%</strong> de probabilidad de al menos un falso
+        positivo: por eso existen el ajuste de comparaciones múltiples (Bonferroni, FDR) y el pre-registro del
+        análisis. Reportar siempre <strong>p-valor + tamaño del efecto + intervalo de confianza</strong>.
       </NotaTecnica>
     </div>
   );
@@ -1122,11 +1214,11 @@ export function SlideCierreT05() {
         </p>
       </div>
 
-      <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+      <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2.5">
         <Etiqueta>Cheat sheet</Etiqueta>
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           {filas.map((f, i) => (
-            <div key={i} className="grid grid-cols-1 sm:grid-cols-[130px_1fr_1fr] gap-2 items-center p-3 rounded-xl bg-slate-950/60 border border-slate-800">
+            <div key={i} className="grid grid-cols-1 sm:grid-cols-[130px_1fr_1fr] gap-2 items-center p-2.5 rounded-xl bg-slate-950/60 border border-slate-800">
               <div className="text-sm font-black text-rose-300 font-mono">{f.k}</div>
               <div className="text-xs text-slate-200 leading-snug">{f.c}</div>
               <div className="text-[11px] font-mono text-slate-400 leading-snug">{f.t}</div>
@@ -1141,7 +1233,7 @@ export function SlideCierreT05() {
           { n: '2', t: 'Reporta el p-valor con el tamaño del efecto', d: 'Un p-valor solo no dice si el cambio vale la pena en el negocio.' },
           { n: '3', t: 'Si no rechazaste, no digas que son iguales', d: 'Di que no tienes poder para detectarlo. Es una diferencia enorme.' },
         ].map((r, i) => (
-          <div key={i} className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1.5">
+          <div key={i} className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1.5">
             <div className="w-6 h-6 rounded-lg bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-xs font-black text-rose-300">
               {r.n}
             </div>
@@ -1151,9 +1243,10 @@ export function SlideCierreT05() {
         ))}
       </div>
 
-      <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-center justify-between gap-4 flex-wrap">
+      <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-center justify-between gap-4 flex-wrap">
         <p className="text-sm text-slate-300">
-          Con esto cerramos el tema de <strong className="text-slate-100">significancia y p-valor</strong>.
+          Cerramos el tema de <strong className="text-slate-100">significancia y p-valor</strong>. La regla la aplican
+          ahora en el <strong className="text-cyan-300">contraste de hipótesis</strong>.
         </p>
         <div className="flex items-center gap-2 text-xs text-slate-400">
           <Mic size={14} className="text-amber-400" />
