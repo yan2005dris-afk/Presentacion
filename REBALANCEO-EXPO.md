@@ -189,8 +189,8 @@ El script comprueba, sobre el deck renderizado:
 Si una slide de esta rama desborda, es **fallo**. Si desborda una slide de otro bloque, es **aviso**:
 hoy avisa de dos y ambos son del equipo:
 
-- `stats-3.0` «Teorema del Límite Central (TLC)» — 832 px (desborde 142 px)
-- `stats-6.0` «Contraste de Hipótesis: Comparación entre Grupos» — 772 px (desborde 81 px)
+- `stats-3.0` «Teorema del Límite Central (TLC)» — ≈ 840 px (desborde ≈ 142 px)
+- `stats-6.0` «Contraste de Hipótesis: Comparación entre Grupos» — ≈ 780 px (desborde ≈ 81 px)
 
 Se arreglan con padding, sin tocar una palabra del contenido.
 

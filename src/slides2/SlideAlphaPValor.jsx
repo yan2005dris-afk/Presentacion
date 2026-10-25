@@ -167,6 +167,14 @@ export function SlideDecisionRiesgo() {
               <strong className="text-rose-200">después</strong>. Ese orden temporal es la idea más importante del tema.
             </p>
           </div>
+
+          <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 flex items-start gap-2.5">
+            <Target size={15} className="text-cyan-400 shrink-0 mt-0.5" />
+            <p className="text-xs text-slate-300 leading-relaxed">
+              La pregunta real <strong className="text-slate-100">no</strong> es "¿cuál convierte más?" — eso ya lo sabemos.
+              Es: <strong className="text-cyan-300">"¿esta diferencia es un efecto real o es ruido que se invierte mañana?"</strong>
+            </p>
+          </div>
         </div>
 
         {/* Columna 2 — el caso real */}
@@ -232,14 +240,6 @@ export function SlideDecisionRiesgo() {
                 </button>
               ))}
             </div>
-          </div>
-
-          <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 flex items-start gap-2.5">
-            <Target size={15} className="text-cyan-400 shrink-0 mt-0.5" />
-            <p className="text-xs text-slate-300 leading-relaxed">
-              La pregunta real <strong className="text-slate-100">no</strong> es "¿cuál convierte más?" — eso ya lo sabemos.
-              Es: <strong className="text-cyan-300">"¿esta diferencia es un efecto real o es ruido que se invierte mañana?"</strong>
-            </p>
           </div>
         </div>
       </div>

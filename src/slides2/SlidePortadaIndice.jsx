@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Users, ArrowRight, BarChart2, CheckCircle2, Layers, User } from 'lucide-react';
+import { ArrowRight, BarChart2 } from 'lucide-react';
 
 export function SlidePortada2() {
   return (
