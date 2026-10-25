@@ -1,11 +1,12 @@
 # Guion — Tema 05: Nivel de Significancia (α) y P-Valor
 
-**Expositor**: Andy · **Bloque**: C · Decidir · **Slides**: 7 (+ 1 de apertura de bloque)
+**Expositor**: Andy · **Bloque**: C · Decidir · **Slides**: 7 (+ 1 handoff de apertura)
 **Duración**: 17–18 min (tope 20) · **Archivo de slides**: `src/slides2/SlideAlphaPValor.jsx`
-**Case que recorre todas las slides**: e-commerce, botón de checkout.
+**Ids en el deck**: `stats-5.0` … `stats-5.6` (+ `stats-5.h`, el handoff de bloque)
 
-> Versión vigente y versionada. El borrador anterior vivía en `docs/expo1/tema05/guion-ordenado-t05.md`
-> (carpeta `docs/` está en `.gitignore`, así que no viajaba con la rama).
+> **Este es el guion canónico.** `docs/expo1/tema05/guion-ordenado-t05.md` es un espejo de este
+> archivo para trabajar offline (la carpeta `docs/` está en `.gitignore` y no viajaba con la rama).
+> Si editás uno, editá el otro: no hay dos versiones, hay un archivo y su copia.
 
 ---
 
@@ -25,42 +26,87 @@ tú decides si el efecto que ves es real o es ruido. Eres el único bloque del s
 **El puente con Gino** (lo dice tu slide 5.0): *«ese 5 % que deja fuera es mi tema — la otra cara de
 la misma campana»*.
 
-**Tu caso, el mismo en todas las slides**: el equipo de producto quiere subir el botón «Comprar» a una
-versión B. A convierte 10.0 % (400/4.000) y B convierte 11.6 % (464/4.000). z = 2.3054,
-p bilateral = 0.0211, p unilateral = 0.0106.
-
-**Lo que entregas al equipo**: el criterio. Se lo pasas en el contraste de hipótesis.
+**Lo que entregas al equipo**: el criterio. Se lo pasas en el contraste de hipótesis (`stats-6.0`).
 
 ---
 
-## 1. Regla dual: una slide, dos audiencias
+## 1. El ejemplo que corre por todas las slides
 
-Cada slide tiene **dos pistas**:
+Un solo caso, usado en las 7 slides. Cambiar de ejemplo a mitad de camino pierde al público.
 
-- **El cuerpo**: lo que se dice en voz alta y lo que se ve. Segunda persona del plural, sin fórmulas
-  que no se puedan seguir. Un solo trabajo por slide.
-- **«Para el especialista»** (la franja inferior en rojo): la nota técnica, en 1–3 líneas. Es lo que
-  permite que el mismo material sirva a una audiencia donde no se conoce el estadístico y a una
-  audiencia donde sí.
+> **Equipo de producto de un e-commerce** quiere subir el botón "Comprar" a una versión B.
+> En un test A/B: **A = 4.000 usuarios → 400 convierten (10.0 %)**. **B = 4.000 usuarios →
+> 464 convierten (11.6 %)**. El equipo ve que B convierte más y quiere lanzarlo.
+> La pregunta real **no** es "¿cuál convierte más?" (eso ya lo sabemos). Es:
+> **"¿esta diferencia es un efecto real o es ruido que se va a invertir mañana?"**
 
-Nunca leas la franja «Para el especialista» en voz alta: está para que el especialista la encuentre.
+Esa pregunta es exactamente lo que responden α y el p-valor.
+
+| Concepto | Valor del caso |
+|---|---|
+| H₀ | La conversión de B es igual a la de A (p<sub>B</sub> = p<sub>A</sub>) |
+| H₁ | Difieren (bilateral) — o B > A (unilateral, "solo me interesa que sea mejor") |
+| α | 0.05 (decidido **antes** del test) |
+| z | 2.3054 |
+| p-valor | **0.0211** (bilateral) / 0.0106 (unilateral) |
+| Decisión | 0.0211 ≤ 0.05 → **se rechaza H₀** → B es mejor |
+| Pero | +1.6 pp en 4.000 usuarios = 64 órdenes. Con un ticket de $50, **$3.200/mes**. ¿Vale el riesgo del deploy? |
+
+**El segundo dominio** (aparece en la slide 5.3): control de calidad — 1.000 piezas, 25 defectuosas
+(2.5 %), H₀ = 2 % de defecto → z = 1.1294 → p = 0.2587 → **no se rechaza H₀**. Mismo criterio,
+mundo distinto.
+
+---
+
+## 2. Regla dual: una slide, dos audiencias
+
+El sílabo pide explicar a **especialistas** y a **no especialistas**. No lo hagas con dos bloques de
+texto separados en la misma slide: se pelean entre sí. Hazlo con **un caso visual grande + una nota
+técnica aparte**.
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  VISUAL DOMINANTE (el ejemplo, en grande)               │  ← el 80% del espacio
+│                                                          │
+│  ┌──────────────────┐  ┌────────────────────────────┐   │
+│  │  Números/Diagrama │  │  "En palabras"             │   │
+│  │  o simulación    │  │  analogía + conclusión     │   │
+│  └──────────────────┘  └────────────────────────────┘   │
+├─────────────────────────────────────────────────────────┤
+│  📌 PARA EL ESPECIALISTA (nota mono, 1-2 líneas)         │  ← collapsed o en strip inferior
+└─────────────────────────────────────────────────────────┘
+```
+
+- **No especialista** entra por la **analogía** y sale por el **número**.
+- **Especialista** entra por la **fórmula** y sale por la **decisión**.
+- Nadie tiene que leer un muro de texto para llegar a su respuesta.
+
+**Una idea, un visual, una cifra, una decisión.** Un visual sin número ni decisión es decoración.
+Si una slide tiene más de un visual dominante, sobra uno.
+
+**Cada slide de este guion trae cinco bloques**: *Lo que ves* (la pantalla), *Qué decir* (el guion
+oral), *Para el especialista* (la nota técnica), *Cifras* (los números del caso corriendo) y
+*Trampa* (el error que no debes cometer en esa slide).
 
 ---
 
 ## Slide 5.0 — Toda Decisión Tiene un Riesgo
+
+**Id**: `stats-5.0` · **Tiempo**: ≈ 2:00 · **Visuales**: ninguno (es el marco)
 
 ### Título
 "Toda decisión tiene un riesgo"
 
 ### Lo que ves en la slide
 - **Puente con Gino**: «ese 5 % que deja fuera es mi tema — la otra cara de la misma campana».
-- **Columna izquierda · la analogía del tribunal**: H₀ (el acusado es inocente) / H₁ (es culpable),
-  los dos errores (falso positivo = Error I · falso negativo = Error II) y la frase clave en ámbar.
-- **Columna derecha · el caso real**: A 10.0 % (400/4.000) vs B 11.6 % (464/4.000), las hipótesis del
-  caso en notación y el **toggle bilateral / unilateral** dentro de la tarjeta de H₁.
+- **Columna izquierda · el marco**: la analogía del tribunal con H₀ (el acusado es inocente) y H₁
+  (es culpable), los dos errores (falso positivo = Error I · falso negativo = Error II), la caja de
+  «α antes / p después» y la pregunta real.
+- **Columna derecha · el caso**: el equipo quiere subir el botón, A 10.0 % (400/4.000) vs B 11.6 %
+  (464/4.000), las hipótesis del caso en notación y el **toggle bilateral / unilateral**.
 - **Nota del especialista** al pie.
 
-### Qué decir (guión)
+### Qué decir (guion)
 
 **Intro**: "Hola, soy Andy. Mi bloque es el que convierte evidencia en decisión, y antes de hablar de
 alpha y del p-valor quiero plantar una pregunta: ¿cuánta evidencia necesita un juez para declarar
@@ -89,9 +135,15 @@ reduce el p-valor a la mitad, pero definirla después de verlos es p-hacking.
 ### Cifras de esta slide
 A = 10.0 % (400/4.000) · B = 11.6 % (464/4.000) · z = 2.3054 · p bilateral = 0.0211 · unilateral = 0.0106
 
+### Trampa
+No digas «alpha es la probabilidad de equivocarnos». Es la probabilidad de **rechazar H₀ siendo H₀
+cierta** — el error que el tribunal está dispuesto a tolerar.
+
 ---
 
 ## Slide 5.1 — α: el Área que Decides Tolerar
+
+**Id**: `stats-5.1` · **Tiempo**: ≈ 2:30 · **Visual**: V1 · banda de 100 marcas
 
 ### Título
 "α es el área de la cola que decides tolerar"
@@ -105,7 +157,7 @@ A = 10.0 % (400/4.000) · B = 11.6 % (464/4.000) · z = 2.3054 · p bilateral = 
 - **El puente con el intervalo de confianza**.
 - **Nota del especialista** al pie.
 
-### Qué decir (guión)
+### Qué decir (guion)
 
 **Intro**: "Alpha es el presupuesto de errores que te das antes de empezar. Mira esta campana: la zona
 sombreada es la parte de resultados **tan raros** que, si la apuesta por defecto fuera cierta, no
@@ -130,9 +182,15 @@ observar los datos; el umbral crítico bilateral es z = 1.96 (α = 0.05), 2.576 
 ### Cifras de esta slide
 z = 1.960 (α 0.05) · 2.576 (α 0.01) · 3.291 (α 0.001) · 5 marcas rojas de 100
 
+### Trampa
+«Confianza 95 % ⟺ α = 0.05» no significa que alpha *sea* el 5 % de confianza: es que el error del
+intervalo y alpha son el mismo número visto desde lados opuestos.
+
 ---
 
 ## Slide 5.2 — El P-Valor: ¿Qué Tan Raro Fue Eso si Nada Cambió?
+
+**Id**: `stats-5.2` · **Tiempo**: ≈ 3:00 · **Visual**: V2 · inset de 20 monedas
 
 ### Título
 "El p-valor: ¿qué tan raro fue eso si nada cambió?"
@@ -146,14 +204,15 @@ z = 1.960 (α 0.05) · 2.576 (α 0.01) · 3.291 (α 0.001) · 5 marcas rojas de 
 - **Panel lateral**: los dos dominios (0.0207 monedas · 0.0211 e-commerce) y bilateral vs unilateral.
 - **Nota del especialista** al pie.
 
-### Qué decir (guión)
+### Qué decir (guion)
 
 **Intro**: "Ya fijamos cuánto riesgo aceptamos. Ahora falta medir cuánta evidencia tenemos, y la
 pregunta del p-valor es una sola: **¿qué tan raro o sorprendente es lo que vimos si asumimos que nada
 cambió?**"
 
 **El slider**: "Mueve el estadístico y observa cómo se expande la zona de sorpresa. En nuestro caso
-z = 2.3054, y el p-valor bilateral es 0.0211."
+z = 2.3054, y el p-valor bilateral es 0.0211. Es decir: si nada hubiera cambiado, veríamos esto o algo
+más extremo en 1 de cada 47 experimentos."
 
 **Las monedas**: "Para que el p-valor deje de ser abstracto, un ejemplo más simple que el A/B test:
 monedas. Quince caras en veinte tiradas de una moneda justa. ¿Qué tan raro es eso? El área de la cola
@@ -170,10 +229,18 @@ punto: por eso el inset sombrea la cola completa.
 
 ### Cifras de esta slide
 z = 2.3054 → p = 0.0211 (bilateral) / 0.0106 (unilateral) · P(X ≥ 15 | n=20, p=0.5) = 0.0207
+· 1 de cada 47 experimentos
+
+### Trampa
+«El p-valor es la probabilidad de que H₀ sea verdadera» → **falso**. Y «la probabilidad de que sea por
+azar» → **falso**. Es la probabilidad de los **datos**, dada H₀. El p-valor **siempre se calcula**; la
+decisión se toma comparándolo con alpha.
 
 ---
 
 ## Slide 5.3 — La Regla de Decisión: p ≤ α
+
+**Id**: `stats-5.3` · **Tiempo**: ≈ 3:00 · **Visuales**: V3 · matriz 2×2 + V4 · control de calidad
 
 ### Título
 "La regla de decisión: p ≤ α"
@@ -188,7 +255,7 @@ z = 2.3054 → p = 0.0211 (bilateral) / 0.0106 (unilateral) · P(X ≥ 15 | n=20
   **p = 0.2587 → no rechazamos H₀**.
 - **Nota del especialista** al pie.
 
-### Qué decir (guión)
+### Qué decir (guion)
 
 **Intro**: "Y ahora la regla, que es una línea: si el p-valor es menor o igual que alpha, rechazamos H₀.
 En nuestro caso 0.0211 contra 0.05: rechazamos. El botón B convierte más y no es casualidad."
@@ -216,11 +283,19 @@ resultado no significativo aquí no descarta el efecto. En control de calidad, p
 dentro de lo esperado.
 
 ### Cifras de esta slide
-p = 0.0211 vs α = 0.05 · α = 5.0 % · β = 33.5 % (n = 4.000) · poder = 66.5 % · control de calidad: z = 1.1294, p = 0.2587
+p = 0.0211 vs α = 0.05 · α = 5.0 % · β = 33.5 % (n = 4.000) · poder = 66.5 % · β = 81.7 % con
+α = 0.001 · control de calidad: z = 1.1294, p = 0.2587
+
+### Trampa
+«No significativo = no hay diferencia» → **falso**. Es «no tengo poder para detectarla». Y ojo: con
+α = 0.01 el **mismo** resultado (0.0211) no rechaza. La decisión depende del riesgo que fijaste, no de
+los datos.
 
 ---
 
 ## Slide 5.4 — Lo que el P-Valor NO Es
+
+**Id**: `stats-5.4` · **Tiempo**: ≈ 2:30 · **Visuales**: ninguno (la cifra es el visual)
 
 ### Título
 "Lo que el p-valor NO es"
@@ -232,7 +307,7 @@ p = 0.0211 vs α = 0.05 · α = 5.0 % · β = 33.5 % (n = 4.000) · poder = 66.5
 - **Una línea de cierre**: significancia estadística ≠ significancia práctica.
 - **Nota del especialista** al pie.
 
-### Qué decir (guión)
+### Qué decir (guion)
 
 **Intro**: "Cuatro frases que he escuchado decir a gente brillante, y que son las que más caro salen."
 
@@ -247,6 +322,11 @@ por grupo, cero coma uno puntos porcentuales da p = 0.0184, estadísticamente si
 cuánto es? Mil órdenes extra al mes, unos 50.000 dólares con ticket de 50. Significativo no es lo mismo
 que útil."
 
+**El contraste con nuestro caso** (esto es lo que hay que decir de memoria): "Y fíjate la diferencia
+con nuestro caso: 1.6 puntos porcentuales nos dan 64 órdenes, 3.200 dólares al mes. Ahí el
+significativo y el útil coinciden. Allá, con un millón de usuarios, el significativo te da 50.000
+dólares y el útil es discutible."
+
 **Cuatro**: "Y si no rechacé, es que son iguales. No: es que no tuve poder para detectarlo."
 
 **Cierre**: "Por eso el p-valor nunca viaja solo: se reporta con el tamaño del efecto y con el
@@ -259,10 +339,18 @@ efecto**; un p-valor aislado no permite decidir nada.
 
 ### Cifras de esta slide
 n = 1.000.000 por grupo · Δ = 0.1 pp → z = 2.357, p = 0.0184 → 1.000 órdenes extra ≈ 50.000 $/mes
+· nuestro caso: Δ = 1.6 pp → 64 órdenes ≈ 3.200 $/mes
+
+### Trampa
+«p bajo ⟹ efecto real» solo vale si el diseño del experimento fue correcto (sin sesgo de selección,
+sin p-hacking, sin mirar los datos antes de fijar H₀). Y no cierres esta slide diciendo «el p-valor te
+dice si algo es real»: el p-valor no dice nada del tamaño del efecto.
 
 ---
 
 ## Slide 5.5 — El Criterio Estadístico, Automatizado
+
+**Id**: `stats-5.5` · **Tiempo**: ≈ 3:00 · **Visual**: V5 · slider de n
 
 ### Título
 "El criterio estadístico, automatizado"
@@ -275,7 +363,7 @@ n = 1.000.000 por grupo · Δ = 0.1 pp → z = 2.357, p = 0.0184 → 1.000 órde
 - **Tira de los 3 usos** en el stack: auto-deploy de A/B · feature selection · alertas de anomalías.
 - **Nota del especialista** al pie, con los dos caveats de ingeniería.
 
-### Qué decir (guión)
+### Qué decir (guion)
 
 **Intro**: "Y aquí es donde esto se vuelve útil de verdad. En software el criterio no lo decide una
 persona: lo decide una línea de código. La librería te devuelve el p-valor, y la comparación con alpha
@@ -303,11 +391,20 @@ del efecto + intervalo de confianza**, y calcular el **poder** antes de recoger 
 slider usa el estimador pooled (el mismo de SciPy): z = 0.016 / √(0.108 · 0.892 · 2/n).
 
 ### Cifras de esta slide
-n = 500 → z = 0.8151, p = 0.4150, poder 13.5 % · n = 4.000 → z = 2.3054, p = 0.0211, poder 66.5 % · n = 5.519 → 80 % de poder · 20 tests al 5 % → 64.15 %
+n = 500 → z = 0.8151, p = 0.4150, poder 13.5 % · n = 4.000 → z = 2.3054, p = 0.0211, poder 66.5 %
+· n = 5.519 → 80 % de poder · 20 tests al 5 % → 64.15 %
+
+### Trampa
+Automatizar no es decidir sin criterio: si el alpha está metido en el código a mano, cada experimento
+hereda un umbral que nadie revisó. Y no digas «con 4.000 personas tengo el 66 % de probabilidad de que
+sea real»: el 66.5 % es el **poder**, es decir la probabilidad de *detectar* el efecto, no la
+probabilidad de que sea real.
 
 ---
 
 ## Slide 5.6 — Lo que te Llevas
+
+**Id**: `stats-5.6` · **Tiempo**: ≈ 1:30 · **Visuales**: ninguno
 
 ### Título
 "Lo que te llevas"
@@ -317,7 +414,7 @@ n = 500 → z = 0.8151, p = 0.4150, poder 13.5 % · n = 4.000 → z = 2.3054, p 
 - **Tres reglas** numeradas.
 - **Fila de cierre**: entrega del bloque al equipo + «¿Alguien tiene dudas?».
 
-### Qué decir (guión)
+### Qué decir (guion)
 
 **Recap**: "Para llevarse: alpha es el riesgo que fijaste antes; el p-valor es qué tan raro fue lo que
 viste dado que nada cambió; y la decisión es solo compararlos."
@@ -336,29 +433,50 @@ fija y se documenta antes de la recolección de datos; y el resultado de un cont
 ### Cifras de esta slide
 α = P(rechazar H₀ | H₀ verdadera) · p = P(datos tan extremos | H₀ cierta) = 0.0211 en nuestro caso
 
+### Trampa
+No cerrar con «el p-valor te dice si algo es real». Cerrar con la decisión y sus consecuencias, y
+entregar el bloque al equipo: tu `stats-5.6` cierra **tu tema**, no la exposición.
+
 ---
 
-## Checklist de números verificados
+## 3. Lo que este guion NO cubre
 
-**No recalcules nada en el escenario.** Todos verificados con cálculo real:
+| Tema | Dónde está | Nota |
+|---|---|---|
+| T-Test, ANOVA, Chi-Cuadrado | `stats-6.0` (sección 6, **Equipo Completo**) | Es el sílabo «Contraste de hipótesis» y lo explica **todo el grupo**, no solo Andy. Se movió ahí desde la sección 5. |
+| Poisson, Normal, TLC, intervalos | Secciones 1–4 (Said, Yandris, Allison, Gino) | Solo los mencionas en una frase (α = el 5 % del intervalo de Gino) |
+| A/B testing, feature selection, riesgo | `stats-6.1` (equipo) | Tú solo lo mencionas como caso de uso, 30 s |
+| Qué es la inferencia (población / muestra) | `stats-0.2` (apertura, Grupo 3 y 4) | El marco lo pone el equipo antes de tu bloque |
+| Cierre de la exposición | `stats-6.2` (equipo) | No lo repitas. Tu `stats-5.6` cierra **tu tema**, no la exposición |
 
-| Dato | Valor |
-|---|---|
-| E-commerce A/B | 400/4.000 (10.0 %) vs 464/4.000 (11.6 %) |
-| z del caso | **2.3054** |
-| p bilateral / unilateral | **0.0211** / 0.0106 |
-| 20 monedas, 15 caras | P(X ≥ 15) = **0.0207** |
-| Control de calidad | 1.000 piezas, 25 defectuosas, H₀ = 2 % → z = **1.1294**, p = **0.2587** |
-| z críticos | 1.960 (α 0.05) · 2.576 (α 0.01) · 3.291 (α 0.001) |
-| Poder con efecto 1.6 pp | n = 500 → 13.5 % · n = 4.000 → **66.5 %** · n = 5.519 → 80 % |
-| β con n = 4.000 | 33.5 % (α 0.05) · 57.6 % (α 0.01) · 81.7 % (α 0.001) |
-| 20 tests al α = 0.05 | **64.15 %** de al menos un falso positivo |
-| Contraejemplo | n = 1.000.000, Δ = 0.1 pp → z = 2.357, p = 0.0184 → 1.000 órdenes extra (≈ 50.000 $/mes) |
+---
 
-## Checklist antes de exponer
+## 4. Checklist de números (verificados — no recalcules en el escenario)
+
+- [ ] A: 400/4.000 = 10.0 % · B: 464/4.000 = 11.6 %
+- [ ] z = 2.3054 · p bilateral = **0.0211** · p unilateral = **0.0106** · 1 de cada 47 experimentos
+- [ ] Decisión con α = 0.05: **rechazar H₀** · con α = 0.01: **no rechazar**
+- [ ] z(α=0.05) = 1.96 · z(α=0.01) = 2.576 · z(α=0.001) = 3.29
+- [ ] Monedas: P(X ≥ 15 | n=20, p=0.5) = **0.0207**
+- [ ] Control de calidad: z = 1.1294 → p = **0.2587** → no rechaza
+- [ ] Poder con efecto 1.6 pp: n = 500 → 13.5 % · n = 4.000 → **66.5 %** · n = 5.519 → 80 %
+- [ ] β = 33.5 % con α = 0.05 · 57.6 % con α = 0.01 · 81.7 % con α = 0.001
+- [ ] Contraejemplo: n = 1.000.000, Δ = 0.1 pp → z = 2.357, p = 0.0184, 1.000 órdenes extra
+      (≈ 50.000 $/mes) — frente a nuestro caso: 64 órdenes (≈ 3.200 $/mes)
+- [ ] 20 tests a α = 0.05 → **64.15 %** de al menos un falso positivo
+
+## 5. Checklist antes de exponer
 
 - [ ] Ensayo cronometrado de las 7 slides: objetivo **17–18 min**, tope 20.
+- [ ] ¿Digo «sorpresa» y **nunca** «cantidad de evidencia»?
+- [ ] ¿Digo «no rechazamos H₀» y **nunca** «aceptamos H₀»?
+- [ ] ¿Sé el caso de memoria: 400/4.000 vs 464/4.000 → 0.0211?
+- [ ] ¿Distingo el p bilateral (0.0211) del unilateral (0.0106) y sé por qué?
+- [ ] ¿Sé decir los tres números del remate: 0.0207 · 0.0211 · 0.2587?
+- [ ] ¿Sé de memoria el poder: 4.000 → 66.5 %, y que hacen falta ~5.519 para el 80 %?
+- [ ] ¿El código corre o llevo captura? (`pip install scipy`)
 - [ ] `npm run build` sin errores y `node scripts/verify-deck.mjs` en verde.
-- [ ] Los tres «NO es» dichos en voz alta, sin p-hacking verbal.
-- [ ] Comprobar que el guion y lo que dices coinciden (el drawer **[HABLAR] Guión**).
-- [ ] Si te pasas de 18 min: el cierre (`stats-5.6`) es lo primero que se recorta.
+- [ ] ¿Las slides se ven bien en **modo oscuro**? (el deck es dark)
+- [ ] ¿La campana de Gauss se entiende en 3 segundos sin que yo la explique?
+- [ ] ¿Sé que el contraste de hipótesis (`stats-6.0`) lo explica el equipo, no yo?
+- [ ] Si te pasás de 18 min: el cierre (`stats-5.6`) es lo primero que se recorta.
