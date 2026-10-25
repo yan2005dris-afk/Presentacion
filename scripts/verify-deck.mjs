@@ -96,7 +96,7 @@ await page.waitForTimeout(400);
 for (let i = 0; i < 20; i++) {
   textoDeck.push(await page.locator('main').innerText());
   await page.keyboard.press('ArrowRight');
-  await page.waitForTimeout(220);
+  await page.waitForTimeout(520);
 }
 const todo = textoDeck.join('\n');
 CIFRAS_ESPERADAS.forEach((c) => {

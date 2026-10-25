@@ -4,7 +4,7 @@ import {
   Scale, Target, CheckCircle2, XCircle, AlertTriangle, Mic, Code2,
   ShieldCheck, TrendingUp, Ban, Lightbulb, Gavel, ChevronRight
 } from 'lucide-react';
-import { normPdf, normCdf, zCritico } from './stats';
+import { normPdf, normCdf, zCritico, binomialHist, binomialTail } from './stats';
 
 // ==========================================
 // === ANDY — NIVEL DE SIGNIFICANCIA (α) Y P-VALOR ===
@@ -18,7 +18,7 @@ import { normPdf, normCdf, zCritico } from './stats';
 
 // ───────── Campana de Gauss (SVG) ─────────
 // VIEW = 800 x 300 ; eje x: z ∈ [-4, 4] ; eje y: pdf escalado a 240 px
-const CW = 800, CH = 300, BASE = 268, AMP = 228, ESCALA_X = 88;
+const CW = 800, CH = 212, BASE = 180, AMP = 150, ESCALA_X = 88;
 
 const px = (z) => CW / 2 + z * ESCALA_X;
 const py = (pdf) => BASE - (pdf / 0.3989422804) * AMP;
@@ -390,6 +390,72 @@ export function SlideAlphaCampana() {
   );
 }
 
+// ───────── V2 · Inset de 20 monedas: el p-valor como área ─────────
+// Franja de barras con la PMF binomial real (n = 20, p = 0.5). La cola k >= 15
+// sombreada es el área que define el p-valor: P(X >= 15) = 0.0207.
+function InsetMonedas({ n = 20, p = 0.5, observado = 15 }) {
+  const hist = binomialHist(n, p);
+  const maxP = Math.max(...hist.map((h) => h.p));
+  const W = 700;
+  const H = 54;
+  const ancho = W / (n + 1);
+  const pCola = binomialTail(observado, n, p);
+
+  return (
+    <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1.5">
+      <div className="flex items-center justify-between">
+        <Etiqueta>El mismo concepto, en 20 monedas</Etiqueta>
+        <span className="text-[11px] font-mono text-cyan-300 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20">
+          P(X ≥ {observado}) = {pCola.toFixed(4)}
+        </span>
+      </div>
+
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
+        {/* el área de la cola ES el p-valor: se resalta aunque las barras sean bajas */}
+        <rect
+          x={observado * ancho}
+          y={0}
+          width={W - observado * ancho}
+          height={H - 1}
+          fill="#22d3ee"
+          fillOpacity="0.14"
+        />
+        {hist.map((h) => {
+          const altura = Math.max((h.p / maxP) * (H - 4), 2);
+          const enCola = h.k >= observado;
+          return (
+            <rect
+              key={h.k}
+              x={h.k * ancho + 2}
+              y={H - altura}
+              width={ancho - 5}
+              height={altura}
+              rx="1"
+              fill={enCola ? '#22d3ee' : '#334155'}
+              fillOpacity="0.95"
+            />
+          );
+        })}
+        <line x1="0" y1={H - 1} x2={W} y2={H - 1} stroke="#475569" strokeWidth="1.5" />
+        <line
+          x1={observado * ancho}
+          y1={0}
+          x2={observado * ancho}
+          y2={H - 1}
+          stroke="#22d3ee"
+          strokeWidth="1.5"
+          strokeDasharray="3 3"
+        />
+      </svg>
+
+      <p className="text-[11px] text-slate-400 leading-relaxed">
+        <strong className="text-slate-200">15 caras en 20 tiradas</strong> de una moneda justa:{' '}
+        <strong className="text-cyan-300">2.07 %</strong> de las veces. El p-valor es un <em>área</em>, no un punto.
+      </p>
+    </div>
+  );
+}
+
 // ==================================================================
 // 5.2 · El p-valor: la pregunta de la sorpresa
 // ==================================================================
@@ -399,8 +465,8 @@ export function SlidePValorSorpresa() {
   const pBil = 2 * pUni;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-3 space-y-3">
-      <div className="border-b border-slate-800 pb-2.5">
+    <div className="max-w-5xl mx-auto px-4 py-2.5 space-y-2.5">
+      <div className="border-b border-slate-800 pb-2">
         <span className="text-xs uppercase tracking-wider text-rose-400 font-bold">La evidencia</span>
         <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
           El p-valor: ¿qué tan raro fue eso si nada cambió?
@@ -411,15 +477,15 @@ export function SlidePValorSorpresa() {
       </div>
 
       {/* La pregunta */}
-      <div className="p-3 rounded-2xl bg-rose-950/20 border border-rose-900/40 text-center">
-        <p className="text-base sm:text-lg font-black text-rose-100 leading-snug">
+      <div className="p-2.5 rounded-2xl bg-rose-950/20 border border-rose-900/40 text-center">
+        <p className="text-sm sm:text-base font-black text-rose-100 leading-snug">
           "¿Qué tan raro o sorprendente es el resultado que obtuvimos{' '}
           <span className="text-rose-300">si asumimos que nada cambió</span> (H₀ es cierta)?"
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2 p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2.5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
+        <div className="lg:col-span-2 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
           <div className="flex items-center justify-between">
             <Etiqueta>Distribución nula · zona de sorpresa</Etiqueta>
             <span className="text-xs font-mono text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
@@ -461,35 +527,33 @@ export function SlidePValorSorpresa() {
               <span>3.29 (α = 0.001)</span>
             </div>
           </div>
+
+          <div className="pt-2.5 border-t border-slate-800">
+            <InsetMonedas />
+          </div>
         </div>
 
-        <div className="space-y-3">
-          <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
-            <Etiqueta>El caso, en palabras</Etiqueta>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Si la conversión real fuera 10%, ver <strong className="text-slate-100">11.6%</strong> en 4,000 personas
-              sería muy raro: <strong className="text-cyan-300">2.1%</strong> de probabilidad. Es decir, en 1 de cada
-              47 experimentos veríamos esto <em>aunque nada hubiera cambiado</em>.
+        <div className="space-y-2.5">
+          <div className="p-3.5 rounded-xl bg-rose-950/20 border border-rose-900/40 space-y-1.5">
+            <Etiqueta>Dos dominios, un concepto</Etiqueta>
+            <p className="text-xs text-slate-200 leading-relaxed">
+              <span className="font-mono text-cyan-300">0.0207</span> en las monedas ·{' '}
+              <span className="font-mono text-cyan-300">0.0211</span> en el e-commerce.{' '}
+              <strong className="text-rose-200">Casi el mismo número</strong> en dos mundos distintos: por eso el
+              p-valor es un concepto único y no un truco del A/B testing.
             </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2">
-            <Etiqueta>Los dos números</Etiqueta>
-            <div className="space-y-1.5 text-xs text-slate-300">
+            <div className="pt-1.5 mt-0.5 border-t border-rose-900/30 space-y-1 text-xs text-slate-300">
               <div className="flex justify-between"><span>Bilateral (p<sub>B</sub> ≠ p<sub>A</sub>)</span><span className="font-mono font-bold text-cyan-300">{pBil.toFixed(4)}</span></div>
               <div className="flex justify-between"><span>Unilateral (p<sub>B</sub> &gt; p<sub>A</sub>)</span><span className="font-mono font-bold text-cyan-300">{pUni.toFixed(4)}</span></div>
             </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">
-              El p-valor siempre se calcula. La decisión se toma comparándolo con α.
-            </p>
           </div>
 
         </div>
       </div>
 
       <NotaTecnica>
-        p = P(X ≥ x<sub>obs</sub> | H₀ cierta): una <strong>probabilidad condicional</strong> sobre la distribución
-        nula, no sobre H₀. p ∈ [0, 1]. Con z = 2.3054 el p bilateral es 0.0211 y el unilateral 0.0106.
+        p = P(X ≥ x<sub>obs</sub> | H₀ cierta): una <strong>probabilidad condicional</strong> sobre la distribución nula,
+        no sobre H₀. Con z = 2.3054 el p bilateral es 0.0211 y el unilateral 0.0106.
       </NotaTecnica>
     </div>
   );
