@@ -4,7 +4,7 @@ import {
   Scale, Target, CheckCircle2, XCircle, AlertTriangle, Mic, Code2,
   ShieldCheck, TrendingUp, Ban, Lightbulb, Gavel, ChevronRight
 } from 'lucide-react';
-import { normPdf, normCdf, zCritico, binomialHist, binomialTail } from './stats';
+import { normPdf, normCdf, zCritico, binomialHist, binomialTail, powerForEffect } from './stats';
 
 // ==========================================
 // === ANDY — NIVEL DE SIGNIFICANCIA (α) Y P-VALOR ===
@@ -559,6 +559,201 @@ export function SlidePValorSorpresa() {
   );
 }
 
+// ───────── V3 · Matriz 2×2 de la decisión (diagrama SVG) ─────────
+// Eje X = decisión · Eje Y = realidad. Las cuatro celdas llevan su
+// probabilidad EN VIVO: α sale del selector de la slide y β sale del poder
+// real del caso (n = 4.000 por grupo, efecto 1.6 pp), no de un número inventado.
+const MAT_W = 760;
+const MAT_H = 300;
+const MAT_X0 = 118; // margen izquierdo: etiquetas de realidad
+const MAT_X1 = 16;
+const MAT_Y0 = 26;
+const MAT_Y1 = 56; // margen inferior: encabezado de decisión
+const MAT_GAP = 12;
+const MAT_CW = (MAT_W - MAT_X0 - MAT_X1 - MAT_GAP) / 2; // 307
+const MAT_CH = (MAT_H - MAT_Y0 - MAT_Y1 - MAT_GAP) / 2; // 103
+
+function Sub({ children }) {
+  return (
+    <tspan dy="4" fontSize="10">
+      {children}
+    </tspan>
+  );
+}
+
+function MatrizDecision({ alpha }) {
+  const poder = powerForEffect(4000, 0.016, 0.1, alpha);
+  const beta = 1 - poder;
+
+  const celdas = [
+    {
+      col: 0,
+      fila: 0,
+      titulo: 'Acierto',
+      simbolo: '1 − α',
+      valor: (1 - alpha) * 100,
+      color: '#34d399',
+      d1: 'H₀ era cierta y',
+      d2: 'no la rechazamos.',
+    },
+    {
+      col: 1,
+      fila: 0,
+      titulo: 'Error Tipo I',
+      simbolo: 'α',
+      valor: alpha * 100,
+      color: '#fb7185',
+      d1: 'Declaramos un cambio',
+      d2: 'que no existe.',
+    },
+    {
+      col: 0,
+      fila: 1,
+      titulo: 'Error Tipo II',
+      simbolo: 'β',
+      valor: beta * 100,
+      color: '#60a5fa',
+      d1: 'El cambio existe y',
+      d2: 'no lo detectamos.',
+    },
+    {
+      col: 1,
+      fila: 1,
+      titulo: 'Acierto',
+      simbolo: '1 − β',
+      valor: poder * 100,
+      color: '#34d399',
+      d1: 'H₀ era falsa y',
+      d2: 'la rechazamos.',
+    },
+  ];
+
+  return (
+    <svg viewBox={`0 0 ${MAT_W} ${MAT_H}`} className="w-full h-auto select-none">
+      {/* eje Y: la realidad */}
+      <text
+        x="22"
+        y={MAT_H / 2}
+        fill="#64748b"
+        fontSize="12"
+        fontWeight="700"
+        letterSpacing="1.5"
+        textAnchor="middle"
+        transform={`rotate(-90 22 ${MAT_H / 2})`}
+      >
+        REALIDAD
+      </text>
+
+      {celdas.map((c, i) => {
+        const x = MAT_X0 + c.col * (MAT_CW + MAT_GAP);
+        const y = MAT_Y0 + c.fila * (MAT_CH + MAT_GAP);
+        return (
+          <g key={i}>
+            <rect
+              x={x}
+              y={y}
+              width={MAT_CW}
+              height={MAT_CH}
+              rx="12"
+              fill={c.color}
+              fillOpacity="0.11"
+              stroke={c.color}
+              strokeOpacity="0.55"
+              strokeWidth="1.5"
+            />
+            <text x={x + 16} y={y + 30} fill={c.color} fontSize="15" fontWeight="700">
+              {c.titulo}
+            </text>
+            <text x={x + 16} y={y + 58} fill="#94a3b8" fontSize="12">
+              {c.d1}
+            </text>
+            <text x={x + 16} y={y + 76} fill="#64748b" fontSize="12">
+              {c.d2}
+            </text>
+            <text
+              x={x + MAT_CW - 18}
+              y={y + 50}
+              fill={c.color}
+              fontSize="28"
+              fontWeight="800"
+              fontFamily="monospace"
+              textAnchor="end"
+            >
+              {c.valor.toFixed(1)}%
+            </text>
+            <text
+              x={x + MAT_CW - 18}
+              y={y + 72}
+              fill={c.color}
+              fontSize="13"
+              fontWeight="700"
+              fontFamily="monospace"
+              textAnchor="end"
+            >
+              {c.simbolo}
+            </text>
+          </g>
+        );
+      })}
+
+      {/* etiquetas de fila: la realidad */}
+      <text
+        x={MAT_X0 - 14}
+        y={MAT_Y0 + MAT_CH / 2 + 5}
+        fill="#cbd5e1"
+        fontSize="13"
+        fontWeight="700"
+        textAnchor="end"
+      >
+        H<Sub>0</Sub> verdadera
+      </text>
+      <text
+        x={MAT_X0 - 14}
+        y={MAT_Y0 + MAT_CH + MAT_GAP + MAT_CH / 2 + 5}
+        fill="#cbd5e1"
+        fontSize="13"
+        fontWeight="700"
+        textAnchor="end"
+      >
+        H<Sub>0</Sub> falsa
+      </text>
+
+      {/* encabezado de columna: la decisión */}
+      <text
+        x={MAT_X0 + MAT_CW / 2}
+        y={MAT_Y0 + MAT_CH * 2 + MAT_GAP + 22}
+        fill="#cbd5e1"
+        fontSize="13"
+        fontWeight="700"
+        textAnchor="middle"
+      >
+        NO RECHAZAMOS H<Sub>0</Sub>
+      </text>
+      <text
+        x={MAT_X0 + MAT_CW + MAT_GAP + MAT_CW / 2}
+        y={MAT_Y0 + MAT_CH * 2 + MAT_GAP + 22}
+        fill="#cbd5e1"
+        fontSize="13"
+        fontWeight="700"
+        textAnchor="middle"
+      >
+        RECHAZAMOS H<Sub>0</Sub>
+      </text>
+      <text
+        x={MAT_W / 2}
+        y={MAT_H - 8}
+        fill="#64748b"
+        fontSize="12"
+        fontWeight="700"
+        letterSpacing="2"
+        textAnchor="middle"
+      >
+        DECISIÓN
+      </text>
+    </svg>
+  );
+}
+
 // ==================================================================
 // 5.3 · La regla de decisión
 // ==================================================================
@@ -566,29 +761,6 @@ export function SlideReglaDecision() {
   const [alpha, setAlpha] = useState(0.05);
   const p = 0.0211;
   const rechaza = p <= alpha;
-
-  const celdas = [
-    {
-      t: 'H₀ verdadera · No rechazamos',
-      d: 'Acierto',
-      c: 'border-emerald-500/40 bg-emerald-950/30 text-emerald-200',
-    },
-    {
-      t: 'H₀ verdadera · Rechazamos',
-      d: 'Error Tipo I (α) · falso positivo',
-      c: 'border-rose-500/40 bg-rose-950/30 text-rose-200',
-    },
-    {
-      t: 'H₀ falsa · No rechazamos',
-      d: 'Error Tipo II (β) · falso negativo',
-      c: 'border-blue-500/40 bg-blue-950/30 text-blue-200',
-    },
-    {
-      t: 'H₀ falsa · Rechazamos',
-      d: 'Acierto',
-      c: 'border-emerald-500/40 bg-emerald-950/30 text-emerald-200',
-    },
-  ];
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-4 space-y-5">
@@ -620,74 +792,94 @@ export function SlideReglaDecision() {
         </div>
       </div>
 
-      {/* La regla */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
-          <Etiqueta>Regla universal</Etiqueta>
-          <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 font-mono text-xs text-slate-200">
-            p ≤ α ⟹ <span className="text-emerald-300">rechazar H₀</span> · resultado significativo
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* V3 · Matriz 2×2 como diagrama */}
+        <div className="lg:col-span-2 p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <Etiqueta>La matriz completa de la decisión</Etiqueta>
+            <span className="text-[11px] font-mono text-slate-400 bg-slate-950/70 px-2 py-0.5 rounded border border-slate-800">
+              β con n = 4.000 · efecto 1.6 pp
+            </span>
           </div>
-          <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 font-mono text-xs text-slate-200">
-            p &gt; α ⟹ <span className="text-amber-300">no rechazar H₀</span> · evidencia insuficiente
-          </div>
-        </div>
 
-        <div
-          className={`p-5 rounded-2xl border space-y-2 ${
-            rechaza
-              ? 'bg-emerald-950/25 border-emerald-500/40'
-              : 'bg-amber-950/25 border-amber-500/40'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            {rechaza ? (
-              <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-            ) : (
-              <XCircle className="w-5 h-5 text-amber-400 shrink-0" />
-            )}
-            <div className="text-sm font-bold text-slate-100">
-              El caso: p = {p.toFixed(4)} vs α = {alpha}
-            </div>
-          </div>
-          <p className="text-xs text-slate-300 leading-relaxed">
-            {rechaza ? (
-              <>
-                <strong className="text-emerald-300">Rechazamos H₀.</strong> La conversión de B es
-                significativamente mayor: el botón B convierte más y no es casualidad. Con α = 0.01 el{' '}
-                <em>mismo</em> resultado no alcanzaría el umbral.
-              </>
-            ) : (
-              <>
-                <strong className="text-amber-300">No rechazamos H₀.</strong> Con un umbral tan estricto no tenemos
-                evidencia suficiente. Ojo: esto <em>no</em> significa que B y A sean iguales — significa que{' '}
-                <strong className="text-slate-100">no tenemos poder para detectarlo</strong>.
-              </>
-            )}
+          <MatrizDecision alpha={alpha} />
+
+          <p className="text-[11px] text-slate-400 leading-relaxed border-t border-slate-800 pt-2">
+            Baja α de 0.05 a 0.001 y β pasa de <strong className="text-blue-300">33.5%</strong> a{' '}
+            <strong className="text-blue-300">81.7%</strong>: menos falsos positivos, pero muchos más falsos
+            negativos. <strong className="text-slate-200">El umbral no es solo un riesgo: es una apuesta.</strong>
           </p>
         </div>
-      </div>
 
-      {/* Tabla 2x2 */}
-      <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
-        <Etiqueta>La matriz completa de la decisión</Etiqueta>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-          {celdas.map((c, i) => (
-            <div key={i} className={`p-3 rounded-xl border ${c.c} space-y-0.5`}>
-              <div className="text-[11px] font-bold uppercase tracking-wider opacity-80">{c.t}</div>
-              <div className="text-sm font-bold">{c.d}</div>
+        <div className="space-y-3">
+          {/* La regla */}
+          <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
+            <Etiqueta>Regla universal</Etiqueta>
+            <div className="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800 font-mono text-[11px] text-slate-200">
+              p ≤ α ⟹ <span className="text-emerald-300">rechazar H₀</span> · significativo
             </div>
-          ))}
+            <div className="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800 font-mono text-[11px] text-slate-200">
+              p &gt; α ⟹ <span className="text-amber-300">no rechazar</span> · evidencia insuficiente
+            </div>
+          </div>
+
+          {/* El caso */}
+          <div
+            className={`p-3.5 rounded-2xl border space-y-1.5 ${
+              rechaza
+                ? 'bg-emerald-950/25 border-emerald-500/40'
+                : 'bg-amber-950/25 border-amber-500/40'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              {rechaza ? (
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              ) : (
+                <XCircle className="w-4 h-4 text-amber-400 shrink-0" />
+              )}
+              <div className="text-xs font-bold text-slate-100">
+                El caso: p = {p.toFixed(4)} vs α = {alpha}
+              </div>
+            </div>
+            <p className="text-[11px] text-slate-300 leading-relaxed">
+              {rechaza ? (
+                <>
+                  <strong className="text-emerald-300">Rechazamos H₀.</strong> B convierte más y no es casualidad.
+                  Con α = 0.01 el <em>mismo</em> resultado no alcanzaría el umbral.
+                </>
+              ) : (
+                <>
+                  <strong className="text-amber-300">No rechazamos H₀.</strong> No significa que A y B sean iguales:
+                  significa que <strong className="text-slate-100">no tenemos poder para detectarlo</strong>.
+                </>
+              )}
+            </p>
+          </div>
+
+          {/* V4 · Contraste con un segundo dominio: control de calidad */}
+          <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-amber-500/25 space-y-1.5">
+            <Etiqueta>Control de calidad · segundo dominio</Etiqueta>
+            <div className="text-[11px] text-slate-300 leading-snug">
+              <strong className="text-slate-100">1.000 piezas</strong> · 25 defectuosas (2.5 %) · H₀: 2 % de defecto
+            </div>
+            <div className="flex items-center justify-between text-[11px] font-mono">
+              <span className="text-slate-400">z = 1.1294</span>
+              <span className="text-amber-300 font-bold">p = 0.2587</span>
+            </div>
+            <p className="text-[11px] text-slate-300 leading-relaxed">
+              <strong className="text-amber-200">No rechazamos H₀.</strong> Un 2.5 % no es evidencia de que la línea se
+              haya roto: <strong className="text-slate-100">el proceso sigue normal</strong>. Mismo criterio, otro
+              dominio.
+            </p>
+          </div>
         </div>
-        <p className="text-[11px] text-slate-400 leading-relaxed">
-          El poder estadístico es <strong className="text-slate-200">1 − β</strong>: con α fijo, más poder exige más
-          muestra. Por eso un p-valor alto en un experimento de 4,000 personas puede ser solo falta de poder.
-        </p>
       </div>
 
       <NotaTecnica>
         "No rechazar H₀" <strong>no</strong> es "aceptar H₀": es ausencia de evidencia, no evidencia de igualdad. Con
-        n = 4,000 por grupo el poder para detectar 1.6 pp de conversión es limitado; un resultado no significativo
-        aquí no descarta el efecto.
+        n = 4,000 por grupo el poder para detectar 1.6 pp de conversión es{' '}
+        <strong className="text-slate-100">66.5%</strong> (β = 33.5%); un resultado no significativo aquí no descarta el
+        efecto. En control de calidad, p = 0.2587 deja la línea dentro de lo esperado.
       </NotaTecnica>
     </div>
   );
