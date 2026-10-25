@@ -243,6 +243,38 @@ export function SlideDecisionRiesgo() {
   );
 }
 
+// ───────── V1 · Banda de 100 marcas: los falsos positivos de α ─────────
+// Determinista: exactamente las primeras `marcas` marcas en rojo, sin aleatoriedad.
+function BandaMarcas({ alpha }) {
+  const marcas = alpha >= 0.01 ? Math.round(alpha * 100) : 1;
+  const frecuencia =
+    alpha >= 0.05 ? '5 de cada 100' : alpha >= 0.01 ? '1 de cada 100' : '1 de cada 1.000';
+
+  return (
+    <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+      <Etiqueta>En datos · 100 pruebas con H₀ cierta</Etiqueta>
+
+      <div className="grid grid-cols-[repeat(25,minmax(0,1fr))] gap-[3px]">
+        {Array.from({ length: 100 }, (_, i) => (
+          <div
+            key={i}
+            className={`aspect-square rounded-[2px] ${
+              i < marcas ? 'bg-rose-500' : 'bg-slate-700/70'
+            }`}
+            title={i < marcas ? 'Falso positivo (Error Tipo I)' : 'Correcto'}
+          />
+        ))}
+      </div>
+
+      <p className="text-xs text-slate-300 leading-relaxed">
+        <strong className="text-rose-300">{frecuencia}</strong> son{' '}
+        <strong className="text-rose-200">falsos positivos</strong>: el sistema dijo «hay cambio real» y no lo había.
+        <span className="text-slate-500"> (en promedio)</span>
+      </p>
+    </div>
+  );
+}
+
 // ==================================================================
 // 5.1 · α: el área que decides tolerar
 // ==================================================================
@@ -328,25 +360,18 @@ export function SlideAlphaCampana() {
 
         {/* Lectura + dominios */}
         <div className="space-y-3">
-          <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
-            <Etiqueta>En palabras</Etiqueta>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Con <strong className="text-rose-300">α = {alpha}</strong> aceptas que{' '}
-              <strong className="text-slate-100">{alpha * 100} de cada 100</strong> veces que el sistema diga "hay
-              cambio real", sean alarmas falsas.
+          <BandaMarcas alpha={alpha} />
+
+          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1">
+            <Etiqueta>Umbrales por industria</Etiqueta>
+            <p className="text-[11px] text-slate-400 leading-relaxed">
+              <span className="font-mono text-slate-200">0.05</span> web y producto ·{' '}
+              <span className="font-mono text-slate-200">0.01</span> riesgo de crédito ·{' '}
+              <span className="font-mono text-slate-200">0.001</span> ensayos clínicos.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2">
-            <Etiqueta>Umbrales por industria</Etiqueta>
-            <div className="space-y-1.5 text-[11px] text-slate-300">
-              <div><span className="font-mono text-white">α = 0.05</span> · Web, marketing, producto SaaS</div>
-              <div><span className="font-mono text-white">α = 0.01</span> · Riesgo de crédito y finanzas</div>
-              <div><span className="font-mono text-white">α = 0.001</span> · Ensayos clínicos y salud</div>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2">
+          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1">
             <Etiqueta>El puente con el intervalo de confianza</Etiqueta>
             <p className="text-[11px] text-slate-300 leading-relaxed">
               El intervalo que ya vimos y α son la <strong className="text-slate-100">misma campana por los dos lados</strong>:
