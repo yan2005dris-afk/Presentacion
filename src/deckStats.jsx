@@ -4,7 +4,7 @@ import {
   SlideInferencialFundamentos, SlidePoissonNegocio,
   SlideNormalFundamentos, SlideNormalCampanaLectura, SlideNormalSoftwareCaso, SlideTLC,
   SlideIntervalosConfianza,
-  SlideTribunalDecision, SlideHipotesisH0H1, SlideAlphaCampana, SlidePValorSorpresa,
+  SlideDecisionRiesgo, SlideAlphaCampana, SlidePValorSorpresa,
   SlideReglaDecision, SlidePValorNoEs, SlideCriterioSoftware, SlideCierreT05,
   SlideComparacionMedias,
   SlideABTestingAplicaciones, SlideConclusionesInferencial
@@ -106,7 +106,7 @@ export const getStatsSlides = (onSelectSection) => [
     component: <SlideIntervalosConfianza />
   },
 
-  // === ANDY: NIVEL DE SIGNIFICANCIA (α) Y P-VALOR ===
+// === ANDY: NIVEL DE SIGNIFICANCIA (α) Y P-VALOR ===
   // Guion: docs/expo1/tema05/guion-ordenado-t05.md
   // Caso que recorre todas las slides: e-commerce, botón de checkout.
   //   A: 400/4000 (10.0%) · B: 464/4000 (11.6%) · z = 2.3054 · p = 0.0211
@@ -114,44 +114,36 @@ export const getStatsSlides = (onSelectSection) => [
     id: 'stats-5.0',
     section: 5,
     title: 'Toda Decisión Tiene un Riesgo',
-    subtitle: 'Andy · Punto de partida · La analogía del tribunal',
-    speaker: 'Hola a todos, soy Andy. Antes de hablar de alpha y del p-valor, una pregunta: cuanta evidencia necesita un juez para declarar culpable, y cuanto se equivoca si lo hace? Porque cada vez que un sistema decide, un boton, un modelo, una alerta, hay un juez y hay un error posible. Nuestro caso: el equipo de producto quiere subir el boton Comprar a una version B, y ve que B convierte mas. La pregunta real no es cual convierte mas, eso ya lo sabemos, sino si esta diferencia es un efecto real o es ruido que se invierte manana.',
-    component: <SlideTribunalDecision />
+    subtitle: 'Andy · Plantear la pregunta · El tribunal y el caso del checkout',
+    speaker: 'Hola a todos, soy Andy. Antes de hablar de alpha y del p-valor, una pregunta: cuanta evidencia necesita un juez para declarar culpable, y cuanto se equivoca si lo hace? Porque cada vez que un sistema decide, un boton, un modelo, una alerta, hay un juez y hay un error posible. Nuestro caso: el equipo de producto quiere subir el boton Comprar a una version B y ve que B convierte mas. La pregunta real no es cual convierte mas, eso ya lo sabemos, sino si esta diferencia es un efecto real o es ruido que se invierte manana.',
+    component: <SlideDecisionRiesgo />
   },
   {
     id: 'stats-5.1',
     section: 5,
-    title: 'H₀ y H₁: Las Dos Aposturas',
-    subtitle: 'Andy · Plantear la pregunta · Bilateral vs unilateral',
-    speaker: 'La apuesta por defecto es que la conversion de B es igual a la de A: eso es H0. La alternativa es que difieren. Y ojo con esto, porque aqui se cometen errores: si a mi lo que me interesa es que B sea mejor, y no solo que sea distinto, entonces la alternativa es de un solo lado. Decidir eso antes de ver los datos es medio analisis. Con nuestros datos, el p bilateral es 0.0211 y el unilateral 0.0106: la misma evidencia, dos preguntas.',
-    component: <SlideHipotesisH0H1 />
+    title: 'α: el Área que Decides Tolerar',
+    subtitle: 'Andy · El umbral · 5 de cada 100 son falsos positivos',
+    speaker: 'Alpha es el presupuesto de errores que te das antes de empezar. Mira esta campana: la zona sombreada es la parte de resultados tan raros que, si la apuesta por defecto fuera cierta, no esperariamos ver. Tu eliges cuanto de esa zona te molesta. Con alpha igual a cero coma cero cinco estas diciendo que de cada cien veces que el sistema diga hay cambio real, aceptaras que cinco sean alarmas falsas. Y fíjate que es el mismo cinco por ciento que Gino dejo fuera del intervalo de confianza.',
+    component: <SlideAlphaCampana />
   },
   {
     id: 'stats-5.2',
     section: 5,
-    title: 'α es el Área de la Cola que Decides Tolerar',
-    subtitle: 'Andy · El umbral · α = 0.05 · 0.01 · 0.001',
-    speaker: 'Alpha es el presupuesto de errores que te das antes de empezar. Mira esta campana: la zona sombreada es la parte de resultados tan raros que, si la apuesta por defecto fuera cierta, no esperariamos ver. Tu eliges cuanto de esa zona te molesta. Con alpha igual a cero coma cero cinco, estas diciendo que de cada cien veces que el sistema diga hay cambio real, aceptaras que cinco sean alarmas falsas. Y noten que el intervalo de confianza que vimos antes y alpha son la misma campana por los dos lados.',
-    component: <SlideAlphaCampana />
+    title: 'El P-Valor: ¿Qué Tan Raro Fue Eso si Nada Cambió?',
+    subtitle: 'Andy · La pregunta de la sorpresa · Monedas y e-commerce',
+    speaker: 'Ya fijamos cuanto riesgo aceptamos. Falta medir cuanta evidencia tenemos, y la pregunta del p-valor es una sola: que tan raro o sorprendente es lo que vimos si asumimos que la apuesta por defecto es cierta. Mira el mismo caso con veinte monedas: ver quince caras es un p-valor de cero coma cero dos cero siete. Y nuestro e-commerce da cero coma cero dos uno uno. Casi el mismo numero en dos dominios distintos: por eso el p-valor es un concepto unico y no un truco del A B testing.',
+    component: <SlidePValorSorpresa />
   },
   {
     id: 'stats-5.3',
     section: 5,
-    title: 'El P-Valor: ¿Qué Tan Raro Fue Eso si Nada Cambió?',
-    subtitle: 'Andy · La evidencia · La pregunta de la sorpresa',
-    speaker: 'Ya fijamos cuanto riesgo aceptamos. Falta medir cuanta evidencia tenemos, y la pregunta del p-valor es una sola: que tan raro o sorprendente es lo que vimos si asumimos que la apuesta por defecto es cierta. Si la conversion real fuera diez por ciento y sin embargo vimos once coma seis en cuatro mil personas, que tan raro es eso? La respuesta es el p-valor: dos coma uno por ciento. En uno de cada cuarenta y siete experimentos veriamos esto aunque nada hubiera cambiado.',
-    component: <SlidePValorSorpresa />
-  },
-  {
-    id: 'stats-5.4',
-    section: 5,
     title: 'La Regla de Decisión: p ≤ α',
-    subtitle: 'Andy · El criterio · p = 0.0211 vs α = 0.05',
-    speaker: 'Y ahora la regla, que es una linea: si el p-valor es menor o igual que alpha, rechazamos H0. En nuestro caso, cero coma cero dos uno uno contra cero coma cero cinco, rechazamos: el boton B convierte mas y no es casualidad. Ojo con el otro lado: no rechazar H0 no es aceptar H0. Es no tengo evidencia suficiente, no he probado que sean iguales. Con cuatro mil personas por grupo tu poder es limitado, y por eso un resultado negativo no es un no.',
+    subtitle: 'Andy · El criterio · Los dos errores y un segundo dominio',
+    speaker: 'Y ahora la regla, que es una linea: si el p-valor es menor o igual que alpha, rechazamos H0. En nuestro caso, cero coma cero dos uno uno contra cero coma cero cinco, rechazamos: el boton B convierte mas y no es casualidad. Ojo con el otro lado: no rechazar H0 no es aceptar H0, es no tener evidencia suficiente. Y el criterio no es del A B testing: en control de calidad, mil piezas con veinticinco defectuosas dan un p-valor de cero coma dos cinco y ocho y no rechazamos: la linea sigue normal.',
     component: <SlideReglaDecision />
   },
   {
-    id: 'stats-5.5',
+    id: 'stats-5.4',
     section: 5,
     title: 'Lo que el P-Valor NO Es',
     subtitle: 'Andy · Las trampas · Significativo no es lo mismo que útil',
@@ -159,19 +151,19 @@ export const getStatsSlides = (onSelectSection) => [
     component: <SlidePValorNoEs />
   },
   {
-    id: 'stats-5.6',
+    id: 'stats-5.5',
     section: 5,
     title: 'El Criterio Estadístico, Automatizado',
-    subtitle: 'Andy · En producción · SciPy · Auto-deploy, feature selection y alertas',
-    speaker: 'Y aqui es donde esto se vuelve util de verdad. En software el criterio no lo decide una persona, lo decide una linea de codigo: la libreria te devuelve el p-valor, y la comparacion con alpha es una linea mas. Esa linea puede ser la que decide si se despliega la variante, si una variable entra al modelo, o si se abre un incidente. Y un detalle de ingenieria que importa: alpha va en la configuracion, no hardcodeado. Y si corres veinte tests al cinco por ciento, la probabilidad de que salga al menos un falso positivo es del sesenta y cuatro por ciento.',
+    subtitle: 'Andy · En producción · SciPy · El poder depende de n',
+    speaker: 'Y aqui es donde esto se vuelve util de verdad. En software el criterio no lo decide una persona, lo decide una linea de codigo: la libreria te devuelve el p-valor, y la comparacion con alpha es una linea mas. Esa linea puede ser la que decide si se despliega la variante, si una variable entra al modelo, o si se abre un incidente. Y ojo con la muestra: con cuatro mil personas por grupo solo tenemos un sesenta y seis por ciento de poder, asi que un resultado negativo puede ser que no tuvo poder, no que no hay efecto.',
     component: <SlideCriterioSoftware />
   },
   {
-    id: 'stats-5.7',
+    id: 'stats-5.6',
     section: 5,
     title: 'Lo que te Llevas',
     subtitle: 'Andy · Cierre del tema · Cheat sheet y tres reglas',
-    speaker: 'Para llevarse: alpha es el riesgo que fijaste antes, el p-valor es que tan raro fue lo que viste dado que nada cambio, y la decision es solo compararlos. Tres reglas para manana: uno, fija alpha antes de mirar los datos; dos, reporta el p-valor con el tamano del efecto; tres, si no rechazaste, no digas que son iguales, di que no tienes poder. Con esto cerramos el tema de significancia y p-valor. Alguien tiene preguntas?',
+    speaker: 'Para llevarse: alpha es el riesgo que fijaste antes, el p-valor es que tan raro fue lo que viste dado que nada cambio, y la decision es solo compararlos. Tres reglas para manana: uno, fija alpha antes de mirar los datos; dos, reporta el p-valor con el tamano del efecto; tres, si no rechazaste, no digas que son iguales, di que no tienes poder. Con esto cerramos el tema de significancia y p-valor, y el equipo sigue con el contraste de hipotesis. Alguien tiene preguntas?',
     component: <SlideCierreT05 />
   },
 

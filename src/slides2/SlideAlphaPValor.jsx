@@ -88,12 +88,14 @@ function Etiqueta({ children }) {
 }
 
 // ==================================================================
-// 5.0 · Tribunal: toda decisión tiene un riesgo
+// 5.0 · Toda decisión tiene un riesgo (fusión de tribunal + H₀/H₁)
 // ==================================================================
-export function SlideTribunalDecision() {
+export function SlideDecisionRiesgo() {
+  const [bilateral, setBilateral] = useState(true);
+
   return (
-    <div className="max-w-5xl mx-auto px-4 py-4 space-y-5">
-      <div className="border-b border-slate-800 pb-3">
+    <div className="max-w-5xl mx-auto px-4 py-2.5 space-y-2.5">
+      <div className="border-b border-slate-800 pb-2">
         <span className="text-xs uppercase tracking-wider text-rose-400 font-bold">Punto de partida</span>
         <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
           Toda decisión tiene un riesgo
@@ -103,35 +105,47 @@ export function SlideTribunalDecision() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        {/* Recorder de tribunal */}
-        <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
+      {/* Puente con el expositor anterior */}
+      <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-start gap-2.5">
+        <Lightbulb size={15} className="text-cyan-400 shrink-0 mt-0.5" />
+        <p className="text-xs text-slate-200 leading-relaxed">
+          Gino mostró el intervalo al 95 %: <strong className="text-cyan-300">ese 5 % que deja fuera es mi tema</strong> — la otra cara de la misma campana.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Columna 1 — la analogía */}
+        <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2.5">
           <Etiqueta>La analogía · el tribunal</Etiqueta>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1.5">
+          <div className="grid grid-cols-2 gap-2.5">
+            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
               <div className="text-[11px] font-bold text-slate-200 uppercase tracking-wider">H₀ · Estado por defecto</div>
-              <p className="text-xs text-slate-300 leading-snug">El acusado es <strong>inocente</strong>. No hay efecto, no hay cambio.</p>
+              <p className="text-xs text-slate-300 leading-snug">
+                El acusado es <strong>inocente</strong>. No hay efecto, no hay cambio.
+              </p>
             </div>
-            <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-900/40 space-y-1.5">
+            <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-900/40 space-y-1">
               <div className="text-[11px] font-bold text-rose-300 uppercase tracking-wider">H₁ · La alternativa</div>
-              <p className="text-xs text-slate-300 leading-snug">El acusado es <strong>culpable</strong>. Hay un efecto real.</p>
+              <p className="text-xs text-slate-300 leading-snug">
+                El accused es <strong>culpable</strong>. Hay un efecto real.
+              </p>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 flex items-start gap-2.5">
-              <Gavel size={15} className="text-amber-400 shrink-0 mt-0.5" />
-              <p className="text-xs text-slate-300 leading-relaxed">
-                <strong className="text-slate-100">Falso positivo:</strong> declaras culpable a un inocente.
-                <span className="text-amber-300"> → Error Tipo I</span>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800 flex items-start gap-2">
+              <Gavel size={14} className="text-amber-400 shrink-0 mt-0.5" />
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                <strong className="text-slate-100">Falso positivo:</strong> condenas a un inocente.
+                <span className="text-amber-300"> → Error I</span>
               </p>
             </div>
-            <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 flex items-start gap-2.5">
-              <Gavel size={15} className="text-blue-400 shrink-0 mt-0.5" />
-              <p className="text-xs text-slate-300 leading-relaxed">
-                <strong className="text-slate-100">Falso negativo:</strong> absolves a un culpable.
-                <span className="text-blue-300"> → Error Tipo II</span>
+            <div className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800 flex items-start gap-2">
+              <Gavel size={14} className="text-blue-400 shrink-0 mt-0.5" />
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                <strong className="text-slate-100">Falso negativo:</strong> absuelves a un culpable.
+                <span className="text-blue-300"> → Error II</span>
               </p>
             </div>
           </div>
@@ -145,151 +159,92 @@ export function SlideTribunalDecision() {
           </div>
         </div>
 
-        {/* El caso real */}
-        <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
+        {/* Columna 2 — el caso real */}
+        <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2.5">
           <Etiqueta>El caso real · software y negocio</Etiqueta>
 
-          <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
+          <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1.5">
             <p className="text-sm text-slate-200 font-semibold leading-snug">
               El equipo de producto quiere subir el botón "Comprar" a una versión B.
             </p>
-            <div className="grid grid-cols-2 gap-2 pt-1">
-              <div className="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-center">
-                <div className="text-[10px] uppercase tracking-wider text-slate-500">Variante A (control)</div>
-                <div className="text-lg font-black text-slate-100 mt-0.5">10.0%</div>
-                <div className="text-[10px] font-mono text-slate-500">400 de 4,000</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-center leading-tight">
+                <div className="text-[10px] uppercase tracking-wider text-slate-500">A (control)</div>
+                <div className="text-base font-black text-slate-100">10.0%</div>
+                <div className="text-[10px] font-mono text-slate-500">400 / 4.000</div>
               </div>
-              <div className="p-2.5 rounded-lg bg-rose-950/30 border border-rose-900/40 text-center">
-                <div className="text-[10px] uppercase tracking-wider text-rose-400/70">Variante B (nueva)</div>
-                <div className="text-lg font-black text-rose-200 mt-0.5">11.6%</div>
-                <div className="text-[10px] font-mono text-rose-400/60">464 de 4,000</div>
+              <div className="p-2 rounded-lg bg-rose-950/30 border border-rose-900/40 text-center leading-tight">
+                <div className="text-[10px] uppercase tracking-wider text-rose-400/70">B (nueva)</div>
+                <div className="text-base font-black text-rose-200">11.6%</div>
+                <div className="text-[10px] font-mono text-rose-400/60">464 / 4.000</div>
               </div>
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 flex items-start gap-2.5">
-            <Lightbulb size={15} className="text-cyan-400 shrink-0 mt-0.5" />
+          {/* Las mismas dos apuestas, en los números del caso */}
+          <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1.5">
+            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              La misma estructura, en nuestros números
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+                <span className="text-slate-500 font-bold">H₀:</span>{' '}
+                <span className="font-mono text-slate-100">p<sub>B</sub> = p<sub>A</sub></span>
+              </div>
+              <div className="p-2.5 rounded-lg bg-rose-950/30 border border-rose-900/40">
+                <span className="text-rose-400/80 font-bold">H₁:</span>{' '}
+                <span className="font-mono text-rose-200">
+                  {bilateral ? (
+                    <>p<sub>B</sub> ≠ p<sub>A</sub></>
+                  ) : (
+                    <>p<sub>B</sub> &gt; p<sub>A</sub></>
+                  )}
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+              <span className="text-[11px] text-slate-400">¿Qué querías demostrar antes de ver los datos?</span>
+              {[
+                { id: true, pre: 'Bilateral · ', post: <>p<sub>B</sub> ≠ p<sub>A</sub></> },
+                { id: false, pre: 'Unilateral · ', post: <>p<sub>B</sub> &gt; p<sub>A</sub></> },
+              ].map((opt) => (
+                <button
+                  key={String(opt.id)}
+                  onClick={() => setBilateral(opt.id)}
+                  className={`px-2 py-0.5 rounded text-[11px] font-bold transition-all border ${
+                    bilateral === opt.id
+                      ? 'bg-rose-500 text-white border-rose-400'
+                      : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                  }`}
+                >
+                  {opt.pre}
+                  {opt.post}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 flex items-start gap-2.5">
+            <Target size={15} className="text-cyan-400 shrink-0 mt-0.5" />
             <p className="text-xs text-slate-300 leading-relaxed">
               La pregunta real <strong className="text-slate-100">no</strong> es "¿cuál convierte más?" — eso ya lo sabemos.
               Es: <strong className="text-cyan-300">"¿esta diferencia es un efecto real o es ruido que se invierte mañana?"</strong>
             </p>
           </div>
-
-          <div className="p-3 rounded-lg bg-slate-950/50 border border-dashed border-slate-700">
-            <p className="text-[11px] text-slate-400 leading-relaxed">
-              Cada vez que un sistema decide — un botón, un modelo, una alerta — hay un juez y hay un error
-              posible. Hoy vamos a ver el <strong className="text-slate-300">rulebook</strong>: cuál es el riesgo que
-              aceptamos y cuánta evidencia vio la máquina.
-            </p>
-          </div>
         </div>
       </div>
 
       <NotaTecnica>
-        H₀ es el <strong>estado por defecto</strong> (sin efecto, sin diferencia, sin cambio) y H₁ la afirmación que se
-        quiere sostener. La <strong>pre-especificación</strong> —fijar α y la dirección de H₁ antes de recoger los
-        datos— es lo que separa una prueba de una búsqueda de significatividad.
+        H₀ es el <strong>estado por defecto</strong> y H₁ la afirmación que se quiere sostener. Fijar α y la dirección
+        de H₁ <strong>antes</strong> de recoger los datos separa una prueba de una búsqueda de significatividad:
+        elegir unilateralidad reduce el p-valor a la mitad, pero definirla después de verlos es <strong>p-hacking</strong>.
       </NotaTecnica>
     </div>
   );
 }
 
 // ==================================================================
-// 5.1 · H₀ y H₁: las dos aposturas
-// ==================================================================
-export function SlideHipotesisH0H1() {
-  const [bilateral, setBilateral] = useState(true);
-
-  return (
-    <div className="max-w-5xl mx-auto px-4 py-4 space-y-5">
-      <div className="border-b border-slate-800 pb-3">
-        <span className="text-xs uppercase tracking-wider text-rose-400 font-bold">Plantear la pregunta</span>
-        <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-          H₀ y H₁: las dos aposturas
-        </h2>
-        <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
-          La dirección de la alternativa no es un detalle: es parte de la hipótesis.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
-          <div className="flex items-center justify-between">
-            <Etiqueta>H₀ · Hipótesis nula</Etiqueta>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-950 border border-slate-800 text-slate-400">
-              estado por defecto
-            </span>
-          </div>
-          <p className="text-lg font-black text-slate-100">
-            <span className="text-slate-500 font-bold">H₀:</span> p<sub>B</sub> = p<sub>A</sub>
-          </p>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            "La conversión de la variante B es igual a la de A." Cualquier variación observada se atribuye al azar.
-          </p>
-        </div>
-
-        <div className="p-5 rounded-2xl bg-rose-950/20 border border-rose-900/40 space-y-3">
-          <div className="flex items-center justify-between">
-            <Etiqueta>H₁ · Hipótesis alternativa</Etiqueta>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/15 border border-rose-500/30 text-rose-300">
-              lo que se quiere demostrar
-            </span>
-          </div>
-          <p className="text-lg font-black text-rose-200">
-            <span className="text-rose-400/70 font-bold">H₁:</span>{' '}
-            {bilateral ? (
-              <>p<sub>B</sub> ≠ p<sub>A</sub></>
-            ) : (
-              <>p<sub>B</sub> &gt; p<sub>A</sub></>
-            )}
-          </p>
-          <p className="text-xs text-slate-300 leading-relaxed">
-            {bilateral
-              ? 'Bilateral: me basta con que sean distintas. Es el estándar cuando no sabemos de antemano en qué dirección.'
-              : 'Unilateral: solo me interesa que B sea mejor. Es más estricto, pero detecta mejor efectos en esa dirección.'}
-          </p>
-        </div>
-      </div>
-
-      {/* Selector de alternativa */}
-      <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
-        <Etiqueta>¿Qué querías demostrar antes de ver los datos?</Etiqueta>
-        <div className="flex flex-wrap items-center gap-2">
-          {[
-            { id: true, pre: 'Bilateral · ', post: <>p<sub>B</sub> ≠ p<sub>A</sub></> },
-            { id: false, pre: 'Unilateral · ', post: <>p<sub>B</sub> &gt; p<sub>A</sub></> },
-          ].map((opt) => (
-            <button
-              key={String(opt.id)}
-              onClick={() => setBilateral(opt.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
-                bilateral === opt.id
-                  ? 'bg-rose-500 text-white border-rose-400 shadow-sm'
-                  : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200'
-              }`}
-            >
-              {opt.pre}
-              {opt.post}
-            </button>
-          ))}
-        </div>
-        <p className="text-xs text-slate-400 leading-relaxed">
-          Con los datos del caso (z = 2.3054): p bilateral = <strong className="text-cyan-300">0.0211</strong> ·
-          p unilateral = <strong className="text-cyan-300">0.0106</strong>. La misma evidencia, dos preguntas.
-        </p>
-      </div>
-
-      <NotaTecnica>
-        Elegir unilateralidad <strong>reduce a la mitad</strong> el p-valor, pero solo es legítimo si la dirección
-        estaba fijada <em>antes</em> de observar los datos. Definirla después de ver que "el efecto va hacia allá" es
-        p-hacking: estás usando los datos dos veces.
-      </NotaTecnica>
-    </div>
-  );
-}
-
-// ==================================================================
-// 5.2 · α: el riesgo que fijas antes de ver los datos
+// 5.1 · α: el área que decides tolerar
 // ==================================================================
 export function SlideAlphaCampana() {
   const [alpha, setAlpha] = useState(0.05);
@@ -411,7 +366,7 @@ export function SlideAlphaCampana() {
 }
 
 // ==================================================================
-// 5.3 · El p-valor: la pregunta de la sorpresa
+// 5.2 · El p-valor: la pregunta de la sorpresa
 // ==================================================================
 export function SlidePValorSorpresa() {
   const [zObs, setZObs] = useState(2.3054);
@@ -419,8 +374,8 @@ export function SlidePValorSorpresa() {
   const pBil = 2 * pUni;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-4 space-y-5">
-      <div className="border-b border-slate-800 pb-3">
+    <div className="max-w-5xl mx-auto px-4 py-3 space-y-3">
+      <div className="border-b border-slate-800 pb-2.5">
         <span className="text-xs uppercase tracking-wider text-rose-400 font-bold">La evidencia</span>
         <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
           El p-valor: ¿qué tan raro fue eso si nada cambió?
@@ -431,15 +386,15 @@ export function SlidePValorSorpresa() {
       </div>
 
       {/* La pregunta */}
-      <div className="p-4 rounded-2xl bg-rose-950/20 border border-rose-900/40 text-center">
+      <div className="p-3 rounded-2xl bg-rose-950/20 border border-rose-900/40 text-center">
         <p className="text-base sm:text-lg font-black text-rose-100 leading-snug">
           "¿Qué tan raro o sorprendente es el resultado que obtuvimos{' '}
           <span className="text-rose-300">si asumimos que nada cambió</span> (H₀ es cierta)?"
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2 p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2 p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2.5">
           <div className="flex items-center justify-between">
             <Etiqueta>Distribución nula · zona de sorpresa</Etiqueta>
             <span className="text-xs font-mono text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
@@ -504,13 +459,6 @@ export function SlidePValorSorpresa() {
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2">
-            <Etiqueta>La analogía de apoyo</Etiqueta>
-            <p className="text-[11px] text-slate-300 leading-relaxed">
-              La lotería: ver un número tan raro como el que salió, cuando el sorteo funciona como se supone, tiene
-              un p-valor de 0.02. El tribunal se agota como analogía aquí.
-            </p>
-          </div>
         </div>
       </div>
 
@@ -523,7 +471,7 @@ export function SlidePValorSorpresa() {
 }
 
 // ==================================================================
-// 5.4 · La regla de decisión
+// 5.3 · La regla de decisión
 // ==================================================================
 export function SlideReglaDecision() {
   const [alpha, setAlpha] = useState(0.05);
@@ -657,7 +605,7 @@ export function SlideReglaDecision() {
 }
 
 // ==================================================================
-// 5.5 · Lo que el p-valor NO es
+// 5.4 · Lo que el p-valor NO es
 // ==================================================================
 export function SlidePValorNoEs() {
   const errores = [
@@ -732,7 +680,7 @@ export function SlidePValorNoEs() {
 }
 
 // ==================================================================
-// 5.6 · En software: el criterio automatizado
+// 5.5 · En software: el criterio automatizado
 // ==================================================================
 export function SlideCriterioSoftware() {
   const [alpha, setAlpha] = useState(0.05);
@@ -860,7 +808,7 @@ else:
 }
 
 // ==================================================================
-// 5.7 · Cierre: cheat sheet y 3 reglas
+// 5.6 · Cierre: cheat sheet y 3 reglas
 // ==================================================================
 export function SlideCierreT05() {
   const filas = [
