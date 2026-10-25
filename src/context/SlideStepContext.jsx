@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useIsPresent } from 'framer-motion';
 
 const SlideStepContext = createContext({
   step: 0,
@@ -50,15 +51,27 @@ export function useSlideStep() {
 }
 
 /**
+ * Registra cuántos pasos internos tiene la diapositiva.
+ * Solo registra si la diapositiva está presente: con AnimatePresence
+ * mode="wait" la diapositiva saliente sigue montada durante su animación
+ * y, sin este filtro, le dejaría sus pasos a la siguiente.
+ */
+export function useRegisterSteps(n) {
+  const { registerMaxSteps } = useSlideStep();
+  const isPresent = useIsPresent();
+
+  useEffect(() => {
+    if (isPresent) registerMaxSteps(n);
+  }, [n, isPresent, registerMaxSteps]);
+}
+
+/**
  * Componente RevealStep para mostrar elementos progresivamente.
  * stepIndex: A partir de qué paso (1, 2, 3...) se vuelve visible.
  */
 export function RevealStep({ stepIndex, children, className = '' }) {
-  const { step, registerMaxSteps } = useSlideStep();
-
-  useEffect(() => {
-    registerMaxSteps(stepIndex);
-  }, [stepIndex, registerMaxSteps]);
+  const { step } = useSlideStep();
+  useRegisterSteps(stepIndex);
 
   const isVisible = step >= stepIndex;
 

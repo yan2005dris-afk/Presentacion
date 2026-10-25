@@ -2,7 +2,9 @@ import React from 'react';
 import {
   SlidePortada2, SlideIndice2, SlideConceptoInferencia, SlideIntroSeccion,
   SlideInferencialFundamentos, SlidePoissonNegocio,
-  SlideNormalFundamentos, SlideNormalCampanaLectura, SlideNormalSoftwareCaso, SlideTLC,
+  SlideNormalFundamentos, SlideNormalCampanaLectura, SlideNormalSoftwareCaso,
+  SlideTLCConcepto, SlideTLCTamanoMuestra, SlideTLCPropiedades, SlideTLCImportancia,
+  SlideTLCEscenario, SlideTLCPasos, SlideTLCTablaZ, SlideTLCConclusion,
   SlideIntervalosConfianza,
   SlideDecisionRiesgo, SlideAlphaCampana, SlidePValorSorpresa,
   SlideReglaDecision, SlidePValorNoEs, SlideCriterioSoftware, SlideCierreT05,
@@ -19,7 +21,7 @@ export const SECTIONS_STATS = [
   { id: 0, title: 'Portada e Índice', member: 'Grupo 3 y 4', color: 'from-blue-600 to-indigo-600', bloque: 'Apertura', minutos: 4 },
   { id: 1, title: 'Distribuciones de Probabilidad & Poisson', member: 'Said', color: 'from-cyan-500 to-blue-500', bloque: 'A · Describir', minutos: 5 },
   { id: 2, title: 'Distribución Normal & Gauss en Software', member: 'Yandris', color: 'from-purple-500 to-indigo-500', bloque: 'A · Describir', minutos: 6 },
-  { id: 3, title: 'Teorema del Límite Central (TLC)', member: 'Allison', color: 'from-teal-500 to-emerald-500', bloque: 'A · Describir', minutos: 4 },
+  { id: 3, title: 'Teorema del Límite Central (TLC)', member: 'Alisson', color: 'from-teal-500 to-emerald-500', bloque: 'A · Describir', minutos: 4 },
   { id: 4, title: 'Margen de Error & Intervalos', member: 'Gino', color: 'from-amber-500 to-orange-500', bloque: 'B · Afirmar', minutos: 4 },
   { id: 5, title: 'Nivel de Significancia (α) & P-Valor', member: 'Andy', color: 'from-rose-500 to-pink-500', bloque: 'C · Decidir', minutos: 18 },
   { id: 6, title: 'Aplicaciones & Cierre', member: 'Grupo 3 y 4', color: 'from-blue-600 to-cyan-500', bloque: 'D · Usar', minutos: 6 },
@@ -31,7 +33,7 @@ export const getStatsSlides = (onSelectSection) => [
     section: 0,
     title: 'Estadística Inferencial y Toma de Decisiones',
     subtitle: 'Exposición Oficial · Grupo 3 y 4',
-    speaker: 'Bienvenidos a la presentación de Estadística Inferencial. Hoy analizaremos el paso de los datos muestrales a decisiones certeras en software y negocio: Said, Yandris, Allison, Gino y Andy abordaremos cada fundamento.',
+    speaker: 'Bienvenidos a la presentación de Estadística Inferencial. Hoy analizaremos el paso de los datos muestrales a decisiones certeras en software y negocio: Said, Yandris, Alisson, Gino y Andy abordaremos cada fundamento.',
     component: <SlidePortada2 />
   },
   {
@@ -39,7 +41,7 @@ export const getStatsSlides = (onSelectSection) => [
     section: 0,
     title: 'Agenda de Estadística Inferencial',
     subtitle: 'Asignación de Temas por Expositor',
-    speaker: 'Nuestra agenda está distribuida entre Said (Distribuciones y Poisson), Yandris (Distribución Normal en Sistemas y Monitoreo), Allison (Teorema del Límite Central), Gino (Intervalos de Confianza) y Andy (Significancia y P-Valor).',
+    speaker: 'Nuestra agenda está distribuida entre Said (Distribuciones y Poisson), Yandris (Distribución Normal en Sistemas y Monitoreo), Alisson (Teorema del Límite Central), Gino (Intervalos de Confianza) y Andy (Significancia y P-Valor).',
     component: <SlideIndice2 onSelectSection={onSelectSection} secciones={SECTIONS_STATS} />
   },
   {
@@ -113,7 +115,7 @@ export const getStatsSlides = (onSelectSection) => [
           'Ejemplo Real en Software: POST /api/v1/users',
         ]}
         deja="La forma de la distribución ya está: una campana con un centro y una dispersión."
-        puente="Una campana descrita es una campana asumida: el Teorema del Límite Central (Allison) nos dice cuándo vale usarla."
+        puente="Una campana descrita es una campana asumida: el Teorema del Límite Central (Alisson) nos dice cuándo vale usarla."
       />
     )
   },
@@ -148,35 +150,102 @@ export const getStatsSlides = (onSelectSection) => [
     component: <SlideNormalSoftwareCaso />
   },
 
-  // === HANDOFF · SECCION 3 · ALLISON ===
+  // === HANDOFF · SECCION 3 · ALISSON ===
   {
     id: 'stats-3.h',
     section: 3,
-    title: 'Allison · Teorema del Límite Central (TLC)',
+    title: 'Alisson · Teorema del Límite Central (TLC)',
     subtitle: 'Bloque A · Describir · Apertura de sección',
-    speaker: 'Toca a Allison: el puente de la inferencia, por que las medias de muestras grandes se parecen a una campana.',
+    speaker: 'Toca a Alisson: el puente de la inferencia, por que las medias de muestras grandes se parecen a una campana.',
     component: (
       <SlideIntroSeccion
-        expositor="Allison"
+        expositor="Alisson"
         bloque="A · Describir"
         titulo="Teorema del Límite Central (TLC)"
         resumen="El puente de la inferencia: por qué las medias de muestras grandes se parecen a una campana aunque el origen de los datos no lo sea."
         tono="teal"
-        temas={['Teorema del Límite Central (TLC)']}
+        temas={[
+          'Introducción y Concepto Clave',
+          'Condiciones de Aplicación',
+          'Propiedades Matemáticas',
+          '¿Por qué es tan Importante en la Práctica?',
+          'Ejemplo en Software: Latencia de un Microservicio',
+          'Paso a Paso: del TLC al Valor Z',
+          'Paso 4: Probabilidad con la Tabla Z',
+          'Conclusión: ¿Azar o Degradación del Servidor?',
+        ]}
         deja="La media de una muestra grande se comporta como una normal, aunque los datos de origen no lo fueran."
         puente="Con una campana ya podemos acotar lo que no sabemos: intervalos de confianza (Gino)."
       />
     )
   },
 
-  // === ALLISON: TEOREMA DEL LÍMITE CENTRAL (TLC) ===
+  // === ALISSON: TEOREMA DEL LÍMITE CENTRAL (TLC) ===
+  // Pasos internos (flechas): 3.0 desorden → forma original → campana;
+  // 3.1 recorre n = 1, 5, 10, 30, 100; 3.2 a 3.7 revelan tarjeta por tarjeta.
   {
     id: 'stats-3.0',
     section: 3,
     title: 'Teorema del Límite Central (TLC)',
-    subtitle: 'Expositor: Allison · Normalidad de Medias Muestrales y Caso E-Commerce (n ≥ 30)',
-    speaker: 'Hola, soy Allison. El Teorema del Límite Central es el puente de la inferencia: sin importar qué tan asimétricos sean los datos de origen, el promedio de muestras grandes (n >= 30) siempre convergerá a una campana normal con error estándar sigma sobre raíz de n.',
-    component: <SlideTLC />
+    subtitle: 'Expositora: Alisson · Slide 3.0 · Introducción y Concepto Clave',
+    speaker: '¡Buenos días a todos! Hoy nos enfocaremos en uno de los pilares más importantes de la estadística: el Teorema del Límite Central. Para entenderlo de forma sencilla, el TLC establece que si extraemos múltiples muestras aleatorias e independientes de una población, la distribución de sus medias muestrales se aproximará a una distribución normal, con forma de campana de Gauss. Lo verdaderamente sorprendente de este teorema es que se cumple sin importar la forma que tenga la población original, ya sea asimétrica, uniforme o discreta.',
+    component: <SlideTLCConcepto />
+  },
+  {
+    id: 'stats-3.1',
+    section: 3,
+    title: 'Condiciones de Aplicación',
+    subtitle: 'Expositora: Alisson · Slide 3.1 · Aleatoriedad, Independencia, n ≥ 30 y Varianza Finita',
+    speaker: 'Para aplicar el TLC en la práctica, los datos deben cumplir cuatro condiciones, y las podemos ver directamente en este histograma. Cada barra cuenta cuántas medias muestrales cayeron en ese rango. Primero, aleatoriedad: los datos se seleccionan completamente al azar; por eso las medias se reparten alrededor de la media poblacional, la línea punteada, y no se cargan hacia un lado. Segundo, independencia: las observaciones no influyen entre sí, así que cada media que se suma a una barra aporta información nueva y no repite a otra. Tercero, el tamaño de muestra, y aquí lo vemos en vivo. Con n igual a 1, cada media es un solo dato y el histograma tiene la misma forma asimétrica de la población original. Con n igual a 5 y a 10 la forma empieza a cambiar, pero todavía no está garantizada. A partir de n igual a 30 aparece la campana normal, y con n igual a 100 la campana es aún más estrecha. Cuarto, varianza finita: la población original tiene una varianza conocida y delimitada; gracias a eso la dispersión de las medias disminuye a medida que crece n, y las barras se concentran cada vez más cerca de la media poblacional. Cuando se cumplen las cuatro condiciones, el histograma de las medias toma la forma de una campana de Gauss.',
+    component: <SlideTLCTamanoMuestra />
+  },
+  {
+    id: 'stats-3.2',
+    section: 3,
+    title: 'Propiedades Matemáticas',
+    subtitle: 'Expositora: Alisson · Slide 3.2 · Normalidad, Media Centrada y Error Estándar',
+    speaker: 'Al cumplirse las condiciones anteriores, la distribución de las medias muestrales adquiere tres propiedades clave. Uno, normalidad: la distribución de las medias se aproxima a una campana de Gauss, independientemente de la forma poblacional original. Dos, media centrada: la media de las medias muestrales es igual a la media poblacional, mu sub X barra igual a mu. Y tres, error estándar: la dispersión disminuye a medida que aumenta el tamaño de la muestra, sigma sub X barra igual a sigma sobre raíz de n.',
+    component: <SlideTLCPropiedades />
+  },
+  {
+    id: 'stats-3.3',
+    section: 3,
+    title: '¿Por qué es tan Importante en la Práctica?',
+    subtitle: 'Expositora: Alisson · Slide 3.3 · Beneficios en el Desarrollo de Software',
+    speaker: 'La verdadera utilidad del TLC radica en que nos permite realizar inferencias sobre toda una población utilizando únicamente una muestra, evitando el costo y la imposibilidad de analizar cada elemento individual. Gracias al TLC, podemos aplicar pruebas estadísticas paramétricas, como pruebas t o ANOVA, que asumen normalidad en los datos, incluso cuando trabajamos con procesos reales cuyos datos originales no son normales. En desarrollo de software, eso significa estimar el tiempo de respuesta de toda una API midiendo solo una muestra de peticiones, sin procesar millones de registros; comparar dos versiones de una aplicación en una prueba A/B aunque las latencias sean asimétricas; y, así como en finanzas permite gestionar el riesgo estudiando subconjuntos representativos, en software permite monitorear el rendimiento y el riesgo de caídas del sistema con subconjuntos representativos de métricas.',
+    component: <SlideTLCImportancia />
+  },
+  {
+    id: 'stats-3.4',
+    section: 3,
+    title: 'Ejemplo en Software: Latencia de un Microservicio (API REST)',
+    subtitle: 'Expositora: Alisson · Slide 3.4 · Escenario, Pregunta y Datos',
+    speaker: 'Veamos un ejemplo práctico del TLC en desarrollo de software. Un equipo de ingeniería monitorea el tiempo de respuesta, o latencia, de un microservicio de autenticación. Las peticiones individuales de los usuarios tienen una distribución asimétrica a la derecha: la gran mayoría responde rápido en milisegundos, pero algunas sufren retardos por la base de datos o el almacenamiento en caché. La pregunta: si la herramienta de monitoreo toma una muestra aleatoria de n igual a 100 peticiones, cuál es la probabilidad de que el tiempo medio de respuesta de esa muestra supere los 210 milisegundos? Los datos: media poblacional, 200 milisegundos; desviación estándar poblacional, 50 milisegundos; y la distribución original es asimétrica, no normal.',
+    component: <SlideTLCEscenario />
+  },
+  {
+    id: 'stats-3.5',
+    section: 3,
+    title: 'Paso a Paso: del TLC al Valor Z',
+    subtitle: 'Expositora: Alisson · Slide 3.5 · Pasos 1 a 3 · Error estándar 5 ms · Z = +2.0',
+    speaker: 'Paso uno, aplicar las propiedades del TLC: como n igual a 100 es mayor o igual a 30 y las peticiones son independientes, la muestra es suficientemente grande; y aunque la población original es asimétrica, el TLC garantiza que la media de la muestra se comportará como una distribución normal. Paso dos, calcular el error estándar, que mide la variabilidad de las medias muestrales: es la desviación estándar poblacional dividida por la raíz del tamaño muestral, 50 entre raíz de 100, es decir 50 entre 10, igual a 5 milisegundos. Paso tres, aplicar la fórmula de estandarización Z del TLC: para encontrar la probabilidad, convertimos la media muestral de 210 milisegundos a un valor de la normal estándar. Z es igual a 210 menos 200, entre 5: 10 entre 5, igual a más 2.',
+    component: <SlideTLCPasos />
+  },
+  {
+    id: 'stats-3.6',
+    section: 3,
+    title: 'Paso 4: Calcular la Probabilidad con la Tabla Z',
+    subtitle: 'Expositora: Alisson · Slide 3.6 · P(Z ≤ 2.0) = 0.9772 · P(Z > 2.0) = 0.0228',
+    speaker: 'Paso cuatro, calcular la probabilidad. Buscamos la probabilidad de que la media sea mayor a 210 milisegundos, es decir, P de Z mayor a 2. Consultando la tabla Z, vamos a la fila 2.0 y a la columna 0.00: el área a la izquierda es 0.9772. Por lo tanto, el área a la derecha es 1 menos 0.9772, igual a 0.0228, es decir, 2.28 por ciento.',
+    component: <SlideTLCTablaZ />
+  },
+  {
+    id: 'stats-3.7',
+    section: 3,
+    title: 'Conclusión: ¿Azar o Degradación del Servidor?',
+    subtitle: 'Expositora: Alisson · Slide 3.7 · Resultado y Utilidad en SLA / Alertas',
+    speaker: 'Conclusión: existe únicamente un 2.28 por ciento de probabilidad de que el promedio de un bloque de 100 peticiones supere los 210 milisegundos por simple fluctuación aleatoria. Utilidad práctica en software: si el sistema de monitoreo detecta que el promedio de 100 peticiones supera los 210 milisegundos, el equipo de DevOps sabe que la probabilidad de que ocurra por azar es casi nula. Esto significa que realmente hay una degradación o fallo en el servidor, y se debe activar una alerta automática de rendimiento.',
+    component: <SlideTLCConclusion />
   },
 
   // === HANDOFF · SECCION 4 · GINO ===

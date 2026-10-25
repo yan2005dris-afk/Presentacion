@@ -45,7 +45,7 @@ export function SlidePortada2() {
         {[
           { name: 'Said', topic: 'Distribuciones' },
           { name: 'Yandris', topic: 'Dist. Normal' },
-          { name: 'Allison', topic: 'TLC' },
+          { name: 'Alisson', topic: 'TLC' },
           { name: 'Gino', topic: 'Intervalos' },
           { name: 'Andy', topic: 'Significancia & P-Valor' },
         ].map((member) => (
@@ -83,11 +83,11 @@ export function SlideIndice2({ onSelectSection, secciones = [] }) {
     },
     {
       idx: 3,
-      speaker: "Allison",
+      speaker: "Alisson",
       color: "border-teal-500/40 text-teal-400",
       title: "3. Teorema del Límite Central (TLC)",
       desc: "Convergencia de medias (n ≥ 30), 4 condiciones y caso resuelto de E-Commerce.",
-      tag: "Allison"
+      tag: "Alisson"
     },
     {
       idx: 4,

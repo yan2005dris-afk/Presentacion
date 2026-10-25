@@ -5,7 +5,7 @@
 
 Este documento es el que le faltaba al equipo. Dice, sin ambigüedad, **qué expone cada uno, cuánto
 tiempo lleva y qué le falta** para llegar al objetivo del sílabo. Las reorganizaciones son
-**aditivas**: no se ha editado el contenido de ninguna slide de Said, Yandris, Allison o Gino.
+**aditivas**: no se ha editado el contenido de ninguna slide de Said, Yandris, Alisson o Gino.
 
 ---
 
@@ -15,7 +15,7 @@ El deck ya no es una lista de seis temas sueltos. Son cuatro preguntas que se co
 
 | Bloque | Pregunta que contesta | Secciones | Quién |
 |---|---|---|---|
-| **A · Describir** | ¿Qué comportamiento tiene el dato? | P1 Said · P2 Yandris · P3 Allison | Said, Yandris, Allison |
+| **A · Describir** | ¿Qué comportamiento tiene el dato? | P1 Said · P2 Yandris · P3 Alisson | Said, Yandris, Alisson |
 | **B · Afirmar** | ¿Qué sabemos del parámetro real? | P4 | Gino |
 | **C · Decidir** | ¿El efecto es real o es ruido? | P5 | Andy |
 | **D · Usar** | ¿Qué hago con esa decisión en software? | P6 | Equipo (contrastes, aplicaciones, cierre) |
@@ -38,7 +38,7 @@ eso entrega el bloque al equipo en el contraste de hipótesis.
 | Concepto de inferencia (población / muestra / error de muestreo) | Apertura | ✅ `stats-0.2` (listo, sin dueño) |
 | Distribuciones de probabilidad, Poisson, colas | A | ✅ Said (2 slides) |
 | Distribución normal, campana, Z-score, regla 68-95-99.7 | A | ✅ Yandris (3 slides) |
-| Teorema del límite central | A | ⚠️ Allison (1 slide) — ver §3 |
+| Teorema del límite central | A | ⚠️ Alisson (1 slide) — ver §3 |
 | Margen de error e intervalos de confianza | B | ⚠️ Gino (1 slide) — ver §3 |
 | Nivel de significancia (α) y p-valor, criterio en software | C | ✅ Andy (7 slides) |
 | Contraste de hipótesis (T-test, ANOVA, χ²) | D | ✅ Equipo (`stats-6.0`) |
@@ -53,7 +53,7 @@ eso entrega el bloque al equipo en el contraste de hipótesis.
 | 0 | Apertura | P0 Portada e Índice | Grupo 3 y 4 | 3 | 4 | `stats-0.0` … `stats-0.2` |
 | 1 | A · Describir | P1 Distribuciones & Poisson | Said | 3 | 5 | `stats-1.h`, `stats-1.0`, `stats-1.1` |
 | 2 | A · Describir | P2 Normal & Gauss | Yandris | 4 | 6 | `stats-2.h`, `stats-2.0` … `stats-2.2` |
-| 3 | A · Describir | P3 TLC | Allison | 2 | 4 | `stats-3.h`, `stats-3.0` |
+| 3 | A · Describir | P3 TLC | Alisson | 2 | 4 | `stats-3.h`, `stats-3.0` |
 | 4 | B · Afirmar | P4 Intervalos | Gino | 2 | 4 | `stats-4.h`, `stats-4.0` |
 | 5 | C · Decidir | P5 α y p-valor | Andy | 8 | 18 | `stats-5.h`, `stats-5.0` … `stats-5.6` |
 | 6 | D · Usar | P6 Contraste, aplicaciones, cierre | Grupo 3 y 4 | 4 | 6 | `stats-6.h`, `stats-6.0` … `stats-6.2` |
@@ -76,14 +76,14 @@ continuas (rango infinito) · Poisson con λ, flujo normal, riesgo de cola y cap
 **Lo que le falta** (1 slide):
 - **La binomial con fórmula e interpretación** — hoy solo se nombra junto a Poisson, sin P(X = k).
 - **La aproximación Poisson → Normal**, que es el puente natural hacia el bloque de Yandris: una
- Requests/s con λ = 30 ya es normal, y eso justifica el TLC de Allison.
+ Requests/s con λ = 30 ya es normal, y eso justifica el TLC de Alisson.
 
 ### Yandris — 3 slides → objetivo 3 ✅
 **Ya cubre**: μ y σ · la anatomía de la fórmula con código Python · franjas ±1σ/±2σ/±3σ y formas de
 campana · el caso real `POST /api/v1/users` con suma de demoras y Z-score contra el SLA.
 **Le falta**: nada obligatorio. *Opcional*: una slide de percentiles y tabla de valores Z.
 
-### Allison — 1 slide → objetivo 3
+### Alisson — 1 slide → objetivo 3
 **Ya cubre**: el TLC, el error estándar σ/√n y el caso e-commerce con n ≥ 30.
 **Lo que le falta** (2 slides):
 - **Las 4 condiciones del TLC, una por una y verificables.** Hoy se mencionan de pasada: no se puede
@@ -110,7 +110,7 @@ n ≈ 5.519 · 64.15 %.
 ### Grupo 3 y 4 — bloque coral
 Contrastes (T-test, ANOVA, χ²), aplicaciones (A/B testing, feature selection, pipelines) y cierre.
 **Lo que hace falta**: que **cada bloque deje un caso para el coral**. Said deja Poisson en colas,
-Yandris deja la normal, Allison deja el TLC, Gino deja los intervalos y Andy deja el criterio de
+Yandris deja la normal, Alisson deja el TLC, Gino deja los intervalos y Andy deja el criterio de
 decisión. El contraste se arma con esos cinco.
 
 ---
@@ -201,7 +201,7 @@ Se arreglan con padding, sin tocar una palabra del contenido.
 | # | No se toca | Por qué |
 |---|---|---|
 | D1 | El deck SIMD (`src/slides/`) | No pertenece a esta exposición |
-| D2 | El contenido de las slides de Said, Yandris, Allison y Gino | Es su material y lo están editando; el rebalanceo se hace con piezas aditivas |
+| D2 | El contenido de las slides de Said, Yandris, Alisson y Gino | Es su material y lo están editando; el rebalanceo se hace con piezas aditivas |
 | D3 | `SlideHipotesisPValor` | Se conserva como respaldo; su contenido quedó repartido |
 | D4 | Dependencias (`recharts`, `d3`, …) | Todo SVG a mano, como el resto del deck |
 | D5 | `informacionT05.md` y `contexto.md` | Solo las correcciones ya aplicadas |
