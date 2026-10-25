@@ -4,6 +4,7 @@ import {
   Scale, Target, CheckCircle2, XCircle, AlertTriangle, Mic, Code2,
   ShieldCheck, TrendingUp, Ban, Lightbulb, Gavel, ChevronRight
 } from 'lucide-react';
+import { normPdf, normCdf, zCritico } from './stats';
 
 // ==========================================
 // === ANDY — NIVEL DE SIGNIFICANCIA (α) Y P-VALOR ===
@@ -13,41 +14,7 @@ import {
 // Caso que corre por todas las slides:
 //   E-commerce, botón de checkout. A: 400/4000 (10.0%) · B: 464/4000 (11.6%)
 //   z = 2.3054 · p bilateral = 0.0211 · p unilateral = 0.0106
-
-// ───────── Helpers estadísticos ─────────
-const SQRT2PI = Math.sqrt(2 * Math.PI);
-
-function normPdf(z) {
-  return Math.exp(-(z * z) / 2) / SQRT2PI;
-}
-
-// Aproximación de Abramowitz & Stegun 7.1.26 para erf
-function erf(x) {
-  const sign = x < 0 ? -1 : 1;
-  const ax = Math.abs(x);
-  const t = 1 / (1 + 0.3275911 * ax);
-  const y =
-    1 -
-    ((((1.061405429 * t - 1.453152027) * t + 1.421413741) * t - 0.284496736) * t + 0.254829592) *
-      t *
-      Math.exp(-ax * ax);
-  return sign * y;
-}
-
-function normCdf(z) {
-  return 0.5 * (1 + erf(z / Math.SQRT2));
-}
-
-// z crítico para una alfa bilateral (cola两侧)
-function zCritico(alpha) {
-  const objetivo = 1 - alpha / 2;
-  let lo = 0, hi = 6;
-  for (let i = 0; i < 60; i++) {
-    const mid = (lo + hi) / 2;
-    if (normCdf(mid) < objetivo) lo = mid; else hi = mid;
-  }
-  return (lo + hi) / 2;
-}
+// Toda la matemática vive en ./stats.js (funciones puras, sin JSX).
 
 // ───────── Campana de Gauss (SVG) ─────────
 // VIEW = 800 x 300 ; eje x: z ∈ [-4, 4] ; eje y: pdf escalado a 240 px
