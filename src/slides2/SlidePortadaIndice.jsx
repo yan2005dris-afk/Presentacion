@@ -63,7 +63,7 @@ export function SlidePortada2() {
   );
 }
 
-export function SlideIndice2({ onSelectSection }) {
+export function SlideIndice2({ onSelectSection, secciones = [] }) {
   const items = [
     {
       idx: 1,
@@ -115,37 +115,75 @@ export function SlideIndice2({ onSelectSection }) {
     }
   ];
 
+  const metaDe = (id) => secciones.find((s) => s.id === id);
+  const totalMin = secciones.reduce((acc, s) => acc + (s.minutos || 0), 0);
+  const apertura = metaDe(0);
+
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6">
-      <div className="mb-6 text-center">
+    <div className="max-w-5xl mx-auto px-4 py-5">
+      <div className="mb-4 text-center">
         <h2 className="text-3xl font-extrabold text-white tracking-tight">Agenda de la Exposición</h2>
-        <p className="text-slate-400 text-sm mt-1">Distribución de temas y expositores · Grupo 3 y 4</p>
+        <p className="text-slate-400 text-sm mt-1">
+          Distribución de temas y expositores · Grupo 3 y 4
+          {totalMin > 0 && <span className="text-slate-500"> · ≈ {totalMin} min en total</span>}
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {items.map((item, i) => (
-          <motion.div
-            key={item.idx}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.07 }}
-            onClick={() => onSelectSection && onSelectSection(item.idx)}
-            className="group cursor-pointer p-4 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-blue-500/50 hover:bg-slate-800/60 transition-all duration-300"
-          >
-            <div className="flex items-center justify-between mb-1.5">
-              <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-950 border ${item.color}`}>
-                Expositor: {item.speaker}
-              </span>
-              <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
-            </div>
-            <h3 className="text-base font-bold text-slate-100 group-hover:text-blue-300 transition-colors">
-              {item.title}
-            </h3>
-            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-              {item.desc}
-            </p>
-          </motion.div>
-        ))}
+      {/* Apertura del deck: una banda, no una tarjeta */}
+      <div
+        onClick={() => onSelectSection && onSelectSection(0)}
+        className="group cursor-pointer mb-3 px-3.5 py-2.5 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex flex-col sm:flex-row sm:items-center gap-2 hover:bg-blue-500/15 transition-colors"
+      >
+        <div className="min-w-0">
+          <div className="text-sm font-bold text-blue-200">
+            0 · ¿Qué es la Estadística Inferencial?
+            <span className="text-slate-400 font-normal"> — población, muestra y error de muestreo</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 sm:ml-auto shrink-0">
+          {apertura && <span className="text-[10px] font-mono text-slate-400">≈ {apertura.minutos} min</span>}
+          <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-blue-500/40 text-blue-300 bg-slate-950/60">
+            {apertura?.bloque || 'Apertura'}
+          </span>
+          <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-blue-400 transition-all" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {items.map((item, i) => {
+          const meta = metaDe(item.idx);
+          return (
+            <motion.div
+              key={item.idx}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.07 }}
+              onClick={() => onSelectSection && onSelectSection(item.idx)}
+              className="group cursor-pointer p-3 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-blue-500/50 hover:bg-slate-800/60 transition-all duration-300"
+            >
+              <div className="flex items-center justify-between mb-1.5 gap-2">
+                <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-950 border ${item.color}`}>
+                  Expositor: {item.speaker}
+                </span>
+                <div className="flex items-center gap-2">
+                  {meta && (
+                    <span className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border bg-slate-950/60 ${item.color}`}>
+                      {meta.bloque}
+                    </span>
+                  )}
+                  {meta && <span className="text-[10px] font-mono text-slate-500">≈ {meta.minutos} min</span>}
+                  <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
+                </div>
+              </div>
+              <h3 className="text-base font-bold text-slate-100 group-hover:text-blue-300 transition-colors">
+                {item.title}
+              </h3>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                {item.desc}
+              </p>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );

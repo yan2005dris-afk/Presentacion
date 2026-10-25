@@ -1,4 +1,6 @@
 export * from './SlidePortadaIndice';
+export * from './SlideConceptoInferencia';
+export * from './SlideIntroSeccion';
 export * from './SlideDistribuciones';
 export * from './SlideNormalTLC';
 export * from './SlideIntervalosConfianza';
