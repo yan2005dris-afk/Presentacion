@@ -7,3 +7,4 @@ export * from './SlideIntervalosConfianza';
 export * from './SlideHipotesisPValor';
 export * from './SlideAlphaPValor';
 export * from './SlideABTestingAplicaciones';
+export * from './SlideTLCAlisson';

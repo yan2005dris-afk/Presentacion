@@ -16,7 +16,7 @@ Tu audiencia acaba de ver:
 
 - **Said**: qué es una distribución y cómo se modela lo que llega (Poisson, colas).
 - **Yandris**: la campana de Gauss: μ, σ, las franjas ±1σ/±2σ/±3σ y el Z-score.
-- **Allison**: el TLC — las medias de muestras grandes se parecen a una campana.
+- **Alisson**: el TLC — las medias de muestras grandes se parecen a una campana.
 - **Gino**: el intervalo de confianza. Su slide ya muestra literalmente **«IC al 95 % (α = 0.05)»**.
 
 **Tu rol**: el bloque que convierte evidencia en decisión. Gino te dejó acotado el parámetro;
@@ -444,7 +444,7 @@ entregar el bloque al equipo: tu `stats-5.6` cierra **tu tema**, no la exposici�
 | Tema | Dónde está | Nota |
 |---|---|---|
 | T-Test, ANOVA, Chi-Cuadrado | `stats-6.0` (sección 6, **Equipo Completo**) | Es el sílabo «Contraste de hipótesis» y lo explica **todo el grupo**, no solo Andy. Se movió ahí desde la sección 5. |
-| Poisson, Normal, TLC, intervalos | Secciones 1–4 (Said, Yandris, Allison, Gino) | Solo los mencionas en una frase (α = el 5 % del intervalo de Gino) |
+| Poisson, Normal, TLC, intervalos | Secciones 1–4 (Said, Yandris, Alisson, Gino) | Solo los mencionas en una frase (α = el 5 % del intervalo de Gino) |
 | A/B testing, feature selection, riesgo | `stats-6.1` (equipo) | Tú solo lo mencionas como caso de uso, 30 s |
 | Qué es la inferencia (población / muestra) | `stats-0.2` (apertura, Grupo 3 y 4) | El marco lo pone el equipo antes de tu bloque |
 | Cierre de la exposición | `stats-6.2` (equipo) | No lo repitas. Tu `stats-5.6` cierra **tu tema**, no la exposición |

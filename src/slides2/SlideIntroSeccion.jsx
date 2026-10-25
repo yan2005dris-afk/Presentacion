@@ -5,7 +5,7 @@ import { ChevronRight, Layers } from 'lucide-react';
 // === PLANTILLA DE HANDOFF (apertura de sección) ===
 // ==========================================
 // Archivo nuevo y aditivo: no modifica ninguna slide de Said, Yandris,
-// Allison o Gino. Solo les da una puerta de entrada a su bloque.
+// Alisson o Gino. Solo les da una puerta de entrada a su bloque.
 // Cada expositor puede instanciarla con sus propios textos:
 //
 //   <SlideIntroSeccion

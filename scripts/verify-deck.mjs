@@ -17,7 +17,7 @@ const URL = process.env.PREVIEW_URL || 'http://localhost:4173/';
 const SECCION_ANDY = 'P5';
 const VIEWPORT = { width: 1600, height: 900 };
 const MAX_ALTO = 694; // viewport útil 758 px − padding vertical del main (64 px)
-const TOTAL_SLIDES = 26;
+const TOTAL_SLIDES = 33;
 
 // La sección de Andy: handoff de apertura + sus 7 slides de trabajo.
 const TITULOS_ESPERADOS = [
@@ -35,7 +35,7 @@ const TITULOS_ESPERADOS = [
 const HANDOFFS_ESPERADOS = [
   'Said · Distribuciones de Probabilidad & Poisson',
   'Yandris · Distribución Normal & Gauss en Software',
-  'Allison · Teorema del Límite Central (TLC)',
+  'Alisson · Teorema del Límite Central (TLC)',
   'Gino · Margen de Error & Intervalos de Confianza',
   'Andy · Nivel de Significancia (α) & P-Valor',
   'Equipo · Contraste, Aplicaciones & Cierre',
@@ -118,8 +118,14 @@ for (let i = 0; i < TOTAL_SLIDES; i++) {
     })
   );
   textoDeck.push(await page.locator('main').innerText());
-  await page.keyboard.press('ArrowRight');
-  await page.waitForTimeout(520);
+  // Algunas slides tienen pasos internos (animaciones con las flechas):
+  // se pulsa hasta que cambie el título, con un tope por slide.
+  const actual = todosLosTitulos[todosLosTitulos.length - 1];
+  for (let p = 0; p < 12; p++) {
+    await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(520);
+    if ((await page.locator('header h1').innerText()) !== actual) break;
+  }
 }
 
 ok(
