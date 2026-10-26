@@ -70,7 +70,7 @@ export function SlideIndice2({ onSelectSection, secciones = [] }) {
       speaker: "Said",
       color: "border-cyan-500/40 text-cyan-400",
       title: "1. Distribuciones de Probabilidad & Poisson",
-      desc: "Minería de datos, variables discretas y gestión de colas de servidores.",
+      desc: "Minería de datos, variables discretas (Binomial/Poisson) y monitoreo epidemiológico (Dengue).",
       tag: "Said"
     },
     {
