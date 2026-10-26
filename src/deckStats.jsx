@@ -57,22 +57,23 @@ export const getStatsSlides = (onSelectSection) => [
   {
     id: 'stats-1.h',
     section: 1,
-    title: 'Said · Distribuciones de Probabilidad & Poisson',
+    title: 'Said · Distribuciones Discretas & Poisson',
     subtitle: 'Bloque A · Describir · Apertura de sección',
-    speaker: 'Empieza Said. Antes de decidir nada hay que saber que comportamiento esperar: cuanto llegaran las peticiones, cuanto se van a saturar los servidores. Eso es distribuciones.',
+    speaker: 'Empieza Said. Antes de decidir nada hay que saber qué comportamiento esperar: pasar de mirar el registro histórico a modelar la incertidumbre con distribuciones discretas como Poisson en emergencias de salud.',
     component: (
       <SlideIntroSeccion
         expositor="Said"
         bloque="A · Describir"
-        titulo="Distribuciones de Probabilidad & Poisson"
-        resumen="Antes de decidir hay que saber qué comportamiento esperar. Said abre el bloque de descripción: qué es una distribución y cómo se modela lo que llega a un servidor."
+        titulo="Distribuciones de Probabilidad & Negocio"
+        resumen="Pasar de mirar el histórico a predecir eventos futuros: variables discretas, modelos predictivos y gestión de colas con Poisson en salud (dengue)."
         tono="cyan"
         temas={[
-          'Distribuciones de Probabilidad: Concepto General',
-          'Distribución de Poisson & Gestión de Colas',
+          'Concepto General: ¿Qué es una Distribución de Probabilidad?',
+          'Variables Discretas en Negocio: Binomial y Poisson',
+          'Poisson en Salud: Monitoreo Epidemiológico de Dengue (λ = 5)',
         ]}
-        deja="Ya sabemos qué esperar: una distribución asigna una probabilidad a cada resultado posible."
-        puente="Con un modelo de la distribución, el siguiente paso es describir la forma más usada en software: la campana de Gauss (Yandris)."
+        deja="Una distribución asigna probabilidades a eventos discretos y permite anticipar picos críticos antes de que colapsen el sistema hospitalario."
+        puente="Con las distribuciones discretas comprendidas, pasamos a las continuas con la campana de Gauss (Yandris)."
       />
     )
   },
@@ -81,17 +82,17 @@ export const getStatsSlides = (onSelectSection) => [
   {
     id: 'stats-1.0',
     section: 1,
-    title: 'Distribuciones de Probabilidad: Concepto General',
-    subtitle: 'Expositor: Said · Minería de Datos, Variables Continuas vs Discretas',
-    speaker: 'Hola a todos, soy Said. Comenzamos definiendo qué es una distribución de probabilidad: la función matemática que nos permite anticipar comportamientos futuros en lugar de solo consultar históricos. En software, las variables discretas como usuarios o errores modelan la interacción.',
+    title: 'Distribuciones de Probabilidad & Variables Discretas',
+    subtitle: 'Expositor: Said · De la Minería de Datos a la Predicción (Binomial y Poisson)',
+    speaker: 'Hola a todos, soy Said. Hoy analizamos las distribuciones de probabilidad y su impacto en negocio y software. Una distribución no es solo un registro histórico; la minería de datos la usa para construir modelos predictivos. En lugar de preguntar cuántas peticiones tuvimos ayer, predecimos cuál es la probabilidad de que un pico tumbe el sistema. En negocio y software casi todas las interacciones son discretas: no hay 2.5 usuarios ni 3.4 errores. Aquí destacan la Binomial, para éxito o fracaso en intentos fijos, y Poisson, para eventos en intervalos continuos.',
     component: <SlideInferencialFundamentos />
   },
   {
     id: 'stats-1.1',
     section: 1,
-    title: 'Distribución de Poisson & Gestión de Colas',
-    subtitle: 'Expositor: Said · Modelado de Solicitudes y Capacidad de Servidores',
-    speaker: 'Continuando con las distribuciones discretas, la de Poisson es la base de la teoría de colas. Permite estimar la probabilidad de que lleguen k peticiones por segundo y dimensionar servidores para evitar el desbordamiento de la cola.',
+    title: 'Poisson & Gestión de Colas: Dengue en Santa Elena',
+    subtitle: 'Expositor: Said · Business Intelligence en Salud (λ = 5 pac/día, Alerta en 15)',
+    speaker: 'Poisson modela eventos independientes a una tasa constante λ. En nuestro caso de Business Intelligence en salud en Santa Elena, el centro recibe en promedio λ = 5 pacientes de dengue al día. Usando Poisson modelamos la probabilidad de un escenario crítico de 15 pacientes. Aunque la probabilidad puntual es muy baja, cuantificar este riesgo permite gestionar la cola física del hospital, optimizando médicos, camas y medicamentos antes de que ocurra la saturación.',
     component: <SlidePoissonNegocio />
   },
 
