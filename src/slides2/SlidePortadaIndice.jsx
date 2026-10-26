@@ -94,7 +94,7 @@ export function SlideIndice2({ onSelectSection, secciones = [] }) {
       speaker: "Gino",
       color: "border-amber-500/40 text-amber-400",
       title: "4. Margen de Error & Nivel de Confianza",
-      desc: "Construcción al 95% y 99%, cálculo de precisión y falacias frecuentes.",
+      desc: "Estimación por intervalos (95% vs 99%), impacto de n, simulación en vivo y caso de SLA en microservicios.",
       tag: "Gino"
     },
     {
