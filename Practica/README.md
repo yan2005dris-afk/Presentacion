@@ -1,3 +1,14 @@
+# Prácticas
+
+Este directorio contiene dos prácticas independientes, una por cada exposición del proyecto:
+
+| Subdirectorio | Tema | Qué hay |
+|---|---|---|
+| *(raíz)* | Práctica de Arquitectura Ensamblador: Procesamiento Escalar vs Vectorial | Dos ejemplos en ensamblador (emu8086 y NASM/SASM) — la práctica del deck de SIMD. Detalle abajo. |
+| [`Estadistica/`](Estadistica/README.md) | Práctica de Estadística Inferencial — A/B Testing con datos reales | Un notebook (`Inferencia_AB_Testing.ipynb`) que resuelve un problema real de negocio con el dataset `faviovaz/marketing-ab-testing` de Kaggle: Poisson, campana de Gauss, TLC, intervalos de confianza, α y p-valor, contrastes y decisión. |
+
+---
+
 # Práctica de Arquitectura Ensamblador: Procesamiento Escalar vs Vectorial
 
 Este directorio contiene dos ejemplos prácticos desarrollados en lenguaje ensamblador para demostrar experimentalmente las diferencias arquitectónicas entre el procesamiento escalar (SISD) y el procesamiento vectorial (SIMD).

@@ -40,7 +40,7 @@ export function SlidePortada2() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="flex flex-wrap items-center justify-center gap-2 max-w-3xl"
+        className="flex flex-wrap items-center justify-center gap-2 max-w-3xl mb-8"
       >
         {[
           { name: 'Said', topic: 'Distribuciones' },
@@ -58,6 +58,26 @@ export function SlidePortada2() {
             <span className="text-slate-400 text-[11px]">({member.topic})</span>
           </div>
         ))}
+      </motion.div>
+
+      {/* Quick Navigation Tips para visitantes y público */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+        className="inline-flex flex-wrap items-center justify-center gap-4 px-4 py-2 rounded-2xl bg-slate-950/60 border border-slate-800/80 text-[11px] font-mono text-slate-400"
+      >
+        <span className="flex items-center gap-1.5">
+          <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-200">Space</kbd> / <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-200">→</kbd> Avanzar
+        </span>
+        <span className="text-slate-700">•</span>
+        <span className="flex items-center gap-1.5">
+          <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-200">←</kbd> Retroceder
+        </span>
+        <span className="text-slate-700">•</span>
+        <span className="flex items-center gap-1.5">
+          <kbd className="px-1.5 py-0.5 rounded bg-purple-950/80 border border-purple-700/60 text-purple-300 font-bold">H</kbd> Modo Zen (100% Pantalla)
+        </span>
       </motion.div>
     </div>
   );

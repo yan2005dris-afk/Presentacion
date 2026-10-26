@@ -1050,13 +1050,104 @@ export function SlideNormalSoftwareCaso() {
               step="5"
               value={demoMetric}
               onChange={(e) => setDemoMetric(parseInt(e.target.value))}
-              className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500"
+              className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-400 my-1"
             />
             <div className="flex justify-between text-[10px] text-slate-500 font-mono">
               <span>80ms (Rápido)</span>
               <span>μ = 150ms (Centro)</span>
               <span>190ms (SLA Z=+2.0)</span>
               <span>230ms (Crítico Z=+4.0)</span>
+            </div>
+
+            {/* Curva de Gauss SVG Ampliada y Elegante (Visualización Impecable) */}
+            <div className="pt-3 pb-1">
+              <svg viewBox="0 0 500 110" className="w-full h-28 overflow-visible">
+                <defs>
+                  <linearGradient id="liveZGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor={isAnomalous ? '#f43f5e' : isWarning ? '#f59e0b' : '#a855f7'} stopOpacity="0.75" />
+                    <stop offset="100%" stopColor={isAnomalous ? '#f43f5e' : isWarning ? '#f59e0b' : '#a855f7'} stopOpacity="0.05" />
+                  </linearGradient>
+                </defs>
+                {/* Eje base horizontal */}
+                <line x1="20" y1="90" x2="480" y2="90" stroke="#334155" strokeWidth="1.5" />
+                
+                {/* Campana de Gauss con trazo nítido y esbelto */}
+                <path
+                  d="M 20 90 C 120 90, 180 85, 215 45 C 235 20, 250 12, 250 12 C 250 12, 265 20, 285 45 C 320 85, 380 90, 480 90"
+                  fill="none"
+                  stroke="#475569"
+                  strokeWidth="2.5"
+                />
+
+                {/* Sombra de la curva sombreada hasta la posición del request */}
+                {(() => {
+                  const clampedX = Math.max(80, Math.min(230, demoMetric));
+                  const markerSvgX = 20 + ((clampedX - 80) / (230 - 80)) * 460;
+                  const activeColor = isAnomalous ? '#f43f5e' : isWarning ? '#f59e0b' : '#a855f7';
+                  const activeBg = isAnomalous ? 'rgba(244,63,94,0.15)' : isWarning ? 'rgba(245,158,11,0.15)' : 'rgba(168,85,247,0.15)';
+
+                  return (
+                    <g>
+                      {/* Línea central nominal μ = 150ms */}
+                      <line x1="250" y1="12" x2="250" y2="90" stroke="#38bdf8" strokeDasharray="3 3" strokeWidth="1.5" />
+                      <text x="250" y="103" fill="#38bdf8" fontSize="10" textAnchor="middle" fontWeight="bold">μ = 150ms</text>
+                      
+                      {/* Marcador Vertical del Request Observado */}
+                      <line
+                        x1={markerSvgX}
+                        y1="10"
+                        x2={markerSvgX}
+                        y2="90"
+                        stroke={activeColor}
+                        strokeWidth="2.5"
+                        strokeDasharray={isAnomalous ? '4 2' : 'none'}
+                      />
+                      
+                      {/* Halo y punto pulsante */}
+                      <circle
+                        cx={markerSvgX}
+                        cy="12"
+                        r="6"
+                        fill={activeBg}
+                        stroke={activeColor}
+                        strokeWidth="1.5"
+                      />
+                      <circle
+                        cx={markerSvgX}
+                        cy="12"
+                        r="3"
+                        fill={activeColor}
+                        className="animate-pulse"
+                      />
+
+                      {/* Badge con coordenadas flotantes (Latencia + Z-Score) */}
+                      <g transform={`translate(${Math.max(60, Math.min(440, markerSvgX))}, 0)`}>
+                        <rect
+                          x="-50"
+                          y="-6"
+                          width="100"
+                          height="18"
+                          rx="9"
+                          fill="#0f172a"
+                          stroke={activeColor}
+                          strokeWidth="1"
+                        />
+                        <text
+                          x="0"
+                          y="6"
+                          fill={activeColor}
+                          fontSize="10"
+                          fontWeight="bold"
+                          textAnchor="middle"
+                          fontFamily="monospace"
+                        >
+                          {demoMetric}ms · Z={zScore}
+                        </text>
+                      </g>
+                    </g>
+                  );
+                })()}
+              </svg>
             </div>
           </div>
 

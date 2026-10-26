@@ -1,80 +1,86 @@
-# Arquitectura y Organización de Computadoras — Presentación Interactiva SIMD & Taxonomía de Flynn
+# Plataforma de Presentaciones Interactivas (Multi-Deck)
 
-Presentación interactiva desarrollada en **React + Vite + Tailwind CSS + Framer Motion** sobre Paralelismo a Nivel de Datos, Arquitectura SIMD y Extensiones Vectoriales x86 (MMX, SSE, AVX).
+Plataforma interactiva para defensas y presentaciones académicas desarrollada en **React + Vite + Tailwind CSS + Framer Motion**.
+
+Diseñada bajo una arquitectura modular desacoplada: el **motor de presentación** (`src/core/`) es independiente de los **contenidos temáticos** (`decks/` y `src/decks/`).
 
 ---
 
-## 🚀 Cómo Ejecutar la Aplicación (Deployment & Local Run)
+## 🗂️ Temas y Decks Disponibles
 
-### Requisitos Previos
-- **Node.js**: v18 o superior
-- **npm** o **pnpm** / **yarn**
+| Deck | Materia | Identificador URL | Contenido Central |
+| :--- | :--- | :---: | :--- |
+| **Estadística Inferencial** | Probabilidad y Estadística | `/?deck=stats` *(Por defecto)* | Poisson en infraestructura, Distribución Normal, TLC, Intervalos de confianza, $\alpha$ y $p$-valor, A/B Testing con datos de Kaggle y Sample Ratio Mismatch (SRM). |
+| **SIMD y Arquitecturas Paralelas** | Arquitectura y Org. de Computadoras | `/?deck=simd` | Límite secuencial Von Neumann, Taxonomía de Flynn, Vector Chaining (Cray-1), MMX/SSE/AVX, microarquitectura y práctica en ensamblador. |
 
-### Pasos para Ejecutar Localmente
+---
+
+## 🚀 Inicio Rápido (Local Run)
 
 ```bash
 # 1. Instalar dependencias
 npm install
 
-# 2. Iniciar el servidor de desarrollo Vite
+# 2. Iniciar servidor de desarrollo
 npm run dev
-```
 
-El servidor iniciará en `http://localhost:5173/` con Hot Module Replacement (HMR).
-
-### Build de Producción
-
-```bash
-# Compilar bundle optimizado para producción
+# 3. Compilar para producción
 npm run build
 
-# Previsualizar el build de producción
+# 4. Previsualizar build
 npm run preview
 ```
 
----
-
-## 📖 Estructura de la Presentación y Expositores
-
-La presentación está dividida en **4 partes principales** asignadas a los 4 integrantes del grupo, completamente alineadas con la *Guía de Estudio Completa*:
-
-### 🟢 Parte 1: El Problema y Taxonomía de Flynn (`Reyes Ricardo`)
-- **Slide 1.0**: Límite del modelo secuencial SISD con video explicativo de YouTube incrustado.
-- **Slide 1.1**: Simulación animada interactiva SISD vs SIMD (Cajero vs Parrilla).
-- **Slide 1.2**: Ciclo Fetch-Decode-Execute (FDEW) en arquitecturas Von Neumann.
-- **Slide 1.3**: Matriz 2x2 interactiva de la Taxonomía de Flynn (SISD, SIMD, MISD, MIMD).
-- **Slide 1.4**: Limitaciones físicas de SISD y cuellos de botella en MIMD/SMP (Spinlocks & Bus Congestion).
-
-### 🔵 Parte 2: Arquitectura SIMD y el Principio Vectorial (`Rivera Yandris`)
-- **Slide 2.1**: Principio SIMD: "Una orden, ocho soldados" y ahorro energético en Control Unit.
-- **Slide 2.2**: Registros Vectoriales XMM/YMM y registros de control (`VLEN`, `VSTR`, `VMASK`).
-- **Slide 2.3**: Dualidad Espacio-Tiempo: Array Processor vs Vector Processor con **esquema arquitectónico CRAY-1/VMIPS** y tabla comparativa.
-- **Slide 2.4**: Ventajas del procesamiento vectorial y Requisitos de Regularidad (Homogeneidad, Alineación, Ausencia de dependencias).
-- **Slide 2.5**: Comparativa de código secuencial vs vectorial.
-
-### 🟣 Parte 3: Extensiones SIMD Modernas (`Alejandro Andy`)
-- **Slide 3.1**: Evolución histórica x86 (MMX, SSE, AVX, AVX-512) y caso real Intel Atom.
-- **Slide 3.2**: Subword Parallelism (particionamiento del sumador de 256 bits en silicio).
-- **Slide 3.3**: Vocabulario vectorial AVX y la instrucción FMA (`Fused Multiply-Add`).
-- **Slide 3.4**: Visor interactivo de datos empaquetados en registro YMM (Float32, Double64, Int16, Byte8) con scroll horizontal.
-- **Slide 3.5**: **Práctica Assembler Sincronizada Paso a Paso** (`movss`/`addss` vs `movaps`/`addps`) con monitor de registro `XMM0` y actualización de memoria RAM tras el `STORE`.
-- **Slide 3.6**: Pipeline de 4 etapas Fetch-Decode-Execute en SIMD.
-- **Slide 3.7**: Encadenamiento Vectorial (Vector Chaining en CRAY-1).
-- **Slide 3.8**: Comparativa de microarquitectura (AMD Excavator vs AMD Zen).
-
-### 🔴 Parte 4: Rendimiento, Aplicaciones y Conclusiones (`Bermudez Gino`)
-- **Slide 4.1**: Desglose dinámico de instrucciones y cálculo de Speedup real (7.0x).
-- **Slide 4.2**: Escalado de Throughput (GFLOPS) y simulador de la Ley de Amdahl.
-- **Slide 4.3**: La Kryptonita del SIMD: Divergencia Condicional (`if/else` con `VMASK`).
-- **Slide 4.4**: 6 Dominios de aplicación real (Imágenes, Audio/Video, 3D, IA/ML, NumPy, GPUs).
-- **Slide 4.5**: Paradigma híbrido en SoCs modernos (CPU + GPU).
-- **Slide 4.6**: Tabla de diagnóstico estructural SMP vs SIMD.
-- **Slide 4.7**: Conclusiones finales.
+* El servidor inicia en `http://localhost:5173/`.
+* Para cambiar de tema se puede usar el selector en el encabezado o los parámetros de consulta:
+  * `http://localhost:5173/?deck=stats`
+  * `http://localhost:5173/?deck=simd`
 
 ---
 
-## 🛠️ Tecnologías Utilizadas
-- **React 18** + **Vite 6**
-- **Tailwind CSS** (Estilos y layout responsivo)
-- **Framer Motion** (Animaciones y transiciones suaves)
-- **Lucide React** (Iconografía técnica)
+## 📁 Arquitectura del Repositorio
+
+```text
+├── decks/                                      # Artefactos y documentación por tema
+│   ├── 01-simd-arquitectura/
+│   │   ├── apuntes/                            # Apuntes teóricos y guiones pedagógicos
+│   │   └── practica/                           # Código ensamblador (EMU8086, SAMS)
+│   └── 02-estadistica-inferencial/
+│       ├── apuntes/                            # Apuntes integrales de estudio
+│       └── practica/                           # Notebooks Jupyter (*.ipynb) y datasets
+│
+├── src/
+│   ├── core/                                   # MOTOR: Layout, navegación, atajos y modales
+│   │   ├── DeckContainer.jsx                   # Orquestador principal de vista
+│   │   ├── DeckHeader.jsx                      # Barra superior, switchers y controles
+│   │   ├── DeckFooter.jsx                      # Barra de progreso, pasos y secciones
+│   │   └── SpeakerNotesDrawer.jsx              # Drawer de notas del orador
+│   │
+│   ├── decks/                                  # DEFINICIÓN DE PRESENTACIONES
+│   │   ├── registry.js                         # Registro central de decks activos
+│   │   ├── simd/deck.jsx                       # Configuración y lista de slides de SIMD
+│   │   └── stats/deck.jsx                      # Configuración y lista de slides de Estadística
+│   │
+│   ├── slides/                                 # Componentes React de slides SIMD
+│   ├── slides2/                                # Componentes React de slides Estadística
+│   └── components/                             # Componentes UI reutilizables y simuladores
+```
+
+---
+
+## ⌨️ Atajos de Teclado del Motor
+
+* `→` / `Espacio`: Avanzar paso / Siguiente diapositiva.
+* `←`: Retroceder paso / Diapositiva anterior.
+* `H` o `Z`: Alternar **Modo Zen** (oculta encabezado y pie para maximizar pantalla útil).
+* `T`: Alternar tema visual (**Dark / Light / Auto**).
+* `S`: Alternar drawer con el **Guion del Orador**.
+* `F`: Alternar **Pantalla Completa**.
+
+---
+
+## 🛠️ Stack Tecnológico
+* **React 19** + **Vite 8**
+* **Tailwind CSS 4** (Estilos y variables de color)
+* **Framer Motion 12** (Transiciones de diapositivas)
+* **Lucide React** (Iconografía técnica)
