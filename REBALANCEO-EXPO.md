@@ -54,7 +54,7 @@ eso entrega el bloque al equipo en el contraste de hipótesis.
 | 1 | A · Describir | P1 Distribuciones & Poisson | Said | 3 | 5 | `stats-1.h`, `stats-1.0`, `stats-1.1` |
 | 2 | A · Describir | P2 Normal & Gauss | Yandris | 4 | 6 | `stats-2.h`, `stats-2.0` … `stats-2.2` |
 | 3 | A · Describir | P3 TLC | Alisson | 2 | 4 | `stats-3.h`, `stats-3.0` |
-| 4 | B · Afirmar | P4 Intervalos | Gino | 2 | 4 | `stats-4.h`, `stats-4.0` |
+| 4 | B · Afirmar | P4 Intervalos | Gino | 4 | 5 | `stats-4.h`, `stats-4.0` … `stats-4.2` |
 | 5 | C · Decidir | P5 α y p-valor | Andy | 8 | 18 | `stats-5.h`, `stats-5.0` … `stats-5.6` |
 | 6 | D · Usar | P6 Contraste, aplicaciones, cierre | Grupo 3 y 4 | 4 | 6 | `stats-6.h`, `stats-6.0` … `stats-6.2` |
 
@@ -91,13 +91,12 @@ campana · el caso real `POST /api/v1/users` con suma de demoras y Z-score contr
 - **Por qué n ≥ 30 y no n ≥ 10**: la demonstración con la binomial (la media de la binomial se parece
   a la normal cuando n·p·q es grande). Es la pieza que conecta su bloque con el de Poisson.
 
-### Gino — 1 slide → objetivo 3
-**Ya cubre**: la fórmula de construcción `IC = x̄ ± Z(α/2) · σ/√n` · el 95 % vs el 99 % · la
-interpretación frecuente correcta · la falacia clásica.
-**Lo que le falta** (2 slides):
-- **El error estándar y el papel de n**: por qué 100 personas dan un margen de error y 10.000 dan otro
-  (el denominador √n es lo que cambia todo). Sin esto, el bloque B es una fórmula sin intuición.
-- **Un caso con números de punta a punta**, del estilo del que hizo Yandris con `POST /users`.
+### Gino — 3 slides → objetivo 3 ✅
+**Ya cubre**:
+- **Slide 4.0**: Estimación puntual vs por intervalo · fórmula de construcción `IC = x̄ ± Z(α/2) · σ/√n` · trade-off interactivo al 90%, 95% y 99% · interpretación frecuentista rigurosa vs la falacia clásica · nota técnica sobre t-Student (n < 30).
+- **Slide 4.1**: El papel de n en el Error Estándar `SE = σ/√n` con selector interactivo (n = 16, 64, 256, 1024) · ley de rendimientos decrecientes (4× n → mitad de error) · simulador en vivo de 24 intervalos repetidos con tasa de captura auditable (Neyman 1937).
+- **Slide 4.2**: Caso real de software de punta a punta (auditoría de latencia de PostgreSQL en microservicio de pagos con n = 100, x̄ = 138.5 ms, s = 25 ms, margen ± 4.90 ms, IC = [133.60, 143.40] ms < 150 ms de SLA) · código Python automatizado con `scipy.stats` · puente explícito hacia Andy con el α que queda fuera de las colas.
+**Le falta**: nada. Objetivo cumplido al 100%.
 
 ### Andy — 7 slides → objetivo 7 ✅
 **Ya cubre**: α · p-valor · regla de decisión · trampas · criterio automatizado en código, con 5

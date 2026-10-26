@@ -17,7 +17,7 @@ const URL = process.env.PREVIEW_URL || 'http://localhost:4173/';
 const SECCION_ANDY = 'P5';
 const VIEWPORT = { width: 1600, height: 900 };
 const MAX_ALTO = 694; // viewport útil 758 px − padding vertical del main (64 px)
-const TOTAL_SLIDES = 33;
+const TOTAL_SLIDES = 35;
 
 // La sección de Andy: handoff de apertura + sus 7 slides de trabajo.
 const TITULOS_ESPERADOS = [

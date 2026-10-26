@@ -5,7 +5,7 @@ import {
   SlideNormalFundamentos, SlideNormalCampanaLectura, SlideNormalSoftwareCaso,
   SlideTLCConcepto, SlideTLCTamanoMuestra, SlideTLCPropiedades, SlideTLCImportancia,
   SlideTLCEscenario, SlideTLCPasos, SlideTLCTablaZ, SlideTLCConclusion,
-  SlideIntervalosConfianza,
+  SlideIntervalosConfianza, SlideIntervalosTamanoMuestra, SlideIntervalosCasoSoftware,
   SlideDecisionRiesgo, SlideAlphaCampana, SlidePValorSorpresa,
   SlideReglaDecision, SlidePValorNoEs, SlideCriterioSoftware, SlideCierreT05,
   SlideComparacionMedias,
@@ -262,7 +262,11 @@ export const getStatsSlides = (onSelectSection) => [
         titulo="Margen de Error & Intervalos de Confianza"
         resumen="Un intervalo no es un punto: es el rango de respuestas que la muestra permite dar sobre el parámetro real."
         tono="amber"
-        temas={['Margen de Error & Intervalos de Confianza']}
+        temas={[
+          'Estimación por Intervalos & Trade-off (95% vs 99%)',
+          'El Papel de n & Simulación de Muestreo Repetido',
+          'Caso de Software: SLA de Microservicios & Puente a α',
+        ]}
         deja="El intervalo acota el parámetro real con una garantía probabilística, y ese 5 % que deja fuera es justo el α de mi bloque."
         puente="Acotar no es decidir: falta el criterio que convierte el intervalo en una afirmación. Ese es mi bloque (Andy)."
       />
@@ -274,9 +278,25 @@ export const getStatsSlides = (onSelectSection) => [
     id: 'stats-4.0',
     section: 4,
     title: 'Margen de Error & Intervalos de Confianza',
-    subtitle: 'Expositor: Gino · Construcción (95% vs 99%) e Interpretación Frecuentista',
-    speaker: 'Soy Gino. Un intervalo de confianza acota el parámetro desconocido mu con una garantía probabilística. Analizamos el equilibrio del 95% frente al 99% y la falacia de creer que la media poblacional es una variable aleatoria.',
+    subtitle: 'Expositor: Gino · Slide 4.0 · De la Estimación Puntual al Intervalo (95% vs 99%)',
+    speaker: 'Soy Gino. Un intervalo de confianza acota el parametro desconocido mu con una garantia probabilistica. Frente a la estimacion puntual que casi seguro falla, el intervalo calcula un margen de error alrededor de la media muestral. Analizamos el equilibrio del 95 frente al 99 y la falacia de creer que la media poblacional es una variable aleatoria: mu esta fijo, lo que varia es el intervalo.',
     component: <SlideIntervalosConfianza />
+  },
+  {
+    id: 'stats-4.1',
+    section: 4,
+    title: 'El Papel de n & Simulación de Muestreo',
+    subtitle: 'Expositor: Gino · Slide 4.1 · Error Estándar y Muestreo Repetido contra la Falacia',
+    speaker: 'El margen de error tiene una fisica muy clara: el error estandar divide entre la raiz de n. Para reducir el margen a la mitad necesitamos cuadruplicar la muestra. Y para ver que significa el 95 por ciento de confianza, observen la simulacion: de 24 muestras tomadas de la misma poblacion, la gran mayoria capturan el verdadero mu, mientras que unas pocas caen fuera por simple azar.',
+    component: <SlideIntervalosTamanoMuestra />
+  },
+  {
+    id: 'stats-4.2',
+    section: 4,
+    title: 'Caso Real en Software: SLA de Microservicios',
+    subtitle: 'Expositor: Gino · Slide 4.2 · Latencia en PostgreSQL y Conexión con el Nivel de Significancia',
+    speaker: 'Aterrizamos esto en ingenieria de software: un microservicio de pagos con SLA de 150 milisegundos. Muestreamos 100 transacciones con media de 138.5 milisegundos y desviacion de 25. Calculamos el error estandar de 2.5 milisegundos y un margen de 4.9. El intervalo resultante va de 133.6 a 143.4 milisegundos: como el limite superior esta por debajo de 150, confirmamos el SLA. Y este 5 por ciento que dejamos fuera en las colas es justo el alpha que toma Andy para contrastar hipotesis.',
+    component: <SlideIntervalosCasoSoftware />
   },
 
 // === HANDOFF · SECCION 5 · ANDY ===
