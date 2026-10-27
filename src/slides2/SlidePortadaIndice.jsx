@@ -106,7 +106,7 @@ export function SlideIndice2({ onSelectSection, secciones = [] }) {
       speaker: "Alisson",
       color: "border-teal-500/40 text-teal-400",
       title: "3. Teorema del Límite Central (TLC)",
-      desc: "Convergencia de medias (n ≥ 30), 4 condiciones y caso resuelto de E-Commerce.",
+      desc: "Convergencia de medias (n ≥ 30), condiciones de aplicación, propiedades matemáticas, del TLC al valor Z y caso de latencia en microservicio.",
       tag: "Alisson"
     },
     {

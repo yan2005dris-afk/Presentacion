@@ -33,7 +33,7 @@ const TITULOS_ESPERADOS = [
 
 // Las 6 aperturas de sección (handoff) + la slide de apertura del deck.
 const HANDOFFS_ESPERADOS = [
-  'Said · Distribuciones de Probabilidad & Poisson',
+  'Said · Distribuciones Discretas & Poisson',
   'Yandris · Distribución Normal & Gauss en Software',
   'Alisson · Teorema del Límite Central (TLC)',
   'Gino · Margen de Error & Intervalos de Confianza',

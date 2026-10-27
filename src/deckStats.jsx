@@ -21,8 +21,8 @@ export const SECTIONS_STATS = [
   { id: 0, title: 'Portada e Índice', member: 'Grupo 3 y 4', color: 'from-blue-600 to-indigo-600', bloque: 'Apertura', minutos: 4 },
   { id: 1, title: 'Distribuciones de Probabilidad & Poisson', member: 'Said', color: 'from-cyan-500 to-blue-500', bloque: 'A · Describir', minutos: 5 },
   { id: 2, title: 'Distribución Normal & Gauss en Software', member: 'Yandris', color: 'from-purple-500 to-indigo-500', bloque: 'A · Describir', minutos: 6 },
-  { id: 3, title: 'Teorema del Límite Central (TLC)', member: 'Alisson', color: 'from-teal-500 to-emerald-500', bloque: 'A · Describir', minutos: 4 },
-  { id: 4, title: 'Margen de Error & Intervalos', member: 'Gino', color: 'from-amber-500 to-orange-500', bloque: 'B · Afirmar', minutos: 4 },
+  { id: 3, title: 'Teorema del Límite Central (TLC)', member: 'Alisson', color: 'from-teal-500 to-emerald-500', bloque: 'A · Describir', minutos: 14 },
+  { id: 4, title: 'Margen de Error & Intervalos', member: 'Gino', color: 'from-amber-500 to-orange-500', bloque: 'B · Afirmar', minutos: 7 },
   { id: 5, title: 'Nivel de Significancia (α) & P-Valor', member: 'Andy', color: 'from-rose-500 to-pink-500', bloque: 'C · Decidir', minutos: 18 },
   { id: 6, title: 'Aplicaciones & Cierre', member: 'Grupo 3 y 4', color: 'from-blue-600 to-cyan-500', bloque: 'D · Usar', minutos: 6 },
 ];
